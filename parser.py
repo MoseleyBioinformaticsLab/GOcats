@@ -63,3 +63,5 @@ class OboParser(object):
             elif is_term is not False and re.match(self.endterm_match, line):
                 visitor.make_entry()
                 is_term = False
+
+"""Parsing for other ontologies can go below here."""
