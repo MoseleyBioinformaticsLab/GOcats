@@ -96,9 +96,13 @@ class GoDagNode(AbstractNode):
 		self.dag_parent_set = set()  # A set of parent (id's | node objects)? in the GO graph
 		self.dag_child_set = set()  #... child ... in the GO graph
 		self.sub_ontology = str()
+		self.obsolete = False
 
 	def set_sub_ontology(self, sub_ontology):
 		self.sub_ontology = sub_ontology
+
+	def set_obsolete():
+		self.obsolete = True
 
 	def add_dag_edge(self, edge):
 		self.dag_edges.append(edge)
