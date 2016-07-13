@@ -1,49 +1,42 @@
 # !/usr/bin/python3
 
-
 class OboGraph(object):
 	"""A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
 	acyclic graph (DAG)"""
 	def __init__(self):
-		self.node_list = []  # A list of node objects in the graph
-		self.edge_list = []  # A list of edge objects between nodes in the graph
-		self.id_index = {}  # A dictionary pointing ontology term IDs to the node object representing it in the graph
-		self.vocab_index = {}  # A dictionary pointing every unique word in the ontology to a list of terms that contain that word. CAREFUL WITH THIS ONE
+		self.node_list = list()  # A list of node objects in the graph
+		self.edge_list = list()  # A list of edge objects between nodes in the graph
+		self.id_index = dict()  # A dictionary pointing ontology term IDs to the node object representing it in the graph
+		self.vocab_index = dict()  # A dictionary pointing every unique word in the ontology to a list of terms that contain that word. CAREFUL WITH THIS ONE
 
 	def add_node(self, node):
 		self.node_list.append(node)
 		self.id_index[node.id] = node
 		for word in node.name+node.definition:
 			try:
-				vocab_index[word].add(node.id)
-			except KeyError():
-				vocab_index[word] = set(node.id)
+				self.vocab_index[word].add(node.id)
+			except KeyError:
+				self.vocab_index[word] = set([node.id])
 
 	def add_edge(self, edge):
 		self.edge_list.append(edge)
 
 
 class GoGraph(OboGraph):
-	"""A Gene ontology specific DAG"""
+	"""A Gene-Ontology-specific DAG"""
+	def __init__(self, sub_ontology):
+		super().__init__()
+		self.sub_ontology = sub_ontology
 
-
-class AbstractNode(object):
-	"""Generic OBO node contaning all basic properties of a node except for 
-	an edge list, which will be ontology-specific and defined in each node 
-	object that inherits from this object."""
-	def __init__(self):
-		self.id = str()
-		self.name = list()  # A list of strings (words) in the term name
-		self.defintion = list()  # ... in the term definition
-
-	def set_id(self, id):
-		self.id = id
-
-	def set_name(self, name):
-		self.name = name_list
-
-	def set_definition(self, defintion):
-		self.definition = definition
+	def add_node(self, node):
+		assert node.sub_ontology  # make sure that the node provided has a sub_ontology speicfied (need to add option for incorporating all in the future)
+		if node.sub_ontology == self.sub_ontology:
+			super().add_node(node)
+		else:
+			pass  # Don't add nodes to the graph that aren't in the specified GO sub-ontology 
+"""Can have a bunch of OBO graph objects
+that inherit from the generic OboGraph
+with specialized information and methods"""
 
 
 class Edge(object):
@@ -74,7 +67,25 @@ Can I handle the actual nodes pointers like this?
 	def child_node(self, value):
 		self._child_node = value
 """	
-	 
+
+
+class AbstractNode(object):
+	"""Generic OBO node contaning all basic properties of a node except for 
+	an edge list, which will be ontology-specific and defined in each node 
+	object that inherits from this object."""
+	def __init__(self):
+		self.id = str()
+		self.name = list()  # A list of strings (words) in the term name
+		self.defintion = list()  # ... in the term definition
+
+	def set_id(self, id):
+		self.id = id
+
+	def set_name(self, name):
+		self.name = name_list
+
+	def set_definition(self, defintion):
+		self.definition = definition
 
 
 class GoDagNode(AbstractNode):
@@ -84,12 +95,15 @@ class GoDagNode(AbstractNode):
 		self.dag_edges = list()  # A list of edge object pointers in the GO graph
 		self.dag_parent_set = set()  # A set of parent (id's | node objects)? in the GO graph
 		self.dag_child_set = set()  #... child ... in the GO graph
+		self.sub_ontology = str()
+
+	def set_sub_ontology(self, sub_ontology):
+		self.sub_ontology = sub_ontology
 
 	def add_dag_edge(self, edge):
 		self.dag_edges.append(edge)
-
-		"""need to add in methods for adding (node ids | node object 
-		pointers) to the dag_parent and dag_child sets"""
+	"""need to add in methods for adding (node ids | node object 
+	pointers) to the dag_parent and dag_child sets"""
 
 
 class SubDagNode(AbstractNode):
@@ -102,4 +116,6 @@ class SubDagNode(AbstractNode):
 		self.subdag_child_set = set()
 		self.dag_node = None  # Will be the node object in the overall dag, with the full edge list 
 	
-	def add_subdag_edge
+	def add_subdag_edge(self):
+		pass
+

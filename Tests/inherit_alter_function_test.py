@@ -15,7 +15,6 @@ class OboGraph(object):
 				self.vocab_index[word].add(node.id)
 			except KeyError:
 				self.vocab_index[word] = set([node.id])
-				pass
 
 	def add_edge(self, edge):
 		self.edge_list.append(edge)
@@ -105,6 +104,8 @@ pokedex.add_node(node3)
 
 for node in pokedex.node_list:
 	print(node.id, node.name, node.definition, node.sub_ontology)
+
+print(pokedex.id_index['GO:XXXXXX1'].name)
 
 print(pokedex.vocab_index)
 
