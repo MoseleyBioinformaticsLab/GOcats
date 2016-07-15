@@ -1,4 +1,5 @@
 GOcats3/OBOcats
+
 GOcats3 is an Open Biomedical Ontology (OBO) parser and categorizer currently specialized for the Gene Ontology (GO) which can sort ontology terms into conceptual categories that a user provides. It is being redeveloped from GOcats version 2 available here: https://gitlab.cesb.uky.edu/eugene/ARK.goLocalization. Later, it will be extended into OBOcats, which will parse and categorize any ontology in the OBO Foundry.
 
 USAGE:
