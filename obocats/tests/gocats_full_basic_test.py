@@ -3,14 +3,14 @@ from . import dag
 from . import parser
 
 obo_parser = parser.OboParser()
-little_godag = dag.GoGraph('cellular_component')
-with open('/home/eugene/Databases/GeneOntology/07-14-2016/go.obo', 'r') as database:
-    obo_parser.parse_go(database, little_godag)
+go_dag = dag.GoGraph('cellular_component')
+with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
+    obo_parser.parse_go(database, go_dag)
 
-print(len(little_godag.node_list))
-print(len(little_godag.edge_list))
-for node in little_godag.node_list:
+print(len(go_dag.node_list))
+print(len(go_dag.edge_list))
+for node in go_dag.node_list:
 	print(node.id)
-for edge in little_godag.edge_list:
+for edge in go_dag.edge_list:
 	print(edge.child_id, '-->', edge.parent_id, edge.relationship)
 

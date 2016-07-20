@@ -21,7 +21,11 @@ class OboParser(object):
     space_split = re.compile('\s|\.\s|,\s|:\s|;\s|\)\.|\s\(|\"\s|\.\"|,\"')  # Temporarily removed hyphen condition.
 
     def parse_go(self, database_file, graph):
-        """Parses the database using a PARAMETER graph which handles the database, PARAMETER database_file."""
+        # TODO: find all relationship types in go and add to a list of relationship types 
+
+        """Parses the database using a PARAMETER graph which handles the database, PARAMETER database_file.
+        Handles Gene Ontology (GO) obo files. Uses GoDagNode() objects and should be opperated on GoGraph
+        objects."""
         is_term = False
 
         for line in database_file:

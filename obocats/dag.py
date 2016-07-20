@@ -21,6 +21,18 @@ class OboGraph(object):
     def add_edge(self, edge):
         self.edge_list.append(edge)
 
+    def connect_nodes(self):
+        """Connects nodes by adding node objects to appropriate edge objects 
+        and vice-versa. MUST BE CALLED AFTER BOTH NODE AND EDGE LISTS ARE
+        POPULATED FROM THE DATABASE FILE"""
+        for edge in self.edge_list:
+            edge.parent_node = self.id_index[edge.parent_id]
+            edge.child_node = self.id_index[edge.child_id]
+            self.id_index[edge.parent_id].add_edge(edge)
+            self.id_index[edge.parent_id].add_child_id(edge.child_id)
+            self.id_index[edge.child_id].add_edge(edge)
+            self.id_index[edge.child_id].add_parent_id(edge.parent_id)
+
 
 class GoGraph(OboGraph):
     """A Gene-Ontology-specific DAG"""
@@ -36,10 +48,9 @@ class GoGraph(OboGraph):
         super().add_edge(edge) # May or may not add conditions to filter edges to nodes contained in the sub-ontology before adding.
 
     def connect_nodes(self):
-        """Connects nodes by adding node objects to appropriate edge objects 
-        and vice-versa. MUST BE CALLED AFTER BOTH NODE AND EDGE LISTS ARE
-        POPULATED FROM THE DATABASE FILE"""
-        pass
+        """May need to specialize this method for GO issues like obsolete
+        terms and such."""
+        super().connect_nodes()
 
     
 """Can have a bunch of OBO graph objects
@@ -90,6 +101,9 @@ class AbstractNode(object):
         self.id = str()
         self.name = list()  # A list of strings (words) in the term name
         self.definition = list()  # ... in the term definition
+        self.edges = list()
+        self.parent_id_set = set()  # A set of OBO IDs that are the parents of the current term (cannot make node obj refs here because they can't go into sets. Need sets for set analysis later.)
+        self.child_id_set = set()  # .. children ...
 
     def set_id(self, id):
         self.id = id
@@ -100,14 +114,20 @@ class AbstractNode(object):
     def set_definition(self, definition):
         self.definition = definition
 
+    def add_edge(self, edge):
+        self.edges.append(edge)
+
+    def add_parent_id(self, parent_id):
+        self.parent_id_set.add(parent_id)
+    
+    def add_child_id(self, child_id):
+        self.child_id_set.add(child_id)
+
 
 class GoDagNode(AbstractNode):
     """Extends AbstractNode to include GO relevant information"""
     def __init__(self):
         super().__init__()
-        self.edges = list()  # A list of edge object pointers in the GO graph
-        self.parent_set = set()  # A set of parent (id's | node objects)? in the GO graph
-        self.child_set = set()  #... child ... in the GO graph
         self.sub_ontology = str()
         self.obsolete = False
 
