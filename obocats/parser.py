@@ -15,13 +15,13 @@ class OboParser(object):
     def_match = re.compile('^def:')
     obsolete_match = re.compile('^is_obsolete:\strue')
     is_a_match = re.compile('^is_a:')
-    part_of_match = re.compile('^relationship:\spart_of')
-    has_part_match = re.compile('^relationship:\shas_part')
+    relationship_match = ('^relationship:')
     endterm_match = re.compile('^\s+')
     space_split = re.compile('\s|\.\s|,\s|:\s|;\s|\)\.|\s\(|\"\s|\.\"|,\"')  # Temporarily removed hyphen condition.
 
     def parse_go(self, database_file, graph):
         # TODO: find all relationship types in go and add to a list of relationship types 
+        # TODO: ensure that graph is GOgraph. in the future, don't want to use parse_go for non-go objects.
 
         """Parses the database using a PARAMETER graph which handles the database, PARAMETER database_file.
         Handles Gene Ontology (GO) obo files. Uses GoDagNode() objects and should be opperated on GoGraph
@@ -56,16 +56,13 @@ class OboParser(object):
                     i = re.split(self.space_split, line)
                     node_edge = Edge(i[1], curr_term_id, i[0])  # par_id, child_id, relationship
                     node_edge_list.append(node_edge)
+                    graph.relationship_set.add(i[0])  # I will consider 'is_a' a relationship type although the OBO formatting does not technically connsider it a 'relationship'
 
-                elif re.match(self.part_of_match, line):
-                    p = re.split(self.space_split, line)
-                    node_edge = Edge(p[2], curr_term_id, p[1])
+                elif re.match(self.relationship_match, line):
+                    r = re.split(self.space_split, line)
+                    node_edge = Edge(r[2], curr_term_id, r[1])
                     node_edge_list.append(node_edge)
-
-                elif re.match(self.has_part_match, line):
-                    h = re.split(self.space_split, line)
-                    node_edge = Edge(h[2], curr_term_id, h[1])
-                    node_edge_list.append(node_edge)
+                    graph.relationship_set.add(r[1])
 
                 elif re.match(self.obsolete_match, line):
                     node.set_obsolete()
@@ -77,3 +74,15 @@ class OboParser(object):
                     is_term = False
 
 """Parsing for other ontologies can go below here."""
+
+"""
+elif re.match(self.part_of_match, line):
+    p = re.split(self.space_split, line)
+    node_edge = Edge(p[2], curr_term_id, p[1])
+    node_edge_list.append(node_edge)
+
+elif re.match(self.has_part_match, line):
+    h = re.split(self.space_split, line)
+    node_edge = Edge(h[2], curr_term_id, h[1])
+    node_edge_list.append(node_edge)
+"""

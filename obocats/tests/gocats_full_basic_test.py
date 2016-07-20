@@ -14,3 +14,11 @@ for node in go_dag.node_list:
 for edge in go_dag.edge_list:
 	print(edge.child_id, '-->', edge.parent_id, edge.relationship)
 
+go_dag.connect_nodes()
+
+print(go_dag.relationship_set)
+
+test_node = go_dag.node_list[1117]
+
+print(test_node.parent_id_set, '\n', '    -->', test_node.id, '\n', '        ', test_node.child_id_set)
+

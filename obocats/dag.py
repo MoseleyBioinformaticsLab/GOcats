@@ -7,7 +7,7 @@ class OboGraph(object):
         self.node_list = list()  # A list of node objects in the graph
         self.edge_list = list()  # A list of edge objects between nodes in the graph
         self.id_index = dict()  # A dictionary pointing ontology term IDs to the node object representing it in the graph
-        self.vocab_index = dict()  # A dictionary pointing every unique word in the ontology to a list of terms that contain that word. CAREFUL WITH THIS ONE
+        self.vocab_index = dict()  # A dictionary pointing every unique word in the ontology to a list of terms that contain that word.
 
     def add_node(self, node):
         self.node_list.append(node)
@@ -39,6 +39,7 @@ class GoGraph(OboGraph):
     def __init__(self, sub_ontology):
         super().__init__()
         self.sub_ontology = sub_ontology
+        self.relationship_set = set()  # A set of relationships found used in the ontology (may need to add a typedef_set to the OboGraph obj)
 
     def add_node(self, node):
         assert node.sub_ontology  # May or may not add a contition to filter out sub-ontologies here before adding them
