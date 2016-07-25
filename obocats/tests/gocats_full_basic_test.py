@@ -4,7 +4,7 @@ from . import parser
 
 obo_parser = parser.OboParser()
 go_dag = dag.GoGraph('cellular_component')
-with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
+with open('/home/eugene/Databases/GeneOntology/07-14-2016/go.obo', 'r') as database:
     obo_parser.parse_go(database, go_dag)
 
 print(len(go_dag.node_list))
