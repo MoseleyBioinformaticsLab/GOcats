@@ -8,6 +8,9 @@ class OboParser(object):
     expressions."""
 
     term_match = re.compile('^\[Term\]')
+    typedef_match = re.compile('^\[Typedef\]')
+    comment_match = re.compile('\!.+')
+    go_term_match = re.compile('GO\:\d{7}')
     subset_match = re.compile('^subset:')
     id_match = re.compile('^id:')
     name_match = re.compile('^name:')
