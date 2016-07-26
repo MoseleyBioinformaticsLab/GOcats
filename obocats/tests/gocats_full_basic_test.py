@@ -4,7 +4,7 @@ from . import parser
 
 obo_parser = parser.OboParser()
 go_dag = dag.GoGraph('cellular_component')
-with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
+with open('/home/eugene/Databases/GeneOntology/07-25-2016/go.obo', 'r') as database:
     obo_parser.parse_go(database, go_dag)
 
 print(len(go_dag.node_list))
@@ -22,3 +22,8 @@ test_node = go_dag.node_list[1117]
 
 print(test_node.parent_id_set, '\n', '    -->', test_node.id, '\n', '        ', test_node.child_id_set)
 
+
+node1 = go_dag.id_index['GO:0051079']
+node2 = go_dag.id_index['GO:0007049']
+test_paths = go_dag.find_all_paths(node1, node2)
+print(test_paths)
