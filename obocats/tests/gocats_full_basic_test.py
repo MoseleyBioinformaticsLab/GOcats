@@ -4,19 +4,15 @@ from . import parser
 
 obo_parser = parser.OboParser()
 go_dag = dag.GoGraph('cellular_component')
-<<<<<<< HEAD
-with open('/home/eugene/Databases/GeneOntology/07-25-2016/go.obo', 'r') as database:
-=======
-with open('/home/eugene/Databases/GeneOntology/07-14-2016/go.obo', 'r') as database:
->>>>>>> 562a5e5bd7618470392a19460e8388e59e45c59d
+with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
     obo_parser.parse_go(database, go_dag)
 
 print(len(go_dag.node_list))
 print(len(go_dag.edge_list))
 for node in go_dag.node_list:
-	print(node.id)
+    print(node.id)
 for edge in go_dag.edge_list:
-	print(edge.child_id, '-->', edge.parent_id, edge.relationship)
+    print(edge.child_id, '-->', edge.parent_id, edge.relationship)
 
 go_dag.connect_nodes()
 
