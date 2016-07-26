@@ -35,11 +35,11 @@ class OboGraph(object):
             self.id_index[edge.child_id].add_parent_id(edge.parent_id)
 
     #  TODO: Test current find_all_paths and add in options for filtering relationship types
-    def find_all_paths(self, start_node, end_node, direction='parent', 
-                       allowable_relationships=[], path=[]):
+    #  FIXME: This exceeds max recursion depth in python
+    def find_all_paths(self, start_node, end_node, direction='parent', allowable_relationships=[], path=[]):
         """Returns a list of all paths (lists of GO IDs) between two graph nodes
-        (start_node, end_node) with directionality from children to parents. The 
-        Start node and end node parameters must be node objects."""
+        (start_node, end_node) with the specified directionality. The start node
+        and end node parameters must be node objects."""
         path = path + [start_node.id]  # Probably need to check here if the edge has the right relationship type 
         if start_node.id == end_node.id:
             return [path]
@@ -64,7 +64,6 @@ class OboGraph(object):
         return paths
 
 
-    
 class GoGraph(OboGraph):
     """A Gene-Ontology-specific DAG"""
     def __init__(self, sub_ontology):
@@ -89,10 +88,15 @@ class SubGoGraph(GoGraph):
     Needs filtering methods for specifying nodes that have the correct 
     keyword values as specified by the keyword list."""
     def __init__(self, keyword_list):
+        super().__init__()
         self.keyword_list = keyword_list
+        self.allowed_nodes = []  # Should be a list of GO IDs that contain words from the keyword list
+        self._filter_nodes(self.keyword_list)
 
-
-
+    # TODO: This is a perfect example of where I need to use a decorator (make sure that it is fast) or a static method
+    def _filter_nodes(self, keyword_list):
+        for word in keyword_list:
+            self.allowed_nodes.extend(self.vocab_index[word])
 
 """Can have a bunch of OBO graph objects
 that inherit from the generic OboGraph
