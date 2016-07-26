@@ -8,7 +8,8 @@ class OboGraph(object):
         self.edge_list = list()  # A list of edge objects between nodes in the graph
         self.id_index = dict()  # A dictionary pointing ontology term IDs to the node object representing it in the graph
         self.vocab_index = dict()  # A dictionary pointing every unique word in the ontology to a list of terms that contain that word.
-
+        self.relationship_set = set()  # A set of relationships found used in the ontology (may need to add a typedef_set to the OboGraph obj)
+    
     def add_node(self, node):
         self.node_list.append(node)
         self.id_index[node.id] = node
@@ -33,13 +34,42 @@ class OboGraph(object):
             self.id_index[edge.child_id].add_edge(edge)
             self.id_index[edge.child_id].add_parent_id(edge.parent_id)
 
+    #  TODO: Test current find_all_paths and add in options for filtering relationship types
+    def find_all_paths(self, start_node, end_node, direction='parent', 
+                       allowable_relationships=[], path=[]):
+        """Returns a list of all paths (lists of GO IDs) between two graph nodes
+        (start_node, end_node) with directionality from children to parents. The 
+        Start node and end node parameters must be node objects."""
+        path = path + [start_node.id]  # Probably need to check here if the edge has the right relationship type 
+        if start_node.id == end_node.id:
+            return [path]
+        if start_node.id not in self.id_index.keys():
+            print("{} was not found in the graph!".format(start_node.id))
+            return []
+        paths = []
+        if direction is 'parent':
+            for parent_id in start_node.parent_id_set:
+                if parent_id not in path:
+                    extended_paths = self.find_all_paths(self.id_index[parent_id],
+                                                          end_node, 'parent', path)
+                    for p in extended_paths:
+                        paths.append(p)
+        elif direction is 'child':
+            for child_id in start_node.child_id_set:
+                if child_id not in path:
+                    extended_paths = self.find_all_paths(self.id_index[child_id],
+                                                         end_node, 'child', path)
+                    for c in extended_paths:
+                        paths.append(c)
+        return paths
 
+
+    
 class GoGraph(OboGraph):
     """A Gene-Ontology-specific DAG"""
     def __init__(self, sub_ontology):
         super().__init__()
         self.sub_ontology = sub_ontology
-        self.relationship_set = set()  # A set of relationships found used in the ontology (may need to add a typedef_set to the OboGraph obj)
 
     def add_node(self, node):
         assert node.sub_ontology  # May or may not add a contition to filter out sub-ontologies here before adding them
@@ -53,7 +83,17 @@ class GoGraph(OboGraph):
         terms and such."""
         super().connect_nodes()
 
-    
+
+class SubGoGraph(GoGraph):
+    """A subgraph of Gene Ontology. Represents a concept in the graph
+    Needs filtering methods for specifying nodes that have the correct 
+    keyword values as specified by the keyword list."""
+    def __init__(self, keyword_list):
+        self.keyword_list = keyword_list
+
+
+
+
 """Can have a bunch of OBO graph objects
 that inherit from the generic OboGraph
 with specialized information and methods"""
