@@ -74,6 +74,8 @@ class OboParser(object):
                     graph.add_node(node)
                     for edge in node_edge_list:
                         graph.add_edge(edge)
+                    if node_edge_list == [] and node.obsolete == False:  # Have to look at the local edge list because nodes have not been linked with edges yet. Entire graph must be populated first. This is the only way to do this on-the-fly.
+                        graph.root_nodes.append(node)
                     is_term = False
 
 """Parsing for other ontologies can go below here."""

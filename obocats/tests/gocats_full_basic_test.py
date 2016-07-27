@@ -21,9 +21,10 @@ print(go_dag.relationship_set)
 test_node = go_dag.node_list[1117]
 
 print(test_node.parent_id_set, '\n', '    -->', test_node.id, '\n', '        ', test_node.child_id_set)
+for node in go_dag.root_nodes:
+	print(node.name)
 
-
-node1 = go_dag.id_index['GO:0051079']
-node2 = go_dag.id_index['GO:0007049']
-test_paths = go_dag.find_all_paths(node1, node2)
-print(test_paths)
+#node1 = go_dag.id_index['GO:0051079']
+#node2 = go_dag.id_index['GO:0007049']
+#test_paths = go_dag.find_all_paths(node1, node2)
+#print(test_paths)

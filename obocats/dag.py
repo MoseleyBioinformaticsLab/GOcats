@@ -9,7 +9,8 @@ class OboGraph(object):
         self.id_index = dict()  # A dictionary pointing ontology term IDs to the node object representing it in the graph
         self.vocab_index = dict()  # A dictionary pointing every unique word in the ontology to a list of terms that contain that word.
         self.relationship_set = set()  # A set of relationships found used in the ontology (may need to add a typedef_set to the OboGraph obj)
-    
+        self.root_nodes = list()  # A list of nodes with no parents in the graph. 
+
     def add_node(self, node):
         self.node_list.append(node)
         self.id_index[node.id] = node
