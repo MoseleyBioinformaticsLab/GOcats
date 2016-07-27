@@ -1,10 +1,10 @@
 # !/usr/bin/python3
 import re
-from .dag import AbstractNode, GoDagNode, Edge
+from .dag import AbstractNode, GoGraphNode, Edge
 
 class OboParser(object):
 
-    """Parses the Gene Ontology file line-by-line and calls GoDAG based on conditions met through regular
+    """Parses the Gene Ontology file line-by-line and calls GoGraph based on conditions met through regular
     expressions."""
 
     term_match = re.compile('^\[Term\]')
@@ -27,7 +27,7 @@ class OboParser(object):
         # TODO: ensure that graph is GOgraph. in the future, don't want to use parse_go for non-go objects.
 
         """Parses the database using a PARAMETER graph which handles the database, PARAMETER database_file.
-        Handles Gene Ontology (GO) obo files. Uses GoDagNode() objects and should be opperated on GoGraph
+        Handles Gene Ontology (GO) obo files. Uses GoGraphNode() objects and should be opperated on GoGraph
         objects."""
         is_term = False
 
@@ -35,7 +35,7 @@ class OboParser(object):
 
             if not is_term and re.match(self.term_match, line):
                 is_term = True
-                node = GoDagNode()
+                node = GoGraphNode()
                 node_edge_list = []
 
             elif is_term:
@@ -59,13 +59,13 @@ class OboParser(object):
                     i = re.split(self.space_split, line)
                     node_edge = Edge(i[1], curr_term_id, i[0])  # par_id, child_id, relationship
                     node_edge_list.append(node_edge)
-                    graph.relationship_set.add(i[0])  # I will consider 'is_a' a relationship type although the OBO formatting does not technically connsider it a 'relationship'
+                    graph.used_relationship_set.add(i[0])  # I will consider 'is_a' a relationship type although the OBO formatting does not technically connsider it a 'relationship'
 
                 elif re.match(self.relationship_match, line):
                     r = re.split(self.space_split, line)
                     node_edge = Edge(r[2], curr_term_id, r[1])
                     node_edge_list.append(node_edge)
-                    graph.relationship_set.add(r[1])
+                    graph.used_relationship_set.add(r[1])
 
                 elif re.match(self.obsolete_match, line):
                     node.set_obsolete()
