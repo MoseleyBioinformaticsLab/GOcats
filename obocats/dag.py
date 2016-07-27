@@ -7,8 +7,8 @@ class OboGraph(object):
         self.node_list = list()  # A list of node objects in the graph
         self.edge_list = list()  # A list of edge objects between nodes in the graph
         self.id_index = dict()  # A dictionary pointing ontology term IDs to the node object representing it in the graph
-        self.vocab_index = dict()  # A dictionary pointing every unique word in the ontology to a list of terms that contain that word.
-        self.relationship_set = set()  # A set of relationships found used in the ontology (may need to add a typedef_set to the OboGraph obj)
+        self.vocab_index = dict()  #TODO: make these pointers to objects. A dictionary pointing every unique word in the ontology to a list of terms that contain that word.
+        self.used_relationship_set = set()  # A set of relationships found used in the ontology (may need to add a typedef_set to the OboGraph obj)
         self.root_nodes = list()  # A list of nodes with no parents in the graph. 
 
     def add_node(self, node):
@@ -44,6 +44,10 @@ class OboGraph(object):
         path = path + [start_node.id]  # Probably need to check here if the edge has the right relationship type 
         if start_node.id == end_node.id:
             return [path]
+        if start_node.id != end_node.id and start_node.id in [node.id for node in self.root_nodes]:  # If direction = parent: the end_node was not encountered in the path and the top of the graph was reached.
+            return []
+        if start_node.id != end_node.id and end_node.child_id_set == set():  # If direction = child: the end_node was not encountered in the path and the end of the graph was reached. 
+            return []
         if start_node.id not in self.id_index.keys():
             print("{} was not found in the graph!".format(start_node.id))
             return []
@@ -66,8 +70,8 @@ class OboGraph(object):
 
 
 class GoGraph(OboGraph):
-    """A Gene-Ontology-specific DAG"""
-    def __init__(self, sub_ontology):
+    """A Gene-Ontology-specific graph"""
+    def __init__(self, sub_ontology=None):
         super().__init__()
         self.sub_ontology = sub_ontology
 
@@ -84,20 +88,26 @@ class GoGraph(OboGraph):
         super().connect_nodes()
 
 
-class SubGoGraph(GoGraph):
+# TODO: Should GoSubGraph inherit from GoGraph or should it contain an instance of the GoGraph?
+# Make a generic SubGraph that inherits from OboGraph and have a required parameter: parent_graph? Which will be the object 
+# of the parent graph. Rationalle: I can't inherit the DATA from the parent class, because that gets added through parsing after the 
+# object is instantiated, and I don't want to re-parse for every subpgraph. Because that would be not smart. 
+class GoSubGraph(GoGraph):
     """A subgraph of Gene Ontology. Represents a concept in the graph
     Needs filtering methods for specifying nodes that have the correct 
     keyword values as specified by the keyword list."""
-    def __init__(self, keyword_list):
+    def __init__(self, go_graph, keyword_list):
         super().__init__()
+        self.go_graph = go_graph
         self.keyword_list = keyword_list
-        self.allowed_nodes = []  # Should be a list of GO IDs that contain words from the keyword list
-        self._filter_nodes(self.keyword_list)
+        self.allowed_nodes = self._filter_nodes(self.go_graph.vocab_index, self.keyword_list)  # Should be a list of nodes that contain words from the keyword list
 
-    # TODO: This is a perfect example of where I need to use a decorator (make sure that it is fast) or a static method
-    def _filter_nodes(self, keyword_list):
+    def _filter_nodes(self, vocab_index, keyword_list):
+        """Returns a list of nodes that contain keywords """
+        filtered_id_list = []
         for word in keyword_list:
-            self.allowed_nodes.extend(self.vocab_index[word])
+            filtered_id_list.extend(vocab_index[word])
+        return [self.go_graph.id_index[id] for id in filtered_id_list]
 
 """Can have a bunch of OBO graph objects
 that inherit from the generic OboGraph
@@ -113,30 +123,43 @@ class Edge(object):
         self.relationship = relationship
         self.parent_node = parent_node
         self.child_node = child_node
-
-    def set_parent_node(self, parent_node):
-        self.parent_node = parent_node
-
-    def set_child_node(self, child_node):
-        self.child_node = child_node
 """
-Can I handle the actual nodes pointers like this?
+    @property
+    def parent_id(self):
+        if self.parent_node :
+            return self.parent_node.id
+        else :
+            return self._parent_id
+
+    @property
+    def child_id(self):
+        if self.child_node :
+            return self.child_node.id
+        else :
+            return self._child_id
+
+    # alternative implementation
     @property
     def parent_node(self):
         return self._parent_node
 
     @parent_node.setter
-    def parent_node(self, value):
-        self._parent_node = value
-SP
+    def parent_node(self, new_parent):
+        self._parent_node = new_parent
+        if new_parent :
+            self.parent_id = new_parent.id
+
     @property
     def child_node(self):
         return self._child_node
     
     @child_node.setter
-    def child_node(self, value):
-        self._child_node = value
-""" 
+    def child_node(self, new_child):
+        self._child_node = new_child
+        if new_child :
+            self.child_id = new_child.id
+"""        
+
 
 
 class AbstractNode(object):
@@ -145,13 +168,14 @@ class AbstractNode(object):
     object that inherits from this object."""
     def __init__(self):
         self.id = str()
-        self.name = list()  # A list of strings (words) in the term name
-        self.definition = list()  # ... in the term definition
+        self.name = str()  # A list of strings (words) in the term name
+        self.definition = str()  # ... in the term definition
         self.edges = list()
-        self.parent_id_set = set()  # A set of OBO IDs that are the parents of the current term (cannot make node obj refs here because they can't go into sets. Need sets for set analysis later.)
-        self.child_id_set = set()  # .. children ...
+        self.parent_id_set = None  # A set of OBO IDs that are the parents of the current term (cannot make node obj refs here because they can't go into sets. Need sets for set analysis later.)
+        self.child_id_set = None  # .. children ...
+        self.obsolete = False
 
-    def set_id(self, id):
+    def set_id(self, id):  # dont need the first 4 functions, add @property syntax to the last three like before. change adding functions in parser to directly access the values. 
         self.id = id
 
     def set_name(self, name):
@@ -160,45 +184,58 @@ class AbstractNode(object):
     def set_definition(self, definition):
         self.definition = definition
 
+    def set_obsolete(self):
+        self.obsolete = True
+
     def add_edge(self, edge):
         self.edges.append(edge)
 
-    def add_parent_id(self, parent_id):
+    def update_node(self, allowed_relationships=None)
+        # update parents and child sets based on its edges.
+
+    def add_parent_id(self, parent_id):  #these will go into update node. 
         self.parent_id_set.add(parent_id)
     
     def add_child_id(self, child_id):
         self.child_id_set.add(child_id)
 
 
-class GoDagNode(AbstractNode):
+class GoGraphNode(AbstractNode):
     """Extends AbstractNode to include GO relevant information"""
     def __init__(self):
         super().__init__()
-        self.sub_ontology = str()
-        self.obsolete = False
+        self.sub_ontology = None
 
-    def set_sub_ontology(self, sub_ontology):
+    def set_sub_ontology(self, sub_ontology): # delete this worthless setter.
         self.sub_ontology = sub_ontology
-
-    def set_obsolete(self):
-        self.obsolete = True
 
     def add_edge(self, edge):
         pass
     """need to add in methods for adding (node ids | node object 
-    pointers) to the dag_parent and dag_child sets"""
+    pointers) to the graph_parent and graph_child sets"""
 
 
-class SubDagNode(AbstractNode):
+class SubGraphNode(AbstractNode):
     """Extends Abstract node to include GO relevent information GIVEN SUB-
-    GRAPH CONSTRAINTS which deliniate a sub-DAG"""
-    def __init__(self):
-        super().__init__()
-        self.subdag_edges = list()
-        self.subdag_parent_set = set()
-        self.subdag_child_set = set()
-        self.dag_node = None  # Will be the node object in the overall dag, with the full edge list 
+    GRAPH CONSTRAINTS which deliniate a subgraph"""
+    def __init__(self, super_node, allowed_relationships=None):
+        self.super_node = super_node  # Will be the node object in the full graph, with the full edge list
+        self.edges = list()
+        self._populate_edges(allowed_relationships)
+        self.update_node()
     
-    def add_subdag_edge(self):
-        pass
+        @property
+        def id(self):
+            return self.super_node.id
 
+        @property
+        def name(self):
+            return self.super_node.name
+        
+        @property
+        def definition(self):
+            return self.super_node.definition
+
+        @property
+        def obsolete(self):
+            return self.super_node.obsolete
