@@ -3,24 +3,23 @@ import re
 from .dag import AbstractNode, GoGraphNode, Edge
 
 class OboParser(object):
-
     """Parses the Gene Ontology file line-by-line and calls GoGraph based on conditions met through regular
     expressions."""
-
-    term_match = re.compile('^\[Term\]')
-    typedef_match = re.compile('^\[Typedef\]')
-    comment_match = re.compile('\!.+')
-    go_term_match = re.compile('GO\:\d{7}')
-    subset_match = re.compile('^subset:')
-    id_match = re.compile('^id:')
-    name_match = re.compile('^name:')
-    namespace_match = re.compile('^namespace:')
-    def_match = re.compile('^def:')
-    obsolete_match = re.compile('^is_obsolete:\strue')
-    is_a_match = re.compile('^is_a:')
+    term_stanza = re.compile('\[Term\]')
+    go_term = re.compile('GO\:\d{7}')
+    term_id = re.compile('^id:')
+    term_name = re.compile('^name:')
+    go_namespace = re.compile('^namespace:')
+    term_definition = re.compile('^def:')
+    obsolete = re.compile('^is_obsolete:\strue')
+    is_a = re.compile('^is_a:')
     relationship_match = ('^relationship:')
-    endterm_match = re.compile('^\s+')
+    endterm_stanza = re.compile('^\s+')
     space_split = re.compile('\s|\.\s|,\s|:\s|;\s|\)\.|\s\(|\"\s|\.\"|,\"')  # Temporarily removed hyphen condition.
+    # May use later. 
+    #typedef_stanza = re.compile('^\[Typedef\]')
+    #comment = re.compile('\!.+')
+    #subset = re.compile('^subset:')
 
     def parse_go(self, database_file, graph):
         # TODO: find all relationship types in go and add to a list of relationship types 
@@ -33,44 +32,40 @@ class OboParser(object):
 
         for line in database_file:
 
-            if not is_term and re.match(self.term_match, line):
+            if not is_term and re.match(self.term_stanza, line):
                 is_term = True
                 node = GoGraphNode()
                 node_edge_list = []
 
             elif is_term:
-                if re.match(self.id_match, line):
-                    curr_term_id = line[4:-1]
-                    node.set_id(line[4:-1])
+                if re.match(self.term_id, line):
+                    node.id = re.findall(self.go_term, line)[0]
+                    curr_term_id = node.id
 
-                elif re.match(self.name_match, line):
-                    go_name = re.split(self.space_split, line)[1:-1]
-                    node.set_name(go_name)
+                elif re.match(self.term_name, line):
+                    node.name = line[6:-1]  # ignores 'name: '
 
-                elif re.match(self.namespace_match, line):
-                    sub_ontology = re.split(self.space_split, line)[1:-1]
-                    node.set_sub_ontology(sub_ontology[0])
+                elif re.match(self.go_namespace, line):
+                    node.sub_ontology = line[11:-1]  # ignores 'namespace: '
 
-                elif re.match(self.def_match, line):
-                    go_definition = re.split(self.space_split, line)[1:-1]
-                    node.set_definition(go_definition)
+                elif re.match(self.term_definition, line):
+                    node.definition = re.findall('\"(.*?)\"', line)[0]  # This pattern matches the definition listed within quotes on the line.
 
-                elif re.match(self.is_a_match, line):
-                    i = re.split(self.space_split, line)
-                    node_edge = Edge(i[1], curr_term_id, i[0])  # par_id, child_id, relationship
+                elif re.match(self.is_a, line):
+                    node_edge = Edge(re.findall(self.go_term, line)[0], curr_term_id, 'is_a')  # par_id, child_id, relationship
                     node_edge_list.append(node_edge)
-                    graph.used_relationship_set.add(i[0])  # I will consider 'is_a' a relationship type although the OBO formatting does not technically connsider it a 'relationship'
+                    graph.used_relationship_set.add('is_a')  # I will consider 'is_a' a relationship type although the OBO formatting does not technically connsider it a 'relationship'
 
                 elif re.match(self.relationship_match, line):
-                    r = re.split(self.space_split, line)
-                    node_edge = Edge(r[2], curr_term_id, r[1])
+                    relationship = re.findall("[\w]+", line)[1]  # line example: relationship: part_of GO:0040025 ! vuval development
+                    node_edge = Edge(re.findall(self.go_term, line)[0], curr_term_id, relationship)
                     node_edge_list.append(node_edge)
-                    graph.used_relationship_set.add(r[1])
+                    graph.used_relationship_set.add(relationship)
 
-                elif re.match(self.obsolete_match, line):
-                    node.set_obsolete()
+                elif re.match(self.obsolete, line):
+                    node.obsolete = True
 
-                elif re.match(self.endterm_match, line):
+                elif re.match(self.endterm_stanza, line):
                     graph.add_node(node)
                     for edge in node_edge_list:
                         graph.add_edge(edge)
@@ -78,16 +73,4 @@ class OboParser(object):
                         graph.root_nodes.append(node)
                     is_term = False
 
-"""Parsing for other ontologies can go below here."""
-
-"""
-elif re.match(self.part_of_match, line):
-    p = re.split(self.space_split, line)
-    node_edge = Edge(p[2], curr_term_id, p[1])
-    node_edge_list.append(node_edge)
-
-elif re.match(self.has_part_match, line):
-    h = re.split(self.space_split, line)
-    node_edge = Edge(h[2], curr_term_id, h[1])
-    node_edge_list.append(node_edge)
-"""
+# TODO: Parsing for other ontologies can go below here.
