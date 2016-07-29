@@ -4,8 +4,13 @@ from . import parser
 
 obo_parser = parser.OboParser()
 go_dag = dag.GoGraph('cellular_component')
-with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
+# at the lab
+#with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
+#    obo_parser.parse_go(database, go_dag)
+# at home
+with open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r') as database:
     obo_parser.parse_go(database, go_dag)
+
 
 #print(len(go_dag.node_list))
 #print(len(go_dag.edge_list))
@@ -34,6 +39,6 @@ print(test_paths)
 
 sub_dag = dag.SubGraph(go_dag, ['mitochondrion', 'mitochondria', 'mitochondrial'])
 for node in sub_dag.allowed_nodes:
-	print(node.name)
+	print(node)
 
 #print([node.name for node in sub_dag.allowed_nodes])

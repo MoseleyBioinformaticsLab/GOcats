@@ -2,22 +2,22 @@
 import re
 
 class OboGraph(object):
+
     """A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
     acyclic graph (DAG)"""
+
     def __init__(self):
-        self.node_list = list()  # A list of node objects in the graph
-        self.edge_list = list()  # A list of edge objects between nodes in the graph
-        self.id_index = dict()  # A dictionary pointing ontology term IDs to the node object representing it in the graph
-        self.vocab_index = dict()  #TODO: make these pointers to objects. A dictionary pointing every unique word in the ontology to a list of terms that contain that word.
-        self.used_relationship_set = set()  # A set of relationships found used in the ontology (may need to add a typedef_set to the OboGraph obj)
-        self.root_nodes = list()  # A list of nodes with no parents in the graph. 
+        self.node_list = list()
+        self.edge_list = list()
+        self.id_index = dict()
+        self.vocab_index = dict() 
+        self.used_relationship_set = set()  
+        self.root_nodes = list()  
 
     def add_node(self, node):
         self.node_list.append(node)
         self.id_index[node.id] = node
-        # TODO: if hyphens give me problems, I can add the hyphenated word, 
-        #break up the words and then add the words separately as well. 
-        for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):  # A phrase like "5'-dna ligation" will be split into ["5'-dna", "ligation"]
+        for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):  # If hyphens give me problems, I can add the hyphenated word, break up the words and then add the words separately as well. A phrase like "5'-dna ligation" will be split into ["5'-dna", "ligation"]
             try:
                 self.vocab_index[word.lower()].add(node)
             except KeyError:
@@ -28,20 +28,16 @@ class OboGraph(object):
 
     def connect_nodes(self, allowed_relationships=None):
         """Connects nodes by adding node objects to appropriate edge objects 
-        and vice-versa. Allowed relationships may be a list specified to add 
-        only a set of desired relationship types"""
+        and vice-versa. May specify allowed_relationships in a list."""
         for edge in self.edge_list:
-            # add nodes to the edge
-            edge.parent_node = self.id_index[edge.parent_id]
+            edge.parent_node = self.id_index[edge.parent_id]  # add nodes to the edge
             edge.child_node = self.id_index[edge.child_id]
-            #add edges to the node
-            self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)
+            self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)  # add edges to the node
             self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
 
-    #  TODO: Test current find_all_paths and add in options for filtering 
-    #  relationship types
+    def find_all_paths(self, start_node, end_node, direction='parent', allowed_relationships=None, path=[]):    
+    #  TODO: Test current find_all_paths and add in options for filtering relationship types
     #  FIXME: This exceeds max recursion depth in python
-    def find_all_paths(self, start_node, end_node, direction='parent', allowed_relationships=None, path=[]):
         """Returns a list of all paths (lists of GO IDs) between two graph nodes
         (start_node, end_node) with the specified directionality. The start node
         and end node parameters must be node objects."""
@@ -74,33 +70,31 @@ class OboGraph(object):
 
 
 class GoGraph(OboGraph):
+
     """A Gene-Ontology-specific graph"""
+    
     def __init__(self, sub_ontology=None):
         super().__init__()
         self.sub_ontology = sub_ontology
 
 
 class SubGraph(OboGraph):
-    """A subgraph of Gene Ontology. Represents a concept in the graph. Needs 
-    filtering methods for specifying nodes that have the correct keyword values 
-    as specified by the keyword list."""
+
+    """A subgraph of a provided super_graph with node contents filtered to those
+    containing words from the provided keyword_list."""
+    
     def __init__(self, super_graph, keyword_list):
         super().__init__()
         self.super_graph = super_graph
         self.keyword_list = keyword_list
         self.allowed_nodes = [node for node in [super_graph.vocab_index[word] for word in keyword_list]]
 
-    def _filter_nodes(self, vocab_index, keyword_list):
-        """Returns a list of nodes that contain keywords """
-        filtered_id_list = []
-        for word in keyword_list:
-            filtered_id_list.extend(vocab_index[word])
-        return [self.super_graph.id_index[id] for id in filtered_id_list]
-
 
 class Edge(object):
-    """a generic edge for an OBO node that may be extended later into a subclass
-    for ontologies like GO that are including go term extensions"""
+
+    """An OBO edge which links two ontology term nodes and contains a 
+    relationship type describing now the two nodes are related."""
+    
     def __init__(self, parent_id, child_id, relationship, parent_node=None, child_node=None):
         self.parent_id = parent_id
         self.child_id = child_id
@@ -155,9 +149,10 @@ class Edge(object):
 
 
 class AbstractNode(object):
-    """Generic OBO node contaning all basic properties of a node except for an 
-    edge list, which will be ontology-specific and defined in each node object 
-    that inherits from this object."""
+
+    """A node contaning all basic properties of an OBO node. The parser 
+    currently has direct access to datamembers."""
+    
     def __init__(self):
         self.id = str()
         self.name = str()
@@ -187,15 +182,19 @@ class AbstractNode(object):
             
 
 class GoGraphNode(AbstractNode):
+
     """Extends AbstractNode to include GO relevant information"""
+    
     def __init__(self):
         super().__init__()
         self.sub_ontology = None
 
 
 class SubGraphNode(AbstractNode):
+
     """An instance of a node within a subgraph of an OBO ontology (super-graph)
     """
+    
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
         self.edges = list()

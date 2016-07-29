@@ -3,8 +3,10 @@ import re
 from .dag import AbstractNode, GoGraphNode, Edge
 
 class OboParser(object):
+
     """Parses the Gene Ontology file line-by-line and calls GoGraph based on conditions met through regular
     expressions."""
+    
     term_stanza = re.compile('\[Term\]')
     go_term = re.compile('GO\:\d{7}')
     term_id = re.compile('^id:')
@@ -24,7 +26,6 @@ class OboParser(object):
     def parse_go(self, database_file, graph):
         # TODO: find all relationship types in go and add to a list of relationship types 
         # TODO: ensure that graph is GOgraph. in the future, don't want to use parse_go for non-go objects.
-
         """Parses the database using a PARAMETER graph which handles the database, PARAMETER database_file.
         Handles Gene Ontology (GO) obo files. Uses GoGraphNode() objects and should be opperated on GoGraph
         objects."""
@@ -72,5 +73,3 @@ class OboParser(object):
                     if node_edge_list == [] and node.obsolete == False:  # Have to look at the local edge list because nodes have not been linked with edges yet. Entire graph must be populated first. This is the only way to do this on-the-fly.
                         graph.root_nodes.append(node)
                     is_term = False
-
-# TODO: Parsing for other ontologies can go below here.
