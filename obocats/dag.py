@@ -87,7 +87,7 @@ class SubGraph(OboGraph):
         super().__init__()
         self.super_graph = super_graph
         self.keyword_list = keyword_list
-        self.allowed_nodes = [node for node in [super_graph.vocab_index[word] for word in keyword_list]]
+        self.allowed_nodes = set.union(*[node_set for node_set in [super_graph.vocab_index[word] for word in keyword_list]])
 
 
 class Edge(object):
