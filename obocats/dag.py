@@ -35,6 +35,18 @@ class OboGraph(object):
             self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)  # add edges to the node
             self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
 
+    def filter_nodes(self, keyword_list, sub_ontolgy_filter=None):
+        """Returns a list of nodes that contain words in the given keyword list.
+        An aditional sub-ontology filter may be specified when appropriate."""
+        filtered_nodes = set.union(*[node_set for node_set in [super_graph.vocab_index[word] for word in keyword_list]])
+        if sub_ontology_filter:
+            filtered_nodes = [node for node in filtered_nodes if node.sub_ontology == sub_ontology_filter]
+        return list(filtered_nodes)
+
+    def filter_edges(self, filtered_nodes, allowed_relationships=None):
+        return
+
+
     def find_all_paths(self, start_node, end_node, direction='parent', allowed_relationships=None, path=[]):    
     #  TODO: Test current find_all_paths and add in options for filtering relationship types
     #  FIXME: This exceeds max recursion depth in python
@@ -83,11 +95,19 @@ class SubGraph(OboGraph):
     """A subgraph of a provided super_graph with node contents filtered to those
     containing words from the provided keyword_list."""
     
-    def __init__(self, super_graph, keyword_list):
+    def __init__(self, super_graph):
         super().__init__()
         self.super_graph = super_graph
-        self.keyword_list = keyword_list
-        self.allowed_nodes = set.union(*[node_set for node_set in [super_graph.vocab_index[word] for word in keyword_list]])
+
+    @staticmethod
+    def from_filtered_graph(graph, keyword_list, sub_ontology_filter=None, allowed_relationships=None):
+        subgraph = SubGraph(graph)
+        filtered_nodes = graph.filter_nodes(keyword_list, sub_ontology_filter)
+        filtered_edges = graph.filter_edges(filtered_nodes, allowed_relationships)
+        for node in filtered_nodes:
+            subgraph.add_node(node)
+
+        return subgraph
 
 
 class Edge(object):
