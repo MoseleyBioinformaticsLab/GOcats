@@ -17,7 +17,6 @@ class OboParser(object):
     is_a = re.compile('^is_a:')
     relationship_match = ('^relationship:')
     endterm_stanza = re.compile('^\s+')
-    space_split = re.compile('\s|\.\s|,\s|:\s|;\s|\)\.|\s\(|\"\s|\.\"|,\"')  # Temporarily removed hyphen condition.
     # May use later. 
     #typedef_stanza = re.compile('^\[Typedef\]')
     #comment = re.compile('\!.+')
