@@ -35,16 +35,24 @@ class OboGraph(object):
             self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)  # add edges to the node
             self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
 
-    def filter_nodes(self, keyword_list, sub_ontolgy_filter=None):
+    def filter_nodes(self, keyword_list, sub_ontology_filter=None):
         """Returns a list of nodes that contain words in the given keyword list.
-        An aditional sub-ontology filter may be specified when appropriate."""
-        filtered_nodes = set.union(*[node_set for node_set in [super_graph.vocab_index[word] for word in keyword_list]])
+        An aditional sub-ontology filter may be specified when needed."""
+        filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
         if sub_ontology_filter:
             filtered_nodes = [node for node in filtered_nodes if node.sub_ontology == sub_ontology_filter]
         return list(filtered_nodes)
 
     def filter_edges(self, filtered_nodes, allowed_relationships=None):
-        return
+        """Returns a list of edges from a parent graph that involve nodes in the
+        filtered nodes list and, if specified, has an allowed relationship type."""
+        print([edge.parent_node.name for edge in self.edge_list if edge.parent_node in filtered_nodes])
+#        filtered_edges = [edge for edge in self.edge_list if edge.parent_node and edge.child_node in filtered_nodes]
+        if allowed_relationships:
+            filtered_edges = [edge for edge in filtered_edges if edge.relationship in allowed_relationships]
+        return filtered_edges
+
+
 
 
     def find_all_paths(self, start_node, end_node, direction='parent', allowed_relationships=None, path=[]):    
@@ -105,7 +113,13 @@ class SubGraph(OboGraph):
         filtered_nodes = graph.filter_nodes(keyword_list, sub_ontology_filter)
         filtered_edges = graph.filter_edges(filtered_nodes, allowed_relationships)
         for node in filtered_nodes:
-            subgraph.add_node(node)
+            subgraph_node = SubGraphNode(node, allowed_relationships)
+            subgraph.add_node(subgraph_node)
+        for edge in filtered_edges:
+            subgraph.add_edge(edge)
+        subgraph.connect_nodes(allowed_relationships)
+
+        # Need to do the whole orphan node removal/extend subdag functions. These should go in obograph. 
 
         return subgraph
 
@@ -217,22 +231,21 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-        self.edges = list()
-        self._populate_edges(allowed_relationships)
-        self.update_node(allowed_relationships)
+#        self._populate_edges(allowed_relationships)
+#        self.update_node(allowed_relationships)
     
-        @property
-        def id(self):
-            return self.super_node.id
+    @property
+    def id(self):
+        return self.super_node.id
 
-        @property
-        def name(self):
-            return self.super_node.name
-        
-        @property
-        def definition(self):
-            return self.super_node.definition
+    @property
+    def name(self):
+        return self.super_node.name
+    
+    @property
+    def definition(self):
+        return self.super_node.definition
 
-        @property
-        def obsolete(self):
-            return self.super_node.obsolete
+    @property
+    def obsolete(self):
+        return self.super_node.obsolete

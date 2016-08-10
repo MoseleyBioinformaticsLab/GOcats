@@ -3,13 +3,13 @@ from . import dag
 from . import parser
 
 obo_parser = parser.OboParser()
-go_dag = dag.GoGraph('cellular_component')
+go_dag = dag.GoGraph()
 # at the lab
-#with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
-#    obo_parser.parse_go(database, go_dag)
-# at home
-with open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r') as database:
+with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
     obo_parser.parse_go(database, go_dag)
+# at home
+#with open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r') as database:
+#    obo_parser.parse_go(database, go_dag)
 
 
 #print(len(go_dag.node_list))
@@ -20,7 +20,7 @@ with open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r') as datab
 #for edge in go_dag.edge_list:
 #    print(edge.child_id, '-->', edge.parent_id, edge.relationship)
 
-go_dag.connect_nodes(['is_a', 'regulates'])
+go_dag.connect_nodes()
 
 #print(go_dag.used_relationship_set)
 
@@ -37,8 +37,8 @@ test_paths = go_dag.find_all_paths(node1, node2)
 print(test_paths)
 """
 
-sub_dag = dag.SubGraph(go_dag, ['mitochondrion', 'mitochondria', 'mitochondrial'])
-for node in sub_dag.allowed_nodes:
+sub_dag = dag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion', 'mitochondria', 'mitochondrial'])
+for node in sub_dag.node_list:
 	print(node)
 
 #print([node.name for node in sub_dag.allowed_nodes])
