@@ -86,42 +86,42 @@ class OboGraph(object):
         return paths
 
 
-class GoGraph(OboGraph):
+class AbstractNode(object):
 
-    """A Gene-Ontology-specific graph. GO-specific idiosyncrasies will go here."""
+    """A node contaning all basic properties of an OBO node. The parser 
+    currently has direct access to datamembers."""
     
-    def __init__(self, sub_ontology=None):
-        super().__init__()
-        self.sub_ontology = sub_ontology
+    def __init__(self):
+        self.id = str()
+        self.name = str()
+        self.definition = str()
+        self.edges = list()
+        self.parent_node_set = set()
+        self.child_node_set = set()
+        self.obsolete = False
+
+    def add_edge(self, edge, allowed_relationships):
+        """Adds an edge to the node, and updates the node's parent and child 
+        sets."""
+        self.edges.append(edge)
+        self.update_node(edge, allowed_relationships)
+
+    def update_node(self, edge, allowed_relationships=None):
+        """Not terribly useful to have this as a separate funciton at the 
+        moment. Consider moving"""
+        if not allowed_relationships:
+            if edge.child_id == self.id:
+                self.parent_node_set.add(edge.parent_node)
+            elif edge.parent_id == self.id:
+                self.child_node_set.add(edge.child_node)
+        else:
+            if edge.child_id == self.id and edge.relationship in allowed_relationships:
+                self.parent_node_set.add(edge.parent_node)
+            elif edge.parent_id == self.id and edge.relationship in allowed_relationships:
+                self.child_node_set.add(edge.child_node)
 
 
-class SubGraph(OboGraph):
-
-    """A subgraph of a provided super_graph with node contents filtered to those
-    containing words from the provided keyword_list."""
-    
-    def __init__(self, super_graph):
-        super().__init__()
-        self.super_graph = super_graph
-
-    @staticmethod
-    def from_filtered_graph(graph, keyword_list, sub_ontology_filter=None, allowed_relationships=None):
-        subgraph = SubGraph(graph)
-        filtered_nodes = graph.filter_nodes(keyword_list, sub_ontology_filter)
-        filtered_edges = graph.filter_edges(filtered_nodes, allowed_relationships)
-        for node in filtered_nodes:
-            subgraph_node = SubGraphNode(node, allowed_relationships)
-            subgraph.add_node(subgraph_node)
-        for edge in filtered_edges:
-            subgraph.add_edge(edge)
-        subgraph.connect_nodes(allowed_relationships)
-
-        # Need to do the whole orphan node removal/extend subdag functions. These should go in obograph. 
-
-        return subgraph
-
-
-class Edge(object):
+class AbstractEdge(object):
 
     """An OBO edge which links two ontology term nodes and contains a 
     relationship type describing now the two nodes are related."""
@@ -177,75 +177,3 @@ class Edge(object):
         if new_child :
             self.child_id = new_child.id
 """        
-
-
-class AbstractNode(object):
-
-    """A node contaning all basic properties of an OBO node. The parser 
-    currently has direct access to datamembers."""
-    
-    def __init__(self):
-        self.id = str()
-        self.name = str()
-        self.definition = str()
-        self.edges = list()
-        self.parent_node_set = set()
-        self.child_node_set = set()
-        self.obsolete = False
-
-    def add_edge(self, edge, allowed_relationships):
-        """Adds an edge to the node, and updates the node's parent and child 
-        sets."""
-        self.edges.append(edge)
-        self.update_node(edge, allowed_relationships)
-
-    def update_node(self, edge, allowed_relationships=None):
-        """Not terribly useful to have this as a separate funciton at the 
-        moment. Consider moving"""
-        if not allowed_relationships:
-            if edge.child_id == self.id:
-                self.parent_node_set.add(edge.parent_node)
-            elif edge.parent_id == self.id:
-                self.child_node_set.add(edge.child_node)
-        else:
-            if edge.child_id == self.id and edge.relationship in allowed_relationships:
-                self.parent_node_set.add(edge.parent_node)
-            elif edge.parent_id == self.id and edge.relationship in allowed_relationships:
-                self.child_node_set.add(edge.child_node)
-            
-
-class GoGraphNode(AbstractNode):
-
-    """Extends AbstractNode to include GO relevant information"""
-    
-    def __init__(self):
-        super().__init__()
-        self.sub_ontology = None
-
-
-class SubGraphNode(AbstractNode):
-
-    """An instance of a node within a subgraph of an OBO ontology (super-graph)
-    """
-    
-    def __init__(self, super_node, allowed_relationships=None):
-        self.super_node = super_node
-        self.edges = list()  # Overwriting AbstractNode's edges, parent/child_node_sets
-        self.parent_node_set = set()
-        self.child_node_set = set()
-    
-    @property
-    def id(self):
-        return self.super_node.id
-
-    @property
-    def name(self):
-        return self.super_node.name
-    
-    @property
-    def definition(self):
-        return self.super_node.definition
-
-    @property
-    def obsolete(self):
-        return self.super_node.obsolete

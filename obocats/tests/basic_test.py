@@ -1,9 +1,11 @@
 # !/usr/bin/python3
 from . import dag
 from . import parser
+from . import godag
+from . import subdag
 
 obo_parser = parser.OboParser()
-go_dag = dag.GoGraph()
+go_dag = godag.GoGraph()
 # at the lab
 with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
     obo_parser.parse_go(database, go_dag)
@@ -37,7 +39,7 @@ test_paths = go_dag.find_all_paths(node1, node2)
 print(test_paths)
 """
 
-subdag = dag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion', 'mitochondria', 'mitochondrial'])
+subdag = subdag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion', 'mitochondria', 'mitochondrial'])
 #for node in sub_dag.node_list:
 #	print(node)
 
