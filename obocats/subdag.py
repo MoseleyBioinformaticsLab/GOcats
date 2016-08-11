@@ -21,7 +21,8 @@ class SubGraph(OboGraph):
             subgraph.add_edge(edge)
         subgraph.connect_nodes(allowed_relationships)
 
-        # Need to do the whole orphan node removal/extend subdag functions. These should go in obograph. 
+        # Need to do the whole orphan node removal/extend subdag functions. 
+        #These should go in obograph. 
 
         return subgraph
 
@@ -33,7 +34,7 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-        self.edges = list()  # Overwriting AbstractNode's edges, parent/child_node_sets
+        self.edges = list()  # Overwriting from AbstractNode
         self.parent_node_set = set()
         self.child_node_set = set()
     
