@@ -176,4 +176,4 @@ class AbstractEdge(object):
         self._child_node = new_child
         if new_child :
             self.child_id = new_child.id
-"""        
+"""
