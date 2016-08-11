@@ -41,18 +41,15 @@ class OboGraph(object):
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
         if sub_ontology_filter:
             filtered_nodes = [node for node in filtered_nodes if node.sub_ontology == sub_ontology_filter]
-        return list(filtered_nodes)
+        return filtered_nodes
 
     def filter_edges(self, filtered_nodes, allowed_relationships=None):
         """Returns a list of edges from a parent graph that involve nodes in the
         filtered nodes list and, if specified, has an allowed relationship type."""
-        print([edge.parent_node.name for edge in self.edge_list if edge.parent_node in filtered_nodes])
-#        filtered_edges = [edge for edge in self.edge_list if edge.parent_node and edge.child_node in filtered_nodes]
+        filtered_edges = [edge for edge in self.edge_list if edge.parent_node in filtered_nodes and edge.child_node in filtered_nodes]
         if allowed_relationships:
             filtered_edges = [edge for edge in filtered_edges if edge.relationship in allowed_relationships]
         return filtered_edges
-
-
 
 
     def find_all_paths(self, start_node, end_node, direction='parent', allowed_relationships=None, path=[]):    
@@ -91,7 +88,7 @@ class OboGraph(object):
 
 class GoGraph(OboGraph):
 
-    """A Gene-Ontology-specific graph"""
+    """A Gene-Ontology-specific graph. GO-specific idiosyncrasies will go here."""
     
     def __init__(self, sub_ontology=None):
         super().__init__()
@@ -196,13 +193,15 @@ class AbstractNode(object):
         self.child_node_set = set()
         self.obsolete = False
 
-
     def add_edge(self, edge, allowed_relationships):
-        """Adds an edge to the node, and updates the """
+        """Adds an edge to the node, and updates the node's parent and child 
+        sets."""
         self.edges.append(edge)
         self.update_node(edge, allowed_relationships)
 
     def update_node(self, edge, allowed_relationships=None):
+        """Not terribly useful to have this as a separate funciton at the 
+        moment. Consider moving"""
         if not allowed_relationships:
             if edge.child_id == self.id:
                 self.parent_node_set.add(edge.parent_node)
@@ -231,8 +230,9 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-#        self._populate_edges(allowed_relationships)
-#        self.update_node(allowed_relationships)
+        self.edges = list()  # Overwriting AbstractNode's edges, parent/child_node_sets
+        self.parent_node_set = set()
+        self.child_node_set = set()
     
     @property
     def id(self):
