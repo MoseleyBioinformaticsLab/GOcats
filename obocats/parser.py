@@ -1,6 +1,7 @@
 # !/usr/bin/python3
 import re
-from .dag import AbstractNode, GoGraphNode, Edge
+from .dag import AbstractNode, AbstractEdge
+from .godag import GoGraphNode
 
 class OboParser(object):
 
@@ -52,13 +53,13 @@ class OboParser(object):
                     node.definition = re.findall('\"(.*?)\"', line)[0]  # This pattern matches the definition listed within quotes on the line.
 
                 elif re.match(self.is_a, line):
-                    node_edge = Edge(re.findall(self.go_term, line)[0], curr_term_id, 'is_a')  # par_id, child_id, relationship
+                    node_edge = AbstractEdge(re.findall(self.go_term, line)[0], curr_term_id, 'is_a')  # par_id, child_id, relationship
                     node_edge_list.append(node_edge)
                     graph.used_relationship_set.add('is_a')  # I will consider 'is_a' a relationship type although the OBO formatting does not technically connsider it a 'relationship'
 
                 elif re.match(self.relationship_match, line):
                     relationship = re.findall("[\w]+", line)[1]  # line example: relationship: part_of GO:0040025 ! vuval development
-                    node_edge = Edge(re.findall(self.go_term, line)[0], curr_term_id, relationship)
+                    node_edge = AbstractEdge(re.findall(self.go_term, line)[0], curr_term_id, relationship)
                     node_edge_list.append(node_edge)
                     graph.used_relationship_set.add(relationship)
 
