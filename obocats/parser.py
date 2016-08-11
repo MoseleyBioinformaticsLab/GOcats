@@ -19,10 +19,12 @@ class OboParser(object):
         self.is_a = re.compile('^is_a:')
         self.relationship_match = ('^relationship:')
         self.endterm_stanza = re.compile('^\s+')
+
         # May use later. 
         #self.typedef_stanza = re.compile('^\[Typedef\]')
         #self.comment = re.compile('\!.+')
         #self.subset = re.compile('^subset:')
+
 
 class GoParser(OboParser):
 
@@ -34,11 +36,7 @@ class GoParser(OboParser):
         self.go_graph = go_graph
 
     def parse(self):
-        # TODO: find all relationship types in go and add to a list of relationship types 
-        # TODO: ensure that graph is GOgraph. in the future, don't want to use parse_go for non-go objects.
-        """Parses the database using a PARAMETER graph which handles the database, PARAMETER database_file.
-        Handles Gene Ontology (GO) obo files. Uses GoGraphNode() objects and should be opperated on GoGraph
-        objects."""
+        # TODO: find all relationship types using TypeDef stanza
         is_term = False
 
         for line in self.database_file:

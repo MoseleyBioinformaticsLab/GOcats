@@ -3,7 +3,7 @@ from .dag import OboGraph, AbstractNode, AbstractEdge
 
 class GoGraph(OboGraph):
 
-    """A Gene-Ontology-specific graph. GO-specific idiosyncrasies will go here."""
+    """A Gene-Ontology-specific graph. GO-specific idiosyncrasies go here."""
     
     def __init__(self, sub_ontology=None):
         super().__init__()
