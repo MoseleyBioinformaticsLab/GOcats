@@ -26,9 +26,9 @@ go_dag.connect_nodes()
 
 test_node = go_dag.node_list[1117]
 
-print([node.id for node in test_node.parent_node_set], '\n', '    -->', test_node.id, '\n', '        ', [node.id for node in test_node.child_node_set])
-for node in go_dag.root_nodes:
-	print(node.name)
+#print([node.id for node in test_node.parent_node_set], '\n', '    -->', test_node.id, '\n', '        ', [node.id for node in test_node.child_node_set])
+#for node in go_dag.root_nodes:
+#	print(node.name)
 
 """tests the path traversal method that doesnt work
 node1 = go_dag.id_index['GO:0051079']
@@ -37,8 +37,10 @@ test_paths = go_dag.find_all_paths(node1, node2)
 print(test_paths)
 """
 
-sub_dag = dag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion', 'mitochondria', 'mitochondrial'])
-for node in sub_dag.node_list:
-	print(node)
+subdag = dag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion', 'mitochondria', 'mitochondrial'])
+#for node in sub_dag.node_list:
+#	print(node)
 
 #print([node.name for node in sub_dag.allowed_nodes])
+for node in subdag.node_list:
+	print(node.name)
