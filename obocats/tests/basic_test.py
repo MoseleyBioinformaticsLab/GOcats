@@ -4,16 +4,17 @@ from . import parser
 from . import godag
 from . import subdag
 
-obo_parser = parser.OboParser()
+mlab_database = open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r')  # @ work
+home_database = open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r')  # @home
+
+# Parse GO and make the graph. 
 go_dag = godag.GoGraph()
-# at the lab
-with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as database:
-    obo_parser.parse_go(database, go_dag)
-# at home
-#with open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r') as database:
-#    obo_parser.parse_go(database, go_dag)
+go_parser = parser.GoParser(mlab_database, go_dag)
+go_parser.parse()
+database.close()
+go_dag.connect_nodes()
 
-
+# Test printing
 #print(len(go_dag.node_list))
 #print(len(go_dag.edge_list))
 #for node in go_dag.node_list:
@@ -21,8 +22,6 @@ with open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r') as databas
 	
 #for edge in go_dag.edge_list:
 #    print(edge.child_id, '-->', edge.parent_id, edge.relationship)
-
-go_dag.connect_nodes()
 
 #print(go_dag.used_relationship_set)
 
@@ -44,5 +43,5 @@ subdag = subdag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion', 'mitochon
 #	print(node)
 
 #print([node.name for node in sub_dag.allowed_nodes])
-for node in subdag.node_list:
-	print(node.name)
+#for node in subdag.node_list:
+#	print(node.name)
