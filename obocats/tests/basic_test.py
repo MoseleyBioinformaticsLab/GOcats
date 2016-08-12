@@ -4,14 +4,14 @@ from . import parser
 from . import godag
 from . import subdag
 
-mlab_database = open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r')  # @ work
-#home_database = open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r')  # @home
+#mlab_database = open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r')  # @ work
+home_database = open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r')  # @home
 
 # Parse GO and make the graph. 
-go_dag = godag.GoGraph()
-go_parser = parser.GoParser(mlab_database, go_dag)
+go_dag = godag.GoGraph(namespace_filter="biological_process")
+go_parser = parser.GoParser(home_database, go_dag)
 go_parser.parse()
-mlab_database.close()
+home_database.close()
 go_dag.connect_nodes()
 
 # Test printing
