@@ -46,10 +46,14 @@ class OboGraph(object):
 
     def connect_nodes(self, allowed_relationships=None):
         for edge in self.edge_list:
-            edge.parent_node = self.id_index[edge.parent_id]
-            edge.child_node = self.id_index[edge.child_id]
-            self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)
-            self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
+            try:
+                edge.parent_node = self.id_index[edge.parent_id]
+            except KeyError:
+                self.edge_list.remove(edge)
+            else:
+                edge.child_node = self.id_index[edge.child_id]
+                self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)
+                self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
 
     def filter_nodes(self, keyword_list, sub_ontology_filter=None):
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
