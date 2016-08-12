@@ -55,7 +55,7 @@ class GoParser(OboParser):
                     node.name = line[6:-1]  # ignores 'name: '
 
                 elif re.match(self.namespace, line):
-                    node.sub_ontology = line[11:-1]  # ignores 'namespace: '
+                    node.namespace = line[11:-1]  # ignores 'namespace: '
 
                 elif re.match(self.term_definition, line):
                     node.definition = re.findall('\"(.*?)\"', line)[0]  # This pattern matches the definition listed within quotes on the line.
@@ -63,21 +63,22 @@ class GoParser(OboParser):
                 elif re.match(self.is_a, line):
                     node_edge = AbstractEdge(re.findall(self.go_term, line)[0], curr_term_id, 'is_a')  # par_id, child_id, relationship
                     node_edge_list.append(node_edge)
-                    self.go_graph.used_relationship_set.add('is_a')  # I will consider 'is_a' a relationship type although the OBO formatting does not technically connsider it a 'relationship'
 
                 elif re.match(self.relationship_match, line):
                     relationship = re.findall("[\w]+", line)[1]  # line example: relationship: part_of GO:0040025 ! vuval development
                     node_edge = AbstractEdge(re.findall(self.go_term, line)[0], curr_term_id, relationship)
                     node_edge_list.append(node_edge)
-                    self.go_graph.used_relationship_set.add(relationship)
 
                 elif re.match(self.obsolete, line):
                     node.obsolete = True
 
                 elif re.match(self.endterm_stanza, line):
-                    self.go_graph.add_node(node)
-                    for edge in node_edge_list:
-                        self.go_graph.add_edge(edge)
-                    if node_edge_list == [] and node.obsolete == False:  # Have to look at the local edge list because nodes have not been linked with edges yet. Entire graph must be populated first. This is the only way to do this on-the-fly.
-                        self.go_graph.root_nodes.append(node)
+                    if self.go_graph.valid_node(node):
+                        self.go_graph.add_node(node)
+                        for edge in node_edge_list:
+                            if self.go_graph.valid_relationship(edge):
+                                self.go_graph.add_edge(edge)
+                                self.go_graph.used_relationship_set.add(edge.relationship)
+                        if node_edge_list == [] and node.obsolete == False:  # Have to look at the local edge list because nodes have not been linked with edges yet. Entire graph must be populated first. This is the only way to do this on-the-fly.
+                            self.go_graph.root_nodes.append(node)
                     is_term = False

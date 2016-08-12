@@ -6,13 +6,31 @@ class OboGraph(object):
     """A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
     acyclic graph (DAG)"""
 
-    def __init__(self):
+    def __init__(self, namespace_filter=None, allowed_relationships=None):
+        self.namespace_filter = namespace_filter
+        self.allowed_relationships = allowed_relationships
         self.node_list = list()
         self.edge_list = list()
         self.id_index = dict()
         self.vocab_index = dict() 
         self.used_relationship_set = set()  
         self.root_nodes = list()  
+
+    def valid_node(self, node):
+        if not self.namespace_filter:
+            return True
+        elif node.namespace == self.namespace_filter:
+            return True
+        else:
+            return False
+
+    def valid_relationship(self, edge):
+        if not self.allowed_relationships:
+            return True
+        elif edge.relationship in self.allowed_relationships:
+            return True
+        else:
+            return False
 
     def add_node(self, node):
         self.node_list.append(node)
@@ -55,6 +73,7 @@ class AbstractNode(object):
         self.id = str()
         self.name = str()
         self.definition = str()
+        self.namespace = str()
         self.edges = list()
         self.parent_node_set = set()
         self.child_node_set = set()
