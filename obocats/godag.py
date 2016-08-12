@@ -9,7 +9,7 @@ class GoGraph(OboGraph):
         self.valid_namespaces = ['cellular_component', 'biological_process', 'molecular_function', None]
         if namespace_filter not in self.valid_namespaces:
             raise Exception("{} is not a valid Gene Ontology namespace.\nPlease select from the following: {}".format(namespace_filter, self.valid_namespaces))
-
+        # this looks goofy
         super().__init__(namespace_filter=namespace_filter, allowed_relationships=allowed_relationships)
 
 
