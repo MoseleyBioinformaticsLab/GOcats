@@ -14,9 +14,24 @@ class OboGraph(object):
         self.id_index = dict()
         self.vocab_index = dict() 
         self.used_relationship_set = set()  
-        self.root_nodes = list()  
+        self.root_nodes = list()
 
+        if self.allowed_relationships:
+            if not 'is_a' in self.allowed_relationships:
+                print("WARNING: 'is_a' is a required relationship type within OBO ontologies.\nAdding 'is_a' to the allowed_relationships list.")
+                self.allowed_relationships.append('is_a')
+
+    #Make sure that this is a proper/efficient use of the @property syntax. 
+    @property
+    def orphans(self):
+        return [node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes]
+
+    @property
+    def leaves(self):
+        return [node for node in self.node_list if not node.obsolete and not node.child_node_set]
+    
     def valid_node(self, node):
+        # Filter here for obsolete?
         if not self.namespace_filter:
             return True
         elif node.namespace == self.namespace_filter:
@@ -47,7 +62,7 @@ class OboGraph(object):
     def connect_nodes(self, allowed_relationships=None):
         for edge in self.edge_list:
             try:
-                edge.parent_node = self.id_index[edge.parent_id]
+                edge.parent_node = self.id_index[edge.parent_id]  # Here is where I check to see if the edge is valid considering the namespace filter
             except KeyError:
                 self.edge_list.remove(edge)
             else:
@@ -66,6 +81,26 @@ class OboGraph(object):
         if allowed_relationships:
             filtered_edges = [edge for edge in filtered_edges if edge.relationship in allowed_relationships]
         return filtered_edges
+
+    def descendants(self, node):
+        descendant_set = set()
+        children = list(node.child_node_set)
+        while len(children) > 0:
+            for child in children:
+                descendant_set.add(child)
+                children.extend(child.child_node_set)
+                children.remove(child)
+        return descendant_set
+
+    def ancestors(self, node):
+        ancestors_set = set()
+        parents = list(node.parent_node_set)
+        while len(parents) > 0:
+            for parent in parents:
+                ancestors_set.add(parent)
+                parents.extend(parent.parent_node_set)
+                parents.remove(parent)
+        return ancestors_set
 
 
 class AbstractNode(object):
