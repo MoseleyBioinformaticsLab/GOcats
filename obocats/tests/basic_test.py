@@ -4,14 +4,14 @@ from . import parser
 from . import godag
 from . import subdag
 
-#mlab_database = open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r')  # @ work
-home_database = open('/home/eugene/Databases/GeneOntology/07-25-2016/go.obo', 'r')  # @home
+mlab_database = open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r')  # @ work
+#home_database = open('/home/eugene/Databases/GeneOntology/07-25-2016/go.obo', 'r')  # @home
 
 # Parse GO and make the graph. 
 go_dag = godag.GoGraph("cellular_component")
-go_parser = parser.GoParser(home_database, go_dag)
+go_parser = parser.GoParser(mlab_database, go_dag)
 go_parser.parse()
-home_database.close()
+mlab_database.close()
 go_dag.connect_nodes()
 
 # Test printing
@@ -19,7 +19,7 @@ go_dag.connect_nodes()
 #print(len(go_dag.edge_list))
 #for node in go_dag.node_list:
 #    print(node.id)
-	
+    
 #for edge in go_dag.edge_list:
 #    print(edge.child_id, '-->', edge.parent_id, edge.relationship)
 
@@ -28,9 +28,9 @@ go_dag.connect_nodes()
 #test_node = go_dag.node_list[1117]
 #print([node.id for node in test_node.parent_node_set], '\n', '    -->', test_node.id, '\n', '        ', [node.id for node in test_node.child_node_set])
 #for node in go_dag.root_nodes:
-#	print(node.name)
+#   print(node.name)
 #for node in go_dag.descendants(test_node):
-#	print(node.name)
+#   print(node.name)
 
 """tests the path traversal method that doesnt work
 node1 = go_dag.id_index['GO:0051079']
@@ -40,9 +40,14 @@ print(test_paths)
 """
 
 #for node in go_dag.orphans:
-#	print(node.name)
+#   print(node.name)
 
 subdag = subdag.SubGraph.from_filtered_graph(go_dag, ['Golgi'])
-print(subdag.top_node.name)
+
+for node in subdag.node_list:
+    print(node.name, "\n", "    parents: ", [pnode.name for pnode in node.parent_node_set], "\n", "        children: ", [cnode.name for cnode in node.child_node_set])
+for orphan in subdag.orphans:
+    print(orphan.name)
+
 #for node in subdag.node_list:
-#	print(node)
+#   print(node)

@@ -56,8 +56,25 @@ class OboGraph(object):
             except KeyError:
                 self.vocab_index[word] = set([node])
 
+    def remove_node(self, node):
+        self.node_list.remove(node)
+        del self.id_index[node.id]
+        for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
+            try:
+                self.vocab_index[word].remove(node)
+            except KeyError:
+                pass
+            else:
+                if not self.vocab_index[word]:
+                    del self.vocab_index[word]
+
     def add_edge(self, edge):
         self.edge_list.append(edge)
+
+    def remove_edge(self, edge):
+        self.edge_list.remove(edge)
+        self.id_index[edge.parent_id].remove_edge(edge)
+        self.id_index[edge.child_id].remove_edge(edge)
 
     def connect_nodes(self, allowed_relationships=None):
         for edge in self.edge_list:
@@ -120,9 +137,6 @@ class AbstractNode(object):
 
     def add_edge(self, edge, allowed_relationships):
         self.edges.append(edge)
-        self.update_node(edge, allowed_relationships)
-
-    def update_node(self, edge, allowed_relationships=None):
         if not allowed_relationships:
             if edge.child_id == self.id:
                 self.parent_node_set.add(edge.parent_node)
@@ -133,6 +147,13 @@ class AbstractNode(object):
                 self.parent_node_set.add(edge.parent_node)
             elif edge.parent_id == self.id and edge.relationship in allowed_relationships:
                 self.child_node_set.add(edge.child_node)
+
+    def remove_edge(self, edge):
+        self.edges.remove(edge)
+        if edge.child_id == self.id:
+            self.parent_node_set.remove(edge.parent_node)
+        elif edge.parent_id == self.id:
+            self.child_node_set.remove(edge.child_node)
 
 
 class AbstractEdge(object):
