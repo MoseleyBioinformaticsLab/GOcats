@@ -12,6 +12,21 @@ class SubGraph(OboGraph):
         self.super_graph = super_graph
         self.top_node = None
 
+    def remove_orphans(self):
+        print([node.name for node in self.descendants(self.top_node)])
+        for node in self.orphans:
+            if node.id == self.top_node.id:
+                pass
+            elif node not in self.descendants(self.top_node):
+                print("Removing node: ", node.name)
+                for edge in node.edges:
+                    self.remove_edge(edge)
+                self.remove_node(node)
+
+    @staticmethod
+    def extend_subdag(graph, subgraph, node_list, top_node):
+        return
+
     @staticmethod
     def find_top_node(graph, keyword_list, node_list):
         candidates = [node for node in node_list if len(set(re.findall(r"[\w'-]+", node.name)).intersection(set(keyword_list))) > 0 and not node.obsolete]
@@ -31,6 +46,8 @@ class SubGraph(OboGraph):
             subgraph.add_edge(edge)
         subgraph.connect_nodes(allowed_relationships)
         subgraph.top_node = subgraph.find_top_node(graph, keyword_list, filtered_nodes)
+        while len(subgraph.orphans) > 1:
+            subgraph.remove_orphans()
 
         # Need to do the whole orphan node removal/extend subdag functions. 
         #These should go in obograph. 
