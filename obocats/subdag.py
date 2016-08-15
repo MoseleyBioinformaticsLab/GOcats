@@ -14,13 +14,14 @@ class SubGraph(OboGraph):
 
     @staticmethod
     def find_top_node(graph, keyword_list, node_list):
-        candidates = [node for node in node_list if len(set(re.findall(r"[\w'-]+", node.name).intersection(set(keyword_list)))) > 0 and not node.obsolete]
+        candidates = [node for node in node_list if len(set(re.findall(r"[\w'-]+", node.name)).intersection(set(keyword_list))) > 0 and not node.obsolete]
         top_node_scoring = {node: len(graph.descendants(node)) for node in candidates}
         return max(top_node_scoring, key=top_node_scoring.get)
 
     @staticmethod
     def from_filtered_graph(graph, keyword_list, sub_ontology_filter=None, allowed_relationships=None):
         subgraph = SubGraph(graph)
+        keyword_list = [word.lower() for word in keyword_list]
         filtered_nodes = graph.filter_nodes(keyword_list, sub_ontology_filter)
         filtered_edges = graph.filter_edges(filtered_nodes, allowed_relationships)
         for node in filtered_nodes:
@@ -29,8 +30,6 @@ class SubGraph(OboGraph):
         for edge in filtered_edges:
             subgraph.add_edge(edge)
         subgraph.connect_nodes(allowed_relationships)
-        for node in filtered_nodes:
-            print(node.name)
         subgraph.top_node = subgraph.find_top_node(graph, keyword_list, filtered_nodes)
 
         # Need to do the whole orphan node removal/extend subdag functions. 

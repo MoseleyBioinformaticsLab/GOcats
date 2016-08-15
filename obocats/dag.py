@@ -52,9 +52,9 @@ class OboGraph(object):
         self.id_index[node.id] = node
         for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
             try:
-                self.vocab_index[word.lower()].add(node)
+                self.vocab_index[word].add(node)
             except KeyError:
-                self.vocab_index[word.lower()] = set([node])
+                self.vocab_index[word] = set([node])
 
     def add_edge(self, edge):
         self.edge_list.append(edge)
