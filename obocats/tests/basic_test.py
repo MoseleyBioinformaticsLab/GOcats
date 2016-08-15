@@ -5,7 +5,7 @@ from . import godag
 from . import subdag
 
 #mlab_database = open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r')  # @ work
-home_database = open('/home/eugene/Databases/GeneOntology/06-14-2016/go.obo', 'r')  # @home
+home_database = open('/home/eugene/Databases/GeneOntology/07-25-2016/go.obo', 'r')  # @home
 
 # Parse GO and make the graph. 
 go_dag = godag.GoGraph("cellular_component")

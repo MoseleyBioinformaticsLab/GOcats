@@ -52,13 +52,13 @@ class GoParser(OboParser):
                     curr_term_id = node.id
 
                 elif re.match(self.term_name, line):
-                    node.name = line[6:-1]  # ignores 'name: '
+                    node.name = line[6:-1].lower()  # ignores 'name: '
 
                 elif re.match(self.namespace, line):
-                    node.namespace = line[11:-1]  # ignores 'namespace: '
+                    node.namespace = line[11:-1].lower()  # ignores 'namespace: '
 
                 elif re.match(self.term_definition, line):
-                    node.definition = re.findall('\"(.*?)\"', line)[0]  # This pattern matches the definition listed within quotes on the line.
+                    node.definition = re.findall('\"(.*?)\"', line)[0].lower()  # This pattern matches the definition listed within quotes on the line.
 
                 elif re.match(self.is_a, line):
                     node_edge = AbstractEdge(re.findall(self.go_term, line)[0], curr_term_id, 'is_a')  # par_id, child_id, relationship
