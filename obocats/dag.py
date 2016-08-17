@@ -1,5 +1,6 @@
- # !/usr/bin/python3
+# !/usr/bin/python3
 import re
+
 
 class OboGraph(object):
 
@@ -15,20 +16,27 @@ class OboGraph(object):
         self.vocab_index = dict() 
         self.used_relationship_set = set()  
         self.root_nodes = list()
+        self._orphans = list()
+        self._leaves = list()
+        self._modified = False
 
         if self.allowed_relationships:
-            if not 'is_a' in self.allowed_relationships:
+            if 'is_a' not in self.allowed_relationships:
                 print("WARNING: 'is_a' is a required relationship type within OBO ontologies.\nAdding 'is_a' to the allowed_relationships list.")
                 self.allowed_relationships.append('is_a')
 
-    #Make sure that this is a proper/efficient use of the @property syntax. 
+    # Make sure that this is a proper/efficient use of the @property syntax.
     @property
     def orphans(self):
-        return [node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes]
+        if self._modified:
+            self._update_graph()
+        return self._orphans
 
     @property
     def leaves(self):
-        return [node for node in self.node_list if not node.obsolete and not node.child_node_set]
+        if self._modified:
+            self._update_graph()
+        return self._leaves
     
     def valid_node(self, node):
         # Filter here for obsolete?
@@ -47,7 +55,13 @@ class OboGraph(object):
         else:
             return False
 
+    def _update_graph(self):
+        self._modified = False
+        self._orphans = set([node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes])
+        self.leaves = set([node for node in self.node_list if not node.obsolete and not node.child_node_set])
+
     def add_node(self, node):
+        self._modified = True
         self.node_list.append(node)
         self.id_index[node.id] = node
         for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
@@ -69,33 +83,22 @@ class OboGraph(object):
         self.node_list.remove(node)
 
     def add_edge(self, edge):
+        self._modified = True
         self.edge_list.append(edge)
 
     def remove_edge(self, edge):
+        self._modified = True
         self.id_index[edge.parent_id].remove_edge(edge)
         self.id_index[edge.child_id].remove_edge(edge)
         self.edge_list.remove(edge)
 
     def connect_nodes(self):
+        self._modified = True
         for edge in self.edge_list:
-            # Assign parent nodes to edges, if they exist in the graph. Remove the edge otherwise
-            try:
-                edge.parent_node = self.id_index[edge.parent_id]  
-            except KeyError:
-                if edge in self.edge_list:
-                    self.edge_list.remove(edge)
-            else:
-                self.id_index[edge.parent_id].add_edge(edge, self.allowed_relationships)
-
-            # Assign child nodes to edges, if they exist in the graph. Remove the edge otherwise
-            try:
-                edge.child_node = self.id_index[edge.child_id]
-            except KeyError:
-                if edge in self.edge_list:
-                    self.edge_list.remove(edge)
-            else:
-                self.id_index[edge.child_id].add_edge(edge, self.allowed_relationships)
-
+            edge.parent_node = self.id_index[edge.parent_id]
+            edge.child_node = self.id_index[edge.child_id]
+            self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)
+            self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
 
     def filter_nodes(self, keyword_list):
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
@@ -113,20 +116,20 @@ class OboGraph(object):
         descendant_set = set()
         children = list(node.child_node_set)
         while len(children) > 0:
-            for child in children:
-                descendant_set.add(child)
-                children.extend(child.child_node_set)
-                children.remove(child)
+            child = children[0]
+            descendant_set.add(child)
+            children.extend(child.child_node_set)
+            children.remove(child)
         return descendant_set
 
     def ancestors(self, node):
         ancestors_set = set()
         parents = list(node.parent_node_set)
         while len(parents) > 0:
-            for parent in parents:
-                ancestors_set.add(parent)
-                parents.extend(parent.parent_node_set)
-                parents.remove(parent)
+            parent = parents[0]
+            ancestors_set.add(parent)
+            parents.extend(parent.parent_node_set)
+            parents.remove(parent)
         return ancestors_set
 
 
@@ -182,7 +185,7 @@ class AbstractEdge(object):
     def parent_id(self):
         if self.parent_node :
             return self.parent_node.id
-        else :
+        else:
             return self._parent_id
 
     @parent_id.setter
@@ -193,7 +196,7 @@ class AbstractEdge(object):
     def child_id(self):
         if self.child_node :
             return self.child_node.id
-        else :
+        else:
             return self._child_id
 
     @child_id.setter
