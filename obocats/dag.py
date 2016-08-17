@@ -55,6 +55,12 @@ class OboGraph(object):
         else:
             return False
 
+    def valid_edge(self, edge):
+        if edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index:
+            return True
+        else:
+            return False
+
     def _update_graph(self):
         self._modified = False
         self._orphans = set([node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes])
