@@ -1,17 +1,17 @@
 # !/usr/bin/python3
+import sys
 from . import dag
 from . import parser
 from . import godag
 from . import subdag
 
-mlab_database = open('/mlab/data/databases/GeneOntology/05-26-2016/go.obo', 'r')  # @ work
-#home_database = open('/home/eugene/Databases/GeneOntology/07-25-2016/go.obo', 'r')  # @home
+database = open(sys.argv[1], "r")
 
 # Parse GO and make the graph. 
-go_dag = godag.GoGraph("cellular_component")
-go_parser = parser.GoParser(mlab_database, go_dag)
+go_dag = godag.GoGraph()
+go_parser = parser.GoParser(database, go_dag)
 go_parser.parse()
-mlab_database.close()
+database.close()
 go_dag.connect_nodes()
 
 # Test printing
@@ -19,7 +19,7 @@ go_dag.connect_nodes()
 #print(len(go_dag.edge_list))
 #for node in go_dag.node_list:
 #    print(node.id)
-    
+#    
 #for edge in go_dag.edge_list:
 #    print(edge.child_id, '-->', edge.parent_id, edge.relationship)
 
@@ -42,12 +42,12 @@ print(test_paths)
 #for node in go_dag.orphans:
 #   print(node.name)
 
-subdag = subdag.SubGraph.from_filtered_graph(go_dag, ['Golgi'])
+subdag = subdag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion'], "cellular_component")
 
-for node in subdag.node_list:
-    print(node.name, "\n", "    parents: ", [pnode.name for pnode in node.parent_node_set], "\n", "        children: ", [cnode.name for cnode in node.child_node_set])
-for orphan in subdag.orphans:
-    print(orphan.name)
+#for node in subdag.node_list:
+#    print(node.name, "\n", "    parents: ", [pnode.name for pnode in node.parent_node_set], "\n", "        children: ", [cnode.name for cnode in node.child_node_set])
+#for orphan in subdag.orphans:
+#    print(orphan.name)
 
 #for node in subdag.node_list:
 #   print(node)

@@ -57,8 +57,6 @@ class OboGraph(object):
                 self.vocab_index[word] = set([node])
 
     def remove_node(self, node):
-        self.node_list.remove(node)
-        del self.id_index[node.id]
         for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
             try:
                 self.vocab_index[word].remove(node)
@@ -67,36 +65,48 @@ class OboGraph(object):
             else:
                 if not self.vocab_index[word]:
                     del self.vocab_index[word]
+        del self.id_index[node.id]
+        self.node_list.remove(node)
 
     def add_edge(self, edge):
         self.edge_list.append(edge)
 
     def remove_edge(self, edge):
-        self.edge_list.remove(edge)
         self.id_index[edge.parent_id].remove_edge(edge)
         self.id_index[edge.child_id].remove_edge(edge)
+        self.edge_list.remove(edge)
 
-    def connect_nodes(self, allowed_relationships=None):
+    def connect_nodes(self):
         for edge in self.edge_list:
+            # Assign parent nodes to edges, if they exist in the graph. Remove the edge otherwise
             try:
-                edge.parent_node = self.id_index[edge.parent_id]  # Here is where I check to see if the edge is valid considering the namespace filter
+                edge.parent_node = self.id_index[edge.parent_id]  
             except KeyError:
-                self.edge_list.remove(edge)
+                if edge in self.edge_list:
+                    self.edge_list.remove(edge)
             else:
-                edge.child_node = self.id_index[edge.child_id]
-                self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)
-                self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
+                self.id_index[edge.parent_id].add_edge(edge, self.allowed_relationships)
 
-    def filter_nodes(self, keyword_list, sub_ontology_filter=None):
+            # Assign child nodes to edges, if they exist in the graph. Remove the edge otherwise
+            try:
+                edge.child_node = self.id_index[edge.child_id]
+            except KeyError:
+                if edge in self.edge_list:
+                    self.edge_list.remove(edge)
+            else:
+                self.id_index[edge.child_id].add_edge(edge, self.allowed_relationships)
+
+
+    def filter_nodes(self, keyword_list):
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
-        if sub_ontology_filter:
-            filtered_nodes = [node for node in filtered_nodes if node.sub_ontology == sub_ontology_filter]
+        if self.namespace_filter:
+            filtered_nodes = [node for node in filtered_nodes if node.namespace == self.namespace_filter]
         return filtered_nodes
 
-    def filter_edges(self, filtered_nodes, allowed_relationships=None):
+    def filter_edges(self, filtered_nodes):
         filtered_edges = [edge for edge in self.edge_list if edge.parent_node in filtered_nodes and edge.child_node in filtered_nodes]
-        if allowed_relationships:
-            filtered_edges = [edge for edge in filtered_edges if edge.relationship in allowed_relationships]
+        if self.allowed_relationships:
+            filtered_edges = [edge for edge in filtered_edges if edge.relationship in self.allowed_relationships]
         return filtered_edges
 
     def descendants(self, node):
@@ -149,11 +159,11 @@ class AbstractNode(object):
                 self.child_node_set.add(edge.child_node)
 
     def remove_edge(self, edge):
-        self.edges.remove(edge)
         if edge.child_id == self.id:
             self.parent_node_set.remove(edge.parent_node)
         elif edge.parent_id == self.id:
             self.child_node_set.remove(edge.child_node)
+        self.edges.remove(edge)
 
 
 class AbstractEdge(object):
