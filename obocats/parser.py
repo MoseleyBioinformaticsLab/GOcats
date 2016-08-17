@@ -1,7 +1,8 @@
 # !/usr/bin/python3
 import re
-from .dag import AbstractNode, AbstractEdge
+from .dag import AbstractEdge
 from .godag import GoGraphNode
+
 
 class OboParser(object):
 
@@ -17,7 +18,7 @@ class OboParser(object):
         self.term_definition = re.compile('^def:')
         self.obsolete = re.compile('^is_obsolete:\strue')
         self.is_a = re.compile('^is_a:')
-        self.relationship_match = ('^relationship:')
+        self.relationship_match = re.compile('^relationship:')
         self.endterm_stanza = re.compile('^\s+')
 
         # May use later. 

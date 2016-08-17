@@ -1,5 +1,4 @@
 from .dag import OboGraph, AbstractNode
-import re
 
 
 class SubGraph(OboGraph):
@@ -10,7 +9,20 @@ class SubGraph(OboGraph):
     def __init__(self, super_graph, namespace_filter=None, allowed_relationships=None):
         self.super_graph = super_graph
         self.top_node = None
+
+        if self.super_graph.namespace_filter and self.super_graph.namespace_filter != namespace_filter:
+            raise Exception("Unless a namespace_filter is not specified for a parent_graph, a subgraph's namespace_filter must not differ from its parent graph's namespace_filter.\nsubgraph namespace_filter = {}, supergraph namespace_filter = {}").format(namespace_filter, self.super_graph.namespace_filter)
+        
+        if self.super_graph.allowed_relationships and allowed_relationships and any(relationship not in self.super_graph.allowed_relationships for relationship in allowed_relationships):
+            raise Exception("Unless an allowed_relationships list is not specified for a parent graph, a subgraph's allowed_relationships list must be a subset of, or exactly, its parent graph's allowed_relationships list.\nsubgraph allowed_relationships = {}, supergraph allowed_relationships = {}").format(allowed_relationships, self.super_graph.allowed_relationships)
+        
         super().__init__(namespace_filter, allowed_relationships)
+
+    def subnode(self, super_node):
+        if parent_node.id not in self.id_index:
+            self.add_node(super_node)
+        
+        return self.id_index[super_node.id]
 
     def remove_orphans(self):
         print([node.name for node in self.descendants(self.top_node)])
@@ -23,6 +35,11 @@ class SubGraph(OboGraph):
                     self.remove_edge(edge)
                 self.remove_node(node)
 
+    def add_node(self, super_node):
+        subgraph_node = SubGraphNode(super_node, self.allowed_relationships)
+        if subgraph.valid_node(subgraph_node):
+            super().add_node(subgraph_node)
+    
     @staticmethod
     def extend_subdag(super_graph, subgraph, node_list, top_node):
         return
@@ -43,24 +60,15 @@ class SubGraph(OboGraph):
         filtered_nodes = super_graph.filter_nodes(keyword_list)
         filtered_edges = super_graph.filter_edges(filtered_nodes)
 
-        for node in filtered_nodes:
-            subgraph_node = SubGraphNode(node, allowed_relationships)
-            if subgraph.valid_node(subgraph_node):
-                subgraph.add_node(subgraph_node)
-        for edge in filtered_edges:
+        for super_node in filtered_nodes:
+            subgraph.add_node(super_node)
+        for edge in filtered_edges: # need add_subedge
             if subgraph.valid_relationship(edge):
                 subgraph.add_edge(edge)
 
         subgraph.connect_nodes()
 
         subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
-        print("subgraph top-node: ", subgraph.top_node.name)
-
-        #while len(subgraph.orphans) > 1:
-        #    subgraph.remove_orphans()
-
-        # Need to do the whole orphan node removal/extend subdag functions. 
-        #These should go in obograph. 
 
         return subgraph
 
