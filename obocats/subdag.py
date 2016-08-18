@@ -24,16 +24,18 @@ class SubGraph(OboGraph):
         return self.id_index[super_node.id]
 
     def add_node(self, super_node):
+        self._modified = True
         subgraph_node = SubGraphNode(super_node, self.allowed_relationships)
         if self.valid_node(subgraph_node):
             super().add_node(subgraph_node)
 
     def update_subnode(self, subnode):
+        self._modified = True
         for edge in subnode.super_node.edges:
             if edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index:
-                subnode.subgraph_edges.append(edge)
-                subnode.subgraph_parent_node_set.add(self.id_index[edge.parent_node.id])
-                subnode.subgraph_child_node_set.add(self.id_index[edge.child_node.id])
+                subnode.edges.append(edge)
+                subnode.parent_node_set.add(self.id_index[edge.parent_node.id])
+                subnode.child_node_set.add(self.id_index[edge.child_node.id])
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
@@ -56,10 +58,18 @@ class SubGraph(OboGraph):
         for super_node in filtered_nodes:
             subgraph.add_node(super_node)
 
-        for node in self.node_list:
+        for node in subgraph.node_list:
             subgraph.update_subnode(node)
 
-        subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
+        for node in subgraph.node_list:
+            print("node_name:", node.name)
+            descendant_list = subgraph.descendants(node)
+            for descendant in descendant_list:
+                print("    ", descendant.name)
+
+
+
+        #subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
 
         return subgraph
 
@@ -71,9 +81,9 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-        self.subgraph_edges = set()
-        self.subgraph_parent_node_set = set()
-        self.subgraph_child_node_set = set()
+        self.edges = list()
+        self.parent_node_set = set()
+        self.child_node_set = set()
 
     @property
     def id(self):
