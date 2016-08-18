@@ -31,7 +31,7 @@ go_dag.connect_nodes()
 #   print(node.name)
 #for node in go_dag.descendants(test_node):
 #   print(node.name)
-
+#print(go_dag.descendants(test_node))
 """tests the path traversal method that doesnt work
 node1 = go_dag.id_index['GO:0051079']
 node2 = go_dag.id_index['GO:0007049']
@@ -43,7 +43,7 @@ print(test_paths)
 #   print(node.name)
 
 subdag = subdag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion'], "cellular_component")
-print(subgraph.top_node.name)
+#print(subgraph.top_node.name)
 
 #for node in subdag.node_list:
 #    print(node.name, "\n", "    parents: ", [pnode.name for pnode in node.parent_node_set], "\n", "        children: ", [cnode.name for cnode in node.child_node_set])

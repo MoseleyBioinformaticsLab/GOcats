@@ -63,7 +63,7 @@ class OboGraph(object):
     def _update_graph(self):
         self._modified = False
         self._orphans = set([node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes])
-        self.leaves = set([node for node in self.node_list if not node.obsolete and not node.child_node_set])
+        self._leaves = set([node for node in self.node_list if not node.obsolete and not node.child_node_set])
 
     def add_node(self, node):
         self._modified = True
@@ -121,10 +121,15 @@ class OboGraph(object):
         descendant_set = set()
         children = list(node.child_node_set)
         while len(children) > 0:
-            child = children[0]
-            descendant_set.add(child)
-            children.extend(child.child_node_set)
-            children.remove(child)
+            for child in children:
+                print("1", child)
+                print("2", [child for child in children])
+                descendant_set.add(child)
+                print("3", descendant_set)
+                children.extend(child.child_node_set)
+                print("4", children)
+                children.remove(child)
+                print("5", children)
         return descendant_set
 
     def ancestors(self, node):
