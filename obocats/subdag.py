@@ -25,8 +25,15 @@ class SubGraph(OboGraph):
 
     def add_node(self, super_node):
         subgraph_node = SubGraphNode(super_node, self.allowed_relationships)
-        if subgraph.valid_node(subgraph_node):
+        if self.valid_node(subgraph_node):
             super().add_node(subgraph_node)
+
+    def update_subnode(self, subnode):
+        for edge in subnode.super_node.edges:
+            if edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index:
+                subnode.subgraph_edges.append(edge)
+                subnode.subgraph_parent_node_set.add(self.id_index[edge.parent_node.id])
+                subnode.subgraph_child_node_set.add(self.id_index[edge.child_node.id])
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
@@ -42,15 +49,15 @@ class SubGraph(OboGraph):
         keyword_list = [word.lower() for word in keyword_list]
 
         filtered_nodes = super_graph.filter_nodes(keyword_list)
-        filtered_edges = super_graph.filter_edges(filtered_nodes)
+        # I shouldn't need filtered edges at all.
+        # Just link the nodes with edges that already exist in the nodes. 
+        # filtered_edges = super_graph.filter_edges(filtered_nodes)
 
         for super_node in filtered_nodes:
             subgraph.add_node(super_node)
-        for edge in filtered_edges: # need add_subedge
-            if subgraph.valid_relationship(edge):
-                subgraph.add_edge(edge)
 
-        subgraph.connect_nodes()
+        for node in self.node_list:
+            subgraph.update_subnode(node)
 
         subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
 
@@ -64,10 +71,10 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-        self.edges = list()  # Overwriting from AbstractNode
-        self.parent_node_set = set()
-        self.child_node_set = set()
-    
+        self.subgraph_edges = set()
+        self.subgraph_parent_node_set = set()
+        self.subgraph_child_node_set = set()
+
     @property
     def id(self):
         return self.super_node.id

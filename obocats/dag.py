@@ -25,7 +25,6 @@ class OboGraph(object):
                 print("WARNING: 'is_a' is a required relationship type within OBO ontologies.\nAdding 'is_a' to the allowed_relationships list.")
                 self.allowed_relationships.append('is_a')
 
-    # Make sure that this is a proper/efficient use of the @property syntax.
     @property
     def orphans(self):
         if self._modified:
@@ -103,8 +102,8 @@ class OboGraph(object):
         for edge in self.edge_list:
             edge.parent_node = self.id_index[edge.parent_id]
             edge.child_node = self.id_index[edge.child_id]
-            self.id_index[edge.parent_id].add_edge(edge, allowed_relationships)
-            self.id_index[edge.child_id].add_edge(edge, allowed_relationships)
+            self.id_index[edge.parent_id].add_edge(edge, self.allowed_relationships)
+            self.id_index[edge.child_id].add_edge(edge, self.allowed_relationships)
 
     def filter_nodes(self, keyword_list):
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
