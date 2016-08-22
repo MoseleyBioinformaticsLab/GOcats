@@ -117,22 +117,19 @@ class OboGraph(object):
             filtered_edges = [edge for edge in filtered_edges if edge.relationship in self.allowed_relationships]
         return filtered_edges
 
-    def descendants(self, node):
+    @staticmethod
+    def descendants(node):
         descendant_set = set()
         children = list(node.child_node_set)
         while len(children) > 0:
-            for child in children:
-                print("1", child)
-                print("2", [child for child in children])
-                descendant_set.add(child)
-                print("3", descendant_set)
-                children.extend(child.child_node_set)
-                print("4", children)
-                children.remove(child)
-                print("5", children)
+            child = children[0]
+            descendant_set.add(child)
+            children.extend(child.child_node_set)
+            children.remove(child)
         return descendant_set
 
-    def ancestors(self, node):
+    @staticmethod
+    def ancestors(node):
         ancestors_set = set()
         parents = list(node.parent_node_set)
         while len(parents) > 0:
