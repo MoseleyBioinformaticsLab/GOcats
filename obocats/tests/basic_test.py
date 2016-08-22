@@ -43,7 +43,7 @@ print(test_paths)
 #   print(node.name)
 
 subdag = subdag.SubGraph.from_filtered_graph(go_dag, ['mitochondrion'], "cellular_component")
-#print(subgraph.top_node.name)
+print(subdag.top_node.name)
 
 #for node in subdag.node_list:
 #    print(node.name, "\n", "    parents: ", [pnode.name for pnode in node.parent_node_set], "\n", "        children: ", [cnode.name for cnode in node.child_node_set])

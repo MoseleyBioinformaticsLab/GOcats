@@ -29,13 +29,16 @@ class SubGraph(OboGraph):
         if self.valid_node(subgraph_node):
             super().add_node(subgraph_node)
 
-    def update_subnode(self, subnode):
+    def connect_subnodes(self):
         self._modified = True
-        for edge in subnode.super_node.edges:
-            if edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index:
-                subnode.edges.append(edge)
-                subnode.parent_node_set.add(self.id_index[edge.parent_node.id])
-                subnode.child_node_set.add(self.id_index[edge.child_node.id])
+        for subnode in self.node_list:
+            for edge in subnode.super_node.edges:
+                if edge.parent_node.id == subnode.id and edge.child_node.id in self.id_index:
+                    subnode.edges.append(edge)
+                    subnode.child_node_set.add(edge.child_node)
+                elif edge.child_node.id == subnode.id and edge.parent_node.id in self.id_index:
+                    subnode.edges.append(edge)
+                    subnode.parent_node_set.add(edge.parent_node)
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
@@ -51,25 +54,13 @@ class SubGraph(OboGraph):
         keyword_list = [word.lower() for word in keyword_list]
 
         filtered_nodes = super_graph.filter_nodes(keyword_list)
-        # I shouldn't need filtered edges at all.
-        # Just link the nodes with edges that already exist in the nodes. 
-        # filtered_edges = super_graph.filter_edges(filtered_nodes)
 
         for super_node in filtered_nodes:
             subgraph.add_node(super_node)
 
-        for node in subgraph.node_list:
-            subgraph.update_subnode(node)
+        subgraph.connect_subnodes()
 
-        for node in subgraph.node_list:
-            print("node_name:", node.name)
-            descendant_list = subgraph.descendants(node)
-            for descendant in descendant_list:
-                print("    ", descendant.name)
-
-
-
-        #subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
+        subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
 
         return subgraph
 
