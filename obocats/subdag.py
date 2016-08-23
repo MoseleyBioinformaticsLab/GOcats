@@ -53,7 +53,9 @@ class SubGraph(OboGraph):
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
+        print("in find_top_node, looking for candidates")
         candidates = [node for node in subgraph.node_list if any(word in node.name for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
+        print("top_node_scoring")
         top_node_scoring = {node: len(subgraph.descendants(node)) for node in candidates}
         return max(top_node_scoring, key=top_node_scoring.get)
 
