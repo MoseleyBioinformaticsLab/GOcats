@@ -127,10 +127,11 @@ class OboGraph(object):
     def descendants(node):
         descendant_set = set()
         children = list(node.child_node_set)
+        encountered = list()
         while len(children) > 0:
             child = children[0]
             descendant_set.add(child)
-            children.extend(child.child_node_set)
+            children.extend([child for child in child.child_node_set if child not in descendant_set and child not in children])
             children.remove(child)
         return descendant_set
 
@@ -141,7 +142,7 @@ class OboGraph(object):
         while len(parents) > 0:
             parent = parents[0]
             ancestors_set.add(parent)
-            parents.extend(parent.parent_node_set)
+            parents.extend([parent for parent in parent.parent_node_set if parent not in ancestors_set and parent not in parents])
             parents.remove(parent)
         return ancestors_set
 
