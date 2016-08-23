@@ -16,8 +16,8 @@ class OboGraph(object):
         self.vocab_index = dict() 
         self.used_relationship_set = set()  
         self.root_nodes = list()
-        self._orphans = list()
-        self._leaves = list()
+        self._orphans = None
+        self._leaves = None
         self._modified = False
 
         if self.allowed_relationships:
@@ -117,6 +117,12 @@ class OboGraph(object):
             filtered_edges = [edge for edge in filtered_edges if edge.relationship in self.allowed_relationships]
         return filtered_edges
 
+    def nodes_between(self, start_node, end_node):
+        if start_node.ancestors and end_node.descendants:
+            return start_node.ancestors.intersection(end_node.descendants)
+        else:
+            return set()
+
     @staticmethod
     def descendants(node):
         descendant_set = set()
@@ -143,20 +149,42 @@ class OboGraph(object):
 class AbstractNode(object):
 
     """A node contaning all basic properties of an OBO node. The parser 
-    currently has direct access to datamembers."""
+    currently has direct access to datamembers (id, name, definition, 
+    namespace, edges, and obsolete)."""
     
     def __init__(self):
         self.id = str()
         self.name = str()
         self.definition = str()
         self.namespace = str()
-        self.edges = list()
+        self.edges = set()
         self.parent_node_set = set()
         self.child_node_set = set()
         self.obsolete = False
+        self._modified = False
+        self._descendants = None
+        self._ancestors = None
+
+    @property
+    def descendants(self):
+        if self._modified:
+            self._update_node()
+        return self._descendants
+
+    @property
+    def ancestors(self):
+        if self._modified:
+            self._update_node()
+        return self._ancestors
+    
+    def _update_node(self):
+        self._modified = False
+        self._descendants = OboGraph.descendants(self)
+        self._ancestors = OboGraph.ancestors(self)
 
     def add_edge(self, edge, allowed_relationships):
-        self.edges.append(edge)
+        self._modified = True
+        self.edges.add(edge)
         if not allowed_relationships:
             if edge.child_id == self.id:
                 self.parent_node_set.add(edge.parent_node)
@@ -169,6 +197,7 @@ class AbstractNode(object):
                 self.child_node_set.add(edge.child_node)
 
     def remove_edge(self, edge):
+        self._modified = True
         if edge.child_id == self.id:
             self.parent_node_set.remove(edge.parent_node)
         elif edge.parent_id == self.id:
