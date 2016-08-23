@@ -34,11 +34,22 @@ class SubGraph(OboGraph):
         for subnode in self.node_list:
             for edge in subnode.super_node.edges:
                 if edge.parent_node.id == subnode.id and edge.child_node.id in self.id_index:
-                    subnode.edges.append(edge)
+                    subnode.edges.add(edge)
                     subnode.child_node_set.add(edge.child_node)
                 elif edge.child_node.id == subnode.id and edge.parent_node.id in self.id_index:
-                    subnode.edges.append(edge)
+                    subnode.edges.add(edge)
                     subnode.parent_node_set.add(edge.parent_node)
+
+    def extend_subgraph(self):
+        graph_extension_nodes = set()
+        for subleaf in self.leaves:
+            start_node = self.super_graph.id_index[subleaf.id]
+            end_node = self.super_graph.id_index[self.top_node.id]
+            graph_extension_nodes.update(self.nodes_between(start_node, end_node))
+            graph_extension_nodes.update(self.super_graph.descendants(self.super_graph.id_index[subleaf.id]))  # Double check with Moseley that this is what we want to do. 
+        for super_node in graph_extension_nodes:
+            extended_subnode = self.subnode(super_node)
+        self.connect_subnodes()
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
@@ -62,6 +73,8 @@ class SubGraph(OboGraph):
 
         subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
 
+        subgraph.extend_subgraph()
+
         return subgraph
 
 
@@ -72,7 +85,7 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-        self.edges = list()
+        self.edges = set()
         self.parent_node_set = set()
         self.child_node_set = set()
 
