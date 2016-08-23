@@ -45,17 +45,23 @@ class SubGraph(OboGraph):
         for subleaf in self.leaves:
             start_node = self.super_graph.id_index[subleaf.id]
             end_node = self.super_graph.id_index[self.top_node.id]
+
+            # Adds all nodes in the super_graph that are between the subgraph leaf nodes
+            # and the top_node of the subgraph.
             graph_extension_nodes.update(self.nodes_between(start_node, end_node))
-            graph_extension_nodes.update(self.super_graph.descendants(self.super_graph.id_index[subleaf.id]))  # Double check with Moseley that this is what we want to do. 
+
+            # Adds all super_graph descendents of the subgraph leaf nodes.
+            # Double check with Moesley if this is appropriate 
+            graph_extension_nodes.update(self.super_graph.descendants(self.super_graph.id_index[subleaf.id]))
+        
         for super_node in graph_extension_nodes:
-            extended_subnode = self.subnode(super_node)
+            if super_node.id not in self.id_index:
+                self.add_node(super_node)
         self.connect_subnodes()
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
-        print("in find_top_node, looking for candidates")
         candidates = [node for node in subgraph.node_list if any(word in node.name for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
-        print("top_node_scoring")
         top_node_scoring = {node: len(subgraph.descendants(node)) for node in candidates}
         return max(top_node_scoring, key=top_node_scoring.get)
 
