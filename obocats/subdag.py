@@ -1,4 +1,4 @@
-from .dag import OboGraph, AbstractNode
+from .dag import OboGraph, AbstractNode, AbstractEdge
 
 
 class SubGraph(OboGraph):
@@ -34,11 +34,11 @@ class SubGraph(OboGraph):
         for subnode in self.node_list:
             for edge in subnode.super_node.edges:
                 if edge.parent_node.id == subnode.id and edge.child_node.id in self.id_index:
-                    subnode.edges.add(edge)
-                    subnode.child_node_set.add(edge.child_node)
+                    subnode.edges.add(SubGraphEdge(edge))
+                    subnode.child_node_set.add(self.subnode(edge.child_node))
                 elif edge.child_node.id == subnode.id and edge.parent_node.id in self.id_index:
-                    subnode.edges.add(edge)
-                    subnode.parent_node_set.add(edge.parent_node)
+                    subnode.edges.add(SubGraphEdge(edge))
+                    subnode.parent_node_set.add(self.subnode(edge.parent_node))
 
     def extend_subgraph(self):
         graph_extension_nodes = set()
@@ -116,3 +116,23 @@ class SubGraphNode(AbstractNode):
     @property
     def obsolete(self):
         return self.super_node.obsolete
+
+class SubGraphEdge(AbstractEdge):
+
+    """"""
+
+    def __init__(self, super_edge):
+        self.super_edge = super_edge
+
+    @property
+    def parent_node(self):
+        return self.super_edge.parent_node
+
+    @property
+    def child_node(self):
+        return self.super_edge.child_node
+
+    @property
+    def relationship(self):
+        return self.super_edge.relationship
+    
