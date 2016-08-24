@@ -123,29 +123,6 @@ class OboGraph(object):
         else:
             return set()
 
-    @staticmethod
-    def descendants(node):
-        descendant_set = set()
-        children = list(node.child_node_set)
-        encountered = list()
-        while len(children) > 0:
-            child = children[0]
-            descendant_set.add(child)
-            children.extend([child for child in child.child_node_set if child not in descendant_set and child not in children])
-            children.remove(child)
-        return descendant_set
-
-    @staticmethod
-    def ancestors(node):
-        ancestors_set = set()
-        parents = list(node.parent_node_set)
-        while len(parents) > 0:
-            parent = parents[0]
-            ancestors_set.add(parent)
-            parents.extend([parent for parent in parent.parent_node_set if parent not in ancestors_set and parent not in parents])
-            parents.remove(parent)
-        return ancestors_set
-
 
 class AbstractNode(object):
 
@@ -162,7 +139,7 @@ class AbstractNode(object):
         self.parent_node_set = set()
         self.child_node_set = set()
         self.obsolete = False
-        self._modified = False
+        self._modified = True
         self._descendants = None
         self._ancestors = None
 
@@ -180,8 +157,8 @@ class AbstractNode(object):
     
     def _update_node(self):
         self._modified = False
-        self._descendants = OboGraph.descendants(self)
-        self._ancestors = OboGraph.ancestors(self)
+        self._update_descendants()
+        self._update_ancestors()
 
     def add_edge(self, edge, allowed_relationships):
         self._modified = True
@@ -204,6 +181,33 @@ class AbstractNode(object):
         elif edge.parent_id == self.id:
             self.child_node_set.remove(edge.child_node)
         self.edges.remove(edge)
+
+    def _update_descendants(self):
+        descendant_set = set()
+        children = list(self.child_node_set)
+        encountered = list()
+        while len(children) > 0:
+            child = children[0]
+            descendant_set.add(child)
+            if not child._modified:
+                descendant_set.update(child._descendants)
+            else:
+                children.extend([new_child for new_child in child.child_node_set if new_child not in descendant_set and new_child not in children])
+            children.remove(child)
+        self._descendants = descendant_set
+
+    def _update_ancestors(self):
+        ancestors_set = set()
+        parents = list(self.parent_node_set)
+        while len(parents) > 0:
+            parent = parents[0]
+            ancestors_set.add(parent)
+            if not parent._modified:
+                ancestors_set.update(parent._ancestors)
+            else:
+                parents.extend([new_parent for new_parent in parent.parent_node_set if new_parent not in ancestors_set and new_parent not in parents])
+            parents.remove(parent)
+        self._ancestors = ancestors_set
 
 
 class AbstractEdge(object):

@@ -32,13 +32,9 @@ class SubGraph(OboGraph):
     def connect_subnodes(self):
         self._modified = True
         for subnode in self.node_list:
-            for edge in subnode.super_node.edges:
-                if edge.parent_node.id == subnode.id and edge.child_node.id in self.id_index:
-                    subnode.edges.add(SubGraphEdge(edge))
-                    subnode.child_node_set.add(self.subnode(edge.child_node))
-                elif edge.child_node.id == subnode.id and edge.parent_node.id in self.id_index:
-                    subnode.edges.add(SubGraphEdge(edge))
-                    subnode.parent_node_set.add(self.subnode(edge.parent_node))
+            subnode.child_node_set.update([self.id_index[child.id] for child in subnode.super_node.child_node_set if child.id in self.id_index])
+            subnode.parent_node_set.update([self.id_index[parent.id] for parent in subnode.super_node.parent_node_set if parent.id in self.id_index])
+
 
     def extend_subgraph(self):
         graph_extension_nodes = set()
@@ -50,9 +46,9 @@ class SubGraph(OboGraph):
             # and the top_node of the subgraph.
             graph_extension_nodes.update(self.nodes_between(start_node, end_node))
 
-            # Adds all super_graph descendents of the subgraph leaf nodes.
+            # Adds all super_graph descendants of the subgraph leaf nodes.
             # Double check with Moesley if this is appropriate 
-            graph_extension_nodes.update(self.super_graph.descendants(self.super_graph.id_index[subleaf.id]))
+            graph_extension_nodes.update(self.super_graph.id_index[subleaf.id].descendants)
         
         for super_node in graph_extension_nodes:
             if super_node.id not in self.id_index:
@@ -62,7 +58,7 @@ class SubGraph(OboGraph):
     @staticmethod
     def find_top_node(subgraph, keyword_list):
         candidates = [node for node in subgraph.node_list if any(word in node.name for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
-        top_node_scoring = {node: len(subgraph.descendants(node)) for node in candidates}
+        top_node_scoring = {node: len(node.descendants) for node in candidates}
         return max(top_node_scoring, key=top_node_scoring.get)
 
     @staticmethod
@@ -96,6 +92,9 @@ class SubGraphNode(AbstractNode):
         self.edges = set()
         self.parent_node_set = set()
         self.child_node_set = set()
+        self._modified = True
+        self._descendants = None
+        self._ancestors = None
 
     @property
     def id(self):
