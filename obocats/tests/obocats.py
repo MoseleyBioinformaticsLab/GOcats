@@ -2,11 +2,20 @@
 """ Open Biomedical Ontologies Categories (OboCats)
 
 Usage:
-    obocats build_graph <database_file> <output_directory> [--namespace_filter=<None> --allowed_relationships=<None>]
-    obocats build_subgraphs <supergraph> <categories_file> <output_directory> [--namespace_filter=<None> --allowed_relationships=<None> --map_supersets] 
+    obocats build_subgraphs <database_file> <category_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets]
+
+Options:
+    -h --help                            Shows this screen.
+    --version                            Shows version.
+    --supergraph_namespace=<None>        Filters the supergraph to a given namespace.
+    --subgraph_namespace=<None>          Filters the subgraph to a given namespace.
+    --supergraph_relationships=[]        A provided list will denote which relationships are allowed in the supergraph.
+    --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
+    --map_supersets                      When spedified
+
 """
 from datetime import date
-import sys
+import os
 import re
 import csv
 import jsonpickle
@@ -18,11 +27,10 @@ from . import docopt
 
 
 def main(args):
-    if args['build_graph']:
-        self.build_graph(args)
-    elif args['build_subgraphs']:
-        self.build_subgraphs(args)
+    if args['build_subgraphs']:
+        build_subgraphs(args)
 
+# FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to eachother a lot.  
 def build_graph(args):
     if args['--namespace_filter']:
         namespace_filter = args(['--namespace_filter'])
@@ -35,31 +43,49 @@ def build_graph(args):
 
     database = open(args['<database_file>'], 'r')
     output_directory = args['<output_directory>']
-    file_name = os.path.basename(args['<database_file>'])
-
-    graph_class = {'go.obo': godag.GoGraph(namespace_filter, allowed_relationships)}
-    graph = graph_class[file_name]
-
+    database_name = os.path.basename(args['<database_file>'])
+    graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
+    graph = graph_class[database_name]
     parsing_class = {'go.obo': parser.GoParser(database, graph)}
-    parsing_class[file_name].parse()
+    parsing_class[database_name].parse()
 
     database.close()
     graph.connect_nodes()
 
     print("JsonPickle saving GO object")
-    json_save(graph, os.path.join(output_directory, "{}_{}".format(filename[:-4], date.today())))
+    json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
 
 def build_subgraphs(args):
-    if args['--namespace_filter']:
-        namespace_filter = args(['--namespace_filter'])
+    if args['--supergraph_namespace']:
+        supergraph_namespace = args(['--supergraph_namespace'])
     else:
-        namespace_filter = None
-    if args['--allowed_relationships']:
-        allowed_relationships = args['--allowed_relationships']
+        supergraph_namespace = None
+    if args['--subgraph_namespace']:
+        subgraph_namespace = args['--subgraph_namespace']
     else:
-        allowed_relationships = None
+        subgraph_namespace = None
+    if args['--supergraph_relationships']:
+        supergraph_relationships = args['--supergraph_relationships']
+    else:
+        supergraph_relationships = None
+    if args['--subgraph_relationships']:
+        subgraph_relationships = args['--subgraph_relationships']
+    else:
+        subgraph_relationships = None
 
-    supergraph = json_load(args['<supergraph>'])
+    # Building the super_graph
+    database = open(args['<database_file>'], 'r')
+    output_directory = args['<output_directory>']
+    database_name = os.path.basename(args['<database_file>'])
+    graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
+    supergraph = graph_class[database_name]
+    parsing_class = {'go.obo': parser.GoParser(database, supergraph)}
+    parsing_class[database_name].parse()
+
+    database.close()
+    supergraph.connect_nodes()
+
+    # Building and collecting subgraphs
     subgraph_collection = {}
     with open(args['<category_file>'], newline='') as file:
         reader = csv.reader(file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -67,23 +93,23 @@ def build_subgraphs(args):
             subgraph_name = row[0]
             keyword_list = [keyword for keyword in re.split(';', row[1])]
             print("Creating subgraph {}".format(subgraph_name))
-            subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, keyword_list, namespace_filter, allowed_relationships)
+            subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, keyword_list, subgraph_namespace, subgraph_relationships)
     for subgraph_name, subgraph in subgraph_collection.items():
         json_save(subgraph.mapping, os.path.join(args['<output_directory>'], subgraph_name))
 
 
-def json_save(obj, filename):
+def json_save(obj, file_name):
     """Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
     dictkeys to strings."""
-    f = open(filename, 'w')
+    f = open(file_name, 'w')
     json_obj = jsonpickle.encode(obj, keys=True)
     f.write(json_obj)
     f.close()
 
-def json_load(filename):
+def json_load(file_name):
     """Loads a jsonPickle object from PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
     dictkeys to strings."""
-    f = open(filename)
+    f = open(file_name)
     json_str = f.read()
     obj = jsonpickle.decode(json_str, keys=True)
     return obj

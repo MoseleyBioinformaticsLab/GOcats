@@ -67,9 +67,14 @@ class SubGraph(OboGraph):
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
-        candidates = [node for node in subgraph.node_list if any(word in node.name for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
-        top_node_scoring = {node: len(node.descendants) for node in candidates}
-        return max(top_node_scoring, key=top_node_scoring.get)
+        if len(subgraph.node_list) == 1:
+            return subgraph.node_list[0]
+        elif not subgraph.node_list:
+            raise Exception("Subgraph did not seed any nodes from the supergraph! Aborting.")
+        else:
+            candidates = [node for node in subgraph.node_list if any(word in node.name for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
+            top_node_scoring = {node: len(node.descendants) for node in candidates}
+            return max(top_node_scoring, key=top_node_scoring.get)
 
     @staticmethod
     def from_filtered_graph(super_graph, keyword_list, namespace_filter=None, allowed_relationships=None):
