@@ -106,6 +106,9 @@ class OboGraph(object):
             self.id_index[edge.child_id].add_edge(edge, self.allowed_relationships)
 
     def filter_nodes(self, keyword_list):
+        for word in keyword_list:
+            if word not in self.vocab_index.keys():
+                keyword_list.remove(word)
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
         if self.namespace_filter:
             filtered_nodes = [node for node in filtered_nodes if node.namespace == self.namespace_filter]
@@ -184,8 +187,7 @@ class AbstractNode(object):
 
     def _update_descendants(self):
         descendant_set = set()
-        children = list(self.child_node_set)
-        encountered = list()
+        children = list(self.child_node_set) 
         while len(children) > 0:
             child = children[0]
             descendant_set.add(child)
