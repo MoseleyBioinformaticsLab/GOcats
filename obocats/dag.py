@@ -18,7 +18,7 @@ class OboGraph(object):
         self.root_nodes = list()
         self._orphans = None
         self._leaves = None
-        self._modified = False
+        self._modified = True
 
         if self.allowed_relationships:
             if 'is_a' not in self.allowed_relationships:

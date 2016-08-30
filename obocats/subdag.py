@@ -9,6 +9,7 @@ class SubGraph(OboGraph):
     def __init__(self, super_graph, namespace_filter=None, allowed_relationships=None):
         self.super_graph = super_graph
         self.top_node = None
+        self._mapping = None
 
         if self.super_graph.namespace_filter and self.super_graph.namespace_filter != namespace_filter:
             raise Exception("Unless a namespace_filter is not specified for a parent_graph, a subgraph's namespace_filter must not differ from its parent graph's namespace_filter.\nsubgraph namespace_filter = {}, supergraph namespace_filter = {}").format(namespace_filter, self.super_graph.namespace_filter)
@@ -17,6 +18,15 @@ class SubGraph(OboGraph):
             raise Exception("Unless an allowed_relationships list is not specified for a parent graph, a subgraph's allowed_relationships list must be a subset of, or exactly, its parent graph's allowed_relationships list.\nsubgraph allowed_relationships = {}, supergraph allowed_relationships = {}").format(allowed_relationships, self.super_graph.allowed_relationships)
         
         super().__init__(namespace_filter, allowed_relationships)
+
+    @property
+    def mapping(self):
+        if self._modified and self.top_node:
+            self._mapping = {id: self.top_node.id for id in self.id_index.keys()}
+        elif not self.top_node:
+            raise Exception("Mapping failed: top-node not identified.")
+        return self._mapping
+    
 
     def subnode(self, super_node):
         if super_node.id not in self.id_index:
