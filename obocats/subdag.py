@@ -51,19 +51,18 @@ class SubGraph(OboGraph):
         for subleaf in self.leaves:
             start_node = self.super_graph.id_index[subleaf.id]
             end_node = self.super_graph.id_index[self.top_node.id]
-
-            # Adds all nodes in the super_graph that are between the subgraph leaf nodes
-            # and the top_node of the subgraph.
             graph_extension_nodes.update(self.nodes_between(start_node, end_node))
-
-            # Adds all super_graph descendants of the subgraph leaf nodes.
-            # Double check with Moesley if this is appropriate 
             graph_extension_nodes.update(self.super_graph.id_index[subleaf.id].descendants)
-        
         for super_node in graph_extension_nodes:
             if super_node.id not in self.id_index:
                 self.add_node(super_node)
         self.connect_subnodes()
+
+    def remove_orphan_paths(self):
+        for orphan in self.orphans:
+            print("orphan", orphan)
+             [self.remove_node(node) for node in [orphan.descendants - self.top_node.descendants]]
+             self.remove_node(orphan)
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
@@ -91,6 +90,9 @@ class SubGraph(OboGraph):
         subgraph.connect_subnodes()
 
         subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
+        subgraph.root_nodes = [subgraph.top_node]
+
+        subgraph.remove_orphan_paths()
 
         subgraph.extend_subgraph()
 
