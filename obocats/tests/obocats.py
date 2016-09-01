@@ -2,7 +2,7 @@
 """ Open Biomedical Ontologies Categories (OboCats)
 
 Usage:
-    obocats build_subgraphs <database_file> <category_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets]
+    obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets]
 
 Options:
     -h --help                            Shows this screen.
@@ -27,7 +27,7 @@ from . import docopt
 
 
 def main(args):
-    if args['build_subgraphs']:
+    if args['filter_subgraphs']:
         build_subgraphs(args)
 
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to eachother a lot.  
@@ -55,7 +55,7 @@ def build_graph(args):
     print("JsonPickle saving GO object")
     json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
 
-def build_subgraphs(args):
+def filter_subgraphs(args):
     if args['--supergraph_namespace']:
         supergraph_namespace = args(['--supergraph_namespace'])
     else:
@@ -87,16 +87,37 @@ def build_subgraphs(args):
 
     # Building and collecting subgraphs
     subgraph_collection = {}
-    with open(args['<category_file>'], newline='') as file:
+    with open(args['<keyword_file>'], newline='') as file:
         reader = csv.reader(file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
         for row in reader:
             subgraph_name = row[0]
             keyword_list = [keyword for keyword in re.split(';', row[1])]
             print("Creating subgraph {}".format(subgraph_name))
             subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, keyword_list, subgraph_namespace, subgraph_relationships)
-    for subgraph_name, subgraph in subgraph_collection.items():
-        json_save(subgraph.mapping, os.path.join(args['<output_directory>'], subgraph_name))
 
+    if not args['--map_supersets']:
+        supersets = find_supersets(subgraph_collection)
+    else supersets = None
+
+    collection_mapping = dict()    
+    for subgraph in subgraph_collection.values():
+        for node_id, top_node_id in subgraph.mapping.itmes():
+            try:
+                collection_mapping[node_id].add(top_node_id)
+            except KeyError:
+                collection_mapping[node_id] = set([top_node_id])
+
+    json_save(collection_mapping, os.path.join(args['<output_directory>'], "{}_SubGraphMapping.p").format(os.path.basename(args['<keyword_file>']))
+
+def find_supersets(subgraph_collection):
+    is_superset_of = dict()
+    for subgraph in subgraph_collection.values():
+        current_top_node = subgraph.top_node.id
+        current_contents = subgraph.id_index.keys()
+        for next_subgraph in subgraph_collection.values():
+            if next_subgraph.top_node.id not current_top_node.id and set(current_contents).issuperset(set(next_subgraph.id_index.keys())):
+                is_superset_of[current_top_node.id] = next_subgraph.top_node.id  # The key is a superset of its value
+    return is_superset_of
 
 def json_save(obj, file_name):
     """Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding

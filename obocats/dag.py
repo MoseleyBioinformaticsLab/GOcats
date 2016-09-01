@@ -76,6 +76,14 @@ class OboGraph(object):
                 self.vocab_index[word] = set([node])
 
     def remove_node(self, node):
+        for graph_node in self.node_list:
+            if node in graph_node.parent_node_set:
+                graph_node.parent_node_set.remove(node)
+            elif node in graph_node.child_node_set:
+                graph_node.child_node_set.remove(node)
+            for edge in graph_node.edges:
+                if node is edge.parent_node or node is edge.child_node:
+                    graph_node.edges.remove(edge)                    
         for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
             try:
                 self.vocab_index[word].remove(node)
