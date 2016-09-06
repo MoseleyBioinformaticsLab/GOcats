@@ -20,7 +20,8 @@ class SubGraph(OboGraph):
         super().__init__(namespace_filter, allowed_relationships)
 
     @property
-    def mapping(self):
+    def id_mapping(self):
+        # also root node list here
         if self._modified and self.top_node:
             self._mapping = {id: self.top_node.id for id in self.id_index.keys()}
         elif not self.top_node:
@@ -45,24 +46,37 @@ class SubGraph(OboGraph):
             subnode.child_node_set.update([self.id_index[child.id] for child in subnode.super_node.child_node_set if child.id in self.id_index])
             subnode.parent_node_set.update([self.id_index[parent.id] for parent in subnode.super_node.parent_node_set if parent.id in self.id_index])
 
-
-    def extend_subgraph(self):
-        graph_extension_nodes = set()
+    def greedily_extend_subgraph(self):
+        # change top_node to root_node list.
+        graph_extension_nodes = set([super_node for super_node in self.super_graph.id_index[self.top_node.id].descendants if super_node.id not in self.id_index and self.valid_node(super_node)])
+        for super_node in graph_extension_nodes:
+            #print("node added: ", super_node.name)
+            self.add_node(super_node)
+        self.connect_subnodes()
+    
+    def conservatively_extend_subgraph(self):
         for subleaf in self.leaves:
             start_node = self.super_graph.id_index[subleaf.id]
             end_node = self.super_graph.id_index[self.top_node.id]
             graph_extension_nodes.update(self.nodes_between(start_node, end_node))
-            graph_extension_nodes.update(self.super_graph.id_index[subleaf.id].descendants)
         for super_node in graph_extension_nodes:
-            if super_node.id not in self.id_index:
+            if super_node.id not in self.id_index and self.valid_node(super_node):
                 self.add_node(super_node)
+        #print("nodes added")
+        #for node in graph_extension_nodes:
+            #print("     ", node.name)
         self.connect_subnodes()
 
     def remove_orphan_paths(self):
+        #print("removing orphans")
         for orphan in self.orphans:
-            print("orphan", orphan)
-             [self.remove_node(node) for node in [orphan.descendants - self.top_node.descendants]]
-             self.remove_node(orphan)
+            #print("-    ", orphan.name)
+            orphaned_descendants = orphan.descendants - self.top_node.descendants
+            if orphaned_descendants:
+                for descendant in orphaned_descendants:
+                    #print("     ", descendant.name)
+                    self.remove_node(descendant)
+            self.remove_node(orphan)
 
     @staticmethod
     def find_top_node(subgraph, keyword_list):
@@ -76,7 +90,7 @@ class SubGraph(OboGraph):
             return max(top_node_scoring, key=top_node_scoring.get)
 
     @staticmethod
-    def from_filtered_graph(super_graph, keyword_list, namespace_filter=None, allowed_relationships=None):
+    def from_filtered_graph(super_graph, keyword_list, namespace_filter=None, allowed_relationships=None, extension='greedy'):
 
         subgraph = SubGraph(super_graph, namespace_filter, allowed_relationships)
 
@@ -90,11 +104,31 @@ class SubGraph(OboGraph):
         subgraph.connect_subnodes()
 
         subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
+"""
+        for subnode in subgraph.node_list:
+            if subnode in subnode.descendants:
+                print("subnode cycle: ",subnode.name)
+                if subnode.super_node in subnode.super_node.descendants :
+                    print("supernode cycle: ",subnode.super_node.name)
+                for subnode2 in subnode.descendants :
+                    if subnode in subnode2.child_node_set :
+                        print("Subnode Cycle point:",subnode2.name)
+                    if subnode.super_node in subnode2.super_node.child_node_set :
+                        print("Supernode Cycle point:",subnode2.super_node.name)
+"""
+
+#        print(subgraph.top_node.name)
         subgraph.root_nodes = [subgraph.top_node]
 
+        # if i limited mapping to top_node descendants? may not need remove_orphan_paths, instead hang on to orphans for use later. 
         subgraph.remove_orphan_paths()
 
-        subgraph.extend_subgraph()
+        if extension == 'greedy':
+            subgraph.greedily_extend_subgraph()
+        else:
+            subgraph.conservatively_extend_subgraph()
+
+        #print([node.name for node in subgraph.node_list])
 
         return subgraph
 

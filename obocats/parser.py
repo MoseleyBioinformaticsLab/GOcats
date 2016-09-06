@@ -81,5 +81,5 @@ class GoParser(OboParser):
                                 self.go_graph.add_edge(edge)
                                 self.go_graph.used_relationship_set.add(edge.relationship)
                         if node_edge_list == [] and node.obsolete == False:  # Have to look at the local edge list because nodes have not been linked with edges yet. Entire graph must be populated first. This is the only way to do this on-the-fly.
-                            self.go_graph.root_nodes.append(node)
+                            self.go_graph.root_nodes.append(node)  # make root nodes a set of all namespaces used in the ontology. 
                     is_term = False

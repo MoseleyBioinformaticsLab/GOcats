@@ -38,13 +38,9 @@ class OboGraph(object):
         return self._leaves
     
     def valid_node(self, node):
-        # Filter here for obsolete?
-        if not self.namespace_filter:
+        if not node.obsolete and (not self.namespace_filter or node.namespace == self.namespace_filter):
             return True
-        elif node.namespace == self.namespace_filter:
-            return True
-        else:
-            return False
+        return False
 
     def valid_relationship(self, edge):
         if not self.allowed_relationships:
@@ -57,13 +53,12 @@ class OboGraph(object):
     def valid_edge(self, edge):
         if edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index:
             return True
-        else:
-            return False
+        return False
 
     def _update_graph(self):
-        self._modified = False
         self._orphans = set([node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes])
-        self._leaves = set([node for node in self.node_list if not node.obsolete and not node.child_node_set])
+        self._leaves = set([node for node in self.node_list if not node.obsolete and not node.child_node_set and node.parent_node_set])
+        self._modified = False
 
     def add_node(self, node):
         self._modified = True
@@ -76,24 +71,28 @@ class OboGraph(object):
                 self.vocab_index[word] = set([node])
 
     def remove_node(self, node):
-        for graph_node in self.node_list:
-            if node in graph_node.parent_node_set:
-                graph_node.parent_node_set.remove(node)
-            elif node in graph_node.child_node_set:
-                graph_node.child_node_set.remove(node)
-            for edge in graph_node.edges:
-                if node is edge.parent_node or node is edge.child_node:
-                    graph_node.edges.remove(edge)                    
-        for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
-            try:
-                self.vocab_index[word].remove(node)
-            except KeyError:
-                pass
-            else:
-                if not self.vocab_index[word]:
-                    del self.vocab_index[word]
-        del self.id_index[node.id]
-        self.node_list.remove(node)
+        self._modified = True
+        if node not in self.node_list:
+            pass  # The node has already been removed, or has not been added
+        else:
+            for graph_node in self.node_list:
+                if node in graph_node.parent_node_set:
+                    graph_node.parent_node_set.remove(node)
+                elif node in graph_node.child_node_set:
+                    graph_node.child_node_set.remove(node)
+                for edge in graph_node.edges:
+                    if node is edge.parent_node or node is edge.child_node:
+                        graph_node.edges.remove(edge)                    
+            for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
+                try:
+                    self.vocab_index[word].remove(node)
+                except KeyError:
+                    pass
+                else:
+                    if not self.vocab_index[word]:
+                        del self.vocab_index[word]
+            del self.id_index[node.id]
+            self.node_list.remove(node)
 
     def add_edge(self, edge):
         self._modified = True
@@ -167,9 +166,9 @@ class AbstractNode(object):
         return self._ancestors
     
     def _update_node(self):
-        self._modified = False
         self._update_descendants()
         self._update_ancestors()
+        self._modified = False
 
     def add_edge(self, edge, allowed_relationships):
         self._modified = True
