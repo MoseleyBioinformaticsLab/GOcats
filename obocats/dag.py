@@ -13,7 +13,8 @@ class OboGraph(object):
         self.node_list = list()
         self.edge_list = list()
         self.id_index = dict()
-        self.vocab_index = dict() 
+        self.vocab_index = dict()
+        self.relationship_index = dict()
         self.used_relationship_set = set()  
         self.root_nodes = list()
         self._orphans = None
@@ -42,16 +43,8 @@ class OboGraph(object):
             return True
         return False
 
-    def valid_relationship(self, edge):
-        if not self.allowed_relationships:
-            return True
-        elif edge.relationship in self.allowed_relationships:
-            return True
-        else:
-            return False
-
     def valid_edge(self, edge):
-        if edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index:
+        if (edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index) and (not self.allowed_relationships or edge.relationship_id in self.allowed_relationships):
             return True
         return False
 
@@ -61,7 +54,6 @@ class OboGraph(object):
         self._modified = False
 
     def add_node(self, node):
-        self._modified = True
         self.node_list.append(node)
         self.id_index[node.id] = node
         for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
@@ -69,9 +61,9 @@ class OboGraph(object):
                 self.vocab_index[word].add(node)
             except KeyError:
                 self.vocab_index[word] = set([node])
+        self._modified = True
 
     def remove_node(self, node):
-        self._modified = True
         if node not in self.node_list:
             pass  # The node has already been removed, or has not been added
         else:
@@ -93,24 +85,29 @@ class OboGraph(object):
                         del self.vocab_index[word]
             del self.id_index[node.id]
             self.node_list.remove(node)
+        self._modified = True
 
     def add_edge(self, edge):
-        self._modified = True
         self.edge_list.append(edge)
+        self._modified = True
 
     def remove_edge(self, edge):
-        self._modified = True
         self.id_index[edge.parent_id].remove_edge(edge)
         self.id_index[edge.child_id].remove_edge(edge)
         self.edge_list.remove(edge)
+        self._modified = True
+
+    def add_relationship(self, relationship):
+        self.relationship_index[relationsip.id] = relationship
+        self.modified = True
 
     def connect_nodes(self):
-        self._modified = True
         for edge in self.edge_list:
             edge.parent_node = self.id_index[edge.parent_id]
             edge.child_node = self.id_index[edge.child_id]
             self.id_index[edge.parent_id].add_edge(edge, self.allowed_relationships)
             self.id_index[edge.child_id].add_edge(edge, self.allowed_relationships)
+        self._modified = True
 
     def filter_nodes(self, keyword_list):
         for word in keyword_list:
@@ -124,7 +121,7 @@ class OboGraph(object):
     def filter_edges(self, filtered_nodes):
         filtered_edges = [edge for edge in self.edge_list if edge.parent_node in filtered_nodes and edge.child_node in filtered_nodes]
         if self.allowed_relationships:
-            filtered_edges = [edge for edge in filtered_edges if edge.relationship in self.allowed_relationships]
+            filtered_edges = [edge for edge in filtered_edges if edge.relationship_id in self.allowed_relationships]
         return filtered_edges
 
     def nodes_between(self, start_node, end_node):
@@ -171,7 +168,6 @@ class AbstractNode(object):
         self._modified = False
 
     def add_edge(self, edge, allowed_relationships):
-        self._modified = True
         self.edges.add(edge)
         if not allowed_relationships:
             if edge.child_id == self.id:
@@ -179,18 +175,19 @@ class AbstractNode(object):
             elif edge.parent_id == self.id:
                 self.child_node_set.add(edge.child_node)
         else:
-            if edge.child_id == self.id and edge.relationship in allowed_relationships:
+            if edge.child_id == self.id and edge.relationship_id in allowed_relationships:
                 self.parent_node_set.add(edge.parent_node)
-            elif edge.parent_id == self.id and edge.relationship in allowed_relationships:
+            elif edge.parent_id == self.id and edge.relationship_id in allowed_relationships:
                 self.child_node_set.add(edge.child_node)
+        self._modified = True
 
     def remove_edge(self, edge):
-        self._modified = True
         if edge.child_id == self.id:
             self.parent_node_set.remove(edge.parent_node)
         elif edge.parent_id == self.id:
             self.child_node_set.remove(edge.child_node)
         self.edges.remove(edge)
+        self._modified = True
 
     def _update_descendants(self):
         descendant_set = set()
@@ -224,16 +221,17 @@ class AbstractEdge(object):
     """An OBO edge which links two ontology term nodes and contains a 
     relationship type describing now the two nodes are related."""
     
-    def __init__(self, parent_id, child_id, relationship, parent_node=None, child_node=None):
+    def __init__(self, parent_id, child_id, relationship_id, parent_node=None, child_node=None):
         self.parent_id = parent_id
         self.child_id = child_id
-        self.relationship = relationship
+        self.relationship_id = relationship_id
+        self.relationship_obj = None
         self.parent_node = parent_node
         self.child_node = child_node
 
     @property
     def parent_id(self):
-        if self.parent_node :
+        if self.parent_node:
             return self.parent_node.id
         else:
             return self._parent_id
@@ -244,7 +242,7 @@ class AbstractEdge(object):
 
     @property
     def child_id(self):
-        if self.child_node :
+        if self.child_node:
             return self.child_node.id
         else:
             return self._child_id
@@ -253,7 +251,7 @@ class AbstractEdge(object):
     def child_id(self, new_child):
         self._child_id = new_child
 
-"""
+    """
     # alternative implementation
     @property
     def parent_node(self):
@@ -274,4 +272,17 @@ class AbstractEdge(object):
         self._child_node = new_child
         if new_child :
             self.child_id = new_child.id
-"""
+    """
+
+class AbstractRelationship(object):
+
+    """A relationship as defined by a [typedef] stanza in an OBO ontology"""
+
+    def __init__(self):
+        self.id = str()
+        self.name = str()
+        self.inverse_relationship = None
+        self.category = str()
+        self.specific_concept_position = None
+        self.generic_concept_position = None
+
