@@ -12,7 +12,6 @@ go_dag = godag.GoGraph()
 go_parser = parser.GoParser(database, go_dag)
 go_parser.parse()
 database.close()
-go_dag.connect_nodes()
 
 # Test printing
 #print(len(go_dag.node_list))

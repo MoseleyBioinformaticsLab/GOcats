@@ -98,15 +98,13 @@ class OboGraph(object):
         self._modified = True
 
     def add_relationship(self, relationship):
-        self.relationship_index[relationsip.id] = relationship
+        self.relationship_index[relationship.id] = relationship
         self.modified = True
 
     def connect_nodes(self):
         for edge in self.edge_list:
-            edge.parent_node = self.id_index[edge.parent_id]
-            edge.child_node = self.id_index[edge.child_id]
-            self.id_index[edge.parent_id].add_edge(edge, self.allowed_relationships)
-            self.id_index[edge.child_id].add_edge(edge, self.allowed_relationships)
+            edge.relationship = self.relationship_index[edge.relationship_id]
+            edge.connect_nodes((self.id_index[edge.node_pair_id[0]], self.id_index[edge.node_pair_id[1]]), self.allowed_relationships)
         self._modified = True
 
     def filter_nodes(self, keyword_list):
@@ -149,7 +147,8 @@ class AbstractNode(object):
         self._modified = True
         self._descendants = None
         self._ancestors = None
-
+        # new sets for equilavalece, actor/actee, ordinal, etc
+        
     @property
     def descendants(self):
         if self._modified:
@@ -221,58 +220,59 @@ class AbstractEdge(object):
     """An OBO edge which links two ontology term nodes and contains a 
     relationship type describing now the two nodes are related."""
     
-    def __init__(self, parent_id, child_id, relationship_id, parent_node=None, child_node=None):
-        self.parent_id = parent_id
-        self.child_id = child_id
+    def __init__(self, node1_id, node2_id, relationship_id, node_pair=None):
+        self.node_pair_id = (node1_id, node2_id)
+        self.node_pair = node_pair
         self.relationship_id = relationship_id
-        self.relationship_obj = None
-        self.parent_node = parent_node
-        self.child_node = child_node
+        self.relationship = None
 
     @property
     def parent_id(self):
-        if self.parent_node:
-            return self.parent_node.id
-        else:
-            return self._parent_id
+        if self.relationship :
+            return self.relationship.forward(self.node_pair_id)
+        return None
 
-    @parent_id.setter
-    def parent_id(self, new_parent):
-        self._parent_id = new_parent
 
     @property
     def child_id(self):
-        if self.child_node:
-            return self.child_node.id
-        else:
-            return self._child_id
+        if self.relationship :
+            return self.relationship.reverse(self.node_pair_id)
+        return None
 
-    @child_id.setter
-    def child_id(self, new_child):
-        self._child_id = new_child
+    @property
+    def forward_node(self):
+        if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship :
+            return self.relationship_forward(self.node_pair) 
+        return None
 
-    """
-    # alternative implementation
+    @property
+    def reverse_node(self):
+        if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship :
+            return self.relationship_reverse(self.node_pair) 
+        return None
+    
     @property
     def parent_node(self):
-        return self._parent_node
-
-    @parent_node.setter
-    def parent_node(self, new_parent):
-        self._parent_node = new_parent
-        if new_parent :
-            self.parent_id = new_parent.id
+        if self.relationship and self.relationship.category == "scoping" :
+            return self.relationship_forward(self.node_pair) 
+        return None
 
     @property
     def child_node(self):
-        return self._child_node
-    
-    @child_node.setter
-    def child_node(self, new_child):
-        self._child_node = new_child
-        if new_child :
-            self.child_id = new_child.id
-    """
+        if self.relationship and self.relationship.category == "scoping" :
+            return self.relationship_reverse(self.node_pair) 
+        return None
+
+    @property
+    #to finish later
+    def other_node(self, node):
+        return
+
+    def connect_nodes(self, node_pair, allowed_relationships):
+        self.node_pair = node_pair
+        node_pair[0].add_edge(self, allowed_relationships)
+        node_pair[1].add_edge(self, allowed_relationships)
+
 
 class AbstractRelationship(object):
 
@@ -281,8 +281,21 @@ class AbstractRelationship(object):
     def __init__(self):
         self.id = str()
         self.name = str()
-        self.inverse_relationship = None
         self.category = str()
-        self.specific_concept_position = None
-        self.generic_concept_position = None
 
+
+class DirectionalRelationship(AbstractRelationship):
+
+    """A relationship as defined by a [typedef] stanza in an OBO ontology"""
+
+    def __init__(self):
+        super().__init__()
+        self.inverse_relationship_id = None
+        self.inverse_relationship = None
+        self.direction = 1
+
+    def forward(self,pair):
+        return pair[self.direction]
+
+    def reverse(self,pair):
+        return pair[(self.direction+1) % 2]

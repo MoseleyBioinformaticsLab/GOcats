@@ -21,6 +21,7 @@ class OboParser(object):
         self.relationship_match = re.compile('^relationship:')
         self.end_stanza = re.compile('^\s+')
         self.typedef_stanza = re.compile('^\[Typedef\]')
+        self.inverse_tag = re.compile('^inverse_of:')
 
         # May use later.
         #self.comment = re.compile('\!.+')
@@ -35,10 +36,11 @@ class GoParser(OboParser):
         super().__init__()
         self.database_file = database_file
         self.go_graph = go_graph
-        self.relationship_mapping = {"ends_during": ("temporal", 1, 2), "happens_during": ("temporal", 1, 2), "has_part": ("scaling", 2, 1),
-                                     "negatively_regulates": ("active", 1, 2),  "never_in_taxon": ("other", 1, 2), "occurs_in", ("scaling", 1, 2),
-                                     "part_of": ("scaling", 1, 2), "positively_regulates": ("active", 1, 2), "regulates": ("active", 1, 2),
-                                     "starts_during": ("temporal", 1, 2), "is_a": ("scaling", 1, 2)}
+        # 5 types of relationships: scoping, ordinal, active, equivalent, negation
+        self.relationship_mapping = {"ends_during": ("scoping", 1), "happens_during": ("scoping", 1), "has_part": ("scoping", 0),
+                                     "negatively_regulates": ("active", 1),  "never_in_taxon": ("negation", 1), "occurs_in": ("scoping", 1),
+                                     "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
+                                     "starts_during": ("scoping", 1), "is_a": ("scoping", 1)}
 
     def parse(self):
         # TODO: find all relationship types using TypeDef stanza
@@ -52,9 +54,10 @@ class GoParser(OboParser):
                 node = GoGraphNode()
                 node_edge_list = []
 
-            if not id_typedef and not is_term and re.match(self.typedef_stanza, line):
+            if not is_typedef and not is_term and re.match(self.typedef_stanza, line):
                 is_typedef = True
-                relationship_obj = AbstractRelationship() 
+                relationship_properties = dict()
+                relationship_obj = DirectionalRelationship() 
 
             elif is_term:
                 if re.match(self.stanza_id, line):
@@ -71,7 +74,7 @@ class GoParser(OboParser):
                     node.definition = re.findall('\"(.*?)\"', line)[0].lower()  # This pattern matches the definition listed within quotes on the line.
 
                 elif re.match(self.is_a, line):
-                    node_edge = AbstractEdge(re.findall(self.go_term, line)[0], curr_stanza_id, 'is_a')  # node2, node1, relationship
+                    node_edge = AbstractEdge(curr_stanza_id, re.findall(self.go_term, line)[0], 'is_a')  # node1, node2, relationship
                     node_edge_list.append(node_edge)
                     is_a_relationship = AbstractRelationship()
                     is_a_relationship.id = "is_a"
@@ -80,7 +83,7 @@ class GoParser(OboParser):
 
                 elif re.match(self.relationship_match, line):
                     relationship_id = re.findall("[\w]+", line)[1]  # line example: relationship: part_of GO:0040025 ! vuval development
-                    node_edge = AbstractEdge(re.findall(self.go_term, line)[0], curr_stanza_id, relationship_id)
+                    node_edge = AbstractEdge(curr_stanza_id, re.findall(self.go_term, line)[0], relationship_id)
                     node_edge_list.append(node_edge)
 
                 elif re.match(self.obsolete, line):
@@ -105,13 +108,13 @@ class GoParser(OboParser):
                     relationship_obj.name = re.findall(r"[\w+\:]+", line)[1]
 
                 elif re.match(self.inverse_tag, line):
-                    relationship_obj.inverse_relationship = re.findall(r"[\w+\:]+", line)[1]
+                    relationship_obj.inverse_relationship_id = re.findall(r"[\w+\:]+", line)[1]
 
                 elif re.match(self.end_stanza, line):
                     properties = self.relationship_mapping[relationship_obj.id]
                     relationship_obj.category = properties[0]
-                    relationship_obj.specific_concept_position = properties[1]
-                    relationship_obj.generic_concept_position = properties[2]
+                    relationship_obj.direction = properties[1]
                     self.go_graph.add_relationship(relationship_obj)
                     is_typedef = False
 
+        self.go_graph.connect_nodes()
