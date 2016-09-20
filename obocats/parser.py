@@ -1,6 +1,6 @@
 # !/usr/bin/python3
 import re
-from .dag import AbstractEdge, AbstractRelationship
+from .dag import AbstractEdge, DirectionalRelationship
 from .godag import GoGraphNode
 
 
@@ -37,6 +37,7 @@ class GoParser(OboParser):
         self.database_file = database_file
         self.go_graph = go_graph
         # 5 types of relationships: scoping, ordinal, active, equivalent, negation
+        # 1 means that the relationship directionality is converntional, 0 means that the semantic directionaly points from node 2 to node1. 
         self.relationship_mapping = {"ends_during": ("scoping", 1), "happens_during": ("scoping", 1), "has_part": ("scoping", 0),
                                      "negatively_regulates": ("active", 1),  "never_in_taxon": ("negation", 1), "occurs_in": ("scoping", 1),
                                      "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
@@ -76,10 +77,13 @@ class GoParser(OboParser):
                 elif re.match(self.is_a, line):
                     node_edge = AbstractEdge(curr_stanza_id, re.findall(self.go_term, line)[0], 'is_a')  # node1, node2, relationship
                     node_edge_list.append(node_edge)
-                    is_a_relationship = AbstractRelationship()
-                    is_a_relationship.id = "is_a"
-                    is_a_relationship.name = "is a"
-                    self.go_graph.add_relationship(is_a_relationship)
+                    if "is_a" not in self.go_graph.relationship_index:
+                        is_a_relationship = DirectionalRelationship()
+                        is_a_relationship.id = "is_a"
+                        is_a_relationship.name = "is a"
+                        is_a_relationship.category = self.relationship_mapping["is_a"][0]
+                        is_a_relationship.direction = self.relationship_mapping["is_a"][1]
+                        self.go_graph.add_relationship(is_a_relationship)
 
                 elif re.match(self.relationship_match, line):
                     relationship_id = re.findall("[\w]+", line)[1]  # line example: relationship: part_of GO:0040025 ! vuval development

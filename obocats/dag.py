@@ -56,7 +56,7 @@ class OboGraph(object):
     def add_node(self, node):
         self.node_list.append(node)
         self.id_index[node.id] = node
-        for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
+        for word in re.findall(r"[\w\'\-]+", node.name + " " + node.definition):
             try:
                 self.vocab_index[word].add(node)
             except KeyError:
@@ -75,7 +75,7 @@ class OboGraph(object):
                 for edge in graph_node.edges:
                     if node is edge.parent_node or node is edge.child_node:
                         graph_node.edges.remove(edge)                    
-            for word in re.findall(r"[\w'-]+", node.name + " " + node.definition):
+            for word in re.findall(r"[\w\'\-]+", node.name + " " + node.definition):
                 try:
                     self.vocab_index[word].remove(node)
                 except KeyError:
@@ -242,29 +242,45 @@ class AbstractEdge(object):
     @property
     def forward_node(self):
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship :
-            return self.relationship_forward(self.node_pair) 
+            return self.relationship.forward(self.node_pair) 
         return None
 
     @property
     def reverse_node(self):
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship :
-            return self.relationship_reverse(self.node_pair) 
+            return self.relationship.reverse(self.node_pair) 
         return None
     
     @property
     def parent_node(self):
         if self.relationship and self.relationship.category == "scoping" :
-            return self.relationship_forward(self.node_pair) 
+            return self.relationship.forward(self.node_pair)
         return None
 
     @property
     def child_node(self):
         if self.relationship and self.relationship.category == "scoping" :
-            return self.relationship_reverse(self.node_pair) 
+            return self.relationship.reverse(self.node_pair) 
         return None
 
+    # finish these later
     @property
-    #to finish later
+    def actor_node(self):
+        return
+
+    @property
+    def recipient_node(self):
+        return
+
+    @property
+    def ordinal_prior_node(self):
+        return
+
+    @property
+    def ordinal_post_node(self):
+        return
+
+    @property
     def other_node(self, node):
         return
 
@@ -286,16 +302,28 @@ class AbstractRelationship(object):
 
 class DirectionalRelationship(AbstractRelationship):
 
-    """A relationship as defined by a [typedef] stanza in an OBO ontology"""
+    """A singly-directional relationship. A forward direction is a condition in 
+    which one node is semantically and hierarchically above the other and is 
+    independent of the directionality of the edge. For example, although 
+    'mitotic cell cycle'(node1) has_part 'mitotic nuclear division'(node2) and 
+    the direction of the edge points from node1 to node2, the forward semantic 
+    directionality points from node2 to node1 becuase of its semantic and 
+    hierarchical scoping."""
 
     def __init__(self):
         super().__init__()
         self.inverse_relationship_id = None
         self.inverse_relationship = None
-        self.direction = 1
+        self.direction = 1  # Defaults as toward node2 (node2 is the 'forward' node)
 
     def forward(self,pair):
         return pair[self.direction]
 
     def reverse(self,pair):
         return pair[(self.direction+1) % 2]
+
+
+class NonDirectionalRelationship(AbstractRelationship):
+    
+    def __init__(self):
+        return    
