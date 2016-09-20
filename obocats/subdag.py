@@ -1,4 +1,5 @@
 from .dag import OboGraph, AbstractNode, AbstractEdge
+import re
 
 
 class SubGraph(OboGraph):
@@ -52,8 +53,8 @@ class SubGraph(OboGraph):
     def greedily_extend_subgraph(self):
         # change top_node to root_node list.
         supergraph_descendents = set([super_node for super_node in self.super_graph.id_index[self.top_node.id].descendants if self.valid_node(super_node) and super_node.id not in self.id_index])
-        print("2 supergraph descendents not in subgraph", len(supergraph_descendents))
-        print("2.5 true supergraph descendants", len(self.super_graph.id_index[self.top_node.id].descendants))
+#        print("2 supergraph descendents not in subgraph", len(supergraph_descendents))
+#        print("2.5 true supergraph descendants", len(self.super_graph.id_index[self.top_node.id].descendants))
         graph_extension_nodes = set([super_node for super_node in self.super_graph.id_index[self.top_node.id].descendants if super_node.id not in self.id_index])
         for super_node in graph_extension_nodes:
             self.add_node(super_node)
@@ -88,7 +89,7 @@ class SubGraph(OboGraph):
         elif not subgraph.node_list:
             raise Exception("Subgraph did not seed any nodes from the supergraph! Aborting.")
         else:
-            candidates = [node for node in subgraph.node_list if any(word in node.name for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
+            candidates = [node for node in subgraph.node_list if any(word in re.findall(r"[\w+\'\-]+", node.name) for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
             top_node_scoring = {node: len(node.descendants) for node in candidates}
             return max(top_node_scoring, key=top_node_scoring.get)
 
@@ -107,7 +108,7 @@ class SubGraph(OboGraph):
         subgraph.connect_subnodes()
 
         subgraph.top_node = subgraph.find_top_node(subgraph, keyword_list)
-        print("1",subgraph.top_node.name)
+#        print("1",subgraph.top_node.name)
 
 #        for subnode in subgraph.node_list:
 #            if subnode in subnode.descendants:
@@ -138,12 +139,17 @@ class SubGraph(OboGraph):
                 subgraph_orphans_descendants.add(node)
 
         subgraph_orphans_descendants.update([orphan for orphan in subgraph.orphans])
-        print("3 orphans and their descendants", len(subgraph_orphans_descendants - subgraph.top_node.descendants))
-        print("4 subgraph contents", len(subgraph.node_list))
-        print("5 subgraph top_node_descendents", len(subgraph.top_node.descendants))
+#        print("3 orphans and their descendants", len(subgraph_orphans_descendants - subgraph.top_node.descendants))
+#        print("4 subgraph contents", len(subgraph.node_list))
+#        print("5 subgraph top_node_descendents", len(subgraph.top_node.descendants))
 
         #print([node.name for node in subgraph.node_list])
-        print(subgraph._modified)
+#        print(subgraph._modified)
+        print("-----", subgraph.top_node.name, "-----")
+        sorted_contents = sorted(set([node.name for node in subgraph.root_node_mapping.keys()] + [subgraph.top_node.name]))
+        print(len(sorted_contents))
+#        for name in sorted_contents:
+#            print(name)
         return subgraph
 
 

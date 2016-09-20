@@ -92,7 +92,7 @@ def filter_subgraphs(args):
         for row in reader:
             subgraph_name = row[0]
             keyword_list = [keyword for keyword in re.split(';', row[1])]
-            print("Creating subgraph {}".format(subgraph_name))
+#            print("Creating subgraph {}".format(subgraph_name))
             subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, keyword_list, subgraph_namespace, subgraph_relationships)
 #    for subgraph_name, subgraph in subgraph_collection.items():
 #        print(subgraph_name, len(subgraph.id_mapping.keys()))
@@ -115,7 +115,6 @@ def filter_subgraphs(args):
                 collection_node_mapping[node].update(root_nodes)
             except KeyError:
                 collection_node_mapping[node] = set([root_nodes])
-
 
     json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "{}_SubGraphMapping.p").format(os.path.basename(args['<keyword_file>'])))
 
