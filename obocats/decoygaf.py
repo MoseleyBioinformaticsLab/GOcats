@@ -2,7 +2,7 @@
 """Decoy GAF maker
 
 Usage:
-    decoygaf.py make_decoy <goDAG> <output_file>
+    decoygaf.py make_decoy <ontology_term_list> <output_file>
     decoygaf.py map_terms <mapped_gaf> <output_file>
 
 """
@@ -26,12 +26,10 @@ def make_decoy(args):
     sub-ontology. We can then map this phony gaf using the slim of our choice and the resulting mapped GAF can be parsed
     to create the mapping we desire.
     """
-    line_format = "UniProtKB	R4GNC1	SRP72		GO:0005737	GO_REF:0000052	IDA		C	Signal recognition particle subunit SRP72	R4GNC1_HUMAN	protein	taxon:9606	20101115	HPA	"
+    line_format = "UniProtKB	R4GNC1	SRP72		GO:0005737	GO_REF:0000052	IDA		C	Signal recognition particle subunit SRP72	R4GNC1_HUMAN	protein	taxon:9606	20101115	HPA	"  # Random GAF line used for formatting purposes
     line_array = re.split('\t', line_format)
 
-    input_godag = args['<goDAG>']
-    go_dag = tools.json_load(input_godag)
-    go_terms = go_dag.godag_dict.keys()
+    go_terms = tools.json_load(args['<ontology_term_list>'])
 
     with open(args['<output_file>'], 'w') as gaf_file:
         gafwriter = csv.writer(gaf_file, delimiter='\t')

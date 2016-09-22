@@ -58,8 +58,8 @@ def build_subdags(args):
             else:
                 uniprot_multi_root[location] = [top_node]
 
-    tools.json_save(go_translated_dict, os.path.join(uniprot_subcell_results_dir, 'Uniprot_subdag_content_dictionary'))
-    tools.json_save(uniprot_multi_root, os.path.join(uniprot_subcell_results_dir, 'Uniprot_multi_root_dictionary'))
+    tools.json_save(go_translated_dict, os.path.join(uniprot_subcell_results_dir, 'uniprot_content_mapping'))
+    tools.json_save(uniprot_multi_root, os.path.join(uniprot_subcell_results_dir, 'uniprot_root_mapping'))
 
 
 class SubcellParser():
