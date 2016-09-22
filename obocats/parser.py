@@ -1,7 +1,7 @@
 # !/usr/bin/python3
 import re
-from .dag import AbstractEdge, DirectionalRelationship
-from .godag import GoGraphNode
+from dag import AbstractEdge, DirectionalRelationship
+from godag import GoGraphNode
 
 
 class OboParser(object):
