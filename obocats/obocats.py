@@ -87,7 +87,7 @@ def filter_subgraphs(args):
     parsing_class[database_name].parse()
 
     if args['--output_termlist']:
-        tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist.p"))
+        tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
 
     database.close()
     supergraph.connect_nodes()
@@ -121,7 +121,7 @@ def filter_subgraphs(args):
             except KeyError:
                 collection_node_mapping[node] = set([root_nodes])
 
-    tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "{}_SubGraphMapping.p").format(re.findall("\w+", os.path.basename(args['<keyword_file>']))[0]))
+    tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
 
 def find_category_subsets(subgraph_collection):
     is_subset_of = dict()
@@ -141,7 +141,7 @@ def subgraph_overlap(args):
         os.makedirs(args['<output_directory>'])
  
     inc_index_table = []
-    gocats_mapping = tools.json_load(args['<gocats_mapping>'])
+    gocats_mapping = tools.json_load(args['<obocats_mapping>'])
     uniprot_mapping = tools.json_load(args['<uniprot_mapping>'])
     map2slim_mapping = tools.json_load(args['<map2slim_mapping>'])
 
