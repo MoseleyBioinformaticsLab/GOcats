@@ -1,4 +1,4 @@
-from .dag import OboGraph, AbstractNode, AbstractEdge
+from dag import OboGraph, AbstractNode, AbstractEdge
 import re
 
 
@@ -145,9 +145,9 @@ class SubGraph(OboGraph):
 
         #print([node.name for node in subgraph.node_list])
 #        print(subgraph._modified)
-        print("-----", subgraph.top_node.name, "-----")
-        sorted_contents = sorted(set([node.name for node in subgraph.root_node_mapping.keys()] + [subgraph.top_node.name]))
-        print(len(sorted_contents))
+#        print("-----", subgraph.top_node.name, "-----")
+#        sorted_contents = sorted(set([node.name for node in subgraph.root_node_mapping.keys()] + [subgraph.top_node.name]))
+#        print(len(sorted_contents))
 #        for name in sorted_contents:
 #            print(name)
         return subgraph
