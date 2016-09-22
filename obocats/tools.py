@@ -7,7 +7,7 @@ import sys
 def json_save(obj, filename):
     """Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
     dictkeys to strings."""
-    f = open(filename, 'w')
+    f = open(filename+".json_pickle", 'w')
     json_obj = jsonpickle.encode(obj, keys=True)
     f.write(json_obj)
     f.close()
