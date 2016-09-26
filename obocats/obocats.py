@@ -42,6 +42,26 @@ def main(args):
     elif args['compare_mapping']:
         compare_mapping(args)
 
+class SubgraphCollection(object):
+
+    """A collection of subgraphs objects with analyses performable across the collection"""
+
+    def __init__(self, supergraph, map_supersets=False):
+        self.supergraph = supergraph
+        self.map_supersets = map_supersets
+        self.collection = dict()
+        self.root_node_ids = set()
+        self._id_mapping = dict()
+        self._node_mapping = dict()
+        self._content_mapping = dict()
+        self._superset_of = dict()
+        self._modified = True
+
+    def add_subgraph(self, subgraph_name, subgraph):
+        self.collection[subgraph_name] = subgraph
+        self.root_nodes.add(subgraph.representative_node)
+        self._modified = True
+
 
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
