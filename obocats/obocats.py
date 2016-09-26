@@ -43,7 +43,7 @@ def main(args):
         compare_mapping(args)
 
 
-# FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to eachother a lot.  
+# FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
     if args['--namespace_filter']:
         namespace_filter = args(['--namespace_filter'])
@@ -139,10 +139,7 @@ def filter_subgraphs(args):
             for subset_id, superset_ids in category_subsets.items():
                 if subset_id in root_id_list:
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
-        for node, root_node_list in collection_node_mapping.items():
-            for subset_id, superset_ids in category_subsets.items():
-                if subset_id in [root_node.id for root_node in root_node_list]:
-                    [root_node_list.remove(node) for node in superset_ids if node in [root_node.id for root_node in root_node_list]]
+    # do the same for node_object_mapping 
 
 
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))

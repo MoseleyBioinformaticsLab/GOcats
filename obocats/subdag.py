@@ -22,6 +22,7 @@ class SubGraph(OboGraph):
     def root_id_mapping(self):
         if (self._modified and self.representative_node) or self._root_id_mapping == None:
             self._root_id_mapping = {node.id: self.representative_node.id for node in self.representative_node.descendants}
+            self._root_id_mapping[self.representative_node.id] = self.representative_node.id
         elif not self.representative_node:
             raise Exception("Mapping failed: top-node not identified.")
         return self._root_id_mapping
@@ -30,6 +31,7 @@ class SubGraph(OboGraph):
     def root_node_mapping(self):
         if (self._modified and self.representative_node) or self._root_node_mapping == None:
             self._root_node_mapping = {node: self.representative_node for node in self.representative_node.descendants}
+            self._root_node_mapping[self.representative_node] = self.representative_node
         elif not self.representative_node:
             raise Exception("Mapping failed: top-node not identified.")
         return self._root_node_mapping
@@ -38,6 +40,7 @@ class SubGraph(OboGraph):
     def content_mapping(self):
         if (self._modified and self.representative_node) or self._content_mapping == None:
             self._content_mapping = {self.representative_node.id: [node.id for node in self.representative_node.descendants]}
+            self._content_mapping[self.representative_node.id].append(self.representative_node.id)
         elif not self.representative_node:
             raise Exception("Mapping failed: top-node not identified.")
         return self._content_mapping
