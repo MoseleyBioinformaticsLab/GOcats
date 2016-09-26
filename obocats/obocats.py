@@ -226,7 +226,7 @@ def compare_mapping(args):
     a gold-standard dataset, provided in csv format (PARAMETER <manual-dataset>)."""
     from tabulate import tabulate
     import catcompare
-    mapped_gaf_dict = catassign.make_gaf_dict(args['<mapped_gaf>'], keys='go_term')
+    mapped_gaf_dict = tools.make_gaf_dict(args['<mapped_gaf>'], keys='go_term')
     location_breakdown_table = []
     curr_dir = os.path.dirname(os.path.realpath(__file__))
     comparison_results = {}
