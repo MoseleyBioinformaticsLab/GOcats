@@ -328,5 +328,5 @@ def compare_mapping(args):
 
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='OboCats 0.0.1')
+    args = docopt.docopt(__doc__, version='OboCats 0.1.0')
     main(args)
