@@ -2,7 +2,7 @@
 """ Open Biomedical Ontologies Categories (OboCats)
 
 Usage:
-    obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist]
+    obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --output_idtranslation]
     obocats subgraph_overlap <obocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index]
     obocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
     obocats compare_mapping <mapped_gaf> <manual_dataset> [--group_annotations=<None>] [--save_assignments=<filename>]
@@ -15,6 +15,7 @@ Options:
     --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
     --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
     --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
+    --output_idtranslation               Outputs a dictionary mapping of ontology IDs to their names. 
     --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
     --group_annotations=<union>          Choose how to group multiple UniProt annotations (union|intersection) [default=union]
     --save_assignments=<filename>        Save a file with all genes and their GO assignments.
@@ -57,6 +58,8 @@ def build_graph(args):
 
     database = open(args['<database_file>'], 'r')
     output_directory = args['<output_directory>']
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
     database_name = os.path.basename(args['<database_file>'])
     graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
     graph = graph_class[database_name]
@@ -90,6 +93,8 @@ def filter_subgraphs(args):
     # Building the super_graph
     database = open(args['<database_file>'], 'r')
     output_directory = args['<output_directory>']
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
     database_name = os.path.basename(args['<database_file>'])
     graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
     supergraph = graph_class[database_name]
@@ -98,6 +103,12 @@ def filter_subgraphs(args):
 
     if args['--output_termlist']:
         tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
+
+    if args['--output_idtranslation']:
+        idtranslation = dict()
+        for id, node in supergraph.id_index.items():
+            idtranslation[id] = node.name
+        tools.json_save(idtranslation, os.path.join(args['<output_directory>'], "idtranslation"))
 
     database.close()
     supergraph.connect_nodes()
@@ -114,8 +125,8 @@ def filter_subgraphs(args):
     # Handling superset mapping
     if not args['--map_supersets']:
         category_subsets = find_category_subsets(subgraph_collection)
-        print(category_subsets)
     else:
+        print("I mapped supersets")
         category_subsets = None
 
     collection_id_mapping = dict()
@@ -143,11 +154,17 @@ def filter_subgraphs(args):
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
     # do the same for node_object_mapping 
 
-
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
     # FIXME: 
     # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "OC_node_mapping"))
+
+    # Making a file for network visualization via Cytoscape 3.0
+    with open(os.path.join(args['<output_directory>'], "NetworkTable.csv"), 'w', newline='') as network_table:
+        edgewriter = csv.writer(network_table, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for term_id, root_id_list in collection_id_mapping.items():
+            for root_id in root_id_list:
+                edgewriter.writerow([term_id, root_id])
 
 def find_category_subsets(subgraph_collection):
     is_subset_of = dict()
@@ -328,5 +345,5 @@ def compare_mapping(args):
 
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='OboCats 0.1.0')
+    args = docopt.docopt(__doc__, version='OboCats 0.1.1')
     main(args)
