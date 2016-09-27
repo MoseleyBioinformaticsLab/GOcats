@@ -63,10 +63,7 @@ class SubGraph(OboGraph):
         self._modified = True
 
     def greedily_extend_subgraph(self):
-        # change representative_node to root_node list.
         supergraph_descendents = set([super_node for super_node in self.super_graph.id_index[self.representative_node.id].descendants if self.valid_node(super_node) and super_node.id not in self.id_index])
-#        print("2 supergraph descendents not in subgraph", len(supergraph_descendents))
-#        print("2.5 true supergraph descendants", len(self.super_graph.id_index[self.representative_node.id].descendants))
         graph_extension_nodes = set([super_node for super_node in self.super_graph.id_index[self.representative_node.id].descendants if super_node.id not in self.id_index])
         for super_node in graph_extension_nodes:
             self.add_node(super_node)
@@ -84,13 +81,10 @@ class SubGraph(OboGraph):
 
     def remove_orphan_paths(self):
         #not using for now
-        #print("removing orphans")
         for orphan in self.orphans:
-            #print("-    ", orphan.name)
             orphaned_descendants = orphan.descendants - self.representative_node.descendants
             if orphaned_descendants:
                 for descendant in orphaned_descendants:
-                    #print("     ", descendant.name)
                     self.remove_node(descendant)
             self.remove_node(orphan)
 
@@ -107,61 +101,24 @@ class SubGraph(OboGraph):
 
     @staticmethod
     def from_filtered_graph(super_graph, keyword_list, namespace_filter=None, allowed_relationships=None, extension='greedy'):
-
         subgraph = SubGraph(super_graph, namespace_filter, allowed_relationships)
-
         keyword_list = [word.lower() for word in keyword_list]
-
         filtered_nodes = super_graph.filter_nodes(keyword_list)
-
         for super_node in filtered_nodes:
             subgraph.add_node(super_node)
-
         subgraph.connect_subnodes()
-
         subgraph.representative_node = subgraph.find_representative_node(subgraph, keyword_list)
-#        print("1",subgraph.representative_node.name)
-
-#        for subnode in subgraph.node_list:
-#            if subnode in subnode.descendants:
-#                print("subnode cycle: ",subnode.name)
-#                if subnode.super_node in subnode.super_node.descendants :
-#                    print("supernode cycle: ",subnode.super_node.name)
-#                for subnode2 in subnode.descendants :
-#                    if subnode in subnode2.child_node_set :
-#                        print("Subnode Cycle point:",subnode2.name)
-#                    if subnode.super_node in subnode2.super_node.child_node_set :
-#                        print("Supernode Cycle point:",subnode2.super_node.name)
-
-
-#        print(subgraph.representative_node.name)
         subgraph.root_nodes.append(subgraph.representative_node)
-
-        # if i limited mapping to representative_node descendants? may not need remove_orphan_paths, instead hang on to orphans for use later. 
-        # subgraph.remove_orphan_paths()
-
         if extension == 'greedy':
             subgraph.greedily_extend_subgraph()
         else:
             subgraph.conservatively_extend_subgraph()
-
         subgraph_orphans_descendants = set()
         for orphan in subgraph.orphans:
             for node in orphan.descendants:
                 subgraph_orphans_descendants.add(node)
-
         subgraph_orphans_descendants.update([orphan for orphan in subgraph.orphans])
-#        print("3 orphans and their descendants", len(subgraph_orphans_descendants - subgraph.representative_node.descendants))
-#        print("4 subgraph contents", len(subgraph.node_list))
-#        print("5 subgraph representative_node_descendents", len(subgraph.representative_node.descendants))
 
-        #print([node.name for node in subgraph.node_list])
-#        print(subgraph._modified)
-#        print("-----", subgraph.representative_node.name, "-----")
-#        sorted_contents = sorted(set([node.name for node in subgraph.root_node_mapping.keys()] + [subgraph.representative_node.name]))
-#        print(len(sorted_contents))
-#        for name in sorted_contents:
-#            print(name)
         return subgraph
 
 
