@@ -41,45 +41,8 @@ def main(args):
         categorize_dataset(args)
     elif args['compare_mapping']:
         compare_mapping(args)
-"""
-class SubgraphCollection(object):
 
-
-
-    def __init__(self, supergraph, map_supersets=False):
-        self.supergraph = supergraph
-        self.map_supersets = map_supersets
-        self.collection = dict()
-        self.root_node_ids = set()
-        self.content_mapping = dict()
-        self._id_mapping = None
-        self._node_mapping = None
-        self._superset_of = dict()
-        self._modified = True
-
-    def _update_mapping(self):
-
-    def _update_id_mapping(self):
-        for subgraph in self.collection.values():
-            for node_id, root_id_list in subgraph.root_id_mapping.items():
-                for root_id in root_id_list:
-                    if not(root_id in self.content_mapping.keys() and any([id in self.content_mapping[root_id] for id in root_id_list - root_id])):
-
-
-
-
-    @property
-    def id_mapping(self):
-        if self._modified or not self._id_mapping:
-
-
-
-
-    def add_subgraph(self, subgraph_name, subgraph):
-        self.collection[subgraph_name] = subgraph
-        self.content_mapping.update(subgraph.content_mapping)
-        self._modified = True
-"""
+# Need a SubGraphCollection object
 
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
@@ -258,6 +221,8 @@ def categorize_dataset(args):
     tools.list_to_file(os.path.join(output_directory, 'UnmappedGenes'), unmapped_genes)
 
 def compare_mapping(args):
+
+    # This method needs to be reworked completely.\
     """Compares the agreement in annotation assignment between a GAF produced by Obcats (PARAMETER <mapped_gaf>) and
     a gold-standard dataset, provided in csv format (PARAMETER <manual-dataset>)."""
     from tabulate import tabulate
