@@ -1,5 +1,5 @@
 # !/usr/bin/python3
-from .dag import OboGraph, AbstractNode
+from dag import OboGraph, AbstractNode
 
 
 class GoGraph(OboGraph):

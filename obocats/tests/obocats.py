@@ -92,15 +92,15 @@ def filter_subgraphs(args):
         for row in reader:
             subgraph_name = row[0]
             keyword_list = [keyword for keyword in re.split(';', row[1])]
-#            print("Creating subgraph {}".format(subgraph_name))
             subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, keyword_list, subgraph_namespace, subgraph_relationships)
-#    for subgraph_name, subgraph in subgraph_collection.items():
-#        print(subgraph_name, len(subgraph.id_mapping.keys()))
 
     if not args['--map_supersets']:
-        supersets = find_supersets(subgraph_collection)
+        category_subsets = find_category_subsets(subgraph_collection)
+        for key, value in category_subsets.items():
+            print(supergraph.id_index[key].name, [supergraph.id_index[id].name for id in value])
+#        print(category_subsets)
     else:
-        supersets = None
+        category_subsets = None
 
     collection_id_mapping = dict()
     collection_node_mapping = dict()
@@ -118,15 +118,16 @@ def filter_subgraphs(args):
 
     json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "{}_SubGraphMapping.p").format(os.path.basename(args['<keyword_file>'])))
 
-def find_supersets(subgraph_collection):
-    is_superset_of = dict()
+def find_category_subsets(subgraph_collection):
+    is_subset_of = dict()
     for subgraph in subgraph_collection.values():
-        current_top_node = subgraph.top_node
-        current_contents = subgraph.id_index.keys()
         for next_subgraph in subgraph_collection.values():
-            if next_subgraph.top_node.id != current_top_node.id and set(current_contents).issuperset(set(next_subgraph.id_index.keys())):
-                is_superset_of[current_top_node.id] = next_subgraph.top_node.id  # The key is a superset of its value
-    return is_superset_of
+            if subgraph.top_node.id in next_subgraph.root_id_mapping.keys():
+                try:
+                    is_subset_of[subgraph.top_node.id].add(next_subgraph.top_node.id)
+                except KeyError:
+                    is_subset_of[subgraph.top_node.id] = {next_subgraph.top_node.id}
+    return is_subset_of
 
 def json_save(obj, file_name):
     """Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
