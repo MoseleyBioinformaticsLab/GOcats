@@ -111,7 +111,7 @@ class OboGraph(object):
         for word in keyword_list:
             if word not in self.vocab_index.keys():
                 keyword_list.remove(word)
-        filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list]])
+        filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list if word in self.vocab_index]])
         if self.namespace_filter:
             filtered_nodes = [node for node in filtered_nodes if node.namespace == self.namespace_filter]
         return filtered_nodes
