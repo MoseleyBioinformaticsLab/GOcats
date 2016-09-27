@@ -41,27 +41,45 @@ def main(args):
         categorize_dataset(args)
     elif args['compare_mapping']:
         compare_mapping(args)
-
+"""
 class SubgraphCollection(object):
 
-    """A collection of subgraphs objects with analyses performable across the collection"""
+
 
     def __init__(self, supergraph, map_supersets=False):
         self.supergraph = supergraph
         self.map_supersets = map_supersets
         self.collection = dict()
         self.root_node_ids = set()
-        self._id_mapping = dict()
-        self._node_mapping = dict()
-        self._content_mapping = dict()
+        self.content_mapping = dict()
+        self._id_mapping = None
+        self._node_mapping = None
         self._superset_of = dict()
         self._modified = True
 
+    def _update_mapping(self):
+
+    def _update_id_mapping(self):
+        for subgraph in self.collection.values():
+            for node_id, root_id_list in subgraph.root_id_mapping.items():
+                for root_id in root_id_list:
+                    if not(root_id in self.content_mapping.keys() and any([id in self.content_mapping[root_id] for id in root_id_list - root_id])):
+
+
+
+
+    @property
+    def id_mapping(self):
+        if self._modified or not self._id_mapping:
+
+
+
+
     def add_subgraph(self, subgraph_name, subgraph):
         self.collection[subgraph_name] = subgraph
-        self.root_nodes.add(subgraph.representative_node)
+        self.content_mapping.update(subgraph.content_mapping)
         self._modified = True
-
+"""
 
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
@@ -133,6 +151,7 @@ def filter_subgraphs(args):
     # Handling superset mapping
     if not args['--map_supersets']:
         category_subsets = find_category_subsets(subgraph_collection)
+        print(category_subsets)
     else:
         category_subsets = None
 
@@ -171,7 +190,7 @@ def find_category_subsets(subgraph_collection):
     is_subset_of = dict()
     for subgraph in subgraph_collection.values():
         for next_subgraph in subgraph_collection.values():
-            if subgraph.representative_node.id in next_subgraph.root_id_mapping.keys():
+            if subgraph.representative_node.id != next_subgraph.representative_node.id and subgraph.representative_node.id in next_subgraph.root_id_mapping.keys():
                 try:
                     is_subset_of[subgraph.representative_node.id].add(next_subgraph.representative_node.id)
                 except KeyError:
