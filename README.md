@@ -1,10 +1,17 @@
-# Project Title
+#GOcats3/OBOcats
 
-One Paragraph of project description goes here
+GOcats3/OBOcats is an Open Biomedical Ontology (OBO) parser and categorizer--currently specialized for the Gene Ontology (GO)--which can sort ontology terms into conceptual categories that a user provides. It is being redeveloped from GOcats version 2 available here: https://gitlab.cesb.uky.edu/eugene/ARK.goLocalization. Later, it will be fully extended into OBOcats, which will parse and categorize any ontology in the OBO Foundry.
+Currently in development.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+It is recommended that you clone this respository into a project directory within the home directory. 
+
+You will also need a local copy of the Gene Ontology OBO flat file, available here: http://purl.obolibrary.org/obo/go.obo
+
+GOcats3/OBOcats is able to map annotations within Gene Associaition Files (GAFs) into categories specified by the user. These categories are specified by creating a csv file where column 1 is the name of the category and column 2 is a list of keywords assocaiated with that category concept, separated by semicolons (;). See ARK.GOcats3/obocats/exampledata/examplecategories.csv as an example of 25 subcellular location categories. In its current version, this will be the main use of GOcats3. 
+
+If you would like to perform the analyses carried out in the development of GOcats3 which involve mapping comparisons to OWLTools' Map2Slim and to UniProt's Subcellular Location Controlled Vocabulary, please install the "additional packages" listed under the Prerequisites section and see the Running the Tests section.
 
 ### Prerequisities
 
