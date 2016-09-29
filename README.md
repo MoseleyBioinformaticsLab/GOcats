@@ -17,7 +17,7 @@ If you would like to perform the analyses carried out in the development of GOca
 
 #### Generating GOcats category mapping and mapping GAFs (standard usage)
 
-Python3 / pip
+##### Python3 / pip
 
 Fedora 24
 ```
@@ -31,7 +31,7 @@ sudo apt-get install python3-dev
 sudo apt-get install python3-pip
 ```
 
-JSONPickle
+##### JSONPickle
 
 Fefora 24 / Ubuntu 16.04
 ```
@@ -42,17 +42,32 @@ sudo pip3 install jsonpickle
 
 ##### OWLTools prerequisites (see Installing OWLTools under Installing or visit https://github.com/owlcollab/owltools):
 
-Maven / Java
+###### Maven / Java
 
 Fedora 24
 ```
-
+sudo dnf install maven java-1.8.0-openjdk-devel
 ```
 
+Ubuntu
 ```
-Give examples
+sudo apt-get install maven openjdk-8-jdk
 ```
 
+#### Plotting and analyses 
+
+Fedora 24
+```
+sudo dnf install gcc-c++ libpng-devel freetype-devel libffi-devel python3-tkinter
+sudo pip3 install --upgrade pip
+sudo pip3 install numpy pandas tabulate cairocffi pyupset
+```
+Ubuntu 16.04
+```
+sudo apt get install gcc libpng-dev freetype2-demos libffi-dev python3-tk 
+sudo pip3 install --upgrade pip
+sudo pip3 install numpy pandas tabulate cairocffi pyupset
+```
 ### Installing
 
 A step by step series of examples that tell you have to get a development env running
