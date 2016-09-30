@@ -99,54 +99,45 @@ mvn clean package -D maven.test.skip.exec=true
 
 #### Example usage
 
-A step by step series of examples that tell you have to get a development env running
-
-Stay what the step will be
-
+Creating a mapping of GO terms from the Gene Ontology using a category file
 ```
-Give the example
+python3 ~/ARK.GOcats/obocats/obocats.py filter_subgraphs ~/Databases/GeneOntology/01-12-2016/go.obo ~/ARK.GOcats/obocats/exampledata/examplecategories.csv ./Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
 ```
-
-And repeat
-
+This will output several files in the 'Output' directory including:
 ```
-until finished
+OC_content_mapping.json_pickle  # A python dictionary with category-defining GO terms as keys and a list of all subgraph contents as values.
+OC_id_mapping  # A python dictionary with every GO term of the specified namespace as keys and a list of category root terms as values.
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+Mapping GO terms in a GAF
+```
+python3 ~/ARK.GOcats/obocats/obocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/OC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_GAF_NAME.goa
+```
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+Basic tests are located in ARK.GOcats/obocats/tests and can be run individually using the -m option in python
 ```
-Give an example
+cd ~/ARK.GOcats3
+python3 -m obocats.tests.gocats_full_basic_test  # Note that this may be broken currently, I am working on fixing this. 
 ```
 
-### And coding style tests
+To run the analyses against OWLTools and UniProt CV, execute the runscript located in runscripts. It is self-documented as well.
+Change into the output directory of your choice
 
-Explain what these tests test and why
-
+The runscripts opperation is as follows:
 ```
-Give an example
+run.sh <OboCatsDir> <GO_file> <output_dir_path>
 ```
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* Dropwizard - Bla bla bla
-* Maven - Maybe
-* Atom - ergaerga
+For example:
+```
+sh ~/ARK.GOcats3/runscripts/run.sh ~/ARK.GOcats3/obocats ~/Databases/GeneOntology/01-12-2016/go.obo ./Output
+```
 
 ## Contributing
 
+#TODO:edit this section
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
@@ -155,16 +146,17 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Eugene Hinderer** - [ehinderer](https://github.com/ehinderer)
 
+#TODO:edit this section
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
+#TODO:edit this section
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+#TODO:edit this section
+
