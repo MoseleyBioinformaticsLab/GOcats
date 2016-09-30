@@ -106,7 +106,7 @@ python3 ~/ARK.GOcats/obocats/obocats.py filter_subgraphs ~/Databases/GeneOntolog
 This will output several files in the 'Output' directory including:
 ```
 OC_content_mapping.json_pickle  # A python dictionary with category-defining GO terms as keys and a list of all subgraph contents as values.
-OC_id_mapping  # A python dictionary with every GO term of the specified namespace as keys and a list of category root terms as values.
+OC_id_mapping.json_pickle  # A python dictionary with every GO term of the specified namespace as keys and a list of category root terms as values.
 ```
 
 Mapping GO terms in a GAF
