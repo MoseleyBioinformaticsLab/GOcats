@@ -70,6 +70,35 @@ sudo pip3 install numpy pandas tabulate cairocffi pyupset
 ```
 ### Installing
 
+#### GOcats3
+
+Clone the repo after installing the dependancies
+```
+cd
+git clone https://gitlab.cesb.uky.edu/eugene/ARK.GOcats3.git
+```
+
+#### OWLTools (optional)
+
+Clone the repo after installing the dependancies 
+```
+cd
+git clone https://github.com/owlcollab/owltools
+```
+
+Install owltools using maven
+```
+cd ~/owltools/OWLTools-Parent
+mvn clean package
+```
+
+You may get build errors. If this happens, I found that this command gets around them without affecting the usage in this project
+```
+mvn clean package -D maven.test.skip.exec=true
+```
+
+#### Example usage
+
 A step by step series of examples that tell you have to get a development env running
 
 Stay what the step will be
