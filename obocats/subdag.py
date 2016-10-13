@@ -13,6 +13,7 @@ class SubGraph(OboGraph):
         if self.super_graph.allowed_relationships and allowed_relationships and any(relationship not in self.super_graph.allowed_relationships for relationship in allowed_relationships):
             raise Exception("Unless an allowed_relationships list is not specified for a parent graph, a subgraph's allowed_relationships list must be a subset of, or exactly, its parent graph's allowed_relationships list.\nsubgraph allowed_relationships = {}, supergraph allowed_relationships = {}").format(allowed_relationships, self.super_graph.allowed_relationships)
         super().__init__(namespace_filter, allowed_relationships)
+        self.seeded_size = None  # The number of nodes filtered in the keyword search, used for informational purposes only. 
         self.representative_node = None
         self._root_id_mapping = None
         self._root_node_mapping = None
@@ -104,6 +105,7 @@ class SubGraph(OboGraph):
         subgraph = SubGraph(super_graph, namespace_filter, allowed_relationships)
         keyword_list = [word.lower() for word in keyword_list]
         filtered_nodes = super_graph.filter_nodes(keyword_list)
+        subgraph.seeded_size = len(filtered_nodes)
         for super_node in filtered_nodes:
             subgraph.add_node(super_node)
         subgraph.connect_subnodes()

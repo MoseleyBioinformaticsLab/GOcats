@@ -156,6 +156,19 @@ def filter_subgraphs(args):
 
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
+    with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
+        report_file.write('Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}'.format(supergraph_namespace, subgraph_namespace,len(set(supergraph.node_list)), len(set(collection_id_mapping.keys()))))
+        for subgraph_name, subgraph in subgraph_collection.items():
+            out_string = """
+                -------------------------
+                {}
+                Seeded size: {}
+                Representitive node: {}
+                Nodes added: {}
+                Non-subgraph hits (orphans): {}
+                Total nodes: {}
+                """.format(subgraph_name, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
+            report_file.write(out_string)
     # FIXME: 
     # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "OC_node_mapping"))
 
