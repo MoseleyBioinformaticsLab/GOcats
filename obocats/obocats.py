@@ -209,9 +209,10 @@ def subgraph_inclusion(args):
             go_id_string = id_translation_dict[location]
         else:
             go_id_string = location
-        inc_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/min([len(obocats_mapping[location]), len(other_mapping[location])])
-        inc_index_table.append([go_id_string, location, inc_index, len(obocats_mapping[location]), len(other_mapping[location])])
-    table = tabulate(sorted(inc_index_table, key=lambda x: x[0]), headers=['Location', 'GO term', 'Inclusion Index', 'GC subgraph size', 'Other subgraph size'])
+        inc_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/len(other_mapping[location])
+        jaccard_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/len(set(other_mapping[location]).union(set(obocats_mapping[location])))
+        inc_index_table.append([go_id_string, location, inc_index, jaccard_index, len(obocats_mapping[location]), len(other_mapping[location])])
+    table = tabulate(sorted(inc_index_table, key=lambda x: x[0]), headers=['Location', 'GO term', 'Inclusion Index', 'Jaccard Index', 'GC subgraph size', 'Other subgraph size'])
     with open(os.path.join(output_file, args['<filename>']), 'w') as outfile:
         outfile.write(table)
 
