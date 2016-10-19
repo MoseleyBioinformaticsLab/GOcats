@@ -99,5 +99,5 @@ def make_gaf_dict(gaf_file, keys):
                         print('ERROR: Reference DB not recognized: '+str(line[0]))
         return gaf_dict
 
-def calculate_inclusion_index(set1, set2):
+#def calculate_inclusion_index(set1, set2):
     
