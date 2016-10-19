@@ -2,10 +2,11 @@
 """ Open Biomedical Ontologies Categories (OboCats)
 
 Usage:
-    obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --output_idtranslation]
-    obocats subgraph_overlap <obocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index]
+    obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist]
+    obocats subgraph_overlap <obocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
+    obocats subgraph_inclusion <obocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
     obocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
-    obocats compare_mapping <mapped_gaf> <manual_dataset> [--group_annotations=<None>] [--save_assignments=<filename>]
+    obocats compare_mapping <mapped_gaf> <manual_dataset>  [--group_annotations=<None> --save_assignments=<filename> --id_translation=<filename>]
 Options:
     -h --help                            Shows this screen.
     --version                            Shows version.
@@ -19,6 +20,7 @@ Options:
     --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
     --group_annotations=<union>          Choose how to group multiple UniProt annotations (union|intersection) [default=union]
     --save_assignments=<filename>        Save a file with all genes and their GO assignments.
+    --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.
 
 """
 from datetime import date
@@ -38,6 +40,8 @@ def main(args):
         filter_subgraphs(args)
     elif args['subgraph_overlap']:
         subgraph_overlap(args)
+    elif args['subgraph_inclusion']:
+        subgraph_inclusion(args)
     elif args['categorize_dataset']:
         categorize_dataset(args)
     elif args['compare_mapping']:
@@ -104,11 +108,10 @@ def filter_subgraphs(args):
     if args['--output_termlist']:
         tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
 
-    if args['--output_idtranslation']:
-        idtranslation = dict()
-        for id, node in supergraph.id_index.items():
-            idtranslation[id] = node.name
-        tools.json_save(idtranslation, os.path.join(args['<output_directory>'], "idtranslation"))
+    idtranslation = dict()
+    for id, node in supergraph.id_index.items():
+        idtranslation[id] = node.name
+    tools.json_save(idtranslation, os.path.join(args['<output_directory>'], "idtranslation"))
 
     database.close()
     supergraph.connect_nodes()
@@ -190,6 +193,28 @@ def find_category_subsets(subgraph_collection):
                     is_subset_of[subgraph.representative_node.id] = {next_subgraph.representative_node.id}
     return is_subset_of
 
+def subgraph_inclusion(args):
+    from tabulate import tabulate
+    inc_index_table = []
+    output_file = args['<output_directory>']
+    obocats_mapping = tools.json_load(args['<obocats_mapping>'])
+    other_mapping = tools.json_load(args['<other_mapping>'])
+    if args['--id_translation']:
+        id_translation_dict = tools.json_load(args['--id_translation'])
+    else:
+        id_translation_dict = None
+    shared_locations = set(other_mapping.keys()).intersection(set(obocats_mapping.keys()))
+    for location in shared_locations:
+        if id_translation_dict:
+            go_id_string = id_translation_dict[location]
+        else:
+            go_id_string = location
+        inc_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/min([len(obocats_mapping[location]), len(other_mapping[location])])
+        inc_index_table.append([go_id_string, location, inc_index, len(obocats_mapping[location]), len(other_mapping[location])])
+    table = tabulate(sorted(inc_index_table, key=lambda x: x[0]), headers=['Location', 'GO term', 'Inclusion Index', 'GC subgraph size', 'Other subgraph size'])
+    with open(os.path.join(output_file, args['<filename>']), 'w') as outfile:
+        outfile.write(table)
+
 def subgraph_overlap(args):
     import pandas as pd
     import pyupset as pyu
@@ -213,22 +238,6 @@ def subgraph_overlap(args):
         set_dict = {'GOcats': gc_set, 'UniProt': up_set, 'Map2Slim': m2s_set}
         pyuobject = pyu.plot(set_dict, unique_keys=['Terms'])
         pyuobject['figure'].savefig(os.path.join(args['<output_directory>'], 'CategorySubgraphIntersection_'+go_id_string))
-
-        if args['--inclusion_index']:
-            from tabulate import tabulate
-            inc_index = len(set(uniprot_mapping[location]).intersection(set(obocats_mapping[location])))/len(uniprot_mapping[location])
-            if godag_dict is None:
-                inc_index_table.append([location, inc_index, set(obocats_mapping[location]), len(uniprot_mapping[location])])
-            else:
-                inc_index_table.append([go_id_string, location, inc_index, len(obocats_mapping[location]), len(uniprot_mapping[location])])
-
-    if args['--inclusion_index']:
-        if godag_dict_loaded is False:
-            print('Subdag inclusion indices for GOcats and UniProt CV locations: ', '\n',
-                  tabulate(inc_index_table, headers=['Location', 'Inclusion Index', 'GC subgraph size', 'UP subgraph size']))
-        else:
-            print('Subdag inclusion indices for GOcats and UniProt CV locations: ', '\n',
-                  tabulate(sorted(inc_index_table, key=lambda x: x[0]), headers=['Location', 'GO term', 'Inclusion Index', 'GC subgraph size', 'UP subgraph size']))
 
 def categorize_dataset(args):
     loaded_gaf_array = tools.parse_gaf(args['<gaf_dataset>'])
@@ -326,15 +335,24 @@ def compare_mapping(args):
                     uniprot_go_set = set.intersection(*uniprot_go_list)  # Asterisk needed. Passes in the sets within the list
             mini_compare(ensg_id, ensg_go_set, uniprot_go_set, comparison_results)  # ensg go list are go assignments from HPA, uniprot go list is go assignment from goCats mapping
             gene_assignment_tuples.append((ensg_id, sorted(mapped_uniprot_id_list), sorted(uniprot_go_set), sorted(ensg_go_set), comparison_results[ensg_id]))  # Saving gene assignments prior to set evaluation.
+    
+    if args['--id_translation']:
+        id_translation_dict = tools.json_load(args['--id_translation'])
+    else: 
+        id_translation_dict = None
 
     for location in set([item for sublist in hpa_dataset_dict.values() for item in sublist]):  # A flattening of the list of lists in hpa dataset dict locations. HPA dataset locaitons should be used as opposed to mapping methods' locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didnt find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.
         complete = len(list(filter(lambda x: x[4] == 'complete' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
         partial = len(list(filter(lambda x: x[4] == 'partial' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
         superset = len(list(filter(lambda x: x[4] == 'superset' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
         none = len(list(filter(lambda x: x[4] == 'none' and (location in x[2] or location in x[3]), gene_assignment_tuples)))
-            
-        location_breakdown_table.append([location, complete, partial, superset, none])
-    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n', tabulate(location_breakdown_table, headers=['Location', 'Complete', 'Partial', 'Superset', 'None']))
+        
+        if id_translation_dict:
+            location_name = id_translation_dict[location]
+        else:
+            location_name = location
+        location_breakdown_table.append([location_name, complete, partial, superset, none])
+    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n', tabulate(sorted(location_breakdown_table), headers=['Location', 'Complete', 'Partial', 'Superset', 'None']))
 
     #  TODO: Find a new way to do this that is more functional (can be used to access information later.)
     complete = 0
