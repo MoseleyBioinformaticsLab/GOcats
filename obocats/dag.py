@@ -15,7 +15,8 @@ class OboGraph(object):
         self.id_index = dict()
         self.vocab_index = dict()
         self.relationship_index = dict()
-        self.used_relationship_set = set()  
+        self.used_relationship_set = set()
+        self.relationship_count = dict()
         self.root_nodes = list()
         self._orphans = None
         self._leaves = None
@@ -89,6 +90,10 @@ class OboGraph(object):
 
     def add_edge(self, edge):
         self.edge_list.append(edge)
+        try:
+            self.relationship_count[edge.relationship_id] += 1
+        except KeyError:
+            self.relationship_count[edge.relationship_id] = 1
         self._modified = True
 
     def remove_edge(self, edge):
@@ -253,13 +258,13 @@ class AbstractEdge(object):
     
     @property
     def parent_node(self):
-        if self.relationship and self.relationship.category == "scoping" :
+        if self.relationship: #and self.relationship.category == "scoping" :
             return self.relationship.forward(self.node_pair)
         return None
 
     @property
     def child_node(self):
-        if self.relationship and self.relationship.category == "scoping" :
+        if self.relationship: #and self.relationship.category == "scoping" :
             return self.relationship.reverse(self.node_pair) 
         return None
 
