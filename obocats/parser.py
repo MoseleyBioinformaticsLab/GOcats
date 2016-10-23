@@ -83,6 +83,7 @@ class GoParser(OboParser):
                         is_a_relationship.name = "is a"
                         is_a_relationship.category = self.relationship_mapping["is_a"][0]
                         is_a_relationship.direction = self.relationship_mapping["is_a"][1]
+                        self.go_graph.used_relationship_set.add(is_a_relationship.id)
                         self.go_graph.add_relationship(is_a_relationship)
 
                 elif re.match(self.relationship_match, line):
