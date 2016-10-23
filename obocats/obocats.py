@@ -157,6 +157,9 @@ def filter_subgraphs(args):
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
     # do the same for node_object_mapping 
 
+    print(supergraph.relationship_count)
+    print(supergraph.used_relationship_set)
+
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
