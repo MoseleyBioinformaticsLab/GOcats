@@ -163,7 +163,7 @@ def filter_subgraphs(args):
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
-        report_file.write('Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}'.format(supergraph_namespace, subgraph_namespace,len(set(supergraph.node_list)), len(set(collection_id_mapping.keys()))))
+        report_file.write('Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(supergraph_namespace, subgraph_namespace,len(set(supergraph.node_list)), len(set(collection_id_mapping.keys()))),subgraph.relationship_count )
         for subgraph_name, subgraph in subgraph_collection.items():
             out_string = """
                 -------------------------
@@ -380,5 +380,5 @@ def compare_mapping(args):
 
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='OboCats 0.1.1')
+    args = docopt.docopt(__doc__, version='OboCats 0.2.0')
     main(args)
