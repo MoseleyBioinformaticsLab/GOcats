@@ -16,6 +16,7 @@ class SubGraph(OboGraph):
         self.seeded_size = None  # The number of nodes filtered in the keyword search, used for informational purposes only. 
         self.representative_node = None
         self.has_part_avg = None
+        self.has_part_names = set()
         self._root_id_mapping = None
         self._root_node_mapping = None
         self._content_mapping = None
@@ -66,11 +67,8 @@ class SubGraph(OboGraph):
             for edge in subnode.super_node.edges:  # This counts the number of times each relationship type is used in a subgraph
                 if edge.forward_node.id in self.id_index and edge.reverse_node.id in self.id_index:
                     if edge.relationship.id == "has_part" and subnode.id == edge.forward_node.id:
-                        print("-->", subnode.name)
-                        print(edge.forward_node.name)
-                        print(edge.reverse_node.name)
-                        print(len(edge.forward_node.descendants))
                         has_part_descendants_list.append(len(edge.forward_node.descendants))
+                        self.has_part_names.add(forward_node.name)
                     try:
                         self.relationship_count[edge.relationship.id] += 1
                     except KeyError:
