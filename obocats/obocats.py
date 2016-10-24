@@ -170,13 +170,13 @@ def filter_subgraphs(args):
                 {}
                 Subgraph relationships: {}
                 Avg. has_part descendents: {}
-                has_part_names: {}
+                has_part_dict: {}
                 Seeded size: {}
                 Representitive node: {}
                 Nodes added: {}
                 Non-subgraph hits (orphans): {}
                 Total nodes: {}
-                """.format(subgraph_name, subgraph.relationship_count, subgraph.has_part_avg, subgraph.has_part_names, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
+                """.format(subgraph_name, subgraph.relationship_count, subgraph.has_part_avg, subgraph.has_part_dict, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
             report_file.write(out_string)
     # FIXME: 
     # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "OC_node_mapping"))
