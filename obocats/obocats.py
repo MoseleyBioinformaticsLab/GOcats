@@ -115,7 +115,7 @@ def filter_subgraphs(args):
 
     database.close()
     supergraph.connect_nodes()
-
+    
     # Building and collecting subgraphs
     subgraph_collection = {}
     with open(args['<keyword_file>'], newline='') as file:
@@ -155,7 +155,7 @@ def filter_subgraphs(args):
             for subset_id, superset_ids in category_subsets.items():
                 if subset_id in root_id_list:
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
-    # do the same for node_object_mapping 
+    #TODO: do the same for node_object_mapping 
 
     print(supergraph.relationship_count)
     print(supergraph.used_relationship_set)
@@ -163,17 +163,19 @@ def filter_subgraphs(args):
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
-        report_file.write('Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(supergraph_namespace, subgraph_namespace,len(set(supergraph.node_list)), len(set(collection_id_mapping.keys()))),subgraph.relationship_count )
+        report_file.write('Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(supergraph_namespace, subgraph_namespace,len(set(supergraph.node_list)), len(set(collection_id_mapping.keys())), supergraph.relationship_count))
         for subgraph_name, subgraph in subgraph_collection.items():
             out_string = """
                 -------------------------
                 {}
+                Subgraph relationships: {}
+                Avg. has_part descendents: {}
                 Seeded size: {}
                 Representitive node: {}
                 Nodes added: {}
                 Non-subgraph hits (orphans): {}
                 Total nodes: {}
-                """.format(subgraph_name, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
+                """.format(subgraph_name, subgraph.relationship_count, subgraph.has_part_avg, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
             report_file.write(out_string)
     # FIXME: 
     # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "OC_node_mapping"))
