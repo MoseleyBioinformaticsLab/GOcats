@@ -68,7 +68,7 @@ class SubGraph(OboGraph):
                 if edge.forward_node.id in self.id_index and edge.reverse_node.id in self.id_index:
                     if edge.relationship.id == "has_part" and subnode.id == edge.forward_node.id:
                         has_part_descendants_list.append(len(edge.forward_node.descendants))
-                        self.has_part_names.add(forward_node.name)
+                        self.has_part_names.add(edge.forward_node.name)
                     try:
                         self.relationship_count[edge.relationship.id] += 1
                     except KeyError:
