@@ -15,6 +15,7 @@ class SubGraph(OboGraph):
         super().__init__(namespace_filter, allowed_relationships)
         self.seeded_size = None  # The number of nodes filtered in the keyword search, used for informational purposes only. 
         self.representative_node = None
+        self.has_part_avg = None
         self._root_id_mapping = None
         self._root_node_mapping = None
         self._content_mapping = None
@@ -58,9 +59,28 @@ class SubGraph(OboGraph):
         self._modified = True
 
     def connect_subnodes(self):
+        has_part_descendants_list = list()
         for subnode in self.node_list:
             subnode.update_children([self.id_index[child.id] for child in subnode.super_node.child_node_set if child.id in self.id_index])
             subnode.update_parents([self.id_index[parent.id] for parent in subnode.super_node.parent_node_set if parent.id in self.id_index])
+            for edge in subnode.super_node.edges:  # This counts the number of times each relationship type is used in a subgraph
+                if edge.forward_node.id in self.id_index and edge.reverse_node.id in self.id_index:
+                    if edge.relationship.id == "has_part" and subnode.id == edge.forward_node.id:
+                        print("-->", subnode.name)
+                        print(edge.forward_node.name)
+                        print(edge.reverse_node.name)
+                        print(len(edge.forward_node.descendants))
+                        has_part_descendants_list.append(len(edge.forward_node.descendants))
+                    try:
+                        self.relationship_count[edge.relationship.id] += 1
+                    except KeyError:
+                        self.relationship_count[edge.relationship.id] = 1
+
+        if has_part_descendants_list:
+            self.has_part_avg = sum(has_part_descendants_list) / float(len(has_part_descendants_list))
+        else:
+            self.has_part_avg = 0
+
         self._modified = True
 
     def greedily_extend_subgraph(self):
