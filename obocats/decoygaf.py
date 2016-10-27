@@ -49,6 +49,8 @@ def map_terms(args):
                     term_mapping[line[4]] = [line[1]]
     tools.json_save(term_mapping, args['<output_file>'])
 
+    tools.json_save(set(term_mapping['GO:0005886']), "/mlab/data/eugene/M2S_PlasmaMembrane_subgraph")
+
 if __name__ == '__main__':
     args = docopt.docopt(__doc__, version='GOcats version 2.1.3')
     main(args)

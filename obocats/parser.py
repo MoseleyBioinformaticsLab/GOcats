@@ -49,7 +49,7 @@ class GoParser(OboParser):
         is_typedef = False
 
         for line in self.database_file:
-
+            
             if not is_term and not is_typedef and re.match(self.term_stanza, line):
                 is_term = True
                 node = GoGraphNode()
