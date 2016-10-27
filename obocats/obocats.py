@@ -2,6 +2,7 @@
 """ Open Biomedical Ontologies Categories (OboCats)
 
 Usage:
+    obocats build_graph <database_file> <output_file> [--supergraph_namespace=<None>]
     obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist]
     obocats subgraph_overlap <obocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
     obocats subgraph_inclusion <obocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
@@ -48,11 +49,10 @@ def main(args):
         compare_mapping(args)
 
 # Need a SubGraphCollection object
-
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
     if args['--namespace_filter']:
-        namespace_filter = args(['--namespace_filter'])
+        namespace_filter = args['--namespace_filter']
     else:
         namespace_filter = None
     if args['--allowed_relationships']:
@@ -75,6 +75,23 @@ def build_graph(args):
 
     print("JsonPickle saving GO object")
     tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
+
+# FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
+def build_graph_interpreter(database_file, output_directory, namespace_filter=None, allowed_relationships=None):
+    database = open(database_file, 'r')
+    output_directory = output_directory
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+    graph = godag.GoGraph(namespace_filter, allowed_relationships)
+    go_parser = parser.GoParser(database, graph)
+    go_parser.parse()
+    database.close()
+    graph.connect_nodes()
+
+    return graph
+
+#    print("JsonPickle saving GO object")
+#   tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
 
 def filter_subgraphs(args):
     if args['--supergraph_namespace']:
@@ -157,9 +174,6 @@ def filter_subgraphs(args):
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
     #TODO: do the same for node_object_mapping 
 
-    print(supergraph.relationship_count)
-    print(supergraph.used_relationship_set)
-
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
@@ -169,14 +183,12 @@ def filter_subgraphs(args):
                 -------------------------
                 {}
                 Subgraph relationships: {}
-                Avg. has_part descendents: {}
-                has_part_dict: {}
                 Seeded size: {}
                 Representitive node: {}
                 Nodes added: {}
                 Non-subgraph hits (orphans): {}
                 Total nodes: {}
-                """.format(subgraph_name, subgraph.relationship_count, subgraph.has_part_avg, subgraph.has_part_dict, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
+                """.format(subgraph_name, subgraph.relationship_count, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
             report_file.write(out_string)
     # FIXME: 
     # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "OC_node_mapping"))
@@ -187,6 +199,27 @@ def filter_subgraphs(args):
         for term_id, root_id_list in collection_id_mapping.items():
             for root_id in root_id_list:
                 edgewriter.writerow([term_id, root_id])
+
+    # Testing plasma membrane subgraph differences
+    # these are lists of go_ids
+    gc_pm = tools.json_load("/mlab/data/eugene/GC_PlasmaMembrane_subgraph.json_pickle")
+    m2s_pm = tools.json_load("/mlab/data/eugene/M2S_PlasmaMembrane_subgraph.json_pickle")
+    go_depth_dict = tools.json_load("/mlab/data/eugene/GODepthDict.json_pickle")
+
+    not_in_gc = m2s_pm - m2s_pm.intersection(gc_pm)
+    print(len(not_in_gc))
+    missing_node_depths = []
+    m2s_descendants_not_in_gc = set()
+    for go_id in not_in_gc:
+        supergraph_descendants = set([node.id for node in supergraph.id_index[go_id].descendants])
+        m2s_descendants_not_in_gc.update(supergraph_descendants.intersection(m2s_pm))
+        missing_node_depths.append((go_depth_dict[go_id], go_id, len(supergraph_descendants.intersection(m2s_pm)), len(supergraph_descendants.intersection(gc_pm))))
+    print(sorted(missing_node_depths, key=lambda depth: depth[0]))
+    print(len(m2s_descendants_not_in_gc))
+    print("descendants of 'unencapsulated part of cell' that are in m2s but not in go cats\n", [node.id for node in supergraph.id_index['GO:0097653'].descendants if node.id in m2s_pm and node.id not in gc_pm])
+    print(len([node.id for node in supergraph.id_index['GO:0097653'].descendants if node.id in m2s_pm and node.id not in gc_pm]))
+    print(len(not_in_gc))
+
 
 def find_category_subsets(subgraph_collection):
     is_subset_of = dict()

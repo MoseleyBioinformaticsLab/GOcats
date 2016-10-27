@@ -1,5 +1,6 @@
 from dag import OboGraph, AbstractNode, AbstractEdge
 import re
+import tools
 
 
 class SubGraph(OboGraph):
@@ -15,9 +16,6 @@ class SubGraph(OboGraph):
         super().__init__(namespace_filter, allowed_relationships)
         self.seeded_size = None  # The number of nodes filtered in the keyword search, used for informational purposes only. 
         self.representative_node = None
-        self.has_part_set = set()
-        self.has_part_avg = None
-        self.has_part_dict = dict()
         self._root_id_mapping = None
         self._root_node_mapping = None
         self._content_mapping = None
@@ -66,9 +64,6 @@ class SubGraph(OboGraph):
             subnode.update_parents([self.id_index[parent.id] for parent in subnode.super_node.parent_node_set if parent.id in self.id_index])
             for edge in subnode.super_node.edges:  # This counts the number of times each relationship type is used in a subgraph
                 if edge.forward_node.id in self.id_index and edge.reverse_node.id in self.id_index:
-                    if edge.relationship.id == "has_part" and subnode.id == edge.forward_node.id:
-                        self.has_part_set.add(edge.forward_node)
-                        self.has_part_dict[edge.forward_node.id] = len(edge.forward_node.descendants)
                     try:
                         self.relationship_count[edge.relationship.id] += 1
                     except KeyError:
@@ -134,27 +129,13 @@ class SubGraph(OboGraph):
                 subgraph_orphans_descendants.add(node)
         subgraph_orphans_descendants.update([orphan for orphan in subgraph.orphans])
 
-        if subgraph.has_part_set:
-            for node in subgraph.has_part_set:
-                to_delete = set()
-                if node.id not in [node.id for node in subgraph.representative_node.descendants]:
-                    print(subgraph.representative_node.name)
-                    print("removing node: ", node.name)
-                    to_delete.add(node)
-            for node in to_delete:
-                subgraph.has_part_set.remove(node)
-                del subgraph.has_part_dict[node.id]
-            try:
-                subgraph.has_part_avg = sum([len(node.descendants) for node in subgraph.has_part_set]) / float(len(subgraph.has_part_set))
-            except ZeroDivisionError:
-                subgraph.has_part_avg = 0
-        else:
-            subgraph.has_part_avg = 0
-
+        # Prints the list of PlasmaMembrane subgraph for testing
         if subgraph.representative_node.id == "GO:0005886":
-            print([node.id for node in subgraph.representative_node.descendants])
-            print(len(subgraph.representative_node.descendants))
-
+            tools.json_save(set([node.id for node in subgraph.representative_node.descendants]), "/mlab/data/eugene/GC_PlasmaMembrane_subgraph")
+            
+        depth_dict = {node.id: super_graph.node_depth(node) for node in super_graph.node_list}
+        tools.json_save(depth_dict, "/mlab/data/eugene/GODepthDict")
+            
         return subgraph
 
 
@@ -165,7 +146,6 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-        self.edges = set()
         self.parent_node_set = set()
         self.child_node_set = set()
         self._modified = True
@@ -173,6 +153,13 @@ class SubGraphNode(AbstractNode):
         self._ancestors = None
 
     # TODO: add in update_parent_node_set and update_child_node_set with a _modified switch !!!!
+
+    @property
+    def super_edges(self):
+        # take super_edges that are consistent with the subgraph. But make it into a 
+        edges = set()
+        edges.add([edge for edge in self.super_node.edges if edge.parent_node.id in [node.id for node in self.parent_node_set] and edge.child_node.id in [node.id for node in self.child_node_set]])  # generate ids from parent/child_node_sets elsewhere
+        return edges
 
     @property
     def id(self):
