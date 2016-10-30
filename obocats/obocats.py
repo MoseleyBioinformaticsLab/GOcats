@@ -51,10 +51,10 @@ def main(args):
 # Need a SubGraphCollection object
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
-    if args['--namespace_filter']:
-        namespace_filter = args['--namespace_filter']
+    if args['--supergraph_namespace']:
+        supergraph_namespace = args['--supergraph_namespace']
     else:
-        namespace_filter = None
+        supergraph_namespace = None
     if args['--allowed_relationships']:
         allowed_relationships = args['--allowed_relationships']
     else:
@@ -73,16 +73,13 @@ def build_graph(args):
     database.close()
     graph.connect_nodes()
 
-    print("JsonPickle saving GO object")
-    tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
+    #print("JsonPickle saving GO object")
+    #tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
 
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
-def build_graph_interpreter(database_file, output_directory, namespace_filter=None, allowed_relationships=None):
+def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None):
     database = open(database_file, 'r')
-    output_directory = output_directory
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-    graph = godag.GoGraph(namespace_filter, allowed_relationships)
+    graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
     go_parser = parser.GoParser(database, graph)
     go_parser.parse()
     database.close()
@@ -90,7 +87,7 @@ def build_graph_interpreter(database_file, output_directory, namespace_filter=No
 
     return graph
 
-#    print("JsonPickle saving GO object")
+#   print("JsonPickle saving GO object")
 #   tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
 
 def filter_subgraphs(args):
@@ -202,9 +199,9 @@ def filter_subgraphs(args):
 
     # Testing plasma membrane subgraph differences
     # these are lists of go_ids
-    gc_pm = tools.json_load("/mlab/data/eugene/GC_PlasmaMembrane_subgraph.json_pickle")
-    m2s_pm = tools.json_load("/mlab/data/eugene/M2S_PlasmaMembrane_subgraph.json_pickle")
-    go_depth_dict = tools.json_load("/mlab/data/eugene/GODepthDict.json_pickle")
+    gc_pm = tools.json_load("/home/eugene/GC_PlasmaMembrane_subgraph.json_pickle")
+    m2s_pm = tools.json_load("/home/eugene/M2S_PlasmaMembrane_subgraph.json_pickle")
+    go_depth_dict = tools.json_load("/home/eugene/GODepthDict.json_pickle")
 
     not_in_gc = m2s_pm - m2s_pm.intersection(gc_pm)
     print(len(not_in_gc))

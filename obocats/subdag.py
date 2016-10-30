@@ -131,10 +131,10 @@ class SubGraph(OboGraph):
 
         # Prints the list of PlasmaMembrane subgraph for testing
         if subgraph.representative_node.id == "GO:0005886":
-            tools.json_save(set([node.id for node in subgraph.representative_node.descendants]), "/mlab/data/eugene/GC_PlasmaMembrane_subgraph")
+            tools.json_save(set([node.id for node in subgraph.representative_node.descendants]), "/home/eugene/GC_PlasmaMembrane_subgraph")
             
         depth_dict = {node.id: super_graph.node_depth(node) for node in super_graph.node_list}
-        tools.json_save(depth_dict, "/mlab/data/eugene/GODepthDict")
+        tools.json_save(depth_dict, "/home/eugene/GODepthDict")
             
         return subgraph
 
