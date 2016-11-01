@@ -199,9 +199,9 @@ def filter_subgraphs(args):
 
     # Testing plasma membrane subgraph differences
     # these are lists of go_ids
-    gc_pm = tools.json_load("/home/eugene/GC_PlasmaMembrane_subgraph.json_pickle")
-    m2s_pm = tools.json_load("/home/eugene/M2S_PlasmaMembrane_subgraph.json_pickle")
-    go_depth_dict = tools.json_load("/home/eugene/GODepthDict.json_pickle")
+    gc_pm = tools.json_load("/mlab/data/eugene/GC_PlasmaMembrane_subgraph.json_pickle")
+    m2s_pm = tools.json_load("/mlab/data/eugene/M2S_PlasmaMembrane_subgraph.json_pickle")
+    go_depth_dict = tools.json_load("/mlab/data/eugene/GODepthDict.json_pickle")
 
     not_in_gc = m2s_pm - m2s_pm.intersection(gc_pm)
     print(len(not_in_gc))
