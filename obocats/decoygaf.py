@@ -2,10 +2,11 @@
 """Decoy GAF maker
 
 Usage:
-    decoygaf.py make_decoy <ontology_term_list> <output_file>
-    decoygaf.py map_terms <mapped_gaf> <output_file>
+    decoygaf.py make_decoy <ontology_term_list> <output_dir> <output_file>
+    decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> --output_mapping_set=None
 
 """
+import os
 import docopt
 import csv
 import re
@@ -32,7 +33,7 @@ def make_decoy(args):
 
     go_terms = tools.json_load(args['<ontology_term_list>'])
 
-    with open(args['<output_file>'], 'w') as gaf_file:
+    with open(os.path.join(args['<output_dir>'], args['<output_file>']), 'w') as gaf_file:
         gafwriter = csv.writer(gaf_file, delimiter='\t')
         for term in go_terms:
             fake_line = line_array[0:1]+[term]+line_array[2:4]+[term]+line_array[5:-1]
@@ -48,12 +49,12 @@ def map_terms(args):
                     term_mapping[line[4]].append(line[1])
                 else:
                     term_mapping[line[4]] = [line[1]]
-    tools.json_save(term_mapping, args['<output_file>'])
+    tools.json_save(term_mapping, os.path.join(args['<output_dir>'], args['<output_file>']))
 
-    tools.json_save(set(term_mapping['GO:0005886']), "/mlab/data/eugene/M2S_PlasmaMembrane_subgraph")
-    with open("/mlab/data/eugene/M2S_PlasmaMembrane_subgraph.json", 'w') as f:
-        json.dump(term_mapping['GO:0005886'], f)
-
+    if args['--output_mapping_set']:
+        tools.json_save(set(term_mapping[args['--output_mapping_set']]), os.path.join(args['<output_dir>'], 'M2S_PlasmaMembrane_subgraph'))
+        with open(os.path.join(args['<output_dir>'], 'M2S_PlasmaMembrane_subgraph.json'), 'w') as f:
+            json.dump(args['--output_mapping_set'], f)
 
 if __name__ == '__main__':
     args = docopt.docopt(__doc__, version='GOcats version 2.1.3')
