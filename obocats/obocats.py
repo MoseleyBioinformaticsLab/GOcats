@@ -2,10 +2,12 @@
 """ Open Biomedical Ontologies Categories (OboCats)
 
 Usage:
-    obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --output_idtranslation]
-    obocats subgraph_overlap <obocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index]
+    obocats build_graph <database_file> <output_file> [--supergraph_namespace=<None>]
+    obocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=<None>]
+    obocats subgraph_overlap <obocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
+    obocats subgraph_inclusion <obocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
     obocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
-    obocats compare_mapping <mapped_gaf> <manual_dataset> [--group_annotations=<None>] [--save_assignments=<filename>]
+    obocats compare_mapping <mapped_gaf> <manual_dataset>  [--group_annotations=<None> --save_assignments=<filename> --id_translation=<filename>]
 Options:
     -h --help                            Shows this screen.
     --version                            Shows version.
@@ -15,10 +17,12 @@ Options:
     --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
     --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
     --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
+    --test_subgraph=<None>               Enter a GO ID to output information describing the mapping differences between OBOcats and Map2Slim.
     --output_idtranslation               Outputs a dictionary mapping of ontology IDs to their names. 
     --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
     --group_annotations=<union>          Choose how to group multiple UniProt annotations (union|intersection) [default=union]
     --save_assignments=<filename>        Save a file with all genes and their GO assignments.
+    --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.
 
 """
 from datetime import date
@@ -38,19 +42,20 @@ def main(args):
         filter_subgraphs(args)
     elif args['subgraph_overlap']:
         subgraph_overlap(args)
+    elif args['subgraph_inclusion']:
+        subgraph_inclusion(args)
     elif args['categorize_dataset']:
         categorize_dataset(args)
     elif args['compare_mapping']:
         compare_mapping(args)
 
 # Need a SubGraphCollection object
-
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
-    if args['--namespace_filter']:
-        namespace_filter = args(['--namespace_filter'])
+    if args['--supergraph_namespace']:
+        supergraph_namespace = args['--supergraph_namespace']
     else:
-        namespace_filter = None
+        supergraph_namespace = None
     if args['--allowed_relationships']:
         allowed_relationships = args['--allowed_relationships']
     else:
@@ -69,8 +74,17 @@ def build_graph(args):
     database.close()
     graph.connect_nodes()
 
-    print("JsonPickle saving GO object")
-    tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
+    #print("JsonPickle saving GO object")
+    #tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
+ 
+def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None):
+    database = open(database_file, 'r')
+    graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
+    go_parser = parser.GoParser(database, graph)
+    go_parser.parse()
+    database.close()
+    graph.connect_nodes()
+    return graph
 
 def filter_subgraphs(args):
     if args['--supergraph_namespace']:
@@ -104,15 +118,14 @@ def filter_subgraphs(args):
     if args['--output_termlist']:
         tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
 
-    if args['--output_idtranslation']:
-        idtranslation = dict()
-        for id, node in supergraph.id_index.items():
-            idtranslation[id] = node.name
-        tools.json_save(idtranslation, os.path.join(args['<output_directory>'], "idtranslation"))
+    idtranslation = dict()
+    for id, node in supergraph.id_index.items():
+        idtranslation[id] = node.name
+    tools.json_save(idtranslation, os.path.join(args['<output_directory>'], "idtranslation"))
 
     database.close()
     supergraph.connect_nodes()
-
+    
     # Building and collecting subgraphs
     subgraph_collection = {}
     with open(args['<keyword_file>'], newline='') as file:
@@ -152,10 +165,24 @@ def filter_subgraphs(args):
             for subset_id, superset_ids in category_subsets.items():
                 if subset_id in root_id_list:
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
-    # do the same for node_object_mapping 
+    #TODO: do the same for node_object_mapping 
 
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
+    with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
+        report_file.write('Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(supergraph_namespace, subgraph_namespace,len(set(supergraph.node_list)), len(set(collection_id_mapping.keys())), supergraph.relationship_count))
+        for subgraph_name, subgraph in subgraph_collection.items():
+            out_string = """
+                -------------------------
+                {}
+                Subgraph relationships: {}
+                Seeded size: {}
+                Representitive node: {}
+                Nodes added: {}
+                Non-subgraph hits (orphans): {}
+                Total nodes: {}
+                """.format(subgraph_name, subgraph.relationship_count, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
+            report_file.write(out_string)
     # FIXME: 
     # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "OC_node_mapping"))
 
@@ -165,6 +192,10 @@ def filter_subgraphs(args):
         for term_id, root_id_list in collection_id_mapping.items():
             for root_id in root_id_list:
                 edgewriter.writerow([term_id, root_id])
+
+    if args['--test_subgraph']:
+        oc_subgraph_set = next(subgraph.representative_node.descendants for subgraph in subgraph_collection if subgraph.representative_node == args['--test_subgraph'])
+        output_mapping_differences(supergraph, oc_subgraph_set, output_dir)
 
 def find_category_subsets(subgraph_collection):
     is_subset_of = dict()
@@ -176,6 +207,29 @@ def find_category_subsets(subgraph_collection):
                 except KeyError:
                     is_subset_of[subgraph.representative_node.id] = {next_subgraph.representative_node.id}
     return is_subset_of
+
+def subgraph_inclusion(args):
+    from tabulate import tabulate
+    inc_index_table = []
+    output_file = args['<output_directory>']
+    obocats_mapping = tools.json_load(args['<obocats_mapping>'])
+    other_mapping = tools.json_load(args['<other_mapping>'])
+    if args['--id_translation']:
+        id_translation_dict = tools.json_load(args['--id_translation'])
+    else:
+        id_translation_dict = None
+    shared_locations = set(other_mapping.keys()).intersection(set(obocats_mapping.keys()))
+    for location in shared_locations:
+        if id_translation_dict:
+            go_id_string = id_translation_dict[location]
+        else:
+            go_id_string = location
+        inc_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/len(other_mapping[location])
+        jaccard_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/len(set(other_mapping[location]).union(set(obocats_mapping[location])))
+        inc_index_table.append([go_id_string, location, inc_index, jaccard_index, len(obocats_mapping[location]), len(other_mapping[location])])
+    table = tabulate(sorted(inc_index_table, key=lambda x: x[0]), headers=['Location', 'GO term', 'Inclusion Index', 'Jaccard Index', 'GC subgraph size', 'Other subgraph size'])
+    with open(os.path.join(output_file, args['<filename>']), 'w') as outfile:
+        outfile.write(table)
 
 def subgraph_overlap(args):
     import pandas as pd
@@ -200,22 +254,6 @@ def subgraph_overlap(args):
         set_dict = {'GOcats': gc_set, 'UniProt': up_set, 'Map2Slim': m2s_set}
         pyuobject = pyu.plot(set_dict, unique_keys=['Terms'])
         pyuobject['figure'].savefig(os.path.join(args['<output_directory>'], 'CategorySubgraphIntersection_'+go_id_string))
-
-        if args['--inclusion_index']:
-            from tabulate import tabulate
-            inc_index = len(set(uniprot_mapping[location]).intersection(set(obocats_mapping[location])))/len(uniprot_mapping[location])
-            if godag_dict is None:
-                inc_index_table.append([location, inc_index, set(obocats_mapping[location]), len(uniprot_mapping[location])])
-            else:
-                inc_index_table.append([go_id_string, location, inc_index, len(obocats_mapping[location]), len(uniprot_mapping[location])])
-
-    if args['--inclusion_index']:
-        if godag_dict_loaded is False:
-            print('Subdag inclusion indices for GOcats and UniProt CV locations: ', '\n',
-                  tabulate(inc_index_table, headers=['Location', 'Inclusion Index', 'GC subgraph size', 'UP subgraph size']))
-        else:
-            print('Subdag inclusion indices for GOcats and UniProt CV locations: ', '\n',
-                  tabulate(sorted(inc_index_table, key=lambda x: x[0]), headers=['Location', 'GO term', 'Inclusion Index', 'GC subgraph size', 'UP subgraph size']))
 
 def categorize_dataset(args):
     loaded_gaf_array = tools.parse_gaf(args['<gaf_dataset>'])
@@ -313,15 +351,24 @@ def compare_mapping(args):
                     uniprot_go_set = set.intersection(*uniprot_go_list)  # Asterisk needed. Passes in the sets within the list
             mini_compare(ensg_id, ensg_go_set, uniprot_go_set, comparison_results)  # ensg go list are go assignments from HPA, uniprot go list is go assignment from goCats mapping
             gene_assignment_tuples.append((ensg_id, sorted(mapped_uniprot_id_list), sorted(uniprot_go_set), sorted(ensg_go_set), comparison_results[ensg_id]))  # Saving gene assignments prior to set evaluation.
+    
+    if args['--id_translation']:
+        id_translation_dict = tools.json_load(args['--id_translation'])
+    else: 
+        id_translation_dict = None
 
     for location in set([item for sublist in hpa_dataset_dict.values() for item in sublist]):  # A flattening of the list of lists in hpa dataset dict locations. HPA dataset locaitons should be used as opposed to mapping methods' locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didnt find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.
         complete = len(list(filter(lambda x: x[4] == 'complete' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
         partial = len(list(filter(lambda x: x[4] == 'partial' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
         superset = len(list(filter(lambda x: x[4] == 'superset' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
         none = len(list(filter(lambda x: x[4] == 'none' and (location in x[2] or location in x[3]), gene_assignment_tuples)))
-            
-        location_breakdown_table.append([location, complete, partial, superset, none])
-    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n', tabulate(location_breakdown_table, headers=['Location', 'Complete', 'Partial', 'Superset', 'None']))
+        
+        if id_translation_dict:
+            location_name = id_translation_dict[location]
+        else:
+            location_name = location
+        location_breakdown_table.append([location_name, complete, partial, superset, none])
+    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n', tabulate(sorted(location_breakdown_table), headers=['Location', 'Complete', 'Partial', 'Superset', 'None']))
 
     #  TODO: Find a new way to do this that is more functional (can be used to access information later.)
     complete = 0
@@ -343,7 +390,27 @@ def compare_mapping(args):
         file_name = args['--save_assignments']
         tools.list_to_file(file_name, sorted(gene_assignment_tuples, key=lambda gene_id: gene_id[0]))
 
+#Fix this to output the results that were output in commit 1b1fd28f630e24909c193f4ed8c1285f62300441. I do not have time to mess with this right now. Get rid of all of the hardcoding.
+def output_mapping_differences(obocats_graph, subgraph, output_dir):
+    gc_subgraph = subgraph
+    m2s_pm = input("Enter the file location of the subgraph equivalent to ")
+    go_depth_dict = tools.json_load("/mlab/data/eugene/GODepthDict.json_pickle")
+
+    not_in_gc = m2s_pm - m2s_pm.intersection(gc_pm)
+    print(len(not_in_gc))
+    missing_node_depths = []
+    m2s_descendants_not_in_gc = set()
+    for go_id in not_in_gc:
+        supergraph_descendants = set([node.id for node in supergraph.id_index[go_id].descendants])
+        m2s_descendants_not_in_gc.update(supergraph_descendants.intersection(m2s_pm))
+        missing_node_depths.append((go_depth_dict[go_id], go_id, len(supergraph_descendants.intersection(m2s_pm)), len(supergraph_descendants.intersection(gc_pm))))
+    print(sorted(missing_node_depths, key=lambda depth: depth[0]))
+    print(len(m2s_descendants_not_in_gc))
+    print("descendants of 'unencapsulated part of cell' that are in m2s but not in go cats\n", [node.id for node in supergraph.id_index['GO:0097653'].descendants if node.id in m2s_pm and node.id not in gc_pm])
+    print(len([node.id for node in supergraph.id_index['GO:0097653'].descendants if node.id in m2s_pm and node.id not in gc_pm]))
+    print(len(not_in_gc))
+
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='OboCats 0.1.1')
+    args = docopt.docopt(__doc__, version='OboCats 0.2.0')
     main(args)
