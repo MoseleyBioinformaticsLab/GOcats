@@ -128,13 +128,6 @@ class SubGraph(OboGraph):
             for node in orphan.descendants:
                 subgraph_orphans_descendants.add(node)
         subgraph_orphans_descendants.update([orphan for orphan in subgraph.orphans])
-
-        # Prints the list of PlasmaMembrane subgraph for testing
-        if subgraph.representative_node.id == "GO:0005886":
-            tools.json_save(set([node.id for node in subgraph.representative_node.descendants]), "/mlab/data/eugene/GC_PlasmaMembrane_subgraph")
-            
-        depth_dict = {node.id: super_graph.node_depth(node) for node in super_graph.node_list}
-        tools.json_save(depth_dict, "/mlab/data/eugene/GODepthDict")
             
         return subgraph
 
