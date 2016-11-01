@@ -10,6 +10,7 @@ import docopt
 import csv
 import re
 import tools
+import json
 
 
 def main(args):
@@ -50,6 +51,9 @@ def map_terms(args):
     tools.json_save(term_mapping, args['<output_file>'])
 
     tools.json_save(set(term_mapping['GO:0005886']), "/mlab/data/eugene/M2S_PlasmaMembrane_subgraph")
+    with open("/mlab/data/eugene/M2S_PlasmaMembrane_subgraph.json", 'w') as f:
+        json.dump(term_mapping['GO:0005886'], f)
+
 
 if __name__ == '__main__':
     args = docopt.docopt(__doc__, version='GOcats version 2.1.3')
