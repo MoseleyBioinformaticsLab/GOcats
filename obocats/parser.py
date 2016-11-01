@@ -49,7 +49,7 @@ class GoParser(OboParser):
         is_typedef = False
 
         for line in self.database_file:
-
+            
             if not is_term and not is_typedef and re.match(self.term_stanza, line):
                 is_term = True
                 node = GoGraphNode()
@@ -83,6 +83,7 @@ class GoParser(OboParser):
                         is_a_relationship.name = "is a"
                         is_a_relationship.category = self.relationship_mapping["is_a"][0]
                         is_a_relationship.direction = self.relationship_mapping["is_a"][1]
+                        self.go_graph.used_relationship_set.add(is_a_relationship.id)
                         self.go_graph.add_relationship(is_a_relationship)
 
                 elif re.match(self.relationship_match, line):

@@ -15,7 +15,8 @@ class OboGraph(object):
         self.id_index = dict()
         self.vocab_index = dict()
         self.relationship_index = dict()
-        self.used_relationship_set = set()  
+        self.used_relationship_set = set()
+        self.relationship_count = dict()
         self.root_nodes = list()
         self._orphans = None
         self._leaves = None
@@ -89,6 +90,10 @@ class OboGraph(object):
 
     def add_edge(self, edge):
         self.edge_list.append(edge)
+        try:
+            self.relationship_count[edge.relationship_id] += 1
+        except KeyError:
+            self.relationship_count[edge.relationship_id] = 1
         self._modified = True
 
     def remove_edge(self, edge):
@@ -107,6 +112,20 @@ class OboGraph(object):
             edge.connect_nodes((self.id_index[edge.node_pair_id[0]], self.id_index[edge.node_pair_id[1]]), self.allowed_relationships)
         self._modified = True
 
+    def node_depth(self, sample_node):
+        # If this loops for eternity, there is a loop in the graph and it is NOT acyclic!
+        if sample_node in self.root_nodes :
+            return 0
+        depth = 1
+        root_node_set = set(self.root_nodes)
+        parent_set = sample_node.parent_node_set
+        while parent_set:
+            if parent_set & root_node_set:  # There is an intersection between the parent set and the root_node_set
+                break
+            depth += 1
+            parent_set = set().union(*[parent.parent_node_set for parent in parent_set])
+        return depth
+
     def filter_nodes(self, keyword_list):
         for word in keyword_list:
             if word not in self.vocab_index.keys():
@@ -121,7 +140,7 @@ class OboGraph(object):
         if self.allowed_relationships:
             filtered_edges = [edge for edge in filtered_edges if edge.relationship_id in self.allowed_relationships]
         return filtered_edges
-
+ 
     def nodes_between(self, start_node, end_node):
         if start_node.ancestors and end_node.descendants:
             return start_node.ancestors.intersection(end_node.descendants)
@@ -253,13 +272,13 @@ class AbstractEdge(object):
     
     @property
     def parent_node(self):
-        if self.relationship and self.relationship.category == "scoping" :
+        if self.relationship: #and self.relationship.category == "scoping" :
             return self.relationship.forward(self.node_pair)
         return None
 
     @property
     def child_node(self):
-        if self.relationship and self.relationship.category == "scoping" :
+        if self.relationship: #and self.relationship.category == "scoping" :
             return self.relationship.reverse(self.node_pair) 
         return None
 
