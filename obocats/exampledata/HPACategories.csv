@@ -1,11 +1,20 @@
 nucleus,nucleus;nuclear;nuclei
-nucleolus,nucleolus;nucleolar
-cytoskeleton,cytoskeleton;cytoskeletal
-er,endoplasmic;sarcoplasmic;reticulum;er
 mitochondria,mitochondrion;mitochondrial;mitochondria
-vesicle,vesicle;vesicles
+er,endoplasmic;sarcoplasmic;reticulum;er
+intermediatefilament,intermediate filament cytoskeleton
 cytoplasm,cytoplasm;cytoplasmic
+cellbridge,intercellular bridge
+nuclearmembrane,nuclear membrane
+vesicle,intracellular membrane-bound organelle
+microtubule,microtubule cytoskeleton
+nucleolus,nucleolus;nucleolar
+actin,actin cytoskeleton
+centrosome,centrosome
 plasmamembrane,plasma
 celljunction,junction
+focaladhesion,focal adhesion
 golgi,golgi
+nucleoplasm,nucleoplasm
 aggresome,aggresome;aggresomes;aggresomal
+microtubuleorgcenter,microtubule organizing center
+microtubuleend,microtubule end
