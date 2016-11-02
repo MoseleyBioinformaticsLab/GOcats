@@ -98,13 +98,13 @@ class SubGraph(OboGraph):
             self.remove_node(orphan)
 
     @staticmethod
-    def find_representative_node(subgraph, keyword_list):
+    def find_representative_node(subgraph, search_string_list):
         if len(subgraph.node_list) == 1:
             return subgraph.node_list[0]
         elif not subgraph.node_list:
             raise Exception("Subgraph did not seed any nodes from the supergraph! Aborting.")
         else:
-            candidates = [node for node in subgraph.node_list if any(word in re.findall(r"[\w+\'\-]+", node.name) for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
+            candidates = [node for node in subgraph.node_list if any(re.search('(?!\-)'+search_string+'(?!\-)', node.name) for search_string in search_string_list) and node not in subgraph.leaves and not node.obsolete]
             representative_node_scoring = {node: len(node.descendants) for node in candidates}
             return max(representative_node_scoring, key=representative_node_scoring.get)
 
