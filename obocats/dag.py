@@ -10,6 +10,7 @@ class OboGraph(object):
     def __init__(self, namespace_filter=None, allowed_relationships=None):
         self.namespace_filter = namespace_filter
         self.allowed_relationships = allowed_relationships
+        self.word_split = re.compile(r"[\w\'\-]+")
         self.node_list = list()
         self.edge_list = list()
         self.id_index = dict()
@@ -126,11 +127,10 @@ class OboGraph(object):
             parent_set = set().union(*[parent.parent_node_set for parent in parent_set])
         return depth
 
-    def filter_nodes(self, keyword_list):
-        for word in keyword_list:
-            if word not in self.vocab_index.keys():
-                keyword_list.remove(word)
-        filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list if word in self.vocab_index]])
+    def filter_nodes(self, search_string_list):
+        search_string_list_words = [re.findall(self.word_split, word) for word in search_string_list]
+        search_string_word_set = set([word for sublist in search_string_list_words for word in sublist])
+        filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in search_string_word_set if word in self.vocab_index]])
         if self.namespace_filter:
             filtered_nodes = [node for node in filtered_nodes if node.namespace == self.namespace_filter]
         return filtered_nodes
