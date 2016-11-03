@@ -288,12 +288,15 @@ def compare_mapping(args):
     comparison_results = {}
 
     #  TODO: Rename and clean up this method.
-    def mini_compare(ensg_id, ensg_go_set, uniprot_go_set, comparison_results):
+    def compare_entry(ensg_id, ensg_go_set, uniprot_go_set, comparison_results):
 
         if ensg_go_set.union(uniprot_go_set) == ensg_go_set.intersection(uniprot_go_set):  # and len(ensg_go_set.union(uniprot_go_set)) != 0:  EDIT should this ever happen? Correctly not-assigning non-assignments demonstrates accuracy. However these cases are non-informative.
             comparison_results[ensg_id] = 'complete'
             return
         elif len(ensg_go_set.intersection(uniprot_go_set)) == 0:
+            print("ensg ID", ensg_id)
+            print("ensg GO set", ensg_go_set)
+            print("UniProt GO set", uniprot_go_set)
             comparison_results[ensg_id] = 'none'
             return
         elif 0 < len(ensg_go_set.intersection(uniprot_go_set)) < len(ensg_go_set.union(uniprot_go_set)):
@@ -302,14 +305,14 @@ def compare_mapping(args):
                 comparison_results[ensg_id] = 'superset'
                 return
             return
-    hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'Supportive')
+    hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'new', 'Supportive')
 
     ensg_uniprot_mapping = {}
     comment_line = re.compile('^yourlist:\w+')
     comma_match = re.compile('\w+,\w+')
     gene_assignment_tuples = []
     #  TODO this mapping file needs to be an argument and/or have some extensive usage documentation
-    with open(str(curr_dir) + '/exampledata/ENSG-UniProtKB_mapping.tab') as tab_file:
+    with open(str(curr_dir) + '/exampledata/ENSG_UniProtKB_mapping.tab') as tab_file:
         for line in csv.reader(tab_file, delimiter='\t'):
             if not re.match(comment_line, str(line)):
                 if re.match(comma_match, line[0]):  # Multiple ENSG IDs for a single Uniprot ID (skipping these)
@@ -349,7 +352,7 @@ def compare_mapping(args):
                     uniprot_go_set = set()
                 else:
                     uniprot_go_set = set.intersection(*uniprot_go_list)  # Asterisk needed. Passes in the sets within the list
-            mini_compare(ensg_id, ensg_go_set, uniprot_go_set, comparison_results)  # ensg go list are go assignments from HPA, uniprot go list is go assignment from goCats mapping
+            compare_entry(ensg_id, ensg_go_set, uniprot_go_set, comparison_results)  # ensg go list are go assignments from HPA, uniprot go list is go assignment from goCats mapping
             gene_assignment_tuples.append((ensg_id, sorted(mapped_uniprot_id_list), sorted(uniprot_go_set), sorted(ensg_go_set), comparison_results[ensg_id]))  # Saving gene assignments prior to set evaluation.
     
     if args['--id_translation']:
