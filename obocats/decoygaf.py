@@ -3,7 +3,7 @@
 
 Usage:
     decoygaf.py make_decoy <ontology_term_list> <output_dir> <output_file>
-    decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> --output_mapping_set=None
+    decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> [--output_mapping_set=None]
 
 """
 import os
