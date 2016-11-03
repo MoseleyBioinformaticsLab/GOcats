@@ -1,5 +1,6 @@
 from dag import OboGraph, AbstractNode, AbstractEdge
 import re
+import tools
 
 
 class SubGraph(OboGraph):
@@ -13,6 +14,7 @@ class SubGraph(OboGraph):
         if self.super_graph.allowed_relationships and allowed_relationships and any(relationship not in self.super_graph.allowed_relationships for relationship in allowed_relationships):
             raise Exception("Unless an allowed_relationships list is not specified for a parent graph, a subgraph's allowed_relationships list must be a subset of, or exactly, its parent graph's allowed_relationships list.\nsubgraph allowed_relationships = {}, supergraph allowed_relationships = {}").format(allowed_relationships, self.super_graph.allowed_relationships)
         super().__init__(namespace_filter, allowed_relationships)
+        self.seeded_size = None  # The number of nodes filtered in the keyword search, used for informational purposes only. 
         self.representative_node = None
         self._root_id_mapping = None
         self._root_node_mapping = None
@@ -60,6 +62,13 @@ class SubGraph(OboGraph):
         for subnode in self.node_list:
             subnode.update_children([self.id_index[child.id] for child in subnode.super_node.child_node_set if child.id in self.id_index])
             subnode.update_parents([self.id_index[parent.id] for parent in subnode.super_node.parent_node_set if parent.id in self.id_index])
+            for edge in subnode.super_node.edges:  # This counts the number of times each relationship type is used in a subgraph
+                if edge.forward_node.id in self.id_index and edge.reverse_node.id in self.id_index:
+                    try:
+                        self.relationship_count[edge.relationship.id] += 1
+                    except KeyError:
+                        self.relationship_count[edge.relationship.id] = 1
+
         self._modified = True
 
     def greedily_extend_subgraph(self):
@@ -89,13 +98,13 @@ class SubGraph(OboGraph):
             self.remove_node(orphan)
 
     @staticmethod
-    def find_representative_node(subgraph, keyword_list):
+    def find_representative_node(subgraph, search_string_list):
         if len(subgraph.node_list) == 1:
             return subgraph.node_list[0]
         elif not subgraph.node_list:
             raise Exception("Subgraph did not seed any nodes from the supergraph! Aborting.")
         else:
-            candidates = [node for node in subgraph.node_list if any(word in re.findall(r"[\w+\'\-]+", node.name) for word in keyword_list) and node not in subgraph.leaves and not node.obsolete]
+            candidates = [node for node in subgraph.node_list if any(re.search('(?<!\-)'+search_string+'(?!\-)', node.name) for search_string in search_string_list) and node not in subgraph.leaves and not node.obsolete]
             representative_node_scoring = {node: len(node.descendants) for node in candidates}
             return max(representative_node_scoring, key=representative_node_scoring.get)
 
@@ -104,6 +113,7 @@ class SubGraph(OboGraph):
         subgraph = SubGraph(super_graph, namespace_filter, allowed_relationships)
         keyword_list = [word.lower() for word in keyword_list]
         filtered_nodes = super_graph.filter_nodes(keyword_list)
+        subgraph.seeded_size = len(filtered_nodes)
         for super_node in filtered_nodes:
             subgraph.add_node(super_node)
         subgraph.connect_subnodes()
@@ -118,7 +128,7 @@ class SubGraph(OboGraph):
             for node in orphan.descendants:
                 subgraph_orphans_descendants.add(node)
         subgraph_orphans_descendants.update([orphan for orphan in subgraph.orphans])
-
+            
         return subgraph
 
 
@@ -129,7 +139,6 @@ class SubGraphNode(AbstractNode):
     
     def __init__(self, super_node, allowed_relationships=None):
         self.super_node = super_node
-        self.edges = set()
         self.parent_node_set = set()
         self.child_node_set = set()
         self._modified = True
@@ -137,6 +146,13 @@ class SubGraphNode(AbstractNode):
         self._ancestors = None
 
     # TODO: add in update_parent_node_set and update_child_node_set with a _modified switch !!!!
+
+    @property
+    def super_edges(self):
+        # take super_edges that are consistent with the subgraph. But make it into a 
+        edges = set()
+        edges.add([edge for edge in self.super_node.edges if edge.parent_node.id in [node.id for node in self.parent_node_set] and edge.child_node.id in [node.id for node in self.child_node_set]])  # generate ids from parent/child_node_sets elsewhere
+        return edges
 
     @property
     def id(self):
