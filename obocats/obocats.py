@@ -261,7 +261,7 @@ def categorize_dataset(args):
     output_directory = os.path.realpath(args['<output_directory>'])
     gaf_name = args['<GAF_name>']
     mapped_gaf_array = []
-    unmapped_genes = []
+    unmapped_genes = set()
 
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
@@ -271,113 +271,82 @@ def categorize_dataset(args):
             for term in mapped_terms:
                 mapped_gaf_array.append(line[0:4]+[term]+line[5:-1])
         else:
-            unmapped_genes.append(line[1])
+            if line[2] == '':
+                unmapped_genes.add('NO_GENE:'+line[1])
+            else:
+                unmapped_genes.add(line[2])
     tools.writeout_gaf(mapped_gaf_array, os.path.join(output_directory, gaf_name))
-    tools.list_to_file(os.path.join(output_directory, 'UnmappedGenes'), unmapped_genes)
+    tools.list_to_file(os.path.join(output_directory, gaf_name+'_unmappedGenes'), unmapped_genes)
 
 def compare_mapping(args):
-
-    # This method needs to be reworked completely.\
     """Compares the agreement in annotation assignment between a GAF produced by Obcats (PARAMETER <mapped_gaf>) and
     a gold-standard dataset, provided in csv format (PARAMETER <manual-dataset>)."""
     from tabulate import tabulate
     import catcompare
-    mapped_gaf_dict = tools.make_gaf_dict(args['<mapped_gaf>'], keys='go_term')
+
+    mapped_dataset_gaf_dict = tools.make_gaf_dict(args['<mapped_gaf>'], keys='db_object_symbol')
+    hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'new', 'Supportive')
     location_breakdown_table = []
     curr_dir = os.path.dirname(os.path.realpath(__file__))
     comparison_results = {}
-
-    #  TODO: Rename and clean up this method.
-    def compare_entry(ensg_id, ensg_go_set, uniprot_go_set, comparison_results):
-
-        if ensg_go_set.union(uniprot_go_set) == ensg_go_set.intersection(uniprot_go_set):  # and len(ensg_go_set.union(uniprot_go_set)) != 0:  EDIT should this ever happen? Correctly not-assigning non-assignments demonstrates accuracy. However these cases are non-informative.
-            comparison_results[ensg_id] = 'complete'
-            return
-        elif len(ensg_go_set.intersection(uniprot_go_set)) == 0:
-            print("ensg ID", ensg_id)
-            print("ensg GO set", ensg_go_set)
-            print("UniProt GO set", uniprot_go_set)
-            comparison_results[ensg_id] = 'none'
-            return
-        elif 0 < len(ensg_go_set.intersection(uniprot_go_set)) < len(ensg_go_set.union(uniprot_go_set)):
-            comparison_results[ensg_id] = 'partial'
-            if uniprot_go_set.issuperset(ensg_go_set):
-                comparison_results[ensg_id] = 'superset'
-                return
-            return
-    hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'new', 'Supportive')
-
-    ensg_uniprot_mapping = {}
-    comment_line = re.compile('^yourlist:\w+')
-    comma_match = re.compile('\w+,\w+')
     gene_assignment_tuples = []
-    #  TODO this mapping file needs to be an argument and/or have some extensive usage documentation
-    with open(str(curr_dir) + '/exampledata/ENSG_UniProtKB_mapping.tab') as tab_file:
-        for line in csv.reader(tab_file, delimiter='\t'):
-            if not re.match(comment_line, str(line)):
-                if re.match(comma_match, line[0]):  # Multiple ENSG IDs for a single Uniprot ID (skipping these)
-                    pass
-                else:
-                    if line[0] in ensg_uniprot_mapping.keys():
-                        ensg_uniprot_mapping[line[0]].append(line[1])
-                    else:
-                        ensg_uniprot_mapping[line[0]] = [line[1]]
+    gene_annotation_not_in_knowledgebase = set()
 
-    #  TODO clean this up. Maybe separate sub-functions for union and intersection.
-    hpa_ensg_id_count = 0
-    ensg_in_mapping = 0
-    hpa_ensg_not_in_mapping = []
-    error_out = []  # List for storing UniProt IDs not found in the mapped GAF knowledge base files.
-    for ensg_id, ensg_go_list in hpa_dataset_dict.items():  # HPA_dataset has ENSG IDs not in the mapping file: 39 cases
-        if ensg_id not in ensg_uniprot_mapping.keys():
-            hpa_ensg_not_in_mapping.append(ensg_id)
-        hpa_ensg_id_count += 1
-        ensg_go_set = set(ensg_go_list)
-        if ensg_id in ensg_uniprot_mapping.keys():
-            ensg_in_mapping += 1
-            mapped_uniprot_id_list = ensg_uniprot_mapping[ensg_id]
-            uniprot_go_list = []
-            if args['--group_annotations'] == 'union':
-                for uniprot_id in mapped_uniprot_id_list:
-                    if uniprot_id in mapped_gaf_dict.keys():
-                        uniprot_go_list.extend(mapped_gaf_dict[uniprot_id])
-                if uniprot_go_list == []:
-                    error_out.extend(mapped_uniprot_id_list)
-                uniprot_go_set = set(uniprot_go_list)
-            elif args['--group_annotations'] == 'intersection':
-                for uniprot_id in mapped_uniprot_id_list:
-                    if uniprot_id in mapped_gaf_dict.keys():
-                        uniprot_go_list.append(set(mapped_gaf_dict[uniprot_id]))
-                if uniprot_go_list == []: # Must be written as '== []' and not 'is []'
-                    uniprot_go_set = set()
-                else:
-                    uniprot_go_set = set.intersection(*uniprot_go_list)  # Asterisk needed. Passes in the sets within the list
-            compare_entry(ensg_id, ensg_go_set, uniprot_go_set, comparison_results)  # ensg go list are go assignments from HPA, uniprot go list is go assignment from goCats mapping
-            gene_assignment_tuples.append((ensg_id, sorted(mapped_uniprot_id_list), sorted(uniprot_go_set), sorted(ensg_go_set), comparison_results[ensg_id]))  # Saving gene assignments prior to set evaluation.
-    
+    def compare_entry(object_symbol, raw_data_go_set, knowledgebase_go_set, comparison_results):
+
+        if raw_data_go_set.union(knowledgebase_go_set) == raw_data_go_set.intersection(knowledgebase_go_set):  # and len(raw_data_go_set.union(knowledgebase_go_set)) != 0:  EDIT should this ever happen? Correctly not-assigning non-assignments demonstrates accuracy. However these cases are non-informative.
+            comparison_results[object_symbol] = 'complete'
+            return
+        elif len(raw_data_go_set.intersection(knowledgebase_go_set)) == 0 and (len(raw_data_go_set) > 0 or len(knowledgebase_go_set) > 0):
+            comparison_results[object_symbol] = 'none'
+            return
+        elif 0 < len(raw_data_go_set.intersection(knowledgebase_go_set)) < len(raw_data_go_set.union(knowledgebase_go_set)):
+            comparison_results[object_symbol] = 'partial'
+            if knowledgebase_go_set.issuperset(raw_data_go_set):
+                comparison_results[object_symbol] = 'superset'
+                return
+        else:
+            comparison_results[object_symbol] = 'inconclusive (missing annotations)'
+            return
+
+    for gene_name, go_set in hpa_dataset_dict.items():
+        if gene_name in mapped_dataset_gaf_dict.keys():
+            #print(gene_name, go_set, mapped_dataset_gaf_dict[gene_name])
+            compare_entry(gene_name, go_set, mapped_dataset_gaf_dict[gene_name], comparison_results)
+            gene_assignment_tuples.append((gene_name, sorted(go_set), sorted(hpa_dataset_dict[gene_name]), comparison_results[gene_name]))  # Saving gene assignments prior to set evaluation.
+        else:
+            comparison_results[gene_name] = 'not in knowledgebase'
+            gene_assignment_tuples.append((gene_name, sorted(go_set), set(), comparison_results[gene_name]))
+
     if args['--id_translation']:
         id_translation_dict = tools.json_load(args['--id_translation'])
     else: 
         id_translation_dict = None
 
+    #shows a breakdown of agreement per location (annoataion category)
     for location in set([item for sublist in hpa_dataset_dict.values() for item in sublist]):  # A flattening of the list of lists in hpa dataset dict locations. HPA dataset locaitons should be used as opposed to mapping methods' locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didnt find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.
-        complete = len(list(filter(lambda x: x[4] == 'complete' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
-        partial = len(list(filter(lambda x: x[4] == 'partial' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
-        superset = len(list(filter(lambda x: x[4] == 'superset' and (location in x[2] and location in x[3]), gene_assignment_tuples)))
-        none = len(list(filter(lambda x: x[4] == 'none' and (location in x[2] or location in x[3]), gene_assignment_tuples)))
-        
+        complete = len(list(filter(lambda x: x[3] == 'complete' and (location in x[1] and location in x[2]), gene_assignment_tuples)))
+        partial = len(list(filter(lambda x: x[3] == 'partial' and (location in x[1] and location in x[2]), gene_assignment_tuples)))
+        superset = len(list(filter(lambda x: x[3] == 'superset' and (location in x[1] and location in x[2]), gene_assignment_tuples)))
+        none = len(list(filter(lambda x: x[3] == 'none' and (location in x[1] or location in x[2]), gene_assignment_tuples)))
+        missing_annotations = len(list(filter(lambda x: x[3] == 'inconclusive (missing annotations)' and (location in x[1] or location in x[2]), gene_assignment_tuples)))
+        not_in_knowledgebase = len(list(filter(lambda x: x[3] == 'not in knowledgebase' and (location in x[1] or location in x[2]), gene_assignment_tuples)))
+
         if id_translation_dict:
             location_name = id_translation_dict[location]
         else:
             location_name = location
-        location_breakdown_table.append([location_name, complete, partial, superset, none])
-    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n', tabulate(sorted(location_breakdown_table), headers=['Location', 'Complete', 'Partial', 'Superset', 'None']))
+        location_breakdown_table.append([location_name, complete, partial, superset, none, missing_annotations, not_in_knowledgebase])
+    
+    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n', tabulate(sorted(location_breakdown_table), headers=['Location', 'Complete', 'Partial', 'Superset', 'None', 'Missing Annotations', 'Not in Knowledgebase']))
 
-    #  TODO: Find a new way to do this that is more functional (can be used to access information later.)
+    #  Shows a breakdown of genes in each agreement category
     complete = 0
     partial = 0
     superset = 0
     no_match = 0
+    missing_annotations = 0
+    not_in_knowledgebase = 0
     for category in comparison_results.values():
         if category is 'complete':
             complete += 1
@@ -387,7 +356,11 @@ def compare_mapping(args):
             superset += 1
         elif category is 'none':
             no_match += 1
-    print('complete: ', complete, '\n', 'partial: ', partial, '\n', 'superset: ', superset, '\n', 'none: ', no_match, '\n', 'Total: ', complete+partial+superset+no_match)
+        elif category is 'inconclusive (missing annotations)':
+            missing_annotations += 1
+        elif category is 'not in knowledgebase':
+            not_in_knowledgebase += 1
+    print('complete: ', complete, '\n', 'partial: ', partial, '\n', 'superset: ', superset, '\n', 'none: ', no_match, '\n', 'missing_annotations: ', missing_annotations, '\n', 'not in knowledgebase: ', not_in_knowledgebase, '\n', 'Total: ', complete+partial+superset+no_match+missing_annotations+not_in_knowledgebase)
 
     if args['--save_assignments']:
         file_name = args['--save_assignments']

@@ -72,9 +72,9 @@ def make_dataset_dict(file_handle, hpa_file=False, format='old', reliability_fil
         hpa_assignments = {}
         for k, v in dataset_dict.items():
             if format == 'new':
-                hpa_assignments[k] = list(set([id for id in v['main_location_go_id_list'] + v['other_location_go_id_list'] if id != '']))
+                hpa_assignments[v['gene_name']] = set([id for id in v['main_location_go_id_list'] + v['other_location_go_id_list'] if id != ''])
             else:
-                hpa_assignments[k] = list(set([hpa_location_mapping[term] for term in v['main_location'] + v['other_location'] if term != '']))
+                hpa_assignments[v['gene_name']] = set([hpa_location_mapping[term] for term in v['main_location'] + v['other_location'] if term != ''])
     else:
         print('Non-HPA datasets not yet supported')
         return
