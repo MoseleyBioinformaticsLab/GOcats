@@ -366,10 +366,15 @@ def compare_mapping(args):
             print(item, "greater than")
         elif len(item[1]) == len(item[2]):
             print(item, "equal to")
-
+    
     print("----", "Superset", "----")
     for item in superset:
         print(item)
+    for gene_tuple in gene_assignment_tuples:
+        if gene_tuple[0] == 'PSMD3' and gene_tuple[3] == 'complete':
+            print("PSMD3 IS IN COMPLETE AGREEMENT!")
+        elif gene_tuple[0] == 'PSMD3' and gene_tuple[3] != 'complete':
+            print("PSMD3 AGREEMENT IS NOT COMPLETE", gene_tuple[3])
 
     if args['--save_assignments']:
         file_name = args['--save_assignments']
