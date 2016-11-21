@@ -83,18 +83,18 @@ def make_gaf_dict(gaf_file, keys):
     with open(gaf_file, 'r') as file:
         for line in csv.reader(file, delimiter='\t'):
             if len(line) > 1:
-                if keys == 'gene_product':
+                if keys == 'go_term':  # Here go terms are mapping to all of the DB Object Symbols in the GAF.
                     if line[4] not in gaf_dict.keys():
-                        gaf_dict[line[4]] = set([line[1]])
-                    elif line[4] in gaf_dict.keys() and line[1] not in gaf_dict[line[4]]:
-                        gaf_dict[line[4]].update([line[1]])
+                        gaf_dict[line[4]] = set([line[2]])
+                    elif line[4] in gaf_dict.keys() and line[2] not in gaf_dict[line[4]]:
+                        gaf_dict[line[4]].update([line[2]])
                     else:
                         pass
-                elif keys == 'go_term':
-                    if line[0] == 'UniProtKB' and line[1] not in gaf_dict.keys():
-                        gaf_dict[line[1]] = [line[4]]
-                    elif line[0] == 'UniProtKB' and line[1] in gaf_dict.keys():
-                        gaf_dict[line[1]].append(line[4])
+                elif keys == 'db_object_symbol':
+                    if line[0] == 'UniProtKB' and line[2] not in gaf_dict.keys():
+                        gaf_dict[line[2]] = set([line[4]])
+                    elif line[0] == 'UniProtKB' and line[2] in gaf_dict.keys():
+                        gaf_dict[line[2]].add(line[4])
                     else:
                         print('ERROR: Reference DB not recognized: '+str(line[0]))
         return gaf_dict
