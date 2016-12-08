@@ -107,7 +107,9 @@ class OboGraph(object):
         self.relationship_index[relationship.id] = relationship
         self.modified = True
 
-    def instantiate_valid_edges(self):  # only instatntiate edge if both nodes are in the graph. If they're ont in the graph, delete them. Keep up with a del list. 
+    def instantiate_valid_edges(self):
+        """only instatntiate edge if both nodes are in the graph. Searches by id
+        since node objects are not referenced at the edges at the time this is called."""
         del_edges = set()
         for edge in self.edge_list:
             if edge.node_pair_id[0] in self.id_index.keys() and edge.node_pair_id[1] in self.id_index.keys():
@@ -116,6 +118,7 @@ class OboGraph(object):
             else:
                 del_edges.add(edge)
         for edge in del_edges:
+            #print("deleted edge: ", edge.node_pair[0], edge.node_pair[1])
             self.edge_list.remove(edge)
 
         self._modified = True
