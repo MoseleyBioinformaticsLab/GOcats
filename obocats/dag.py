@@ -110,7 +110,7 @@ class OboGraph(object):
     def instantiate_valid_edges(self):  # only instatntiate edge if both nodes are in the graph. If they're ont in the graph, delete them. Keep up with a del list. 
         del_edges = set()
         for edge in self.edge_list:
-            if edge.parent_node in self.node_list and edge.child_node in self.node_list:
+            if edge.node_pair_id[0] in self.id_index.keys() and edge.node_pair_id[1] in self.id_index.keys():
                 edge.relationship = self.relationship_index[edge.relationship_id]
                 edge.connect_nodes((self.id_index[edge.node_pair_id[0]], self.id_index[edge.node_pair_id[1]]), self.allowed_relationships)
             else:
