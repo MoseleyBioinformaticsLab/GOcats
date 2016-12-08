@@ -122,4 +122,4 @@ class GoParser(OboParser):
                     self.go_graph.add_relationship(relationship_obj)
                     is_typedef = False
 
-        self.go_graph.connect_nodes()
+        self.go_graph.instantiate_valid_edges()
