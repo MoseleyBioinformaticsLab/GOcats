@@ -18,7 +18,6 @@ Options:
     --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
     --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
     --test_subgraph=<None>               Enter a GO ID to output information describing the mapping differences between OBOcats and Map2Slim.
-    --output_idtranslation               Outputs a dictionary mapping of ontology IDs to their names. 
     --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
     --save_assignments=<filename>        Save a file with all genes and their GO assignments.
     --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.
@@ -72,7 +71,6 @@ def build_graph(args):
     parsing_class[database_name].parse()
 
     database.close()
-    graph.connect_nodes()
 
     #print("JsonPickle saving GO object")
     #tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
@@ -83,7 +81,6 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
     go_parser = parser.GoParser(database, graph)
     go_parser.parse()
     database.close()
-    graph.connect_nodes()
     return graph
 
 def filter_subgraphs(args):
@@ -118,13 +115,12 @@ def filter_subgraphs(args):
     if args['--output_termlist']:
         tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
 
-    idtranslation = dict()
+    id_translation = dict()
     for id, node in supergraph.id_index.items():
-        idtranslation[id] = node.name
-    tools.json_save(idtranslation, os.path.join(args['<output_directory>'], "idtranslation"))
+        id_translation[id] = node.name
+    tools.json_save(id_translation, os.path.join(args['<output_directory>'], "id_translation"))
 
     database.close()
-    supergraph.connect_nodes()
     
     # Building and collecting subgraphs
     subgraph_collection = {}
