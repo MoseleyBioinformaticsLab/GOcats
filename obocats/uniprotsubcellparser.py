@@ -1,5 +1,5 @@
 # !usr/bin/python3
-# Why duplicate functionality? Use methods from other modules.
+# TODO: Why duplicate functionality? Use methods from other modules.
 """uniprotsubcellparser.py
 
 Usage:
@@ -11,7 +11,6 @@ Options:
 """
 import os
 import re
-
 import docopt
 import tools
 
@@ -23,9 +22,8 @@ def main(args):
 
 def build_subdags(args):
     # Uniprot Subcellular Location text file location
-    SL = open(args['<cv_file>'], 'r')  # 'exampledata/uniprotparse/subcell.txt'
+    sl = open(args['<cv_file>'], 'r')  # 'exampledata/uniprotparse/subcell.txt'
     uniprot_collection = []
-    uniprot_dict = {}
     go_translated_dict = {}
     uniprot_multi_root = {}
 
@@ -36,7 +34,7 @@ def build_subdags(args):
     # Main execution for the program
     scparser = SubcellParser()
     udag = UniprotDAG()
-    scparser.parse(udag, SL)
+    scparser.parse(udag, sl)
 
     for top_node in udag.top_nodes:
         UniprotSubDAG(udag, top_node, uniprot_collection)

@@ -1,10 +1,4 @@
-import os
-import re
-import csv
-import dag
-import parser
-import godag
-import tools
+# !/usr/bin/python3
 import obocats
 import itertools
 
@@ -22,48 +16,54 @@ all_cc_no_hp_nodes = cc_no_hp_graph.node_list
 all_mf_nodes = mf_graph.node_list
 all_bp_nodes = bp_graph.node_list
 
+
 def _potential_false_ancestors(edge):
-	"""Considering a problematic relationship edge, returns a set of nodes target that could result in a problematic mapping"""
-	child_ancestors = edge.child_node.ancestors
-	child_ancestors.add(edge.child_node)
-	parent_ancestors = edge.parent_node.ancestors
-	parent_ancestors.add(edge.parent_node)
-	
-	return child_ancestors - parent_ancestors
+    """Considering a problematic relationship edge, returns a set of nodes target that could result in a problematic
+    mapping"""
+    child_ancestors = edge.child_node.ancestors
+    child_ancestors.add(edge.child_node)
+    parent_ancestors = edge.parent_node.ancestors
+    parent_ancestors.add(edge.parent_node)
+
+    return child_ancestors - parent_ancestors
+
 
 def _potential_false_descendants(edge):
-	"""Considering a problematic relationsihp edge, returns a set of source nodes that could result in a problematic mapping. """
-	parent_descendants = edge.parent_node.descendants
-	parent_descendants.add(edge.parent_node)
-	child_descendants = edge.child_node.descendants
-	child_descendants.add(edge.child_node)
+    """Considering a problematic relationsihp edge, returns a set of source nodes that could result in a problematic
+    mapping."""
+    parent_descendants = edge.parent_node.descendants
+    parent_descendants.add(edge.parent_node)
+    child_descendants = edge.child_node.descendants
+    child_descendants.add(edge.child_node)
 
-	return parent_descendants - child_descendants
+    return parent_descendants - child_descendants
+
 
 def potential_false_mappings(edge_list):
-	potential_false_mappings = set()
-	for edge in edge_list:
-		potential_false_mappings.update(set(itertools.product(*[_potential_false_descendants(edge), _potential_false_ancestors(edge)])))
-	return potential_false_mappings
+    potential_false_mappings = set()
+    for edge in edge_list:
+        potential_false_mappings.update(set(itertools.product(*[_potential_false_descendants(edge), _potential_false_ancestors(edge)])))
+    return potential_false_mappings
+
 
 def all_possible_mappings(node_list):
-	node_mapping_tuples = set()
-	for node1 in node_list:
-		for node2 in node_list:
-			if node1 != node2 and node1.ancestors.intersection(node2.descendants):
-				node_mapping_tuples.add((node1, node2))
-	return node_mapping_tuples
+    node_mapping_tuples = set()
+    for node1 in node_list:
+        for node2 in node_list:
+            if node1 != node2 and node1.ancestors.intersection(node2.descendants):
+                node_mapping_tuples.add((node1, node2))
+    return node_mapping_tuples
 
-#celluar_component
+# celluar_component
 potential_false_cc_hp_mappings = potential_false_mappings(cc_hp_edges)
 all_possible_cc_mappings = all_possible_mappings(all_cc_nodes)
 all_possible_cc_no_hp_mappings = all_possible_mappings(all_cc_no_hp_nodes)
 
-#molecular_function
+# molecular_function
 potential_false_mf_hp_mappings = potential_false_mappings(mf_hp_edges)
 all_possible_mf_mappings = all_possible_mappings(all_mf_nodes)
 
-#biological_process
+# biological_process
 potential_false_bp_hp_mappings = potential_false_mappings(bp_hp_edges)
 all_possible_bp_mappings = all_possible_mappings(all_bp_nodes)
 

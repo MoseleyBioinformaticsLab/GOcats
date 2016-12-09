@@ -20,6 +20,7 @@ def main(args):
     elif args['map_terms']:
         map_terms(args)
 
+
 def make_decoy(args):
     """Map2Slim does not output a mapping file relating to how it assigns specific terms to the root that it maps to in
     the GO slim. We can get around this by creating a fake GAF that has the annotated GO term as the ID of the "gene"
