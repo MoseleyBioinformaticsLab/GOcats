@@ -24,11 +24,9 @@ Options:
     --map_manual_dataset=<filename>  Specify a mapping file to map manual dataset annotations to the user-specified categories. 
 
 """
-from datetime import date
 import os
 import re
 import csv
-import dag
 import parser
 import godag
 import subdag
@@ -48,6 +46,7 @@ def main(args):
     elif args['compare_mapping']:
         compare_mapping(args)
 
+
 # Need a SubGraphCollection object
 # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
@@ -65,16 +64,17 @@ def build_graph(args):
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
     database_name = os.path.basename(args['<database_file>'])
-    graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
+    graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, allowed_relationships)}
     graph = graph_class[database_name]
     parsing_class = {'go.obo': parser.GoParser(database, graph)}
     parsing_class[database_name].parse()
 
     database.close()
 
-    #print("JsonPickle saving GO object")
-    #tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
- 
+    # print("JsonPickle saving GO object")
+    # tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
+
+
 def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None):
     database = open(database_file, 'r')
     graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
@@ -83,7 +83,9 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
     database.close()
     return graph
 
+
 def filter_subgraphs(args):
+    # TODO: See if I can condence this.
     if args['--supergraph_namespace']:
         supergraph_namespace = args['--supergraph_namespace']
     else:
@@ -121,7 +123,7 @@ def filter_subgraphs(args):
     tools.json_save(id_translation, os.path.join(args['<output_directory>'], "id_translation"))
 
     database.close()
-    
+
     # Building and collecting subgraphs
     subgraph_collection = {}
     with open(args['<keyword_file>'], newline='') as file:
@@ -154,19 +156,22 @@ def filter_subgraphs(args):
                 collection_node_mapping[node] = set([rep_node])
         for rep_node, content in subgraph.content_mapping.items():
             collection_content_mapping[rep_node] = content
-    
+
     # Remove root nodes that are subsets of existing root nodes from mapping
     if category_subsets:
         for node_id, root_id_list in collection_id_mapping.items():
             for subset_id, superset_ids in category_subsets.items():
                 if subset_id in root_id_list:
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
-    #TODO: do the same for node_object_mapping 
+    # TODO: do the same for node_object_mapping
 
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "OC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "OC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
-        report_file.write('Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(supergraph_namespace, subgraph_namespace,len(set(supergraph.node_list)), len(set(collection_id_mapping.keys())), supergraph.relationship_count))
+        report_file.write(
+            'Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(
+                supergraph_namespace, subgraph_namespace, len(set(supergraph.node_list)),
+                len(set(collection_id_mapping.keys())), supergraph.relationship_count))
         for subgraph_name, subgraph in subgraph_collection.items():
             out_string = """
                 -------------------------
@@ -177,9 +182,13 @@ def filter_subgraphs(args):
                 Nodes added: {}
                 Non-subgraph hits (orphans): {}
                 Total nodes: {}
-                """.format(subgraph_name, subgraph.relationship_count, subgraph.seeded_size, subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size, len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()), len(subgraph.root_node_mapping.keys()))
+                """.format(subgraph_name, subgraph.relationship_count, subgraph.seeded_size,
+                           subgraph.representative_node.name, len(subgraph.node_list) - subgraph.seeded_size,
+                           len(subgraph.node_list) - len(subgraph.root_id_mapping.keys()),
+                           len(subgraph.root_node_mapping.keys()))
             report_file.write(out_string)
-    # FIXME: 
+
+    # FIXME: cannot json save due to recursion of objects within objects...
     # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "OC_node_mapping"))
 
     # Making a file for network visualization via Cytoscape 3.0
@@ -189,9 +198,15 @@ def filter_subgraphs(args):
             for root_id in root_id_list:
                 edgewriter.writerow([term_id, root_id])
 
+
+# TODO: Make script to do the following test.
+"""
     if args['--test_subgraph']:
-        oc_subgraph_set = next(subgraph.representative_node.descendants for subgraph in subgraph_collection if subgraph.representative_node == args['--test_subgraph'])
-        output_mapping_differences(supergraph, oc_subgraph_set, output_dir)
+        oc_subgraph_set = next(subgraph.representative_node.descendants for subgraph in subgraph_collection if
+                               subgraph.representative_node == args['--test_subgraph'])
+        output_mapping_differences(supergraph, oc_subgraph_set, output_directory)
+"""
+
 
 def find_category_subsets(subgraph_collection):
     is_subset_of = dict()
@@ -204,7 +219,9 @@ def find_category_subsets(subgraph_collection):
                     is_subset_of[subgraph.representative_node.id] = {next_subgraph.representative_node.id}
     return is_subset_of
 
+
 def subgraph_inclusion(args):
+    # TODO: rename this method; creates a table that contains inclusion and jacaard index.
     from tabulate import tabulate
     inc_index_table = []
     output_file = args['<output_directory>']
@@ -220,28 +237,35 @@ def subgraph_inclusion(args):
             go_id_string = id_translation_dict[location]
         else:
             go_id_string = location
-        inc_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/len(other_mapping[location])
-        jaccard_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location])))/len(set(other_mapping[location]).union(set(obocats_mapping[location])))
-        inc_index_table.append([go_id_string, location, inc_index, jaccard_index, len(obocats_mapping[location]), len(other_mapping[location])])
-    table = tabulate(sorted(inc_index_table, key=lambda x: x[0]), headers=['Location', 'GO term', 'Inclusion Index', 'Jaccard Index', 'GC subgraph size', 'Other subgraph size'])
+        inc_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location]))) / len(
+            other_mapping[location])
+        jaccard_index = len(set(other_mapping[location]).intersection(set(obocats_mapping[location]))) / len(
+            set(other_mapping[location]).union(set(obocats_mapping[location])))
+        inc_index_table.append([go_id_string, location, inc_index, jaccard_index, len(obocats_mapping[location]),
+                                len(other_mapping[location])])
+    table = tabulate(sorted(inc_index_table, key=lambda x: x[0]),
+                     headers=['Location', 'GO term', 'Inclusion Index', 'Jaccard Index', 'GC subgraph size',
+                              'Other subgraph size'])
     with open(os.path.join(output_file, args['<filename>']), 'w') as outfile:
         outfile.write(table)
+
 
 def subgraph_overlap(args):
     import pandas as pd
     import pyupset as pyu
     if not os.path.exists(args['<output_directory>']):
         os.makedirs(args['<output_directory>'])
- 
-    inc_index_table = []
+
     obocats_mapping = tools.json_load(args['<obocats_mapping>'])
     uniprot_mapping = tools.json_load(args['<uniprot_mapping>'])
     map2slim_mapping = tools.json_load(args['<map2slim_mapping>'])
 
-    location_categories = set(list(obocats_mapping.keys())+list(uniprot_mapping.keys())+list(map2slim_mapping.keys()))
+    location_categories = set(
+        list(obocats_mapping.keys()) + list(uniprot_mapping.keys()) + list(map2slim_mapping.keys()))
     for location in [x for x in location_categories if x not in set(uniprot_mapping.keys()).intersection(*[set(obocats_mapping.keys()), set(map2slim_mapping.keys())])]:
         uniprot_mapping[location] = [location]
-    shared_locations = set(uniprot_mapping.keys()).intersection(*[set(obocats_mapping.keys()), set(map2slim_mapping.keys())])
+    shared_locations = set(uniprot_mapping.keys()).intersection(
+        *[set(obocats_mapping.keys()), set(map2slim_mapping.keys())])
     for location in shared_locations:
         go_id_string = str(location)[3:]
         gc_set = pd.DataFrame({'Terms': obocats_mapping[location]})
@@ -249,7 +273,8 @@ def subgraph_overlap(args):
         m2s_set = pd.DataFrame({'Terms': map2slim_mapping[location]})
         set_dict = {'GOcats': gc_set, 'UniProt': up_set, 'Map2Slim': m2s_set}
         pyuobject = pyu.plot(set_dict, unique_keys=['Terms'])
-        pyuobject['figure'].savefig(os.path.join(args['<output_directory>'], 'CategorySubgraphIntersection_'+go_id_string))
+        pyuobject['figure'].savefig(os.path.join(args['<output_directory>'], 'CategorySubgraphIntersection_' + go_id_string))
+
 
 def categorize_dataset(args):
     loaded_gaf_array = tools.parse_gaf(args['<gaf_dataset>'])
@@ -265,14 +290,15 @@ def categorize_dataset(args):
         if line[4] in mapping_dict.keys():
             mapped_terms = mapping_dict[line[4]]
             for term in mapped_terms:
-                mapped_gaf_array.append(line[0:4]+[term]+line[5:-1])
+                mapped_gaf_array.append(line[0:4] + [term] + line[5:-1])
         else:
             if line[2] == '':
-                unmapped_genes.add('NO_GENE:'+line[1])
+                unmapped_genes.add('NO_GENE:' + line[1])
             else:
                 unmapped_genes.add(line[2])
     tools.writeout_gaf(mapped_gaf_array, os.path.join(output_directory, gaf_name))
-    tools.list_to_file(os.path.join(output_directory, gaf_name+'_unmappedGenes'), unmapped_genes)
+    tools.list_to_file(os.path.join(output_directory, gaf_name + '_unmappedGenes'), unmapped_genes)
+
 
 def compare_mapping(args):
     """Compares the agreement in annotation assignment between a GAF produced by Obcats (PARAMETER <mapped_gaf>) and
@@ -283,10 +309,8 @@ def compare_mapping(args):
     mapped_dataset_gaf_dict = tools.make_gaf_dict(args['<mapped_gaf>'], keys='db_object_symbol')
     hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'new', 'Supportive')
     location_breakdown_table = []
-    curr_dir = os.path.dirname(os.path.realpath(__file__))
     comparison_results = {}
     gene_assignment_tuples = []
-    gene_annotation_not_in_knowledgebase = set()
 
     if args['--map_manual_dataset']:
         manual_dataset_mapping = tools.json_load(args['--map_manual_dataset'])
@@ -295,13 +319,16 @@ def compare_mapping(args):
 
     def compare_entry(object_symbol, raw_data_go_set, knowledgebase_go_set, comparison_results):
 
-        if raw_data_go_set.union(knowledgebase_go_set) == raw_data_go_set.intersection(knowledgebase_go_set):  # and len(raw_data_go_set.union(knowledgebase_go_set)) != 0:  EDIT should this ever happen? Correctly not-assigning non-assignments demonstrates accuracy. However these cases are non-informative.
+        if raw_data_go_set.union(knowledgebase_go_set) == raw_data_go_set.intersection(
+                knowledgebase_go_set):  # and len(raw_data_go_set.union(knowledgebase_go_set)) != 0:  EDIT should this ever happen? Correctly not-assigning non-assignments demonstrates accuracy. However these cases are non-informative.
             comparison_results[object_symbol] = 'complete'
             return
-        elif len(raw_data_go_set.intersection(knowledgebase_go_set)) == 0 and (len(raw_data_go_set) > 0 or len(knowledgebase_go_set) > 0):
+        elif len(raw_data_go_set.intersection(knowledgebase_go_set)) == 0 and (
+                len(raw_data_go_set) > 0 or len(knowledgebase_go_set) > 0):
             comparison_results[object_symbol] = 'none'
             return
-        elif 0 < len(raw_data_go_set.intersection(knowledgebase_go_set)) < len(raw_data_go_set.union(knowledgebase_go_set)):
+        elif 0 < len(raw_data_go_set.intersection(knowledgebase_go_set)) < len(
+                raw_data_go_set.union(knowledgebase_go_set)):
             comparison_results[object_symbol] = 'partial'
             if knowledgebase_go_set.issuperset(raw_data_go_set):
                 comparison_results[object_symbol] = 'superset'
@@ -314,38 +341,54 @@ def compare_mapping(args):
         if gene_name in mapped_dataset_gaf_dict.keys():
             if manual_dataset_mapping:  # Mapping terms in the manually-annotated dataset to the user-defined categories to compare to the mapped dataset
                 old_go_set = go_set
-                go_set = set()                
+                go_set = set()
                 for go_term in old_go_set:
                     go_set.update(manual_dataset_mapping[go_term])
                 compare_entry(gene_name, go_set, mapped_dataset_gaf_dict[gene_name], comparison_results)
-                gene_assignment_tuples.append((gene_name, sorted(go_set), sorted(mapped_dataset_gaf_dict[gene_name]), comparison_results[gene_name]))  # Saving gene assignments prior to set evaluation.
+                gene_assignment_tuples.append((gene_name, sorted(go_set), sorted(mapped_dataset_gaf_dict[gene_name]),
+                                               comparison_results[
+                                                   gene_name]))  # Saving gene assignments prior to set evaluation.
             else:
                 compare_entry(gene_name, go_set, mapped_dataset_gaf_dict[gene_name], comparison_results)
-                gene_assignment_tuples.append((gene_name, sorted(go_set), sorted(mapped_dataset_gaf_dict[gene_name]), comparison_results[gene_name]))           
+                gene_assignment_tuples.append((gene_name, sorted(go_set), sorted(mapped_dataset_gaf_dict[gene_name]),
+                                               comparison_results[gene_name]))
         else:
             comparison_results[gene_name] = 'not in knowledgebase'
             gene_assignment_tuples.append((gene_name, sorted(go_set), set(), comparison_results[gene_name]))
 
     if args['--id_translation']:
         id_translation_dict = tools.json_load(args['--id_translation'])
-    else: 
+    else:
         id_translation_dict = dict()
 
-    #shows a breakdown of agreement per location (annoataion category)
-    for location in set([item for sublist in hpa_dataset_dict.values() for item in sublist] + [item for sublist in manual_dataset_mapping.values() for item in sublist if manual_dataset_mapping]):  # A flattening of the list of lists in hpa dataset dict locations. HPA dataset locaitons should be used as opposed to mapping methods' locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didnt find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.
-        complete = list(filter(lambda x: x[3] == 'complete' and (location in x[1] and location in x[2]), gene_assignment_tuples))
-        partial = list(filter(lambda x: x[3] == 'partial' and (location in x[1] and location in x[2]), gene_assignment_tuples))
-        superset = list(filter(lambda x: x[3] == 'superset' and (location in x[1] and location in x[2]), gene_assignment_tuples))
+    # shows a breakdown of agreement per location (annoataion category)
+    for location in set([item for sublist in hpa_dataset_dict.values() for item in sublist] +
+                        [item for sublist in manual_dataset_mapping.values() for item in sublist if manual_dataset_mapping]):  # A flattening of the list of lists in hpa dataset dict locations. HPA dataset locaitons should be used as opposed to mapping methods' locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didnt find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.
+        complete = list(
+            filter(lambda x: x[3] == 'complete' and (location in x[1] and location in x[2]), gene_assignment_tuples))
+        partial = list(
+            filter(lambda x: x[3] == 'partial' and (location in x[1] and location in x[2]), gene_assignment_tuples))
+        superset = list(
+            filter(lambda x: x[3] == 'superset' and (location in x[1] and location in x[2]), gene_assignment_tuples))
         none = list(filter(lambda x: x[3] == 'none' and (location in x[1] or location in x[2]), gene_assignment_tuples))
-        missing_annotations = list(filter(lambda x: x[3] == 'inconclusive (missing annotations)' and (location in x[1] or location in x[2]), gene_assignment_tuples))
-        not_in_knowledgebase = list(filter(lambda x: x[3] == 'not in knowledgebase' and (location in x[1] or location in x[2]), gene_assignment_tuples))
+        missing_annotations = list(
+            filter(lambda x: x[3] == 'inconclusive (missing annotations)' and (location in x[1] or location in x[2]),
+                   gene_assignment_tuples))
+        not_in_knowledgebase = list(
+            filter(lambda x: x[3] == 'not in knowledgebase' and (location in x[1] or location in x[2]),
+                   gene_assignment_tuples))
 
         if id_translation_dict:
             location_name = id_translation_dict[location]
         else:
             location_name = location
-        location_breakdown_table.append([location_name, len(complete), len(partial), len(superset), len(none), len(missing_annotations), len(not_in_knowledgebase)])
-    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n', tabulate(sorted(location_breakdown_table), headers=['Location', 'Complete', 'Partial', 'Superset', 'None', 'Missing Annotations', 'Not in Knowledgebase']))
+        location_breakdown_table.append(
+            [location_name, len(complete), len(partial), len(superset), len(none), len(missing_annotations),
+             len(not_in_knowledgebase)])
+    print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n',
+          tabulate(sorted(location_breakdown_table),
+                   headers=['Location', 'Complete', 'Partial', 'Superset', 'None', 'Missing Annotations',
+                            'Not in Knowledgebase']))
 
     #  Shows a breakdown of genes in each agreement category
     complete = list(filter(lambda x: x[3] == 'complete', gene_assignment_tuples))
@@ -354,7 +397,9 @@ def compare_mapping(args):
     no_match = list(filter(lambda x: x[3] == 'none', gene_assignment_tuples))
     missing_annotations = list(filter(lambda x: x[3] == 'inconclusive (missing annotations)', gene_assignment_tuples))
     not_in_knowledgebase = list(filter(lambda x: x[3] == 'not in knowledgebase', gene_assignment_tuples))
-    print('complete: ', len(complete), '\n', 'partial: ', len(partial), '\n', 'superset: ', len(superset), '\n', 'none: ', len(no_match), '\n', 'missing_annotations: ', len(missing_annotations), '\n', 'not in knowledgebase: ', len(not_in_knowledgebase), '\n', 'Total: ', len(gene_assignment_tuples))
+    print('complete: ', len(complete), '\n', 'partial: ', len(partial), '\n', 'superset: ', len(superset), '\n',
+          'none: ', len(no_match), '\n', 'missing_annotations: ', len(missing_annotations), '\n',
+          'not in knowledgebase: ', len(not_in_knowledgebase), '\n', 'Total: ', len(gene_assignment_tuples))
 
     print("----", "Partial", "----")
     for item in partial:
@@ -362,7 +407,7 @@ def compare_mapping(args):
             print(item, "greater than")
         elif len(item[1]) == len(item[2]):
             print(item, "equal to")
-    
+
     print("----", "Superset", "----")
     for item in superset:
         print(item)
@@ -376,7 +421,8 @@ def compare_mapping(args):
         file_name = args['--save_assignments']
         tools.list_to_file(file_name, sorted(gene_assignment_tuples, key=lambda gene_id: gene_id[0]))
 
-#Fix this to output the results that were output in commit 1b1fd28f630e24909c193f4ed8c1285f62300441. I do not have time to mess with this right now. Get rid of all of the hardcoding.
+"""
+# Fix this to output the results that were output in commit 1b1fd28f630e24909c193f4ed8c1285f62300441. I do not have time to mess with this right now. Get rid of all of the hardcoding.
 def output_mapping_differences(obocats_graph, subgraph, output_dir):
     gc_subgraph = subgraph
     m2s_pm = input("Enter the file location of the subgraph equivalent to ")
@@ -389,13 +435,17 @@ def output_mapping_differences(obocats_graph, subgraph, output_dir):
     for go_id in not_in_gc:
         supergraph_descendants = set([node.id for node in supergraph.id_index[go_id].descendants])
         m2s_descendants_not_in_gc.update(supergraph_descendants.intersection(m2s_pm))
-        missing_node_depths.append((go_depth_dict[go_id], go_id, len(supergraph_descendants.intersection(m2s_pm)), len(supergraph_descendants.intersection(gc_pm))))
+        missing_node_depths.append((go_depth_dict[go_id], go_id, len(supergraph_descendants.intersection(m2s_pm)),
+                                    len(supergraph_descendants.intersection(gc_pm))))
     print(sorted(missing_node_depths, key=lambda depth: depth[0]))
     print(len(m2s_descendants_not_in_gc))
-    print("descendants of 'unencapsulated part of cell' that are in m2s but not in go cats\n", [node.id for node in supergraph.id_index['GO:0097653'].descendants if node.id in m2s_pm and node.id not in gc_pm])
-    print(len([node.id for node in supergraph.id_index['GO:0097653'].descendants if node.id in m2s_pm and node.id not in gc_pm]))
+    print("descendants of 'unencapsulated part of cell' that are in m2s but not in go cats\n",
+          [node.id for node in supergraph.id_index['GO:0097653'].descendants if
+           node.id in m2s_pm and node.id not in gc_pm])
+    print(len([node.id for node in supergraph.id_index['GO:0097653'].descendants if
+               node.id in m2s_pm and node.id not in gc_pm]))
     print(len(not_in_gc))
-
+"""
 
 if __name__ == '__main__':
     args = docopt.docopt(__doc__, version='OboCats 0.2.0')

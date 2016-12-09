@@ -1,6 +1,7 @@
-from dag import OboGraph, AbstractNode, AbstractEdge
+# !/usr/bin/python3
+"""Subgraph and subgraph components of an OBOGraph object."""
+from dag import OboGraph, AbstractNode
 import re
-import tools
 
 
 class SubGraph(OboGraph):
@@ -58,6 +59,7 @@ class SubGraph(OboGraph):
             super().add_node(subgraph_node)
         self._modified = True
 
+    # TODO: Rename/reconsider this (needs to be similar to instantiate_valid_edges)
     def connect_subnodes(self):
         for subnode in self.node_list:
             subnode.update_children([self.id_index[child.id] for child in subnode.super_node.child_node_set if child.id in self.id_index])
@@ -72,13 +74,14 @@ class SubGraph(OboGraph):
         self._modified = True
 
     def greedily_extend_subgraph(self):
-        supergraph_descendents = set([super_node for super_node in self.super_graph.id_index[self.representative_node.id].descendants if self.valid_node(super_node) and super_node.id not in self.id_index])
+        # supergraph_descendents = set([super_node for super_node in self.super_graph.id_index[self.representative_node.id].descendants if self.valid_node(super_node) and super_node.id not in self.id_index])
         graph_extension_nodes = set([super_node for super_node in self.super_graph.id_index[self.representative_node.id].descendants if super_node.id not in self.id_index])
         for super_node in graph_extension_nodes:
             self.add_node(super_node)
         self.connect_subnodes()
     
     def conservatively_extend_subgraph(self):
+        graph_extension_nodes = set()
         for subleaf in self.leaves:
             start_node = self.super_graph.id_index[subleaf.id]
             end_node = self.super_graph.id_index[self.representative_node.id]
@@ -89,7 +92,7 @@ class SubGraph(OboGraph):
         self.connect_subnodes()
 
     def remove_orphan_paths(self):
-        #not using for now
+        # not using for now
         for orphan in self.orphans:
             orphaned_descendants = orphan.descendants - self.representative_node.descendants
             if orphaned_descendants:
