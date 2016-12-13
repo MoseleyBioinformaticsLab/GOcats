@@ -20,6 +20,7 @@ all_mf_no_hp_nodes = mf_no_hp_graph.node_list
 all_bp_nodes = bp_graph.node_list
 all_bp_no_hp_nodes = bp_no_hp_graph.node_list
 
+
 def _potential_false_ancestors(edge):
     """Considering a problematic relationship edge, returns a set of nodes target that could result in a problematic
     mapping"""
@@ -43,10 +44,10 @@ def _potential_false_descendants(edge):
 
 
 def potential_false_mappings(edge_list):
-    potential_false_mappings = set()
+    pmf = set()
     for edge in edge_list:
-        potential_false_mappings.update(set(itertools.product(*[_potential_false_descendants(edge), _potential_false_ancestors(edge)])))
-    return potential_false_mappings
+        pmf.update(set(itertools.product(*[_potential_false_descendants(edge), _potential_false_ancestors(edge)])))
+    return pmf
 
 
 def all_possible_mappings(node_list):
