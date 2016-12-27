@@ -1,0 +1,14 @@
+[eugene@nyx obocats]$ python3 hp_mapping_testing.py 
+-----cellular_component-----
+Potentially false 'has part' mappings:  30036
+All possible mappings:  56640
+All possible mappings without 'has part':  49679
+Intersection of possible true mappings and potentially false 'has_part' mappings:  6505
+-----molecular_function-----
+Potentially false 'has part' mappings:  10146
+All possible mappings:  65354
+Intersection of possible true mappings and potentially false 'has_part' mappings:  1856
+-----biological_process-----
+Potentially false 'has part' mappings:  143379
+All possible mappings:  762538
+Intersection of possible true mappings and potentially false 'has_part' mappings:  6468
