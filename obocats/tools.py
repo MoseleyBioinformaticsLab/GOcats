@@ -7,6 +7,7 @@ import re
 import csv
 csv.field_size_limit(sys.maxsize)
 
+
 def json_save(obj, filename):
     """Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
     dictkeys to strings."""
@@ -45,8 +46,8 @@ def display_name(dataset, go_id):
     else:
         return dataset[go_id]['name']
 
-# Functions for handling Gene Annotation Files 
 
+# Functions for handling Gene Annotation Files
 def writeout_gaf(data, file_handle):
     with open(file_handle, 'w') as gaf_file:
         gafwriter = csv.writer(gaf_file, delimiter='\t')
@@ -62,6 +63,7 @@ def parse_gaf(file_handle):
             if not re.match(comment_line, str(line[0])):
                 gaf_array.append(line)
     return gaf_array
+
 
 def itemize_gaf(gaf_file):
     location_gene_dict = {}
@@ -98,6 +100,3 @@ def make_gaf_dict(gaf_file, keys):
                     else:
                         print('ERROR: Reference DB not recognized: '+str(line[0]))
         return gaf_dict
-
-#def calculate_inclusion_index(set1, set2):
-    

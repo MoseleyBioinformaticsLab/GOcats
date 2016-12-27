@@ -39,7 +39,7 @@ class GoParser(OboParser):
         # 5 types of relationships: scoping, ordinal, active, equivalent, negation
         # 1 means that the relationship directionality is converntional, 0 means that the semantic directionaly points from node 2 to node1. 
         self.relationship_mapping = {"ends_during": ("scoping", 1), "happens_during": ("scoping", 1), "has_part": ("scoping", 0),
-                                     "negatively_regulates": ("active", 1),  "never_in_taxon": ("negation", 1), "occurs_in": ("scoping", 1),
+                                     "negatively_regulates": ("active", 1), "never_in_taxon": ("negation", 1), "occurs_in": ("scoping", 1),
                                      "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
                                      "starts_during": ("scoping", 1), "is_a": ("scoping", 1)}
 
@@ -57,7 +57,6 @@ class GoParser(OboParser):
 
             if not is_typedef and not is_term and re.match(self.typedef_stanza, line):
                 is_typedef = True
-                relationship_properties = dict()
                 relationship_obj = DirectionalRelationship() 
 
             elif is_term:
@@ -122,4 +121,4 @@ class GoParser(OboParser):
                     self.go_graph.add_relationship(relationship_obj)
                     is_typedef = False
 
-        self.go_graph.connect_nodes()
+        self.go_graph.instantiate_valid_edges()
