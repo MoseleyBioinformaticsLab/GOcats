@@ -303,6 +303,7 @@ def categorize_dataset(args):
 def compare_mapping(args):
     """Compares the agreement in annotation assignment between a GAF produced by Obcats (PARAMETER <mapped_gaf>) and
     a gold-standard dataset, provided in csv format (PARAMETER <manual-dataset>)."""
+    # TODO: Add argumnets for output directory. Save tables and list of genes not in database in this directory.
     from tabulate import tabulate
     import catcompare
 
@@ -385,11 +386,12 @@ def compare_mapping(args):
         location_breakdown_table.append(
             [location_name, len(complete), len(partial), len(superset), len(none), len(missing_annotations),
              len(not_in_knowledgebase)])
+        tools.list_to_file('~/GenesNotInDatabase', not_in_knowledgebase) # TODO: Change location to new output directory.
     print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n',
           tabulate(sorted(location_breakdown_table),
                    headers=['Location', 'Complete', 'Partial', 'Superset', 'None', 'Missing Annotations',
                             'Not in Knowledgebase']))
-
+    
     #  Shows a breakdown of genes in each agreement category
     complete = list(filter(lambda x: x[3] == 'complete', gene_assignment_tuples))
     partial = list(filter(lambda x: x[3] == 'partial', gene_assignment_tuples))
