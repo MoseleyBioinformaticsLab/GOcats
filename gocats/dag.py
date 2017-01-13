@@ -10,6 +10,7 @@ class OboGraph(object):
     def __init__(self, namespace_filter=None, allowed_relationships=None):
         self.namespace_filter = namespace_filter
         self.allowed_relationships = allowed_relationships
+        self.word_split = re.compile(r"[\w\'\-]+")
         self.node_list = list()
         self.edge_list = list()
         self.id_index = dict()
@@ -106,10 +107,20 @@ class OboGraph(object):
         self.relationship_index[relationship.id] = relationship
         self.modified = True
 
-    def connect_nodes(self):
+    def instantiate_valid_edges(self):
+        """only instatntiate edge if both nodes are in the graph. Searches by id
+        since node objects are not referenced at the edges at the time this is called."""
+        del_edges = set()
         for edge in self.edge_list:
-            edge.relationship = self.relationship_index[edge.relationship_id]
-            edge.connect_nodes((self.id_index[edge.node_pair_id[0]], self.id_index[edge.node_pair_id[1]]), self.allowed_relationships)
+            if edge.node_pair_id[0] in self.id_index.keys() and edge.node_pair_id[1] in self.id_index.keys():
+                edge.relationship = self.relationship_index[edge.relationship_id]
+                edge.connect_nodes((self.id_index[edge.node_pair_id[0]], self.id_index[edge.node_pair_id[1]]), self.allowed_relationships)
+            else:
+                del_edges.add(edge)
+        for edge in del_edges:
+            #print("deleted edge: ", edge.node_pair[0], edge.node_pair[1])
+            self.edge_list.remove(edge)
+
         self._modified = True
 
     def node_depth(self, sample_node):
@@ -126,11 +137,10 @@ class OboGraph(object):
             parent_set = set().union(*[parent.parent_node_set for parent in parent_set])
         return depth
 
-    def filter_nodes(self, keyword_list):
-        for word in keyword_list:
-            if word not in self.vocab_index.keys():
-                keyword_list.remove(word)
-        filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in keyword_list if word in self.vocab_index]])
+    def filter_nodes(self, search_string_list):
+        search_string_list_words = [re.findall(self.word_split, word) for word in search_string_list]
+        search_string_word_set = set([word for sublist in search_string_list_words for word in sublist])
+        filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in search_string_word_set if word in self.vocab_index]])
         if self.namespace_filter:
             filtered_nodes = [node for node in filtered_nodes if node.namespace == self.namespace_filter]
         return filtered_nodes
@@ -186,6 +196,10 @@ class AbstractNode(object):
         self._modified = False
 
     def add_edge(self, edge, allowed_relationships):
+        """Adds a given edge to the node's edge list and sets parent and child nodes
+        given the edge represents an allowed relationship."""
+        # TODO: Need to capture non-parent/child relationship types somehow 
+        # FIXME: Should I be adding edges that represent non-allowed relationships?
         self.edges.add(edge)
         if not allowed_relationships:
             if edge.child_id == self.id:

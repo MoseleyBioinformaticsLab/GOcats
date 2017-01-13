@@ -1,11 +1,12 @@
 # !/usr/bin/python3
-"""Functions for handling I/O tasks (and more!) with OboCats."""
+"""Functions for handling I/O tasks (and more!) with GOcats."""
 import jsonpickle
 import sys
 import os
 import re
 import csv
 csv.field_size_limit(sys.maxsize)
+
 
 def json_save(obj, filename):
     """Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
@@ -45,8 +46,8 @@ def display_name(dataset, go_id):
     else:
         return dataset[go_id]['name']
 
-# Functions for handling Gene Annotation Files 
 
+# Functions for handling Gene Annotation Files
 def writeout_gaf(data, file_handle):
     with open(file_handle, 'w') as gaf_file:
         gafwriter = csv.writer(gaf_file, delimiter='\t')
@@ -62,6 +63,7 @@ def parse_gaf(file_handle):
             if not re.match(comment_line, str(line[0])):
                 gaf_array.append(line)
     return gaf_array
+
 
 def itemize_gaf(gaf_file):
     location_gene_dict = {}
@@ -83,21 +85,18 @@ def make_gaf_dict(gaf_file, keys):
     with open(gaf_file, 'r') as file:
         for line in csv.reader(file, delimiter='\t'):
             if len(line) > 1:
-                if keys == 'gene_product':
+                if keys == 'go_term':  # Here go terms are mapping to all of the DB Object Symbols in the GAF.
                     if line[4] not in gaf_dict.keys():
-                        gaf_dict[line[4]] = set([line[1]])
-                    elif line[4] in gaf_dict.keys() and line[1] not in gaf_dict[line[4]]:
-                        gaf_dict[line[4]].update([line[1]])
+                        gaf_dict[line[4]] = set([line[2]])
+                    elif line[4] in gaf_dict.keys() and line[2] not in gaf_dict[line[4]]:
+                        gaf_dict[line[4]].update([line[2]])
                     else:
                         pass
-                elif keys == 'go_term':
-                    if line[0] == 'UniProtKB' and line[1] not in gaf_dict.keys():
-                        gaf_dict[line[1]] = [line[4]]
-                    elif line[0] == 'UniProtKB' and line[1] in gaf_dict.keys():
-                        gaf_dict[line[1]].append(line[4])
+                elif keys == 'db_object_symbol':
+                    if line[0] == 'UniProtKB' and line[2] not in gaf_dict.keys():
+                        gaf_dict[line[2]] = set([line[4]])
+                    elif line[0] == 'UniProtKB' and line[2] in gaf_dict.keys():
+                        gaf_dict[line[2]].add(line[4])
                     else:
                         print('ERROR: Reference DB not recognized: '+str(line[0]))
         return gaf_dict
-
-#def calculate_inclusion_index(set1, set2):
-    

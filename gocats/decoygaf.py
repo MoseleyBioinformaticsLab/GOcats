@@ -3,7 +3,7 @@
 
 Usage:
     decoygaf.py make_decoy <ontology_term_list> <output_dir> <output_file>
-    decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> --output_mapping_set=None
+    decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> [--output_mapping_set=None]
 
 """
 import os
@@ -57,5 +57,5 @@ def map_terms(args):
             json.dump(args['--output_mapping_set'], f)
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 2.1.3')
+    args = docopt.docopt(__doc__, version='GOcats version 0.1.0')
     main(args)
