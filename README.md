@@ -1,6 +1,6 @@
-# GOcats3/OBOcats
+# GOcats3/GOcats
 
-GOcats3/OBOcats is an Open Biomedical Ontology (OBO) parser and categorizer--currently specialized for the Gene Ontology (GO)--which can sort ontology terms into conceptual categories that a user provides. It is being redeveloped from GOcats version 2 available here: https://gitlab.cesb.uky.edu/eugene/ARK.goLocalization. Later, it will be fully extended into OBOcats, which will parse and categorize any ontology in the OBO Foundry.
+GOcats3/GOcats is an Open Biomedical Ontology (OBO) parser and categorizer--currently specialized for the Gene Ontology (GO)--which can sort ontology terms into conceptual categories that a user provides. It is being redeveloped from GOcats version 2 available here: https://gitlab.cesb.uky.edu/eugene/ARK.goLocalization. Later, it will be fully extended into GOcats, which will parse and categorize any ontology in the OBO Foundry.
 Currently in development.
 
 ## Getting Started
@@ -9,7 +9,7 @@ It is recommended that you clone this respository into a project directory withi
 
 You will also need a local copy of the Gene Ontology OBO flat file, available here: http://purl.obolibrary.org/obo/go.obo
 
-GOcats3/OBOcats is able to map annotations within Gene Associaition Files (GAFs) into categories specified by the user. These categories are specified by creating a csv file where column 1 is the name of the category and column 2 is a list of keywords assocaiated with that category concept, separated by semicolons (;). See ARK.GOcats3/obocats/exampledata/examplecategories.csv as an example of 25 subcellular location categories. In its current version, this will be the main use of GOcats3. 
+GOcats3/GOcats is able to map annotations within Gene Associaition Files (GAFs) into categories specified by the user. These categories are specified by creating a csv file where column 1 is the name of the category and column 2 is a list of keywords assocaiated with that category concept, separated by semicolons (;). See ARK.GOcats3/gocats/exampledata/examplecategories.csv as an example of 25 subcellular location categories. In its current version, this will be the main use of GOcats3. 
 
 If you would like to perform the analyses carried out in the development of GOcats3 which involve mapping comparisons to OWLTools' Map2Slim and to UniProt's Subcellular Location Controlled Vocabulary, please install the "Additional Packages" listed under the Prerequisites section and see the Running the Tests section.
 
@@ -101,7 +101,7 @@ mvn clean package -D maven.test.skip.exec=true
 
 Creating a mapping of GO terms from the Gene Ontology using a category file
 ```
-python3 ~/ARK.GOcats/obocats/obocats.py filter_subgraphs ~/Databases/GeneOntology/01-12-2016/go.obo ~/ARK.GOcats/obocats/exampledata/examplecategories.csv ./Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
+python3 ~/ARK.GOcats/gocats/gocats.py filter_subgraphs ~/Databases/GeneOntology/01-12-2016/go.obo ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ./Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
 ```
 This will output several files in the 'Output' directory including:
 ```
@@ -111,15 +111,15 @@ OC_id_mapping.json_pickle  # A python dictionary with every GO term of the speci
 
 Mapping GO terms in a GAF
 ```
-python3 ~/ARK.GOcats/obocats/obocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/OC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_GAF_NAME.goa
+python3 ~/ARK.GOcats/gocats/gocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/OC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_GAF_NAME.goa
 ```
 
 ## Running the tests
 
-Basic tests are located in ARK.GOcats/obocats/tests and can be run individually using the -m option in python
+Basic tests are located in ARK.GOcats/gocats/tests and can be run individually using the -m option in python
 ```
 cd ~/ARK.GOcats3
-python3 -m obocats.tests.gocats_full_basic_test  # Note that this may be broken currently, I am working on fixing this. 
+python3 -m gocats.tests.gocats_full_basic_test  # Note that this may be broken currently, I am working on fixing this. 
 ```
 
 To run the analyses against OWLTools and UniProt CV, execute the runscript located in runscripts. It is self-documented as well.
@@ -127,12 +127,12 @@ Change into the output directory of your choice
 
 The runscripts opperation is as follows:
 ```
-run.sh <OboCatsDir> <GO_file> <output_dir_path>
+run.sh <gocats_dir> <GO_file> <output_dir_path>
 ```
 
 For example:
 ```
-sh ~/ARK.GOcats3/runscripts/run.sh ~/ARK.GOcats3/obocats ~/Databases/GeneOntology/01-12-2016/go.obo ./Output
+sh ~/ARK.GOcats3/runscripts/run.sh ~/ARK.GOcats3/gocats ~/Databases/GeneOntology/01-12-2016/go.obo ./Output
 ```
 
 ## Contributing

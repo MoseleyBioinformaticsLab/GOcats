@@ -386,7 +386,6 @@ def compare_mapping(args):
         location_breakdown_table.append(
             [location_name, len(complete), len(partial), len(superset), len(none), len(missing_annotations),
              len(not_in_knowledgebase)])
-        tools.list_to_file('~/GenesNotInDatabase', not_in_knowledgebase) # TODO: Change location to new output directory.
     print('Number of genes with go location assignments per agreement type (compared with raw data)', '\n',
           tabulate(sorted(location_breakdown_table),
                    headers=['Location', 'Complete', 'Partial', 'Superset', 'None', 'Missing Annotations',
@@ -450,5 +449,5 @@ def output_mapping_differences(gocats_graph, subgraph, output_dir):
 """
 
 if __name__ == '__main__':
-    args = docopt.docopt(__dgc__, version='GOcats version 0.1.0')
+    args = docopt.docopt(__doc__, version='GOcats version 0.1.0')
     main(args)
