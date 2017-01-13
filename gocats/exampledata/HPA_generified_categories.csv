@@ -1,11 +1,13 @@
 nucleus,nucleus;nuclear;nuclei
 nucleolus,nucleolus;nucleolar
-cytoskeleton,cytoskeleton;cytoskeletal
-er,endoplasmic;sarcoplasmic;reticulum;er
 mitochondria,mitochondrion;mitochondrial;mitochondria
-vesicle,vesicle;vesicles
+er,endoplasmic;sarcoplasmic;reticulum;er
 cytoplasm,cytoplasm;cytoplasmic
 plasmamembrane,plasma
 celljunction,junction
 golgi,golgi
+cellbridge,intercellular bridge
 aggresome,aggresome;aggresomes;aggresomal
+cytoskeleton,cytoskeleton
+focaladhesion,focal adhesion
+vesicle,intracellular membrane-bounded organelle
