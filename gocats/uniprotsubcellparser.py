@@ -190,5 +190,5 @@ class UniprotSubDAG:
             self._build_subdag(item, graph)
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='UniprotSubcellParser version 1.0')
+    args = docopt.docopt(__doc__, version='GOcats version 0.1.0')
     main(args)
