@@ -2,10 +2,9 @@
 """ Gene Ontology Categories utility (GOcats)
 
 Usage:
-    gocats build_graph <database_file> <output_file> [--supergraph_namespace=<None>]
     gocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=<None>]
-    gocats subgraph_overlap <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
-    gocats subgraph_inclusion <gocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
+    gocats compute_subgraph_intersection <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
+    gocats compute_subgraph_similarity <gocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
     gocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
     gocats compare_mapping <mapped_gaf> <manual_dataset>  [--map_manual_dataset=<filename> --save_assignments=<filename> --id_translation=<filename>]
 Options:
@@ -37,10 +36,10 @@ import tools
 def main(args):
     if args['filter_subgraphs']:
         filter_subgraphs(args)
-    elif args['subgraph_overlap']:
-        subgraph_overlap(args)
-    elif args['subgraph_inclusion']:
-        subgraph_inclusion(args)
+    elif args['compute_subgraph_intersection']:
+        compute_subgraph_intersection(args)
+    elif args['compute_subgraph_similarity']:
+        compute_subgraph_similarity(args)
     elif args['categorize_dataset']:
         categorize_dataset(args)
     elif args['compare_mapping']:
@@ -48,8 +47,10 @@ def main(args):
 
 
 # Need a SubGraphCollection object
-# FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to each gitother a lot.  
 def build_graph(args):
+    """Not yet implemented. Try build_graph_interpretor to create a GO graph object to explore within a Python
+    interpreter. The graph is built properly in the filter_subgraphs command that exctracts subgraphs from GO."""
+    # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to one another.
     if args['--supergraph_namespace']:
         supergraph_namespace = args['--supergraph_namespace']
     else:
@@ -76,6 +77,7 @@ def build_graph(args):
 
 
 def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None):
+    """Creates a graph object of GO, which can be traversed and queried within a Python interpreter."""
     database = open(database_file, 'r')
     graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
     go_parser = parser.GoParser(database, graph)
@@ -85,7 +87,8 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
 
 
 def filter_subgraphs(args):
-    # TODO: See if I can condence this.
+    """Creates a graph object of GO and then extracts subgraphs which represent concepts that are defined by a list of
+    provided keywords."""
     if args['--supergraph_namespace']:
         supergraph_namespace = args['--supergraph_namespace']
     else:
@@ -137,7 +140,7 @@ def filter_subgraphs(args):
     if not args['--map_supersets']:
         category_subsets = find_category_subsets(subgraph_collection)
     else:
-        print("I mapped supersets")
+        print("NOTE: supersets were mapped.")
         category_subsets = None
 
     collection_id_mapping = dict()
@@ -165,6 +168,7 @@ def filter_subgraphs(args):
                     [root_id_list.remove(node) for node in superset_ids if node in root_id_list]
     # TODO: do the same for node_object_mapping
 
+    # Save mapping files and create report
     tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
@@ -199,16 +203,8 @@ def filter_subgraphs(args):
                 edgewriter.writerow([term_id, root_id])
 
 
-# TODO: Make script to do the following test.
-"""
-    if args['--test_subgraph']:
-        gc_subgraph_set = next(subgraph.representative_node.descendants for subgraph in subgraph_collection if
-                               subgraph.representative_node == args['--test_subgraph'])
-        output_mapping_differences(supergraph, gc_subgraph_set, output_directory)
-"""
-
-
 def find_category_subsets(subgraph_collection):
+    """Finds subgraphs which are subsets of other subgraphs to remove reduncancy, when specified."""
     is_subset_of = dict()
     for subgraph in subgraph_collection.values():
         for next_subgraph in subgraph_collection.values():
@@ -220,8 +216,7 @@ def find_category_subsets(subgraph_collection):
     return is_subset_of
 
 
-def subgraph_inclusion(args):
-    # TODO: rename this method; creates a table that contains inclusion and jacaard index.
+def compute_subgraph_similarity(args):
     from tabulate import tabulate
     inc_index_table = []
     output_file = args['<output_directory>']
@@ -250,7 +245,7 @@ def subgraph_inclusion(args):
         outfile.write(table)
 
 
-def subgraph_overlap(args):
+def compute_subgraph_intersection(args):
     import pandas as pd
     import pyupset as pyu
     if not os.path.exists(args['<output_directory>']):
@@ -308,7 +303,7 @@ def compare_mapping(args):
     import catcompare
 
     mapped_dataset_gaf_dict = tools.make_gaf_dict(args['<mapped_gaf>'], keys='db_object_symbol')
-    hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'new', 'Supportive')
+    hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'Supportive')
     location_breakdown_table = []
     comparison_results = {}
     gene_assignment_tuples = []
@@ -402,6 +397,7 @@ def compare_mapping(args):
           'none: ', len(no_match), '\n', 'missing_annotations: ', len(missing_annotations), '\n',
           'not in knowledgebase: ', len(not_in_knowledgebase), '\n', 'Total: ', len(gene_assignment_tuples))
 
+    # The following are examples mentioned in the publication
     print("----", "Partial", "----")
     for item in partial:
         if len(item[1]) > len(item[2]):
@@ -422,32 +418,6 @@ def compare_mapping(args):
         file_name = args['--save_assignments']
         tools.list_to_file(file_name, sorted(gene_assignment_tuples, key=lambda gene_id: gene_id[0]))
 
-"""
-# Fix this to output the results that were output in commit 1b1fd28f630e24909c193f4ed8c1285f62300441. I do not have time to mess with this right now. Get rid of all of the hardcoding.
-def output_mapping_differences(gocats_graph, subgraph, output_dir):
-    gc_subgraph = subgraph
-    m2s_pm = input("Enter the file location of the subgraph equivalent to ")
-    go_depth_dict = tools.json_load("/mlab/data/eugene/GODepthDict.json_pickle")
-
-    not_in_gc = m2s_pm - m2s_pm.intersection(gc_pm)
-    print(len(not_in_gc))
-    missing_node_depths = []
-    m2s_descendants_not_in_gc = set()
-    for go_id in not_in_gc:
-        supergraph_descendants = set([node.id for node in supergraph.id_index[go_id].descendants])
-        m2s_descendants_not_in_gc.update(supergraph_descendants.intersection(m2s_pm))
-        missing_node_depths.append((go_depth_dict[go_id], go_id, len(supergraph_descendants.intersection(m2s_pm)),
-                                    len(supergraph_descendants.intersection(gc_pm))))
-    print(sorted(missing_node_depths, key=lambda depth: depth[0]))
-    print(len(m2s_descendants_not_in_gc))
-    print("descendants of 'unencapsulated part of cell' that are in m2s but not in go cats\n",
-          [node.id for node in supergraph.id_index['GO:0097653'].descendants if
-           node.id in m2s_pm and node.id not in gc_pm])
-    print(len([node.id for node in supergraph.id_index['GO:0097653'].descendants if
-               node.id in m2s_pm and node.id not in gc_pm]))
-    print(len(not_in_gc))
-"""
-
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.1.0')
+    args = docopt.docopt(__doc__, version='GOcats version 0.2.0')
     main(args)

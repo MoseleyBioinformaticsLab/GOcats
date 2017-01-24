@@ -57,5 +57,5 @@ def map_terms(args):
             json.dump(args['--output_mapping_set'], f)
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.1.0')
+    args = docopt.docopt(__doc__, version='GOcats version 0.2.0')
     main(args)
