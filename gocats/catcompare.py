@@ -5,32 +5,8 @@ methods."""
 import csv
 import re
 
-# Not needed for the new HPA formatting 
-hpa_location_mapping = {
-    'Nucleus': 'GO:0005634',
-    'Nuclear membrane': 'GO:0005634',
-    'Nucleoli': 'GO:0005730',
-    'Nucleus but not nucleoli': 'GO:0005634',  # need to rework this
-    'Cytoskeleton (Intermediate filaments)': 'GO:0005856',
-    'Cytoskeleton (Actin filaments)': 'GO:0005856',
-    'Cytoskeleton (Microtubules)': 'GO:0005856',
-    'Cytoskeleton (Microtubule plus end)': 'GO:0005856',
-    'Cytoskeleton (Cytokinetic bridge)': 'GO:0005856',
-    'Microtubule organizing center': 'GO:0005856',
-    'Centrosome': 'GO:0005856',
-    'Endoplasmic reticulum': 'GO:0005783',
-    'Mitochondria': 'GO:0005739',
-    'Vesicles': 'GO:0031982',
-    'Cytoplasm': 'GO:0005737',
-    'Plasma membrane': 'GO:0005886',
-    'Cell Junctions': 'GO:0030054',
-    'Focal Adhesions': 'GO:0030054',
-    'Golgi apparatus': 'GO:0005794',
-    'Aggresome': 'GO:0016235'
-    }
 
-
-def make_dataset_dict(file_handle, hpa_file=False, format='old', reliability_filter=None):
+def make_dataset_dict(file_handle, hpa_file=False, reliability_filter=None):
     """Currently setup to read HPA subcellular localization CSV file and create a dictionary mapping ENSG IDs to their
     subcellular location. May need to be generalized, but then again this is a special test. """
     list_split = re.compile(';')
@@ -40,44 +16,28 @@ def make_dataset_dict(file_handle, hpa_file=False, format='old', reliability_fil
         with open(file_handle, 'r') as dataset:
             reader = csv.reader(dataset, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             for row in reader:
-                if row[0] == 'Gene':  # FIXME In hpa, this is the first line indicating the column titles. Make better.
+                if row[0] == 'Gene':  # In the hpa data, this is the first line indicating the column titles.
                     pass
                 else:
-                    if format == 'old':  # original data format
-                        if not reliability_filter or reliability_filter == row[4]:
-                            dataset_dict[row[0]] = {
-                                'main_location': re.split(list_split, row[1]),
-                                'other_location': re.split(list_split, row[2]),
-                                'expression_type': row[3],
-                                'reliability': row[4]
-                                }
-                            locations.extend(re.split(list_split, row[1])+re.split(list_split, row[2]))
-                        else:
-                            pass
-                    elif format == 'new':  # New data format
-                        if not reliability_filter or reliability_filter == row[5]:
-                            dataset_dict[row[0]] = {
-                                'gene_name' : row[1],
-                                'main_location': re.split(list_split, row[2]),
-                                'other_location': re.split(list_split, row[3]),
-                                'expression_type': row[4],
-                                'reliability': row[5],
-                                'main_location_go_id_list': re.split(list_split, row[6]),
-                                'other_location_go_id_list': re.split(list_split, row[7])
-                                }
-                            locations.extend(re.split(list_split, row[1])+re.split(list_split, row[2]))
-                        else:
-                            pass
+                    if not reliability_filter or reliability_filter == row[5]:
+                        dataset_dict[row[0]] = {
+                            'gene_name': row[1],
+                            'main_location': re.split(list_split, row[2]),
+                            'other_location': re.split(list_split, row[3]),
+                            'expression_type': row[4],
+                            'reliability': row[5],
+                            'main_location_go_id_list': re.split(list_split, row[6]),
+                            'other_location_go_id_list': re.split(list_split, row[7])
+                            }
+                        locations.extend(re.split(list_split, row[1])+re.split(list_split, row[2]))
+                    else:
+                        pass
 
         hpa_assignments = {}
         for k, v in dataset_dict.items():
-            if format == 'new':
-                hpa_assignments[v['gene_name']] = set([id for id in v['main_location_go_id_list'] + v['other_location_go_id_list'] if id != ''])
-            else:
-                hpa_assignments[v['gene_name']] = set([hpa_location_mapping[term] for term in v['main_location'] + v['other_location'] if term != ''])
+            hpa_assignments[v['gene_name']] = set([id for id in v['main_location_go_id_list'] + v['other_location_go_id_list'] if id != ''])
     else:
         print('Non-HPA datasets not yet supported')
         return
     return hpa_assignments
 
-#  def make_comparison(gaf, manual_dataset, output_file):

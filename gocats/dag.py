@@ -67,7 +67,7 @@ class OboGraph(object):
 
     def remove_node(self, node):
         if node not in self.node_list:
-            pass  # The node has already been removed, or has not been added
+            pass
         else:
             for graph_node in self.node_list:
                 if node in graph_node.parent_node_set:
@@ -118,14 +118,13 @@ class OboGraph(object):
             else:
                 del_edges.add(edge)
         for edge in del_edges:
-            #print("deleted edge: ", edge.node_pair[0], edge.node_pair[1])
             self.edge_list.remove(edge)
 
         self._modified = True
 
     def node_depth(self, sample_node):
-        # If this loops for eternity, there is a loop in the graph and it is NOT acyclic!
-        if sample_node in self.root_nodes :
+        # If this loops for eternity, there bay be a loop in the graph.
+        if sample_node in self.root_nodes:
             return 0
         depth = 1
         root_node_set = set(self.root_nodes)
@@ -176,7 +175,7 @@ class AbstractNode(object):
         self._modified = True
         self._descendants = None
         self._ancestors = None
-        # new sets for equilavalece, actor/actee, ordinal, etc
+        # Will add new sets for equivalence, actor/actee, ordinal, etc
         
     @property
     def descendants(self):
@@ -198,8 +197,8 @@ class AbstractNode(object):
     def add_edge(self, edge, allowed_relationships):
         """Adds a given edge to the node's edge list and sets parent and child nodes
         given the edge represents an allowed relationship."""
-        # TODO: Need to capture non-parent/child relationship types somehow 
-        # FIXME: Should I be adding edges that represent non-allowed relationships?
+        # TODO: Need to capture non-parent/child relationship types, such as actor/actee and equivalence
+        # FIXME: Should we add edges that represent non-allowed relationships?
         self.edges.add(edge)
         if not allowed_relationships:
             if edge.child_id == self.id:
@@ -261,42 +260,41 @@ class AbstractEdge(object):
 
     @property
     def parent_id(self):
-        if self.relationship :
+        if self.relationship:
             return self.relationship.forward(self.node_pair_id)
         return None
 
-
     @property
     def child_id(self):
-        if self.relationship :
+        if self.relationship:
             return self.relationship.reverse(self.node_pair_id)
         return None
 
     @property
     def forward_node(self):
-        if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship :
+        if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.forward(self.node_pair) 
         return None
 
     @property
     def reverse_node(self):
-        if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship :
+        if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.reverse(self.node_pair) 
         return None
     
     @property
     def parent_node(self):
-        if self.relationship: #and self.relationship.category == "scoping" :
+        if self.relationship:
             return self.relationship.forward(self.node_pair)
         return None
 
     @property
     def child_node(self):
-        if self.relationship: #and self.relationship.category == "scoping" :
+        if self.relationship:
             return self.relationship.reverse(self.node_pair) 
         return None
 
-    # finish these later
+    # Will finish these later
     @property
     def actor_node(self):
         return
