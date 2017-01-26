@@ -1,4 +1,5 @@
 # !/usr/bin/python3
+# Used to calculate estimated potential false mappings, potential false mappings, and total possible mappings for the has_part relationship in GO.
 import gocats
 import itertools
 
