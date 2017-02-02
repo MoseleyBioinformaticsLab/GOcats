@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>decoygaf &#8212; GOcats 0.2.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for decoygaf</h1><div class="highlight"><pre>
+<span></span><span class="c1"># !/usr/bin/python3</span>
+<span class="sd">&quot;&quot;&quot;Decoy GAF maker</span>
+
+<span class="sd">Usage:</span>
+<span class="sd">    decoygaf.py make_decoy &lt;ontology_term_list&gt; &lt;output_dir&gt; &lt;output_file&gt;</span>
+<span class="sd">    decoygaf.py map_terms &lt;mapped_gaf&gt; &lt;output_dir&gt; &lt;output_file&gt; [--output_mapping_set=None]</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">docopt</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">tools</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;make_decoy&#39;</span><span class="p">]:</span>
+        <span class="n">make_decoy</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;map_terms&#39;</span><span class="p">]:</span>
+        <span class="n">map_terms</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="make_decoy"><a class="viewcode-back" href="../api.html#decoygaf.make_decoy">[docs]</a><span class="k">def</span> <span class="nf">make_decoy</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Map2Slim does not output a mapping file relating to how it assigns specific terms to the root that it maps to in</span>
+<span class="sd">    the GO slim. We can get around this by creating a fake GAF that has the annotated GO term as the ID of the &quot;gene&quot;</span>
+<span class="sd">    and maintain its annotated GO term. The GAF will contain a single instance of a GO term for each term in the</span>
+<span class="sd">    sub-ontology. We can then map this phony gaf using the slim of our choice and the resulting mapped GAF can be parsed</span>
+<span class="sd">    to create the mapping we desire.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">line_format</span> <span class="o">=</span> <span class="s2">&quot;UniProtKB	R4GNC1	SRP72		GO:0005737	GO_REF:0000052	IDA		C	Signal recognition particle subunit SRP72	R4GNC1_HUMAN	protein	taxon:9606	20101115	HPA	&quot;</span>  <span class="c1"># Random GAF line used for formatting purposes</span>
+    <span class="n">line_array</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">line_format</span><span class="p">)</span>
+
+    <span class="n">go_terms</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;ontology_term_list&gt;&#39;</span><span class="p">])</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_file&gt;&#39;</span><span class="p">]),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
+        <span class="n">gafwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">go_terms</span><span class="p">:</span>
+            <span class="n">fake_line</span> <span class="o">=</span> <span class="n">line_array</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">term</span><span class="p">]</span><span class="o">+</span><span class="n">line_array</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">term</span><span class="p">]</span><span class="o">+</span><span class="n">line_array</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">gafwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">fake_line</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">map_terms</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">term_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;mapped_gaf&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">in</span> <span class="n">term_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">term_mapping</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">term_mapping</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">tools</span><span class="o">.</span><span class="n">json_save</span><span class="p">(</span><span class="n">term_mapping</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_file&gt;&#39;</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">]:</span>
+        <span class="n">tools</span><span class="o">.</span><span class="n">json_save</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">term_mapping</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">]]),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;M2S_PlasmaMembrane_subgraph&#39;</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;M2S_PlasmaMembrane_subgraph.json&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;GOcats version 0.2.0&#39;</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Eugene Hinderer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

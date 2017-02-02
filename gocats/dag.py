@@ -108,8 +108,8 @@ class OboGraph(object):
         self.modified = True
 
     def instantiate_valid_edges(self):
-        """only instatntiate edge if both nodes are in the graph. Searches by id
-        since node objects are not referenced at the edges at the time this is called."""
+        """Instatntiate edge if both nodes of the edge are in the graph. Searches by node id
+        because node objects are not referenced at the edges at the time this method is called."""
         del_edges = set()
         for edge in self.edge_list:
             if edge.node_pair_id[0] in self.id_index.keys() and edge.node_pair_id[1] in self.id_index.keys():
@@ -328,7 +328,7 @@ class AbstractRelationship(object):
     def __init__(self):
         self.id = str()
         self.name = str()
-        self.category = str()
+        self.category = str()  # TODO: change category to correspondence_classes DO everywhere.
 
 
 class DirectionalRelationship(AbstractRelationship):
