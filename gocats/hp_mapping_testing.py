@@ -3,11 +3,11 @@
 import gocats
 import itertools
 
-cc_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='cellular_component')
+cc_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='cellular_component', allowed_relationships=['is_a', 'part_of', 'has_part'])
 cc_no_hp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='cellular_component', allowed_relationships=['is_a', 'part_of'])
-mf_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='molecular_function')
+mf_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='molecular_function', allowed_relationships=['is_a', 'part_of', 'has_part'])
 mf_no_hp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='molecular_function', allowed_relationships=['is_a', 'part_of'])
-bp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='biological_process')
+bp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='biological_process', allowed_relationships=['is_a', 'part_of', 'has_part'])
 bp_no_hp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='biological_process', allowed_relationships=['is_a', 'part_of'])
 
 cc_hp_edges = [edge for edge in cc_graph.edge_list if edge.relationship.id == 'has_part']

@@ -419,5 +419,5 @@ def compare_mapping(args):
         tools.list_to_file(file_name, sorted(gene_assignment_tuples, key=lambda gene_id: gene_id[0]))
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.2.0')
+    args = docopt.docopt(__doc__, version='GOcats version 0.2.1')
     main(args)
