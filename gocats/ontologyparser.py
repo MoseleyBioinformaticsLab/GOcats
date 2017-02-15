@@ -1,4 +1,5 @@
 # !/usr/bin/python3
+
 import re
 from dag import AbstractEdge, DirectionalRelationship
 from godag import GoGraphNode
@@ -24,8 +25,8 @@ class OboParser(object):
         self.inverse_tag = re.compile('^inverse_of:')
 
         # May use later.
-        #self.comment = re.compile('\!.+')
-        #self.subset = re.compile('^subset:')
+        # self.comment = re.compile('\!.+')
+        # self.subset = re.compile('^subset:')
 
 
 class GoParser(OboParser):
