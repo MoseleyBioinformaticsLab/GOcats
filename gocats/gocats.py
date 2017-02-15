@@ -26,7 +26,7 @@ Options:
 import os
 import re
 import csv
-import parser
+import ontologyparser
 import godag
 import subdag
 import docopt
@@ -67,7 +67,7 @@ def build_graph(args):
     database_name = os.path.basename(args['<database_file>'])
     graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, allowed_relationships)}
     graph = graph_class[database_name]
-    parsing_class = {'go.obo': parser.GoParser(database, graph)}
+    parsing_class = {'go.obo': ontologyparser.GoParser(database, graph)}
     parsing_class[database_name].parse()
 
     database.close()
@@ -80,7 +80,7 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
     """Creates a graph object of GO, which can be traversed and queried within a Python interpreter."""
     database = open(database_file, 'r')
     graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
-    go_parser = parser.GoParser(database, graph)
+    go_parser = ontologyparser.GoParser(database, graph)
     go_parser.parse()
     database.close()
     return graph
@@ -114,7 +114,7 @@ def filter_subgraphs(args):
     database_name = os.path.basename(args['<database_file>'])
     graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
     supergraph = graph_class[database_name]
-    parsing_class = {'go.obo': parser.GoParser(database, supergraph)}
+    parsing_class = {'go.obo': ontologyparser.GoParser(database, supergraph)}
     parsing_class[database_name].parse()
 
     if args['--output_termlist']:
