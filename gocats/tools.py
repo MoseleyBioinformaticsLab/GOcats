@@ -9,37 +9,33 @@ csv.field_size_limit(sys.maxsize)
 
 
 def json_save(obj, filename):
-    """Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
-    dictkeys to strings."""
+    """Saves an object to a file."""
     f = open(filename+".json_pickle", 'w')
-    json_obj = jsonpickle.encode(obj, keys=True)
+    json_obj = jsonpickle.encode(obj, keys=True)  # Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.
     f.write(json_obj)
     f.close()
 
 
 def json_load(filename):
-    """Loads a jsonPickle object from PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
-    dictkeys to strings."""
+    """Loads a jsonPickle object from a file."""
     f = open(filename)
     json_str = f.read()
-    obj = jsonpickle.decode(json_str, keys=True)
+    obj = jsonpickle.decode(json_str, keys=True)  # Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.
     return obj
 
 
 def list_to_file(file_location, data):
-    """Makes a text document from PARAMETER data, with each line of the document being one item from the list and outputs
-    the document into PARAMETER file_location. PARAMETER length may be specified to append
-    the length of the list to the filename."""
+    """Makes a text document from data, with each line of the document being one item from the list and outputs the
+    document into a file."""
     with open(file_location+".txt", 'wt') as out_file:
         for line in data:
             out_file.write(str(line) + '\n')
 
 
 def display_name(dataset, go_id):
-    """Improves readability of Gene Ontology (GO) terms by dislpaying the english name of a PARAMETER go_id (gene ontology
-    ID) within its PARAMETER dataset (gene ontology dictionary)."""
+    """Improves readability of Gene Ontology (GO) terms by dislpaying the english name of a GO ID within its dataset."""
     if isinstance(go_id, list):
-        id_list = []
+        id_list = list()
         for i in go_id:
             id_list.append(dataset[i]['name'])
         return id_list
@@ -57,7 +53,7 @@ def writeout_gaf(data, file_handle):
 
 def parse_gaf(file_handle):
     comment_line = re.compile('^!')
-    gaf_array = []
+    gaf_array = list()
     with open(os.path.realpath(file_handle)) as gaf_file:
         for line in csv.reader(gaf_file, delimiter='\t'):
             if not re.match(comment_line, str(line[0])):
@@ -66,7 +62,7 @@ def parse_gaf(file_handle):
 
 
 def itemize_gaf(gaf_file):
-    location_gene_dict = {}
+    location_gene_dict = dict()
     with open(gaf_file, 'r') as file:
         for line in csv.reader(file, delimiter='\t'):
             if len(line) > 1:
@@ -81,7 +77,7 @@ def itemize_gaf(gaf_file):
 
 def make_gaf_dict(gaf_file, keys):
     comment_line = re.compile('^\'!')
-    gaf_dict = {}
+    gaf_dict = dict()
     with open(gaf_file, 'r') as file:
         for line in csv.reader(file, delimiter='\t'):
             if len(line) > 1:
