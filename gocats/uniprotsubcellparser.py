@@ -23,9 +23,9 @@ def main(args):
 def build_subdags(args):
     # Uniprot Subcellular Location text file location
     sl = open(args['<cv_file>'], 'r')  # 'exampledata/uniprotparse/subcell.txt'
-    uniprot_collection = []
-    go_translated_dict = {}
-    uniprot_multi_root = {}
+    uniprot_collection = list()
+    go_translated_dict = dict()
+    uniprot_multi_root = dict()
 
     uniprot_subcell_results_dir = os.path.realpath(args['<output_directory>'])
     if not os.path.exists(uniprot_subcell_results_dir):
@@ -104,19 +104,19 @@ class UniprotDAG:
 
     def __init__(self):
         """Creates containers for DAG creation."""
-        self.DAG_dict = {}
-        self.go_to_name_mapping = {}
+        self.DAG_dict = dict()
+        self.go_to_name_mapping = dict()
         self.curr_id = None
         self.go_id = None
-        self.is_a = []
-        self.part_of = []
-        self.top_nodes = []
-        self.destroy_list = []
+        self.is_a = list()
+        self.part_of = list()
+        self.top_nodes = list()
+        self.destroy_list = list()
 
     def init_derived(self):
         """Reinitializes the relationship lists."""
-        self.is_a = []
-        self.part_of = []
+        self.is_a = list()
+        self.part_of = list()
 
     def set_curr_id(self, curr_id):
         """Sets the current ID of the term being parsed."""
@@ -143,7 +143,7 @@ class UniprotDAG:
         variables."""
         if self.go_id is not None:  # Some of them don't have GO ids
             if self.go_id in self.go_to_name_mapping:
-                self.destroy_list.append(self.curr_id)  # DESTROY THE TERMS THAT HAVE THE SAME GO TERM, THEY ARE USELESS FOR THIS EFFORT (AMBIGUOUS) WHY WHY WHY WHY WHY WHY WOULD THEY EVER DO THAT TO THEIR CV?
+                self.destroy_list.append(self.curr_id)  # Remove terms that refer to the same GO term.
             self.DAG_dict[self.curr_id] = {
                 'name': self.curr_id,
                 'is_a': self.is_a,
@@ -172,8 +172,8 @@ class UniprotSubDAG:
         it is saved to the GLOBAL subDAG collection."""
         self.udag = udag
         self.top_node = top_node
-        self.subdag_list = []
-        self.subdag_dict = {}
+        self.subdag_list = list()
+        self.subdag_dict = dict()
         self.subdag_list.append(top_node['name'])  # The top_node itself should be considered part of its own category
         self._build_subdag(self.top_node['name'], self.udag.DAG_dict)
         self.subdag_dict[self.top_node['go_id']] = [node['go_id'] for k, node in self.udag.DAG_dict.items() if k in self.subdag_list]
@@ -184,11 +184,11 @@ class UniprotSubDAG:
         top-node. Iterates through children of children to find all contents of a top-node."""
         if term != self.top_node['name']:
             self.subdag_list.append(graph[term]['name'])
-        child_list = []
+        child_list = list()
         child_list.extend([node['name'] for key, node in graph.items() if term in node['is_a'] + node['part_of']])
         for item in child_list:
             self._build_subdag(item, graph)
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.2.1')
+    args = docopt.docopt(__doc__, version='GOcats version 0.3.0')
     main(args)
