@@ -1,0 +1,473 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The GOcats API Reference &#8212; GOcats 0.2.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to GOcats’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gocats">
+<span id="the-gocats-api-reference"></span><h1>The GOcats API Reference<a class="headerlink" href="#module-gocats" title="Permalink to this headline">¶</a></h1>
+<p>Gene Ontology Categories utility (GOcats)</p>
+<dl class="docutils">
+<dt>Usage:</dt>
+<dd>gocats filter_subgraphs &lt;database_file&gt; &lt;keyword_file&gt; &lt;output_directory&gt; [&#8211;supergraph_namespace=&lt;None&gt; &#8211;subgraph_namespace=&lt;None&gt; &#8211;supergraph_relationships=[] &#8211;subgraph_relationships=[] &#8211;map_supersets &#8211;output_termlist &#8211;test_subgraph=&lt;None&gt;]
+gocats compute_subgraph_intersection &lt;gocats_mapping&gt; &lt;uniprot_mapping&gt; &lt;map2slim_mapping&gt; &lt;output_directory&gt; [&#8211;inclusion_index &#8211;id_translation=&lt;filename&gt;]
+gocats compute_subgraph_similarity &lt;gocats_mapping&gt; &lt;other_mapping&gt; &lt;output_directory&gt; &lt;filename&gt; [&#8211;id_translation=&lt;filename&gt;]
+gocats categorize_dataset &lt;gaf_dataset&gt; &lt;term_mapping&gt; &lt;output_directory&gt; &lt;GAF_name&gt;
+gocats compare_mapping &lt;mapped_gaf&gt; &lt;manual_dataset&gt;  [&#8211;map_manual_dataset=&lt;filename&gt; &#8211;save_assignments=&lt;filename&gt; &#8211;id_translation=&lt;filename&gt;]</dd>
+<dt>Options:</dt>
+<dd>-h &#8211;help                            Shows this screen.
+&#8211;version                            Shows version.
+&#8211;supergraph_namespace=&lt;None&gt;        Filters the supergraph to a given namespace.
+&#8211;subgraph_namespace=&lt;None&gt;          Filters the subgraph to a given namespace.
+&#8211;supergraph_relationships=[]        A provided list will denote which relationships are allowed in the supergraph.
+&#8211;subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
+&#8211;map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
+&#8211;output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
+&#8211;test_subgraph=&lt;None&gt;               Enter a GO ID to output information describing the mapping differences between GOcats and Map2Slim.
+&#8211;inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
+&#8211;save_assignments=&lt;filename&gt;        Save a file with all genes and their GO assignments.
+&#8211;id_translation=&lt;filename&gt;          Specify an id_translation file to associate go terms with their English names.
+&#8211;map_manual_dataset=&lt;filename&gt;  Specify a mapping file to map manual dataset annotations to the user-specified categories.</dd>
+</dl>
+<dl class="function">
+<dt id="gocats.build_graph">
+<code class="descclassname">gocats.</code><code class="descname">build_graph</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#build_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.build_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not yet implemented. Try build_graph_interpretor to create a GO graph object to explore within a Python
+interpreter. The graph is built properly in the filter_subgraphs command that exctracts subgraphs from GO.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gocats.build_graph_interpreter">
+<code class="descclassname">gocats.</code><code class="descname">build_graph_interpreter</code><span class="sig-paren">(</span><em>database_file</em>, <em>supergraph_namespace=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#build_graph_interpreter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.build_graph_interpreter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a graph object of GO, which can be traversed and queried within a Python interpreter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gocats.compare_mapping">
+<code class="descclassname">gocats.</code><code class="descname">compare_mapping</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#compare_mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.compare_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares the agreement in annotation assignment between a GAF produced by GOcats (PARAMETER &lt;mapped_gaf&gt;) and
+a gold-standard dataset, provided in csv format (PARAMETER &lt;manual-dataset&gt;).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gocats.filter_subgraphs">
+<code class="descclassname">gocats.</code><code class="descname">filter_subgraphs</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#filter_subgraphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.filter_subgraphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a graph object of GO and then extracts subgraphs which represent concepts that are defined by a list of
+provided keywords.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gocats.find_category_subsets">
+<code class="descclassname">gocats.</code><code class="descname">find_category_subsets</code><span class="sig-paren">(</span><em>subgraph_collection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#find_category_subsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.find_category_subsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds subgraphs which are subsets of other subgraphs to remove reduncancy, when specified.</p>
+</dd></dl>
+
+<div class="section" id="module-dag">
+<span id="the-dag-module"></span><h2>The &#8220;DAG&#8221; module<a class="headerlink" href="#module-dag" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dag.AbstractEdge">
+<em class="property">class </em><code class="descclassname">dag.</code><code class="descname">AbstractEdge</code><span class="sig-paren">(</span><em>node1_id</em>, <em>node2_id</em>, <em>relationship_id</em>, <em>node_pair=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#AbstractEdge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.AbstractEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>An OBO edge which links two ontology term nodes and contains a 
+relationship type describing now the two nodes are related.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="dag.AbstractNode">
+<em class="property">class </em><code class="descclassname">dag.</code><code class="descname">AbstractNode</code><a class="reference internal" href="_modules/dag.html#AbstractNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.AbstractNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A node contaning all basic properties of an OBO node. The parser 
+currently has direct access to datamembers (id, name, definition, 
+namespace, edges, and obsolete).</p>
+<dl class="method">
+<dt id="dag.AbstractNode.add_edge">
+<code class="descname">add_edge</code><span class="sig-paren">(</span><em>edge</em>, <em>allowed_relationships</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#AbstractNode.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.AbstractNode.add_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a given edge to the node&#8217;s edge list and sets parent and child nodes
+given the edge represents an allowed relationship.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dag.AbstractRelationship">
+<em class="property">class </em><code class="descclassname">dag.</code><code class="descname">AbstractRelationship</code><a class="reference internal" href="_modules/dag.html#AbstractRelationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.AbstractRelationship" title="Permalink to this definition">¶</a></dt>
+<dd><p>A relationship as defined by a [typedef] stanza in an OBO ontology</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="dag.DirectionalRelationship">
+<em class="property">class </em><code class="descclassname">dag.</code><code class="descname">DirectionalRelationship</code><a class="reference internal" href="_modules/dag.html#DirectionalRelationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.DirectionalRelationship" title="Permalink to this definition">¶</a></dt>
+<dd><p>A singly-directional relationship. A forward direction is a condition in 
+which one node is semantically and hierarchically above the other and is 
+independent of the directionality of the edge. For example, although 
+&#8216;mitotic cell cycle&#8217;(node1) has_part &#8216;mitotic nuclear division&#8217;(node2) and 
+the direction of the edge points from node1 to node2, the forward semantic 
+directionality points from node2 to node1 becuase of its semantic and 
+hierarchical scoping.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="dag.OboGraph">
+<em class="property">class </em><code class="descclassname">dag.</code><code class="descname">OboGraph</code><span class="sig-paren">(</span><em>namespace_filter=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
+acyclic graph (DAG)</p>
+<dl class="method">
+<dt id="dag.OboGraph.instantiate_valid_edges">
+<code class="descname">instantiate_valid_edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.instantiate_valid_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.instantiate_valid_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instatntiate edge if both nodes of the edge are in the graph. Searches by node id
+because node objects are not referenced at the edges at the time this method is called.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-godag">
+<span id="the-go-dag-module"></span><h2>The &#8220;GO DAG&#8221; module<a class="headerlink" href="#module-godag" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="godag.GoGraph">
+<em class="property">class </em><code class="descclassname">godag.</code><code class="descname">GoGraph</code><span class="sig-paren">(</span><em>namespace_filter=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/godag.html#GoGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#godag.GoGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Gene-Ontology-specific graph. GO-specific idiosyncrasies go here.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="godag.GoGraphNode">
+<em class="property">class </em><code class="descclassname">godag.</code><code class="descname">GoGraphNode</code><a class="reference internal" href="_modules/godag.html#GoGraphNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#godag.GoGraphNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends AbstractNode to include GO relevant information</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-subdag">
+<span id="the-subdag-module"></span><h2>The &#8220;SubDAG&#8221; module<a class="headerlink" href="#module-subdag" title="Permalink to this headline">¶</a></h2>
+<p>Subgraph and subgraph components of an OBOGraph object.</p>
+<dl class="class">
+<dt id="subdag.SubGraph">
+<em class="property">class </em><code class="descclassname">subdag.</code><code class="descname">SubGraph</code><span class="sig-paren">(</span><em>super_graph</em>, <em>namespace_filter=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subgraph of a provided super_graph with node contents</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="subdag.SubGraphNode">
+<em class="property">class </em><code class="descclassname">subdag.</code><code class="descname">SubGraphNode</code><span class="sig-paren">(</span><em>super_node</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraphNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraphNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of a node within a subgraph of an OBO ontology (super-graph)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-parser">
+<span id="the-parser-module"></span><h2>The &#8220;Parser&#8221; module<a class="headerlink" href="#module-parser" title="Permalink to this headline">¶</a></h2>
+<p>This is an interface to Python&#8217;s internal parser.</p>
+<dl class="attribute">
+<dt id="parser.STType">
+<code class="descclassname">parser.</code><code class="descname">STType</code><a class="headerlink" href="#parser.STType" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">st</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.compilest">
+<code class="descclassname">parser.</code><code class="descname">compilest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.compilest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compiles an ST object into a code object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.expr">
+<code class="descclassname">parser.</code><code class="descname">expr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.expr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an ST object from an expression.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.isexpr">
+<code class="descclassname">parser.</code><code class="descname">isexpr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.isexpr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if an ST object was created from an expression.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.issuite">
+<code class="descclassname">parser.</code><code class="descname">issuite</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.issuite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if an ST object was created from a suite.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.sequence2st">
+<code class="descclassname">parser.</code><code class="descname">sequence2st</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.sequence2st" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an ST object from a tree representation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.st2list">
+<code class="descclassname">parser.</code><code class="descname">st2list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.st2list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list-tree representation of an ST.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.st2tuple">
+<code class="descclassname">parser.</code><code class="descname">st2tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.st2tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a tuple-tree representation of an ST.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.suite">
+<code class="descclassname">parser.</code><code class="descname">suite</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.suite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an ST object from a suite.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="parser.tuple2st">
+<code class="descclassname">parser.</code><code class="descname">tuple2st</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#parser.tuple2st" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an ST object from a tree representation.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-uniprotsubcellparser">
+<span id="the-uniprot-subcell-parser-module"></span><h2>The &#8220;UniProt Subcell Parser&#8221; module<a class="headerlink" href="#module-uniprotsubcellparser" title="Permalink to this headline">¶</a></h2>
+<p>uniprotsubcellparser.py</p>
+<dl class="docutils">
+<dt>Usage:</dt>
+<dd>uniprotsubcellparser.py build_subdags &lt;cv_file&gt; &lt;output_directory&gt; [&#8211;visualize]</dd>
+<dt>Options:</dt>
+<dd>-h &#8211;help                     Show this screen.
+&#8211;visualize                   Visualize subdags after creation</dd>
+</dl>
+<dl class="class">
+<dt id="uniprotsubcellparser.SubcellParser">
+<em class="property">class </em><code class="descclassname">uniprotsubcellparser.</code><code class="descname">SubcellParser</code><a class="reference internal" href="_modules/uniprotsubcellparser.html#SubcellParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.SubcellParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses Uniprot&#8217;s subcell.txt to build a DAG version of the term relationships.</p>
+<dl class="method">
+<dt id="uniprotsubcellparser.SubcellParser.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>visitor</em>, <em>file_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#SubcellParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.SubcellParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the PARAMETER file_handle file using the PARAMETER visitor. NOTE THIS WAS UNDER</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="uniprotsubcellparser.UniprotDAG">
+<em class="property">class </em><code class="descclassname">uniprotsubcellparser.</code><code class="descname">UniprotDAG</code><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG" title="Permalink to this definition">¶</a></dt>
+<dd><p>A graph representation of the Uniprot subcellular locations. Acts as a visitor to the file_handle to save
+information without altering the file.</p>
+<dl class="method">
+<dt id="uniprotsubcellparser.UniprotDAG.init_derived">
+<code class="descname">init_derived</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.init_derived"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.init_derived" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reinitializes the relationship lists.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="uniprotsubcellparser.UniprotDAG.make_entry">
+<code class="descname">make_entry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.make_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.make_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>At the end of a term, saves all currently assigned information to a dictionary entry. Reinitializes all
+variables.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="uniprotsubcellparser.UniprotDAG.set_curr_id">
+<code class="descname">set_curr_id</code><span class="sig-paren">(</span><em>curr_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_curr_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_curr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current ID of the term being parsed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="uniprotsubcellparser.UniprotDAG.set_go">
+<code class="descname">set_go</code><span class="sig-paren">(</span><em>go_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_go"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_go" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current GO ID.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="uniprotsubcellparser.UniprotDAG.set_is">
+<code class="descname">set_is</code><span class="sig-paren">(</span><em>is_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_is"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_is" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current &#8216;is a&#8217; relationship partner.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="uniprotsubcellparser.UniprotDAG.set_part">
+<code class="descname">set_part</code><span class="sig-paren">(</span><em>part_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_part"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_part" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current &#8216;part of&#8217; relationship partner.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="uniprotsubcellparser.UniprotDAG.set_top_nodes">
+<code class="descname">set_top_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_top_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_top_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signifies all top-nodes in the Uniprot controlled vocabulary by finding all terms without parents.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="uniprotsubcellparser.UniprotSubDAG">
+<em class="property">class </em><code class="descclassname">uniprotsubcellparser.</code><code class="descname">UniprotSubDAG</code><span class="sig-paren">(</span><em>udag</em>, <em>top_node</em>, <em>uniprot_collection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotSubDAG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotSubDAG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a subDAG for every top-node identified in the Uniprot CV. Every node without a parent is assigned as a
+top-node.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="the-catcompare-module">
+<h2>The &#8220;CatCompare&#8221; module<a class="headerlink" href="#the-catcompare-module" title="Permalink to this headline">¶</a></h2>
+<p>Not to be confused with CategoryCompare!</p>
+<span class="target" id="module-catcompare"></span><p>Catcompare evaluates the agreement between automated fine-gained-to-general gene-GO term category mappings made in
+gene annotation files (GAFs) to gene-GO term category mappings generated by hand or by high-throughput experimental
+methods.</p>
+<dl class="function">
+<dt id="catcompare.make_dataset_dict">
+<code class="descclassname">catcompare.</code><code class="descname">make_dataset_dict</code><span class="sig-paren">(</span><em>file_handle</em>, <em>hpa_file=False</em>, <em>reliability_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/catcompare.html#make_dataset_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catcompare.make_dataset_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Currently setup to read HPA subcellular localization CSV file and create a dictionary mapping ENSG IDs to their
+subcellular location. May need to be generalized, but then again this is a special test.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-decoygaf">
+<span id="the-decoy-gaf-module"></span><h2>The &#8220;Decoy GAF&#8221; module<a class="headerlink" href="#module-decoygaf" title="Permalink to this headline">¶</a></h2>
+<p>Decoy GAF maker</p>
+<dl class="docutils">
+<dt>Usage:</dt>
+<dd>decoygaf.py make_decoy &lt;ontology_term_list&gt; &lt;output_dir&gt; &lt;output_file&gt;
+decoygaf.py map_terms &lt;mapped_gaf&gt; &lt;output_dir&gt; &lt;output_file&gt; [&#8211;output_mapping_set=None]</dd>
+</dl>
+<dl class="function">
+<dt id="decoygaf.make_decoy">
+<code class="descclassname">decoygaf.</code><code class="descname">make_decoy</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/decoygaf.html#make_decoy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#decoygaf.make_decoy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map2Slim does not output a mapping file relating to how it assigns specific terms to the root that it maps to in
+the GO slim. We can get around this by creating a fake GAF that has the annotated GO term as the ID of the &#8220;gene&#8221;
+and maintain its annotated GO term. The GAF will contain a single instance of a GO term for each term in the
+sub-ontology. We can then map this phony gaf using the slim of our choice and the resulting mapped GAF can be parsed
+to create the mapping we desire.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="the-has-part-mapping-testing-module">
+<h2>The &#8220;Has_part Mapping Testing&#8221; module<a class="headerlink" href="#the-has-part-mapping-testing-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tools">
+<span id="the-tools-module"></span><h2>The &#8220;Tools&#8221; module<a class="headerlink" href="#module-tools" title="Permalink to this headline">¶</a></h2>
+<p>Functions for handling I/O tasks (and more!) with GOcats.</p>
+<dl class="function">
+<dt id="tools.display_name">
+<code class="descclassname">tools.</code><code class="descname">display_name</code><span class="sig-paren">(</span><em>dataset</em>, <em>go_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#display_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.display_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Improves readability of Gene Ontology (GO) terms by dislpaying the english name of a PARAMETER go_id (gene ontology
+ID) within its PARAMETER dataset (gene ontology dictionary).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.json_load">
+<code class="descclassname">tools.</code><code class="descname">json_load</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#json_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.json_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a jsonPickle object from PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
+dictkeys to strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.json_save">
+<code class="descclassname">tools.</code><code class="descname">json_save</code><span class="sig-paren">(</span><em>obj</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#json_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.json_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves PARAMETER obj in file PARAMETER filename. use_jsonpickle=True used to prevent jsonPickle from encoding
+dictkeys to strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.list_to_file">
+<code class="descclassname">tools.</code><code class="descname">list_to_file</code><span class="sig-paren">(</span><em>file_location</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#list_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.list_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a text document from PARAMETER data, with each line of the document being one item from the list and outputs
+the document into PARAMETER file_location. PARAMETER length may be specified to append
+the length of the list to the filename.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The GOcats API Reference</a><ul>
+<li><a class="reference internal" href="#module-dag">The &#8220;DAG&#8221; module</a></li>
+<li><a class="reference internal" href="#module-godag">The &#8220;GO DAG&#8221; module</a></li>
+<li><a class="reference internal" href="#module-subdag">The &#8220;SubDAG&#8221; module</a></li>
+<li><a class="reference internal" href="#module-parser">The &#8220;Parser&#8221; module</a></li>
+<li><a class="reference internal" href="#module-uniprotsubcellparser">The &#8220;UniProt Subcell Parser&#8221; module</a></li>
+<li><a class="reference internal" href="#the-catcompare-module">The &#8220;CatCompare&#8221; module</a></li>
+<li><a class="reference internal" href="#module-decoygaf">The &#8220;Decoy GAF&#8221; module</a></li>
+<li><a class="reference internal" href="#the-has-part-mapping-testing-module">The &#8220;Has_part Mapping Testing&#8221; module</a></li>
+<li><a class="reference internal" href="#module-tools">The &#8220;Tools&#8221; module</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to GOcats&#8217;s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Eugene Hinderer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -5,7 +5,7 @@ import re
 class OboGraph(object):
 
     """A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
-    acyclic graph (DAG)"""
+    acyclic graph (DAG)."""
 
     def __init__(self, namespace_filter=None, allowed_relationships=None):
         self.namespace_filter = namespace_filter
@@ -30,32 +30,40 @@ class OboGraph(object):
 
     @property
     def orphans(self):
+        """A set of nodes in the graph which have no parents."""
         if self._modified:
             self._update_graph()
         return self._orphans
 
     @property
     def leaves(self):
+        """A set of nodes in the graph which have no children."""
         if self._modified:
             self._update_graph()
         return self._leaves
     
     def valid_node(self, node):
+        """Returns True if a node is not obsolete and is contained within the given ontology namespace contraint."""
         if not node.obsolete and (not self.namespace_filter or node.namespace == self.namespace_filter):
             return True
         return False
 
     def valid_edge(self, edge):
+        """Returns True if an edge is within the list of allowed edges and connects two nodes that are both contained in
+        the graph in question."""
         if (edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index) and (not self.allowed_relationships or edge.relationship_id in self.allowed_relationships):
             return True
         return False
 
     def _update_graph(self):
+        """Repopulates graph orphans and leaves."""
         self._orphans = set([node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes])
         self._leaves = set([node for node in self.node_list if not node.obsolete and not node.child_node_set and node.parent_node_set])
         self._modified = False
 
     def add_node(self, node):
+        """Adds a node object to the graph, adds an object pointer to the vocabulary index to reference nodes to every
+        word in the node name and definition."""
         self.node_list.append(node)
         self.id_index[node.id] = node
         for word in re.findall(r"[\w\'\-]+", node.name + " " + node.definition):
@@ -66,6 +74,7 @@ class OboGraph(object):
         self._modified = True
 
     def remove_node(self, node):
+        """Removes a node from the graph and deletes node references from all entries in the vocabulary index."""
         if node not in self.node_list:
             pass
         else:
@@ -108,8 +117,8 @@ class OboGraph(object):
         self.modified = True
 
     def instantiate_valid_edges(self):
-        """only instatntiate edge if both nodes are in the graph. Searches by id
-        since node objects are not referenced at the edges at the time this is called."""
+        """Instatntiate edge if both nodes of the edge are in the graph. Searches by node id because node objects are
+        not referenced at the edges at the time this method is called."""
         del_edges = set()
         for edge in self.edge_list:
             if edge.node_pair_id[0] in self.id_index.keys() and edge.node_pair_id[1] in self.id_index.keys():
@@ -123,7 +132,8 @@ class OboGraph(object):
         self._modified = True
 
     def node_depth(self, sample_node):
-        # If this loops for eternity, there bay be a loop in the graph.
+        """Returns an integer representative of how many nodes are between the given node and the root node of the
+        graph."""
         if sample_node in self.root_nodes:
             return 0
         depth = 1
@@ -137,6 +147,8 @@ class OboGraph(object):
         return depth
 
     def filter_nodes(self, search_string_list):
+        """Returns a list of node objects that contain vocabulary matching the keywords provided in the search string
+        list. Nodes are selected by searching through the vocablary index."""
         search_string_list_words = [re.findall(self.word_split, word) for word in search_string_list]
         search_string_word_set = set([word for sublist in search_string_list_words for word in sublist])
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in search_string_word_set if word in self.vocab_index]])
@@ -145,12 +157,15 @@ class OboGraph(object):
         return filtered_nodes
 
     def filter_edges(self, filtered_nodes):
+        """Returns a list of edges in the graph that connect the nodes provided in the filtered nodes list."""
         filtered_edges = [edge for edge in self.edge_list if edge.parent_node in filtered_nodes and edge.child_node in filtered_nodes]
         if self.allowed_relationships:
             filtered_edges = [edge for edge in filtered_edges if edge.relationship_id in self.allowed_relationships]
         return filtered_edges
  
     def nodes_between(self, start_node, end_node):
+        """Returns a set of nodes that occur along all paths between the start node and the end node. If no paths exist,
+        an empty set is returned."""
         if start_node.ancestors and end_node.descendants:
             return start_node.ancestors.intersection(end_node.descendants)
         else:
@@ -179,24 +194,27 @@ class AbstractNode(object):
         
     @property
     def descendants(self):
+        """Returns the set of nodes that are recursively forward of a node with a scoping-type relationship."""
         if self._modified:
             self._update_node()
         return self._descendants
 
     @property
     def ancestors(self):
+        """Returns set of nodes that are recursively reverse of a node with a scoping-type relationship."""
         if self._modified:
             self._update_node()
         return self._ancestors
     
     def _update_node(self):
+        """Repopulates ancestor and descendent sets for a node."""
         self._update_descendants()
         self._update_ancestors()
         self._modified = False
 
     def add_edge(self, edge, allowed_relationships):
-        """Adds a given edge to the node's edge list and sets parent and child nodes
-        given the edge represents an allowed relationship."""
+        """Adds a given edge to the node's edge list and sets parent and child nodes given the edge represents an
+        allowed relationship."""
         # TODO: Need to capture non-parent/child relationship types, such as actor/actee and equivalence
         # FIXME: Should we add edges that represent non-allowed relationships?
         self.edges.add(edge)
@@ -260,36 +278,42 @@ class AbstractEdge(object):
 
     @property
     def parent_id(self):
+        """Returns the ID of a node which is forward with respect to the edge."""
         if self.relationship:
             return self.relationship.forward(self.node_pair_id)
         return None
 
     @property
     def child_id(self):
+        """Returns the ID of a node which is reverse with resepct to the edge."""
         if self.relationship:
             return self.relationship.reverse(self.node_pair_id)
         return None
 
     @property
     def forward_node(self):
+        """Returns the node object which is forward with respect to the edge."""
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.forward(self.node_pair) 
         return None
 
     @property
     def reverse_node(self):
+        """Returns the node object which is reverse with respect to the edge."""
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.reverse(self.node_pair) 
         return None
     
     @property
     def parent_node(self):
+        """Returns the node object with is forward with respect to the edge in scoping-type relationsihps."""
         if self.relationship:
             return self.relationship.forward(self.node_pair)
         return None
 
     @property
     def child_node(self):
+        """Returns the node object with is reverse with respect to the edge in scoping-type relationsihps."""
         if self.relationship:
             return self.relationship.reverse(self.node_pair) 
         return None
@@ -316,6 +340,7 @@ class AbstractEdge(object):
         return
 
     def connect_nodes(self, node_pair, allowed_relationships):
+        """Adds the edge object to the node objects (node pair) that are connected by the edge."""
         self.node_pair = node_pair
         node_pair[0].add_edge(self, allowed_relationships)
         node_pair[1].add_edge(self, allowed_relationships)
@@ -323,23 +348,20 @@ class AbstractEdge(object):
 
 class AbstractRelationship(object):
 
-    """A relationship as defined by a [typedef] stanza in an OBO ontology"""
+    """A relationship as defined by a [typedef] stanza in an OBO ontology and augmented by GOcats to better interpret
+    semantic correspondence."""
 
     def __init__(self):
         self.id = str()
         self.name = str()
-        self.category = str()
+        self.category = str()  # TODO: change category to correspondence_classes DO everywhere.
 
 
 class DirectionalRelationship(AbstractRelationship):
 
-    """A singly-directional relationship. A forward direction is a condition in 
-    which one node is semantically and hierarchically above the other and is 
-    independent of the directionality of the edge. For example, although 
-    'mitotic cell cycle'(node1) has_part 'mitotic nuclear division'(node2) and 
-    the direction of the edge points from node1 to node2, the forward semantic 
-    directionality points from node2 to node1 becuase of its semantic and 
-    hierarchical scoping."""
+    """A singly-directional relationship edge connecting two nodes in the graph. The two nodes are designated 'forward'
+    and 'reverse.' The 'forward' node semantically supercedes the 'reverse' node in a way that depends on the context of
+    the type of relationship describing the edge to which it is applied."""
 
     def __init__(self):
         super().__init__()
@@ -347,14 +369,20 @@ class DirectionalRelationship(AbstractRelationship):
         self.inverse_relationship = None
         self.direction = 1  # Defaults as toward node2 (node2 is the 'forward' node)
 
-    def forward(self,pair):
+    def forward(self, pair):
+        """Returns the tuple position of the node in a node pair that semantically supercedes the other and is
+        independent of the directionality of the edge. Default position is 1."""
         return pair[self.direction]
 
-    def reverse(self,pair):
+    def reverse(self, pair):
+        """Returns the tuple position of the node in a node pair that semantically subcedes the other and is independent
+         of the directionality of the edge. Default position is 1."""
         return pair[(self.direction+1) % 2]
 
 
 class NonDirectionalRelationship(AbstractRelationship):
+
+    """A non-directional relationship whose edge directionality is either non-existant or semantically irrelevant."""
     
     def __init__(self):
         return    

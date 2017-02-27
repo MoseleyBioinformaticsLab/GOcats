@@ -24,9 +24,10 @@ Options:
 
 """
 import os
+import sys
 import re
 import csv
-import parser
+import ontologyparser
 import godag
 import subdag
 import docopt
@@ -67,7 +68,7 @@ def build_graph(args):
     database_name = os.path.basename(args['<database_file>'])
     graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, allowed_relationships)}
     graph = graph_class[database_name]
-    parsing_class = {'go.obo': parser.GoParser(database, graph)}
+    parsing_class = {'go.obo': ontologyparser.GoParser(database, graph)}
     parsing_class[database_name].parse()
 
     database.close()
@@ -80,7 +81,7 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
     """Creates a graph object of GO, which can be traversed and queried within a Python interpreter."""
     database = open(database_file, 'r')
     graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
-    go_parser = parser.GoParser(database, graph)
+    go_parser = ontologyparser.GoParser(database, graph)
     go_parser.parse()
     database.close()
     return graph
@@ -106,17 +107,24 @@ def filter_subgraphs(args):
     else:
         subgraph_relationships = None
 
-    # Building the super_graph
+    # Building the supergraph
     database = open(args['<database_file>'], 'r')
     output_directory = args['<output_directory>']
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
     database_name = os.path.basename(args['<database_file>'])
     graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
-    supergraph = graph_class[database_name]
-    parsing_class = {'go.obo': parser.GoParser(database, supergraph)}
-    parsing_class[database_name].parse()
-
+    try:
+        supergraph = graph_class[database_name]
+    except KeyError:
+        print("The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
+        sys.exit()
+    parsing_class = {'go.obo': ontologyparser.GoParser(database, supergraph)}
+    try:
+        parsing_class[database_name].parse()
+    except KeyError:
+        print("The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
+        sys.exit()
     if args['--output_termlist']:
         tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
 
@@ -128,7 +136,7 @@ def filter_subgraphs(args):
     database.close()
 
     # Building and collecting subgraphs
-    subgraph_collection = {}
+    subgraph_collection = dict()
     with open(args['<keyword_file>'], newline='') as file:
         reader = csv.reader(file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
         for row in reader:
@@ -218,7 +226,7 @@ def find_category_subsets(subgraph_collection):
 
 def compute_subgraph_similarity(args):
     from tabulate import tabulate
-    inc_index_table = []
+    inc_index_table = list()
     output_file = args['<output_directory>']
     gocats_mapping = tools.json_load(args['<gocats_mapping>'])
     other_mapping = tools.json_load(args['<other_mapping>'])
@@ -276,7 +284,7 @@ def categorize_dataset(args):
     mapping_dict = tools.json_load(args['<term_mapping>'])
     output_directory = os.path.realpath(args['<output_directory>'])
     gaf_name = args['<GAF_name>']
-    mapped_gaf_array = []
+    mapped_gaf_array = list()
     unmapped_genes = set()
 
     if not os.path.exists(output_directory):
@@ -296,17 +304,17 @@ def categorize_dataset(args):
 
 
 def compare_mapping(args):
-    """Compares the agreement in annotation assignment between a GAF produced by GOcats (PARAMETER <mapped_gaf>) and
-    a gold-standard dataset, provided in csv format (PARAMETER <manual-dataset>)."""
+    """Compares the agreement in annotation assignment between a GAF produced by GOcats and another dataset, provided in
+    csv format."""
     # TODO: Add argumnets for output directory. Save tables and list of genes not in database in this directory.
     from tabulate import tabulate
     import catcompare
 
     mapped_dataset_gaf_dict = tools.make_gaf_dict(args['<mapped_gaf>'], keys='db_object_symbol')
     hpa_dataset_dict = catcompare.make_dataset_dict(os.path.realpath(args['<manual_dataset>']), True, 'Supportive')
-    location_breakdown_table = []
-    comparison_results = {}
-    gene_assignment_tuples = []
+    location_breakdown_table = list()
+    comparison_results = dict()
+    gene_assignment_tuples = list()
 
     if args['--map_manual_dataset']:
         manual_dataset_mapping = tools.json_load(args['--map_manual_dataset'])
@@ -314,7 +322,6 @@ def compare_mapping(args):
         manual_dataset_mapping = dict()
 
     def compare_entry(object_symbol, raw_data_go_set, knowledgebase_go_set, comparison_results):
-
         if raw_data_go_set.union(knowledgebase_go_set) == raw_data_go_set.intersection(
                 knowledgebase_go_set):  # and len(raw_data_go_set.union(knowledgebase_go_set)) != 0:  EDIT should this ever happen? Correctly not-assigning non-assignments demonstrates accuracy. However these cases are non-informative.
             comparison_results[object_symbol] = 'complete'
@@ -419,5 +426,5 @@ def compare_mapping(args):
         tools.list_to_file(file_name, sorted(gene_assignment_tuples, key=lambda gene_id: gene_id[0]))
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.2.0')
+    args = docopt.docopt(__doc__, version='GOcats version 0.3.0')
     main(args)

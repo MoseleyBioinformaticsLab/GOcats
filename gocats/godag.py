@@ -16,7 +16,7 @@ class GoGraph(OboGraph):
 
 class GoGraphNode(AbstractNode):
 
-    """Extends AbstractNode to include GO relevant information"""
+    """Extends AbstractNode to include GO relevant information."""
     
     def __init__(self):
         super().__init__()
