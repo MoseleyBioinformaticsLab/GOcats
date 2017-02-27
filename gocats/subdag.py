@@ -6,7 +6,7 @@ import re
 
 class SubGraph(OboGraph):
 
-    """A subgraph of a provided super_graph with node contents"""
+    """A subgraph of a provided supergraph with node contents."""
     
     def __init__(self, super_graph, namespace_filter=None, allowed_relationships=None):
         self.super_graph = super_graph
@@ -70,11 +70,9 @@ class SubGraph(OboGraph):
                         self.relationship_count[edge.relationship.id] += 1
                     except KeyError:
                         self.relationship_count[edge.relationship.id] = 1
-
         self._modified = True
 
     def greedily_extend_subgraph(self):
-        # supergraph_descendents = set([super_node for super_node in self.super_graph.id_index[self.representative_node.id].descendants if self.valid_node(super_node) and super_node.id not in self.id_index])
         graph_extension_nodes = set([super_node for super_node in self.super_graph.id_index[self.representative_node.id].descendants if super_node.id not in self.id_index])
         for super_node in graph_extension_nodes:
             self.add_node(super_node)
@@ -92,7 +90,8 @@ class SubGraph(OboGraph):
         self.connect_subnodes()
 
     def remove_orphan_paths(self):
-        # not using for now
+        """Not currently in use. Removes nodes and their descendants from the subgraph which do not root to the
+        category-representative node."""
         for orphan in self.orphans:
             orphaned_descendants = orphan.descendants - self.representative_node.descendants
             if orphaned_descendants:
@@ -152,9 +151,9 @@ class SubGraphNode(AbstractNode):
 
     @property
     def super_edges(self):
-        # take super_edges that are consistent with the subgraph. But make it into a 
+        # Take super_edges that are consistent with the subgraph, but copy them to a new subgraph edges set.
         edges = set()
-        edges.add([edge for edge in self.super_node.edges if edge.parent_node.id in [node.id for node in self.parent_node_set] and edge.child_node.id in [node.id for node in self.child_node_set]])  # generate ids from parent/child_node_sets elsewhere
+        edges.add([edge for edge in self.super_node.edges if edge.parent_node.id in [node.id for node in self.parent_node_set] and edge.child_node.id in [node.id for node in self.child_node_set]])
         return edges
 
     @property

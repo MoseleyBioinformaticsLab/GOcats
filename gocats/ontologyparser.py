@@ -1,4 +1,5 @@
 # !/usr/bin/python3
+
 import re
 from dag import AbstractEdge, DirectionalRelationship
 from godag import GoGraphNode
@@ -6,8 +7,8 @@ from godag import GoGraphNode
 
 class OboParser(object):
 
-    """Parses the Gene Ontology file line-by-line and calls GoGraph based on 
-    conditions met through regular expressions."""
+    """A scaffolding for parsing OBO formatted ontologies. Contains regular expressions for the basic stanzas and
+    information pertinent for creating a graph object of an ontology."""
     
     def __init__(self):
         self.term_stanza = re.compile('\[Term\]')
@@ -24,8 +25,8 @@ class OboParser(object):
         self.inverse_tag = re.compile('^inverse_of:')
 
         # May use later.
-        #self.comment = re.compile('\!.+')
-        #self.subset = re.compile('^subset:')
+        # self.comment = re.compile('\!.+')
+        # self.subset = re.compile('^subset:')
 
 
 class GoParser(OboParser):
@@ -36,12 +37,12 @@ class GoParser(OboParser):
         super().__init__()
         self.database_file = database_file
         self.go_graph = go_graph
-        # 5 types of relationships: scoping, ordinal, active, equivalent, negation
+        # 5 types of relationships: scoping, scaling (grouped with scoping for now), spaciotemporal, active, equivalance (not present here), and other.
         # 1 means that the relationship directionality is converntional, 0 means that the semantic directionaly points from node 2 to node1. 
-        self.relationship_mapping = {"ends_during": ("scoping", 1), "happens_during": ("scoping", 1), "has_part": ("scoping", 0),
-                                     "negatively_regulates": ("active", 1), "never_in_taxon": ("negation", 1), "occurs_in": ("scoping", 1),
+        self.relationship_mapping = {"ends_during": ("spatiotemporal", 1), "happens_during": ("spatiotemporal", 1), "has_part": ("scoping", 0),
+                                     "negatively_regulates": ("active", 1), "never_in_taxon": ("other", 1), "occurs_in": ("spatiotemporal", 1),
                                      "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
-                                     "starts_during": ("scoping", 1), "is_a": ("scoping", 1)}
+                                     "starts_during": ("spatiotemporal", 1), "is_a": ("scoping", 1)}
 
     def parse(self):
         # TODO: find all relationship types using TypeDef stanza
