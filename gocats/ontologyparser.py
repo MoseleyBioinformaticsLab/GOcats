@@ -7,8 +7,8 @@ from godag import GoGraphNode
 
 class OboParser(object):
 
-    """Parses the Gene Ontology file line-by-line and calls GoGraph based on 
-    conditions met through regular expressions."""
+    """A scaffolding for parsing OBO formatted ontologies. Contains regular expressions for the basic stanzas and
+    information pertinent for creating a graph object of an ontology."""
     
     def __init__(self):
         self.term_stanza = re.compile('\[Term\]')
