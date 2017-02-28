@@ -13,7 +13,7 @@ GOcats is able to map annotations within Gene Associaition Files (GAFs) into cat
 
 If you would like to perform the analyses carried out in the development of GOcats which involve mapping comparisons to OWLTools' Map2Slim and to UniProt's Subcellular Location Controlled Vocabulary, please install the "Additional Packages" listed under the Prerequisites section and see the Running the Tests section.
 
-### Prerequisities
+### Prerequisites
 
 #### Generating GOcats category mapping and mapping GAFs (standard usage)
 

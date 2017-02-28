@@ -6,42 +6,43 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>uniprotsubcellparser &#8212; GOcats 0.2.1 documentation</title>
+    <title>uniprotsubcellparser &#8212; GOcats 0.3.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2.1',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-   
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="top" title="GOcats 0.3.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body role="document">
-  
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>GOcats 0.3.0 documentation</span></a></h1>
+        <h2 class="heading"><span>uniprotsubcellparser</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+      </div>
+      <div class="content">
+        
+        
   <h1>Source code for uniprotsubcellparser</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !usr/bin/python3</span>
 <span class="c1"># TODO: Why duplicate functionality? Use methods from other modules.</span>
@@ -68,9 +69,9 @@
 <span class="k">def</span> <span class="nf">build_subdags</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="c1"># Uniprot Subcellular Location text file location</span>
     <span class="n">sl</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;cv_file&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>  <span class="c1"># &#39;exampledata/uniprotparse/subcell.txt&#39;</span>
-    <span class="n">uniprot_collection</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">go_translated_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">uniprot_multi_root</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">uniprot_collection</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">go_translated_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">uniprot_multi_root</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="n">uniprot_subcell_results_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_directory&gt;&#39;</span><span class="p">])</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uniprot_subcell_results_dir</span><span class="p">):</span>
@@ -149,19 +150,19 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates containers for DAG creation.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">DAG_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">go_to_name_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DAG_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">go_to_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">curr_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">go_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_a</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">part_of</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">top_nodes</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">destroy_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">part_of</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destroy_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
 <div class="viewcode-block" id="UniprotDAG.init_derived"><a class="viewcode-back" href="../api.html#uniprotsubcellparser.UniprotDAG.init_derived">[docs]</a>    <span class="k">def</span> <span class="nf">init_derived</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reinitializes the relationship lists.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_a</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">part_of</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">part_of</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="UniprotDAG.set_curr_id"><a class="viewcode-back" href="../api.html#uniprotsubcellparser.UniprotDAG.set_curr_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_curr_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curr_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sets the current ID of the term being parsed.&quot;&quot;&quot;</span>
@@ -188,7 +189,7 @@
 <span class="sd">        variables.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">go_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Some of them don&#39;t have GO ids</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">go_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">go_to_name_mapping</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">destroy_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curr_id</span><span class="p">)</span>  <span class="c1"># DESTROY THE TERMS THAT HAVE THE SAME GO TERM, THEY ARE USELESS FOR THIS EFFORT (AMBIGUOUS) WHY WHY WHY WHY WHY WHY WOULD THEY EVER DO THAT TO THEIR CV?</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">destroy_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curr_id</span><span class="p">)</span>  <span class="c1"># Remove terms that refer to the same GO term.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">DAG_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">curr_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">curr_id</span><span class="p">,</span>
                 <span class="s1">&#39;is_a&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_a</span><span class="p">,</span>
@@ -217,8 +218,8 @@
 <span class="sd">        it is saved to the GLOBAL subDAG collection.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">udag</span> <span class="o">=</span> <span class="n">udag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top_node</span> <span class="o">=</span> <span class="n">top_node</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subdag_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subdag_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subdag_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subdag_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subdag_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>  <span class="c1"># The top_node itself should be considered part of its own category</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_build_subdag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">udag</span><span class="o">.</span><span class="n">DAG_dict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subdag_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;go_id&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">[</span><span class="s1">&#39;go_id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">udag</span><span class="o">.</span><span class="n">DAG_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subdag_list</span><span class="p">]</span>
@@ -229,54 +230,28 @@
 <span class="sd">        top-node. Iterates through children of children to find all contents of a top-node.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">term</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subdag_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
-        <span class="n">child_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">child_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="n">child_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="s1">&#39;is_a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">node</span><span class="p">[</span><span class="s1">&#39;part_of&#39;</span><span class="p">]])</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">child_list</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_build_subdag</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span></div>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;GOcats version 0.2.1&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="n">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;GOcats version 0.3.0&#39;</span><span class="p">)</span>
     <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 
-          </div>
-        </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2017, Eugene Hinderer.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
-      
-    </div>
 
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Eugene Hinderer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+    </div>
   </body>
 </html>
