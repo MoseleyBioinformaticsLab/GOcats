@@ -1,6 +1,8 @@
 # !/usr/bin/python3
-"""Used to calculate estimated potential false mappings, potential false mappings, and total possible mappings that
-occur along paths containing the has_part relationship in GO."""
+"""
+Used to calculate estimated potential false mappings, potential false mappings, and total possible mappings that
+occur along paths containing the has_part relationship in GO.
+"""
 import gocats
 import itertools
 

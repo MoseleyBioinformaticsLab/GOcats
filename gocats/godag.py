@@ -1,4 +1,8 @@
 # !/usr/bin/python3
+"""
+Defines a Gene Ontology-specific graph which may have special properties when compared to other OBO formatted
+ontologies.
+"""
 from dag import OboGraph, AbstractNode
 
 

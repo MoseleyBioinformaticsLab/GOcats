@@ -45,7 +45,11 @@
         
   <h1>Source code for ontologyparser</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !/usr/bin/python3</span>
-
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A parser which reads ontologies in the OBO format and calls appropriate graph objects to store information in a graph</span>
+<span class="sd">representation. Separate parsing classes within this module operate on distinct ontologies in the OBO Foundry to handle</span>
+<span class="sd">any subtle differences among ontologies.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">dag</span> <span class="k">import</span> <span class="n">AbstractEdge</span><span class="p">,</span> <span class="n">DirectionalRelationship</span>
 <span class="kn">from</span> <span class="nn">godag</span> <span class="k">import</span> <span class="n">GoGraphNode</span>

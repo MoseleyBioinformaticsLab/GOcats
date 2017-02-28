@@ -1,6 +1,6 @@
 # !/usr/bin/python3
 """
-
+Contains necessary objects for creating a Directed Acyclic Graph (DAG) object to represent biomedical ontologies.
 """
 import re
 

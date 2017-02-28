@@ -1,5 +1,7 @@
 # !/usr/bin/python3
-"""Functions for handling I/O tasks (and more!) with GOcats."""
+"""
+Functions for handling I/O tasks (and more) with GOcats.
+"""
 import jsonpickle
 import sys
 import os

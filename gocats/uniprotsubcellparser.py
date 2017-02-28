@@ -1,13 +1,13 @@
 # !usr/bin/python3
-# TODO: Why duplicate functionality? Use methods from other modules.
-"""uniprotsubcellparser.py
+"""
+UniProt subcellular location parser and graph creation module command line implementation::
 
-Usage:
-    uniprotsubcellparser.py build_subdags <cv_file> <output_directory> [--visualize]
+    Usage:
+        uniprotsubcellparser.py build_subdags <cv_file> <output_directory> [--visualize]
 
-Options:
-    -h --help                     Show this screen.
-    --visualize                   Visualize subdags after creation
+    Options:
+        -h --help                     Show this screen.
+        --visualize                   Visualize subdags after creation
 """
 import os
 import re
