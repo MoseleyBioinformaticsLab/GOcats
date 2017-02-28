@@ -6,58 +6,75 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to GOcats’s documentation! &#8212; GOcats 0.2.1 documentation</title>
+    <title>Welcome to GOcats’s documentation! &#8212; GOcats 0.3.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.1',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The GOcats API Reference" href="api.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="top" title="GOcats 0.3.0 documentation" href="#" />
+    <link rel="next" title="The GOcats API Reference" href="api.html" /> 
   </head>
   <body role="document">
-  
+      <div class="header" role="banner"><h1 class="heading"><a href="#">
+          <span>GOcats 0.3.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Welcome to GOcats’s documentation!</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="#">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="api.html">The GOcats API Reference</a>&#160;&#160;»
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+      </div>
+      <div class="content">
+        
+        
   <div class="section" id="welcome-to-gocats-s-documentation">
 <h1>Welcome to GOcats&#8217;s documentation!<a class="headerlink" href="#welcome-to-gocats-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<div class="toctree-wrapper compound" id="contents">
+<p class="caption"><span class="caption-text">Contents:</span><a class="headerlink" href="#contents" title="Permalink to this toctree">¶</a></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api.html">The GOcats API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-dag">The &#8220;DAG&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-godag">The &#8220;GO DAG&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-subdag">The &#8220;SubDAG&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-parser">The &#8220;Parser&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-uniprotsubcellparser">The &#8220;UniProt Subcell Parser&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#the-catcompare-module">The &#8220;CatCompare&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-decoygaf">The &#8220;Decoy GAF&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#the-has-part-mapping-testing-module">The &#8220;Has_part Mapping Testing&#8221; module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-tools">The &#8220;Tools&#8221; module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#modules">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#gocats">GOcats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-dag">Directed Acyclic Graph (DAG)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-godag">Gene Ontology Directed Acylic Graph (GODAG)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-subdag">Directed Acyclic Subgraph (SubDAG)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-ontologyparser">Ontology Parser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-decoygaf">Decoy Gene Anotation File Creator (DecoyGAF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-uniprotsubcellparser">UniProt Subcellular Locations Parser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-tools">Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#test-scripts">Test Scripts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#map2slim-mapping-error-testing">Map2Slim Mapping Error Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#has-part-mapping-error-analysis-hp-mapping-testing-py">Has_Part mapping error analysis (hp_mapping_testing.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#speed-test">Speed Test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#run-scripts">Run Scripts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#run-sh">run.sh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#run-map-supersets-sh">run_map_supersets.sh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#fullsubgraphinclusion-sh">FullSubgraphInclusion.sh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#gocatsgenerichpamapping-sh">GOcatsGenericHPAMapping.sh</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -73,59 +90,20 @@
 </div>
 
 
-          </div>
-        </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to GOcats&#8217;s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="api.html" title="next chapter">The GOcats API Reference</a></li>
-  </ul></li>
-</ul>
-</div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="#">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="api.html">The GOcats API Reference</a>&#160;&#160;»
+        </p>
+
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2017, Eugene Hinderer.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
-      
-      |
-      <a href="_sources/index.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
 
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Eugene Hinderer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+    </div>
   </body>
 </html>

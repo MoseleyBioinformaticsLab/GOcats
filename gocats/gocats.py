@@ -1,26 +1,27 @@
 # !/usr/bin/python3
-""" Gene Ontology Categories utility (GOcats)
+"""
+Gene Ontology Categories Suite (GOcats) command line implementation::
 
-Usage:
-    gocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=<None>]
-    gocats compute_subgraph_intersection <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
-    gocats compute_subgraph_similarity <gocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
-    gocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
-    gocats compare_mapping <mapped_gaf> <manual_dataset>  [--map_manual_dataset=<filename> --save_assignments=<filename> --id_translation=<filename>]
-Options:
-    -h --help                            Shows this screen.
-    --version                            Shows version.
-    --supergraph_namespace=<None>        Filters the supergraph to a given namespace.
-    --subgraph_namespace=<None>          Filters the subgraph to a given namespace.
-    --supergraph_relationships=[]        A provided list will denote which relationships are allowed in the supergraph.
-    --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
-    --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
-    --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
-    --test_subgraph=<None>               Enter a GO ID to output information describing the mapping differences between GOcats and Map2Slim.
-    --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
-    --save_assignments=<filename>        Save a file with all genes and their GO assignments.
-    --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.
-    --map_manual_dataset=<filename>  Specify a mapping file to map manual dataset annotations to the user-specified categories. 
+    Usage:
+        gocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=<None>]
+        gocats compute_subgraph_intersection <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
+        gocats compute_subgraph_similarity <gocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
+        gocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
+        gocats compare_mapping <mapped_gaf> <manual_dataset>  [--map_manual_dataset=<filename> --save_assignments=<filename> --id_translation=<filename>]
+    Options:
+        -h --help                            Shows this screen.
+        --version                            Shows version.
+        --supergraph_namespace=<None>        Filters the supergraph to a given namespace.
+        --subgraph_namespace=<None>          Filters the subgraph to a given namespace.
+        --supergraph_relationships=[]        A provided list will denote which relationships are allowed in the supergraph.
+        --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
+        --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
+        --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
+        --test_subgraph=<None>               Enter a GO ID to output information describing the mapping differences between GOcats and Map2Slim.
+        --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
+        --save_assignments=<filename>        Save a file with all genes and their GO assignments.
+        --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.
+        --map_manual_dataset=<filename>  Specify a mapping file to map manual dataset annotations to the user-specified categories.
 
 """
 import os
