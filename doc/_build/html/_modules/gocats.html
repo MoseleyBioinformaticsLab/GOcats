@@ -6,72 +6,75 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gocats &#8212; GOcats 0.2.1 documentation</title>
+    <title>gocats &#8212; GOcats 0.3.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2.1',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-   
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="top" title="GOcats 0.3.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body role="document">
-  
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>GOcats 0.3.0 documentation</span></a></h1>
+        <h2 class="heading"><span>gocats</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+      </div>
+      <div class="content">
+        
+        
   <h1>Source code for gocats</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !/usr/bin/python3</span>
-<span class="sd">&quot;&quot;&quot; Gene Ontology Categories utility (GOcats)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Gene Ontology Categories Suite (GOcats) command line implementation::</span>
 
-<span class="sd">Usage:</span>
-<span class="sd">    gocats filter_subgraphs &lt;database_file&gt; &lt;keyword_file&gt; &lt;output_directory&gt; [--supergraph_namespace=&lt;None&gt; --subgraph_namespace=&lt;None&gt; --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=&lt;None&gt;]</span>
-<span class="sd">    gocats compute_subgraph_intersection &lt;gocats_mapping&gt; &lt;uniprot_mapping&gt; &lt;map2slim_mapping&gt; &lt;output_directory&gt; [--inclusion_index --id_translation=&lt;filename&gt;]</span>
-<span class="sd">    gocats compute_subgraph_similarity &lt;gocats_mapping&gt; &lt;other_mapping&gt; &lt;output_directory&gt; &lt;filename&gt; [--id_translation=&lt;filename&gt;]</span>
-<span class="sd">    gocats categorize_dataset &lt;gaf_dataset&gt; &lt;term_mapping&gt; &lt;output_directory&gt; &lt;GAF_name&gt;</span>
-<span class="sd">    gocats compare_mapping &lt;mapped_gaf&gt; &lt;manual_dataset&gt;  [--map_manual_dataset=&lt;filename&gt; --save_assignments=&lt;filename&gt; --id_translation=&lt;filename&gt;]</span>
-<span class="sd">Options:</span>
-<span class="sd">    -h --help                            Shows this screen.</span>
-<span class="sd">    --version                            Shows version.</span>
-<span class="sd">    --supergraph_namespace=&lt;None&gt;        Filters the supergraph to a given namespace.</span>
-<span class="sd">    --subgraph_namespace=&lt;None&gt;          Filters the subgraph to a given namespace.</span>
-<span class="sd">    --supergraph_relationships=[]        A provided list will denote which relationships are allowed in the supergraph.</span>
-<span class="sd">    --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.</span>
-<span class="sd">    --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.</span>
-<span class="sd">    --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.</span>
-<span class="sd">    --test_subgraph=&lt;None&gt;               Enter a GO ID to output information describing the mapping differences between GOcats and Map2Slim.</span>
-<span class="sd">    --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.</span>
-<span class="sd">    --save_assignments=&lt;filename&gt;        Save a file with all genes and their GO assignments.</span>
-<span class="sd">    --id_translation=&lt;filename&gt;          Specify an id_translation file to associate go terms with their English names.</span>
-<span class="sd">    --map_manual_dataset=&lt;filename&gt;  Specify a mapping file to map manual dataset annotations to the user-specified categories. </span>
+<span class="sd">    Usage:</span>
+<span class="sd">        gocats filter_subgraphs &lt;database_file&gt; &lt;keyword_file&gt; &lt;output_directory&gt; [--supergraph_namespace=&lt;None&gt; --subgraph_namespace=&lt;None&gt; --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=&lt;None&gt;]</span>
+<span class="sd">        gocats compute_subgraph_intersection &lt;gocats_mapping&gt; &lt;uniprot_mapping&gt; &lt;map2slim_mapping&gt; &lt;output_directory&gt; [--inclusion_index --id_translation=&lt;filename&gt;]</span>
+<span class="sd">        gocats compute_subgraph_similarity &lt;gocats_mapping&gt; &lt;other_mapping&gt; &lt;output_directory&gt; &lt;filename&gt; [--id_translation=&lt;filename&gt;]</span>
+<span class="sd">        gocats categorize_dataset &lt;gaf_dataset&gt; &lt;term_mapping&gt; &lt;output_directory&gt; &lt;GAF_name&gt;</span>
+<span class="sd">        gocats compare_mapping &lt;mapped_gaf&gt; &lt;manual_dataset&gt;  [--map_manual_dataset=&lt;filename&gt; --save_assignments=&lt;filename&gt; --id_translation=&lt;filename&gt;]</span>
+<span class="sd">    Options:</span>
+<span class="sd">        -h --help                            Shows this screen.</span>
+<span class="sd">        --version                            Shows version.</span>
+<span class="sd">        --supergraph_namespace=&lt;None&gt;        Filters the supergraph to a given namespace.</span>
+<span class="sd">        --subgraph_namespace=&lt;None&gt;          Filters the subgraph to a given namespace.</span>
+<span class="sd">        --supergraph_relationships=[]        A provided list will denote which relationships are allowed in the supergraph.</span>
+<span class="sd">        --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.</span>
+<span class="sd">        --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.</span>
+<span class="sd">        --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.</span>
+<span class="sd">        --test_subgraph=&lt;None&gt;               Enter a GO ID to output information describing the mapping differences between GOcats and Map2Slim.</span>
+<span class="sd">        --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.</span>
+<span class="sd">        --save_assignments=&lt;filename&gt;        Save a file with all genes and their GO assignments.</span>
+<span class="sd">        --id_translation=&lt;filename&gt;          Specify an id_translation file to associate go terms with their English names.</span>
+<span class="sd">        --map_manual_dataset=&lt;filename&gt;  Specify a mapping file to map manual dataset annotations to the user-specified categories.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">parser</span>
+<span class="kn">import</span> <span class="nn">ontologyparser</span>
 <span class="kn">import</span> <span class="nn">godag</span>
 <span class="kn">import</span> <span class="nn">subdag</span>
 <span class="kn">import</span> <span class="nn">docopt</span>
@@ -112,7 +115,7 @@
     <span class="n">database_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;database_file&gt;&#39;</span><span class="p">])</span>
     <span class="n">graph_class</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;go.obo&#39;</span><span class="p">:</span> <span class="n">godag</span><span class="o">.</span><span class="n">GoGraph</span><span class="p">(</span><span class="n">supergraph_namespace</span><span class="p">,</span> <span class="n">allowed_relationships</span><span class="p">)}</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">graph_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span>
-    <span class="n">parsing_class</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;go.obo&#39;</span><span class="p">:</span> <span class="n">parser</span><span class="o">.</span><span class="n">GoParser</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">graph</span><span class="p">)}</span>
+    <span class="n">parsing_class</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;go.obo&#39;</span><span class="p">:</span> <span class="n">ontologyparser</span><span class="o">.</span><span class="n">GoParser</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">graph</span><span class="p">)}</span>
     <span class="n">parsing_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
 
     <span class="n">database</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
@@ -125,7 +128,7 @@
     <span class="sd">&quot;&quot;&quot;Creates a graph object of GO, which can be traversed and queried within a Python interpreter.&quot;&quot;&quot;</span>
     <span class="n">database</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">database_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">godag</span><span class="o">.</span><span class="n">GoGraph</span><span class="p">(</span><span class="n">supergraph_namespace</span><span class="p">,</span> <span class="n">allowed_relationships</span><span class="p">)</span>
-    <span class="n">go_parser</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">GoParser</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
+    <span class="n">go_parser</span> <span class="o">=</span> <span class="n">ontologyparser</span><span class="o">.</span><span class="n">GoParser</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
     <span class="n">go_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
     <span class="n">database</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">graph</span></div>
@@ -151,17 +154,24 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">subgraph_relationships</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1"># Building the super_graph</span>
+    <span class="c1"># Building the supergraph</span>
     <span class="n">database</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;database_file&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
     <span class="n">output_directory</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_directory&gt;&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_directory</span><span class="p">)</span>
     <span class="n">database_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;database_file&gt;&#39;</span><span class="p">])</span>
     <span class="n">graph_class</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;go.obo&#39;</span><span class="p">:</span> <span class="n">godag</span><span class="o">.</span><span class="n">GoGraph</span><span class="p">(</span><span class="n">supergraph_namespace</span><span class="p">,</span> <span class="n">supergraph_relationships</span><span class="p">)}</span>
-    <span class="n">supergraph</span> <span class="o">=</span> <span class="n">graph_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span>
-    <span class="n">parsing_class</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;go.obo&#39;</span><span class="p">:</span> <span class="n">parser</span><span class="o">.</span><span class="n">GoParser</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">supergraph</span><span class="p">)}</span>
-    <span class="n">parsing_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
-
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">supergraph</span> <span class="o">=</span> <span class="n">graph_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">graph_class</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="n">parsing_class</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;go.obo&#39;</span><span class="p">:</span> <span class="n">ontologyparser</span><span class="o">.</span><span class="n">GoParser</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">supergraph</span><span class="p">)}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">parsing_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">graph_class</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_termlist&#39;</span><span class="p">]:</span>
         <span class="n">tools</span><span class="o">.</span><span class="n">json_save</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">supergraph</span><span class="o">.</span><span class="n">id_index</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_directory&gt;&#39;</span><span class="p">],</span> <span class="s2">&quot;termlist&quot;</span><span class="p">))</span>
 
@@ -173,7 +183,7 @@
     <span class="n">database</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="c1"># Building and collecting subgraphs</span>
-    <span class="n">subgraph_collection</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">subgraph_collection</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;keyword_file&gt;&#39;</span><span class="p">],</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
@@ -263,7 +273,7 @@
 
 <span class="k">def</span> <span class="nf">compute_subgraph_similarity</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">tabulate</span> <span class="k">import</span> <span class="n">tabulate</span>
-    <span class="n">inc_index_table</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">inc_index_table</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="n">output_file</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_directory&gt;&#39;</span><span class="p">]</span>
     <span class="n">gocats_mapping</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;gocats_mapping&gt;&#39;</span><span class="p">])</span>
     <span class="n">other_mapping</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;other_mapping&gt;&#39;</span><span class="p">])</span>
@@ -321,7 +331,7 @@
     <span class="n">mapping_dict</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;term_mapping&gt;&#39;</span><span class="p">])</span>
     <span class="n">output_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_directory&gt;&#39;</span><span class="p">])</span>
     <span class="n">gaf_name</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;GAF_name&gt;&#39;</span><span class="p">]</span>
-    <span class="n">mapped_gaf_array</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mapped_gaf_array</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="n">unmapped_genes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
@@ -341,17 +351,17 @@
 
 
 <div class="viewcode-block" id="compare_mapping"><a class="viewcode-back" href="../api.html#gocats.compare_mapping">[docs]</a><span class="k">def</span> <span class="nf">compare_mapping</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compares the agreement in annotation assignment between a GAF produced by GOcats (PARAMETER &lt;mapped_gaf&gt;) and</span>
-<span class="sd">    a gold-standard dataset, provided in csv format (PARAMETER &lt;manual-dataset&gt;).&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Compares the agreement in annotation assignment between a GAF produced by GOcats and another dataset, provided in</span>
+<span class="sd">    csv format.&quot;&quot;&quot;</span>
     <span class="c1"># TODO: Add argumnets for output directory. Save tables and list of genes not in database in this directory.</span>
     <span class="kn">from</span> <span class="nn">tabulate</span> <span class="k">import</span> <span class="n">tabulate</span>
     <span class="kn">import</span> <span class="nn">catcompare</span>
 
     <span class="n">mapped_dataset_gaf_dict</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">make_gaf_dict</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;mapped_gaf&gt;&#39;</span><span class="p">],</span> <span class="n">keys</span><span class="o">=</span><span class="s1">&#39;db_object_symbol&#39;</span><span class="p">)</span>
     <span class="n">hpa_dataset_dict</span> <span class="o">=</span> <span class="n">catcompare</span><span class="o">.</span><span class="n">make_dataset_dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;manual_dataset&gt;&#39;</span><span class="p">]),</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Supportive&#39;</span><span class="p">)</span>
-    <span class="n">location_breakdown_table</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">comparison_results</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">gene_assignment_tuples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">location_breakdown_table</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">comparison_results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">gene_assignment_tuples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;--map_manual_dataset&#39;</span><span class="p">]:</span>
         <span class="n">manual_dataset_mapping</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;--map_manual_dataset&#39;</span><span class="p">])</span>
@@ -359,7 +369,6 @@
         <span class="n">manual_dataset_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">compare_entry</span><span class="p">(</span><span class="n">object_symbol</span><span class="p">,</span> <span class="n">raw_data_go_set</span><span class="p">,</span> <span class="n">knowledgebase_go_set</span><span class="p">,</span> <span class="n">comparison_results</span><span class="p">):</span>
-
         <span class="k">if</span> <span class="n">raw_data_go_set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">knowledgebase_go_set</span><span class="p">)</span> <span class="o">==</span> <span class="n">raw_data_go_set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span>
                 <span class="n">knowledgebase_go_set</span><span class="p">):</span>  <span class="c1"># and len(raw_data_go_set.union(knowledgebase_go_set)) != 0:  EDIT should this ever happen? Correctly not-assigning non-assignments demonstrates accuracy. However these cases are non-informative.</span>
             <span class="n">comparison_results</span><span class="p">[</span><span class="n">object_symbol</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;complete&#39;</span>
@@ -463,49 +472,23 @@
         <span class="n">file_name</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;--save_assignments&#39;</span><span class="p">]</span>
         <span class="n">tools</span><span class="o">.</span><span class="n">list_to_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">gene_assignment_tuples</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">gene_id</span><span class="p">:</span> <span class="n">gene_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;GOcats version 0.2.1&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="n">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;GOcats version 0.3.0&#39;</span><span class="p">)</span>
     <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 
-          </div>
-        </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2017, Eugene Hinderer.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
-      
-    </div>
 
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Eugene Hinderer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+    </div>
   </body>
 </html>

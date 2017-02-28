@@ -1,5 +1,5 @@
 # !/usr/bin/python3
-"""Subgraph and subgraph components of an OBOGraph object."""
+"""A subgraph object of an OBOGraph object."""
 from dag import OboGraph, AbstractNode
 import re
 
