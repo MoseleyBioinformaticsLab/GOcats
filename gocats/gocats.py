@@ -21,8 +21,7 @@ Gene Ontology Categories Suite (GOcats) command line implementation::
         --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
         --save_assignments=<filename>        Save a file with all genes and their GO assignments.
         --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.
-        --map_manual_dataset=<filename>  Specify a mapping file to map manual dataset annotations to the user-specified categories.
-
+        --map_manual_dataset=<filename>      Specify a mapping file to map manual dataset annotations to the user-specified categories.
 """
 import os
 import sys

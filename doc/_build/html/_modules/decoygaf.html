@@ -45,12 +45,15 @@
         
   <h1>Source code for decoygaf</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !/usr/bin/python3</span>
-<span class="sd">&quot;&quot;&quot;Decoy GAF maker</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Decoy Gene Annotation File Creator command line implementation::</span>
 
-<span class="sd">Usage:</span>
-<span class="sd">    decoygaf.py make_decoy &lt;ontology_term_list&gt; &lt;output_dir&gt; &lt;output_file&gt;</span>
-<span class="sd">    decoygaf.py map_terms &lt;mapped_gaf&gt; &lt;output_dir&gt; &lt;output_file&gt; [--output_mapping_set=None]</span>
-
+<span class="sd">    Usage:</span>
+<span class="sd">        decoygaf.py make_decoy &lt;ontology_term_list&gt; &lt;output_dir&gt; &lt;output_file&gt;</span>
+<span class="sd">        decoygaf.py map_terms &lt;mapped_gaf&gt; &lt;output_dir&gt; &lt;output_file&gt; [--output_mapping_set=&lt;filepath&gt;]</span>
+<span class="sd">    Options:</span>
+<span class="sd">        -h --help                            Shows this screen.</span>
+<span class="sd">        --output_mapping_set=&lt;filepath&gt;      Saves a JSONPickle file of the mapping produced by the module under the provided filepath.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">docopt</span>

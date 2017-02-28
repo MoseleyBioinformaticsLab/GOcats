@@ -138,24 +138,20 @@ sh ~/ARK.GOcats3/runscripts/run.sh ~/ARK.GOcats3/gocats ~/Databases/GeneOntology
 ## Contributing
 
 #TODO:edit this section
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-#TODO:edit this section
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+#TODO:edit this section 
 
 ## Authors
 
 * **Eugene Hinderer** - [ehinderer](https://github.com/ehinderer)
 
 #TODO:edit this section
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
 #TODO:edit this section
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 

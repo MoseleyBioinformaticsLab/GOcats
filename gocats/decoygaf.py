@@ -1,10 +1,13 @@
 # !/usr/bin/python3
-"""Decoy GAF maker
+"""
+Decoy Gene Annotation File Creator command line implementation::
 
-Usage:
-    decoygaf.py make_decoy <ontology_term_list> <output_dir> <output_file>
-    decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> [--output_mapping_set=None]
-
+    Usage:
+        decoygaf.py make_decoy <ontology_term_list> <output_dir> <output_file>
+        decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> [--output_mapping_set=<filepath>]
+    Options:
+        -h --help                            Shows this screen.
+        --output_mapping_set=<filepath>      Saves a JSONPickle file of the mapping produced by the module under the provided filepath.
 """
 import os
 import docopt

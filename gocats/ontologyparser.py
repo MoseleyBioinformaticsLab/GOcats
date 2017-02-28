@@ -1,5 +1,9 @@
 # !/usr/bin/python3
-
+"""
+A parser which reads ontologies in the OBO format and calls appropriate graph objects to store information in a graph
+representation. Separate parsing classes within this module operate on distinct ontologies in the OBO Foundry to handle
+any subtle differences among ontologies.
+"""
 import re
 from dag import AbstractEdge, DirectionalRelationship
 from godag import GoGraphNode
