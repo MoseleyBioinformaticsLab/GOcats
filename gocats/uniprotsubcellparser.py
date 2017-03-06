@@ -13,6 +13,7 @@ import os
 import re
 import docopt
 import tools
+import version
 
 
 def main(args):
@@ -190,5 +191,5 @@ class UniprotSubDAG:
             self._build_subdag(item, graph)
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.3.0')
+    args = docopt.docopt(__doc__, version='UniProtSubcellParser Version '+version.version)
     main(args)

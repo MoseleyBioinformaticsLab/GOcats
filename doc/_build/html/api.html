@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The GOcats API Reference &#8212; GOcats 0.3.0 documentation</title>
+    <title>The GOcats API Reference &#8212; GOcats 1.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.0',
+        VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,18 +25,18 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="GOcats 0.3.0 documentation" href="index.html" />
-    <link rel="prev" title="Welcome to GOcats’s documentation!" href="index.html" /> 
+    <link rel="top" title="GOcats 1.0.0 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to GOcats’ documentation!" href="index.html" /> 
   </head>
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>GOcats 0.3.0 documentation</span></a></h1>
+          <span>GOcats 1.0.0 documentation</span></a></h1>
         <h2 class="heading"><span>The GOcats API Reference</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
-        «&#160;&#160;<a href="index.html">Welcome to GOcats&#8217;s documentation!</a>
+        «&#160;&#160;<a href="index.html">Welcome to GOcats&#8217; documentation!</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         </p>
@@ -50,12 +50,13 @@
 <div class="section" id="modules">
 <h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
 <p>All modules are located in /ARK.GOcats/gocats.</p>
-<div class="section" id="gocats">
-<h3>GOcats<a class="headerlink" href="#gocats" title="Permalink to this headline">¶</a></h3>
-<p>This top-level module is responsible for running the main GO term categorizaion methods. See tutorial for step-by-step instructions on how to accomplish basic tasks.</p>
-<span class="target" id="module-gocats"></span><p>Gene Ontology Categories Suite (GOcats) command line implementation:</p>
+<span class="target" id="module-gocats"></span><div class="section" id="the-gene-ontology-categories-suite-gocats">
+<h3>The Gene Ontology Categories Suite (GOcats)<a class="headerlink" href="#the-gene-ontology-categories-suite-gocats" title="Permalink to this headline">¶</a></h3>
+<p>This module provides methods for the creation of directed acyclic concept subgraphs of Gene Ontology, along with methods
+for evaluating those subgraphs.</p>
+<p>Command line implementation:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-    <span class="n">gocats</span> <span class="n">filter_subgraphs</span> <span class="o">&lt;</span><span class="n">database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">supergraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">subgraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">supergraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">subgraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">map_supersets</span> <span class="o">--</span><span class="n">output_termlist</span> <span class="o">--</span><span class="n">test_subgraph</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span><span class="p">]</span>
+    <span class="n">gocats</span> <span class="n">create_subgraphs</span> <span class="o">&lt;</span><span class="n">database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">supergraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">subgraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">supergraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">subgraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">map_supersets</span> <span class="o">--</span><span class="n">output_termlist</span> <span class="o">--</span><span class="n">test_subgraph</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span><span class="p">]</span>
     <span class="n">gocats</span> <span class="n">compute_subgraph_intersection</span> <span class="o">&lt;</span><span class="n">gocats_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">uniprot_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">map2slim_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">inclusion_index</span> <span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
     <span class="n">gocats</span> <span class="n">compute_subgraph_similarity</span> <span class="o">&lt;</span><span class="n">gocats_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">other_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
     <span class="n">gocats</span> <span class="n">categorize_dataset</span> <span class="o">&lt;</span><span class="n">gaf_dataset</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">term_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">GAF_name</span><span class="o">&gt;</span>
@@ -79,14 +80,28 @@
 <dl class="function">
 <dt id="gocats.build_graph">
 <code class="descclassname">gocats.</code><code class="descname">build_graph</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#build_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.build_graph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Not yet implemented. Try build_graph_interpretor to create a GO graph object to explore within a Python
-interpreter. The graph is built properly in the filter_subgraphs command that exctracts subgraphs from GO.</p>
+<dd><p><strong>Not yet implemented</strong></p>
+<p>Try build_graph_interpreter to create a GO graph object to explore within a Python
+interpreter.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gocats.build_graph_interpreter">
 <code class="descclassname">gocats.</code><code class="descname">build_graph_interpreter</code><span class="sig-paren">(</span><em>database_file</em>, <em>supergraph_namespace=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#build_graph_interpreter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.build_graph_interpreter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a graph object of GO, which can be traversed and queried within a Python interpreter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filehandle</strong> &#8211; Ontology database file.</li>
+<li><strong>supergraph_namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Optional - Filter graph to a sub-ontology namespace.</li>
+<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; Optional - Filter graph to use only those relationships listed.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -97,8 +112,8 @@ csv format.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="gocats.filter_subgraphs">
-<code class="descclassname">gocats.</code><code class="descname">filter_subgraphs</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#filter_subgraphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.filter_subgraphs" title="Permalink to this definition">¶</a></dt>
+<dt id="gocats.create_subgraphs">
+<code class="descclassname">gocats.</code><code class="descname">create_subgraphs</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#create_subgraphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.create_subgraphs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a graph object of GO and then extracts subgraphs which represent concepts that are defined by a list of
 provided keywords.</p>
 </dd></dl>
@@ -502,19 +517,33 @@ document into a file.</p>
 <div class="section" id="map2slim-mapping-error-testing">
 <h3>Map2Slim Mapping Error Testing<a class="headerlink" href="#map2slim-mapping-error-testing" title="Permalink to this headline">¶</a></h3>
 <p>The following scripts are located /ARK.GOcats/gocats/tests/Map2SlimMappingTest</p>
-<div class="section" id="go-term-collection-gotermcollect-py">
-<h4>GO term collection (gotermcollect.py)<a class="headerlink" href="#go-term-collection-gotermcollect-py" title="Permalink to this headline">¶</a></h4>
-</div>
-<div class="section" id="output-data-processing-outputprocessing-py">
-<h4>Output Data Processing (outputprocessing.py)<a class="headerlink" href="#output-data-processing-outputprocessing-py" title="Permalink to this headline">¶</a></h4>
-</div>
-<div class="section" id="map2slim-term-mapping-error-analysis-erroranalysis-py">
-<h4>Map2Slim term mapping error analysis (erroranalysis.py)<a class="headerlink" href="#map2slim-term-mapping-error-analysis-erroranalysis-py" title="Permalink to this headline">¶</a></h4>
-</div>
+<p>These scripts are for enumerating the potential scoping and scaling errors that Map2Slim makes by evaluating all
+relationship types in the same way. We are using Map2Slim&#8217;s &#8211;idfile option to map custom GO terms, instead of mapping
+to a whole GOslim. The goal is to produce an all-against-all mapping for all terms in Gene Ontology (or for individual
+sub-ontologies of GO) so that all possilbe term-to-term mappings that Map2Slim can make are evaluated. However, because
+Map2Slim does not natively allow this kind of evaluation, we were foced to perform two workarounds:</p>
+<p>1. The first workaround is mapping GO terms to themselves. Map2Slim is designed to map <em>gene</em> annotations within a Gene
+Annotation File (GAF) to a GO term in a GO slim or to a set of manually-defined GO terms. Therefore we created a &#8220;decoy&#8221;
+GAF which replaced the &#8220;gene name&#8221; field with a string representing a GO term from the GO ontology file, and its row
+contains a string of the same GO term in its &#8220;GO annotation&#8221; field. Map2Slim can read, process, and map the GO
+annotation field in the same way it normally does. In this way, the resulting mapped gaf contains a GO term string
+mapped to another GO term that has been mapped to the provided target GO term list.</p>
+<p>This was accomplished in gotermcollect.py</p>
+<p>2. The second workaround is that Map2Slim removes all mappings that are subsumed by other mappings. This means that if
+one were to supply our &#8220;decoy GAF&#8221; with an &#8211;idfile listing of all terms in GO we would receive only mappings of GO
+terms to themselves (all other mappings would be subsumed by one another). To overcome this we supplied a single GO term
+in the &#8211;idfile option at a time for all terms in go, and then converged all resulting mappings together from the
+resulting ~44,000 GAF output files (ignoring self-mappings and redundancy).</p>
+<p>This was accomplished using gotermcollect.py, outputprocessing.py, m2s_runner.sh, run.sh, and a Perl script wihich submitted jobs to a TORUQUE cluster (submit_spartan_24.pl).</p>
 </div>
 <div class="section" id="has-part-mapping-error-analysis-hp-mapping-testing-py">
 <h3>Has_Part mapping error analysis (hp_mapping_testing.py)<a class="headerlink" href="#has-part-mapping-error-analysis-hp-mapping-testing-py" title="Permalink to this headline">¶</a></h3>
 <p>The following script is located in /ARK.GOcats/gocats</p>
+<p>Similar to Map2Slim error testing, this script enumerates the errors made by the misinterpretation of a problematic edge
+type. In this case this involves enumerating all has_part paths in GO without reversing the semantic directionality of
+the edge. GOcats perferms this reversal by defalut, creating a proper scoping/scaling interpretation of the relationship
+with respect to term categorization. This test reverses the direcitonality back to its original, problematic state and
+enumerates how many mappings are created as a result.</p>
 </div>
 <div class="section" id="speed-test">
 <h3>Speed Test<a class="headerlink" href="#speed-test" title="Permalink to this headline">¶</a></h3>
@@ -544,7 +573,7 @@ document into a file.</p>
       <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
-        «&#160;&#160;<a href="index.html">Welcome to GOcats&#8217;s documentation!</a>
+        «&#160;&#160;<a href="index.html">Welcome to GOcats&#8217; documentation!</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         </p>
