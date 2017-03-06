@@ -15,6 +15,7 @@ import csv
 import re
 import tools
 import json
+import version
 
 
 def main(args):
@@ -60,5 +61,5 @@ def map_terms(args):
             json.dump(args['--output_mapping_set'], f)
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.3.0')
+    args = docopt.docopt(__doc__, version='DecoyGAF Version '+version.version)
     main(args)

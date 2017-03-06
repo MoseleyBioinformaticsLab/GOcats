@@ -101,7 +101,7 @@ mvn clean package -D maven.test.skip.exec=true
 
 Creating a mapping of GO terms from the Gene Ontology using a category file
 ```
-python3 ~/ARK.GOcats/gocats/gocats.py filter_subgraphs ~/Databases/GeneOntology/01-12-2016/go.obo ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ./Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
+python3 ~/ARK.GOcats/gocats/gocats.py create_subgraphs ~/Databases/GeneOntology/01-12-2016/go.obo ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ./Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
 ```
 This will output several files in the 'Output' directory including:
 ```

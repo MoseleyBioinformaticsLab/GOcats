@@ -1,9 +1,15 @@
 # !/usr/bin/python3
 """
-Gene Ontology Categories Suite (GOcats) command line implementation::
+The Gene Ontology Categories Suite (GOcats)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This module provides methods for the creation of directed acyclic concept subgraphs of Gene Ontology, along with methods
+for evaluating those subgraphs.
+
+Command line implementation::
 
     Usage:
-        gocats filter_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=<None>]
+        gocats create_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=<None>]
         gocats compute_subgraph_intersection <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
         gocats compute_subgraph_similarity <gocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
         gocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
@@ -32,11 +38,12 @@ import godag
 import subdag
 import docopt
 import tools
+import version
 
 
 def main(args):
-    if args['filter_subgraphs']:
-        filter_subgraphs(args)
+    if args['create_subgraphs']:
+        create_subgraphs(args)
     elif args['compute_subgraph_intersection']:
         compute_subgraph_intersection(args)
     elif args['compute_subgraph_similarity']:
@@ -49,8 +56,10 @@ def main(args):
 
 # Need a SubGraphCollection object
 def build_graph(args):
-    """Not yet implemented. Try build_graph_interpretor to create a GO graph object to explore within a Python
-    interpreter. The graph is built properly in the filter_subgraphs command that exctracts subgraphs from GO."""
+    """**Not yet implemented**
+
+    Try build_graph_interpreter to create a GO graph object to explore within a Python
+    interpreter."""
     # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to one another.
     if args['--supergraph_namespace']:
         supergraph_namespace = args['--supergraph_namespace']
@@ -78,7 +87,12 @@ def build_graph(args):
 
 
 def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None):
-    """Creates a graph object of GO, which can be traversed and queried within a Python interpreter."""
+    """Creates a graph object of GO, which can be traversed and queried within a Python interpreter.
+
+    :param filehandle: Ontology database file.
+    :param str supergraph_namespace: Optional - Filter graph to a sub-ontology namespace.
+    :param list allowed_relationships: Optional - Filter graph to use only those relationships listed.
+    """
     database = open(database_file, 'r')
     graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
     go_parser = ontologyparser.GoParser(database, graph)
@@ -87,7 +101,7 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
     return graph
 
 
-def filter_subgraphs(args):
+def create_subgraphs(args):
     """Creates a graph object of GO and then extracts subgraphs which represent concepts that are defined by a list of
     provided keywords."""
     if args['--supergraph_namespace']:
@@ -426,5 +440,5 @@ def compare_mapping(args):
         tools.list_to_file(file_name, sorted(gene_assignment_tuples, key=lambda gene_id: gene_id[0]))
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='GOcats version 0.3.0')
+    args = docopt.docopt(__doc__, version=str('GOcats Version ')+version.version)
     main(args)

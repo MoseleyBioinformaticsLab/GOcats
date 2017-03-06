@@ -10,6 +10,7 @@ import csv
 csv.field_size_limit(sys.maxsize)
 
 
+# TODO: move to using JSON not JsonPickle and use sort_keys=True parameter to test outputs between runs
 def json_save(obj, filename):
     """Saves an object to a file."""
     f = open(filename+".json_pickle", 'w')
