@@ -2,6 +2,7 @@
 """
 Functions for handling I/O tasks (and more) with GOcats.
 """
+import json
 import jsonpickle
 import sys
 import os
@@ -12,6 +13,18 @@ csv.field_size_limit(sys.maxsize)
 
 # TODO: move to using JSON not JsonPickle and use sort_keys=True parameter to test outputs between runs
 def json_save(obj, filename):
+    with open(filename+".json", 'w') as json_file:
+        json.dump(obj, json_file)
+
+
+def json_load(filename):
+    with open(filename, 'r') as json_file:
+        json_str = json_file.read()
+        obj = json.loads(json_str)
+        return obj
+
+
+def jsonpickle_save(obj, filename):
     """Saves an object to a file."""
     f = open(filename+".json_pickle", 'w')
     json_obj = jsonpickle.encode(obj, keys=True)  # Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.
@@ -19,7 +32,7 @@ def json_save(obj, filename):
     f.close()
 
 
-def json_load(filename):
+def jsonpickle_load(filename):
     """Loads a jsonPickle object from a file."""
     f = open(filename)
     json_str = f.read()

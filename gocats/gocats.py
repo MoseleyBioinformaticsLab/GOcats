@@ -156,6 +156,7 @@ def create_subgraphs(args):
         for row in reader:
             subgraph_name = row[0]
             keyword_list = [keyword for keyword in re.split(';', row[1])]
+            print(subgraph_name)  # Added for debugging
             subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, keyword_list, subgraph_namespace, subgraph_relationships)
 
     # Handling superset mapping
