@@ -155,7 +155,6 @@ class OboGraph(object):
         search_string_list_words = [re.findall(self.word_split, word) for word in search_string_list]
         search_string_word_set = set([word for sublist in search_string_list_words for word in sublist])
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in search_string_word_set if word in self.vocab_index]])
-        print(len(filtered_nodes))
         if self.namespace_filter:
             filtered_nodes = [node for node in filtered_nodes if node.namespace == self.namespace_filter]
         return filtered_nodes
