@@ -79,17 +79,13 @@ def build_graph(args):
     graph = graph_class[database_name]
     parsing_class = {'go.obo': ontologyparser.GoParser(database, graph)}
     parsing_class[database_name].parse()
-
     database.close()
-
-    # print("JsonPickle saving GO object")
-    # tools.json_save(graph, os.path.join(output_directory, "{}_{}".format(database_name[:-4], date.today())))
 
 
 def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None):
     """Creates a graph object of GO, which can be traversed and queried within a Python interpreter.
 
-    :param filehandle: Ontology database file.
+    :param database_file: Ontology database file.
     :param str supergraph_namespace: Optional - Filter graph to a sub-ontology namespace.
     :param list allowed_relationships: Optional - Filter graph to use only those relationships listed.
     """
@@ -140,12 +136,12 @@ def create_subgraphs(args):
         print("The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
         sys.exit()
     if args['--output_termlist']:
-        tools.json_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
+        tools.jsonpickle_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
 
     id_translation = dict()
     for id, node in supergraph.id_index.items():
         id_translation[id] = node.name
-    tools.json_save(id_translation, os.path.join(args['<output_directory>'], "id_translation"))
+    tools.jsonpickle_save(id_translation, os.path.join(args['<output_directory>'], "id_translation"))
 
     database.close()
 
@@ -192,8 +188,8 @@ def create_subgraphs(args):
     # TODO: do the same for node_object_mapping
 
     # Save mapping files and create report
-    tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
-    tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_content_mapping"))
+    tools.jsonpickle_save(collection_id_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
+    tools.jsonpickle_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
         report_file.write(
             'Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(
@@ -216,7 +212,7 @@ def create_subgraphs(args):
             report_file.write(out_string)
 
     # FIXME: cannot json save due to recursion of objects within objects...
-    # tools.json_save(collection_node_mapping, os.path.join(args['<output_directory>'], "GC_node_mapping"))
+    # tools.jsonpickle_save(collection_node_mapping, os.path.join(args['<output_directory>'], "GC_node_mapping"))
 
     # Making a file for network visualization via Cytoscape 3.0
     with open(os.path.join(args['<output_directory>'], "NetworkTable.csv"), 'w', newline='') as network_table:
@@ -243,10 +239,10 @@ def compute_subgraph_similarity(args):
     from tabulate import tabulate
     inc_index_table = list()
     output_file = args['<output_directory>']
-    gocats_mapping = tools.json_load(args['<gocats_mapping>'])
-    other_mapping = tools.json_load(args['<other_mapping>'])
+    gocats_mapping = tools.jsonpickle_load(args['<gocats_mapping>'])
+    other_mapping = tools.jsonpickle_load(args['<other_mapping>'])
     if args['--id_translation']:
-        id_translation_dict = tools.json_load(args['--id_translation'])
+        id_translation_dict = tools.jsonpickle_load(args['--id_translation'])
     else:
         id_translation_dict = None
     shared_locations = set(other_mapping.keys()).intersection(set(gocats_mapping.keys()))
@@ -274,9 +270,9 @@ def compute_subgraph_intersection(args):
     if not os.path.exists(args['<output_directory>']):
         os.makedirs(args['<output_directory>'])
 
-    gocats_mapping = tools.json_load(args['<gocats_mapping>'])
-    uniprot_mapping = tools.json_load(args['<uniprot_mapping>'])
-    map2slim_mapping = tools.json_load(args['<map2slim_mapping>'])
+    gocats_mapping = tools.jsonpickle_load(args['<gocats_mapping>'])
+    uniprot_mapping = tools.jsonpickle_load(args['<uniprot_mapping>'])
+    map2slim_mapping = tools.jsonpickle_load(args['<map2slim_mapping>'])
 
     location_categories = set(
         list(gocats_mapping.keys()) + list(uniprot_mapping.keys()) + list(map2slim_mapping.keys()))
@@ -296,7 +292,7 @@ def compute_subgraph_intersection(args):
 
 def categorize_dataset(args):
     loaded_gaf_array = tools.parse_gaf(args['<gaf_dataset>'])
-    mapping_dict = tools.json_load(args['<term_mapping>'])
+    mapping_dict = tools.jsonpickle_load(args['<term_mapping>'])
     output_directory = os.path.realpath(args['<output_directory>'])
     gaf_name = args['<GAF_name>']
     mapped_gaf_array = list()
@@ -332,7 +328,7 @@ def compare_mapping(args):
     gene_assignment_tuples = list()
 
     if args['--map_manual_dataset']:
-        manual_dataset_mapping = tools.json_load(args['--map_manual_dataset'])
+        manual_dataset_mapping = tools.jsonpickle_load(args['--map_manual_dataset'])
     else:
         manual_dataset_mapping = dict()
 
@@ -375,7 +371,7 @@ def compare_mapping(args):
             gene_assignment_tuples.append((gene_name, sorted(go_set), set(), comparison_results[gene_name]))
 
     if args['--id_translation']:
-        id_translation_dict = tools.json_load(args['--id_translation'])
+        id_translation_dict = tools.jsonpickle_load(args['--id_translation'])
     else:
         id_translation_dict = dict()
 
