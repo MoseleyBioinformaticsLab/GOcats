@@ -13,19 +13,19 @@ csv.field_size_limit(sys.maxsize)
 
 # TODO: move to using JSON not JsonPickle and use sort_keys=True parameter to test outputs between runs
 def json_save(obj, filename):
-    if type(obj) == str() or type(obj) == list():
+    if type(obj) == str or type(obj) == list:
         json_obj = obj
-    elif type(obj) == dict():
+    elif type(obj) == dict:
         json_obj = dict()
         for key, value in obj.items():
-            if type(value) == str() or type(value) == list():
+            if type(value) == str or type(value) == list:
                 new_value = value
-            elif type(value) == set():
+            elif type(value) == set:
                 new_value = [item for item in value]
             else:
                 raise Exception("Data type is not supported!")
             json_obj[key] = new_value
-    elif type(obj) == set():
+    elif type(obj) == set:
         json_obj = [item for item in obj]
     else:
         raise Exception("Data type is not supported!")
