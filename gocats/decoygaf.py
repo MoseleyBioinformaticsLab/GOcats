@@ -35,7 +35,7 @@ def make_decoy(args):
     line_format = "UniProtKB	R4GNC1	SRP72		GO:0005737	GO_REF:0000052	IDA		C	Signal recognition particle subunit SRP72	R4GNC1_HUMAN	protein	taxon:9606	20101115	HPA	"  # Random GAF line used for formatting purposes
     line_array = re.split('\t', line_format)
 
-    go_terms = tools.json_load(args['<ontology_term_list>'])
+    go_terms = tools.jsonpickle_load(args['<ontology_term_list>'])
 
     with open(os.path.join(args['<output_dir>'], args['<output_file>']), 'w') as gaf_file:
         gafwriter = csv.writer(gaf_file, delimiter='\t')
@@ -53,10 +53,10 @@ def map_terms(args):
                     term_mapping[line[4]].append(line[1])
                 else:
                     term_mapping[line[4]] = [line[1]]
-    tools.json_save(term_mapping, os.path.join(args['<output_dir>'], args['<output_file>']))
+    tools.jsonpickle_save(term_mapping, os.path.join(args['<output_dir>'], args['<output_file>']))
 
     if args['--output_mapping_set']:
-        tools.json_save(set(term_mapping[args['--output_mapping_set']]), os.path.join(args['<output_dir>'], 'M2S_PlasmaMembrane_subgraph'))
+        tools.jsonpickle_save(set(term_mapping[args['--output_mapping_set']]), os.path.join(args['<output_dir>'], 'M2S_PlasmaMembrane_subgraph'))
         with open(os.path.join(args['<output_dir>'], 'M2S_PlasmaMembrane_subgraph.json'), 'w') as f:
             json.dump(args['--output_mapping_set'], f)
 

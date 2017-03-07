@@ -56,7 +56,7 @@
 <span class="n">csv</span><span class="o">.</span><span class="n">field_size_limit</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="json_save"><a class="viewcode-back" href="../api.html#tools.json_save">[docs]</a><span class="k">def</span> <span class="nf">json_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="jsonpickle_save"><a class="viewcode-back" href="../api.html#tools.jsonpickle_save">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Saves an object to a file.&quot;&quot;&quot;</span>
     <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="o">+</span><span class="s2">&quot;.json_pickle&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
     <span class="n">json_obj</span> <span class="o">=</span> <span class="n">jsonpickle</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.</span>
@@ -64,7 +64,7 @@
     <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="json_load"><a class="viewcode-back" href="../api.html#tools.json_load">[docs]</a><span class="k">def</span> <span class="nf">json_load</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="jsonpickle_load"><a class="viewcode-back" href="../api.html#tools.jsonpickle_load">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_load</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Loads a jsonPickle object from a file.&quot;&quot;&quot;</span>
     <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">json_str</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
