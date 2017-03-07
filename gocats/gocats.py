@@ -189,7 +189,7 @@ def create_subgraphs(args):
 
     # Save mapping files and create report
     tools.jsonpickle_save(collection_id_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
-    tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
+    tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
     tools.jsonpickle_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_content_mapping"))
     tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
