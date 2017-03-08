@@ -8,7 +8,8 @@ import re
 class OboGraph(object):
 
     """A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
-    acyclic graph (DAG)."""
+    acyclic graph (DAG).
+    """
 
     def __init__(self, namespace_filter=None, allowed_relationships=None):
         self.namespace_filter = namespace_filter
@@ -33,40 +34,70 @@ class OboGraph(object):
 
     @property
     def orphans(self):
-        """A set of nodes in the graph which have no parents."""
+        """:py:obj:`property` defining a set of nodes in the graph which have no parents. When the graph is modified, calls
+        :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
+
+        :return: Set of 'orphan' nodes.
+        :rtype: :py:class:`set`
+        """
         if self._modified:
             self._update_graph()
         return self._orphans
 
     @property
     def leaves(self):
-        """A set of nodes in the graph which have no children."""
+        """:py:obj:`property` defining a set of nodes in the graph which have no children. When the graph is modified, calls
+        :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
+
+        :return: Set of 'leaf' nodes.
+        :rtype: :py:class:`set`
+        """
         if self._modified:
             self._update_graph()
         return self._leaves
     
     def valid_node(self, node):
-        """Returns True if a node is not obsolete and is contained within the given ontology namespace contraint."""
+        """Defines condition of a valid node. Node is valid if it is not obsolete and is contained within the given
+        ontology namespace contraint.
+
+        :param node: A :class:`dag.AbstractNode` object
+        :return: True if node is valid, False otherwise
+        :rtype: :py:obj:`True` or :py:obj:`False`
+        """
         if not node.obsolete and (not self.namespace_filter or node.namespace == self.namespace_filter):
             return True
         return False
 
     def valid_edge(self, edge):
-        """Returns True if an edge is within the list of allowed edges and connects two nodes that are both contained in
-        the graph in question."""
+        """Defines condition of a valid edge. Edge is valid if it is within the list of allowed edges and connects two
+        nodes that are both contained in the graph in question.
+
+        :param edge: A :class:`dag.AbstractEdge` object
+        :return: True if node is valid, False otherwise
+        :rtype: :py:obj:`True` or :py:obj:`False`
+        """
         if (edge.parent_node.id in self.id_index and edge.child_node.id in self.id_index) and (not self.allowed_relationships or edge.relationship_id in self.allowed_relationships):
             return True
         return False
 
     def _update_graph(self):
-        """Repopulates graph orphans and leaves."""
+        """Repopulates graph orphans and leaves sets.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         self._orphans = set([node for node in self.node_list if not node.obsolete and not node.parent_node_set and node not in self.root_nodes])
         self._leaves = set([node for node in self.node_list if not node.obsolete and not node.child_node_set and node.parent_node_set])
         self._modified = False
 
     def add_node(self, node):
         """Adds a node object to the graph, adds an object pointer to the vocabulary index to reference nodes to every
-        word in the node name and definition."""
+        word in the node name and definition. Sets modification state to :py:obj:`True`.
+
+        :param node: A :class:`dag.AbstractNode` object.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         self.node_list.append(node)
         self.id_index[node.id] = node
         for word in re.findall(r"[\w\'\-]+", node.name + " " + node.definition):
@@ -77,7 +108,13 @@ class OboGraph(object):
         self._modified = True
 
     def remove_node(self, node):
-        """Removes a node from the graph and deletes node references from all entries in the vocabulary index."""
+        """Removes a node from the graph and deletes node references from all entries in the vocabulary index. Sets
+        modification state to :py:obj:`True`.
+
+        :param node: A :class:`dag.AbstractNode` object.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         if node not in self.node_list:
             pass
         else:
@@ -102,6 +139,13 @@ class OboGraph(object):
         self._modified = True
 
     def add_edge(self, edge):
+        """Adds an edge object to the graph, and counts the edge relationship type. Sets modification state to
+        :py:obj:`True`.
+
+        :param edge: A :class:`dag.AbstractEdge` object.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         self.edge_list.append(edge)
         try:
             self.relationship_count[edge.relationship_id] += 1
@@ -110,18 +154,38 @@ class OboGraph(object):
         self._modified = True
 
     def remove_edge(self, edge):
+        """Removes an edge object from the graph, and removes references to that edge from the node objects involved.
+        Sets modification state to :py:obj:`True`.
+
+        :param edge: A :class:`dag.AbstractEdge` object.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         self.id_index[edge.parent_id].remove_edge(edge)
         self.id_index[edge.child_id].remove_edge(edge)
         self.edge_list.remove(edge)
         self._modified = True
 
     def add_relationship(self, relationship):
+        """Adds a :class:`dag.AbstractRelationship` object to the graph's relationship index, referenced by
+        that relationships ID. Sets modification state to :py:obj:`True`.
+
+        :param relationship: A :class:`dag.AbstractRelationship` object.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         self.relationship_index[relationship.id] = relationship
-        self.modified = True
+        self._modified = True
 
     def instantiate_valid_edges(self):
-        """Instatntiate edge if both nodes of the edge are in the graph. Searches by node id because node objects are
-        not referenced at the edges at the time this method is called."""
+        """Add all edge references to their respective nodes and vice versa if both nodes of the edge are in the graph.
+        This is carried out by :func:`edge.connect_nodes`. Also adds :class:`dag.AbstractRelationship` object
+        reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets
+        modification state to :py:obj:`True`.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         del_edges = set()
         for edge in self.edge_list:
             if edge.node_pair_id[0] in self.id_index.keys() and edge.node_pair_id[1] in self.id_index.keys():
@@ -131,12 +195,16 @@ class OboGraph(object):
                 del_edges.add(edge)
         for edge in del_edges:
             self.edge_list.remove(edge)
-
         self._modified = True
 
     def node_depth(self, sample_node):
-        """Returns an integer representative of how many nodes are between the given node and the root node of the
-        graph."""
+        """Returns an integer representing how many nodes are between the given node and the root node of the graph
+        (depth level).
+
+        :param sample_node: A :class:`dag.AbstractNode` object.
+        :return: Depth level.
+        :rtype: :py:obj:`int`
+        """
         if sample_node in self.root_nodes:
             return 0
         depth = 1
@@ -151,7 +219,12 @@ class OboGraph(object):
 
     def filter_nodes(self, search_string_list):
         """Returns a list of node objects that contain vocabulary matching the keywords provided in the search string
-        list. Nodes are selected by searching through the vocablary index."""
+        list. Nodes are selected by searching through the vocablary index.
+
+        :param search_string_list: A :py:obj:`list` of search strings provided in the keyword_file provided to :func:`gocats.create_subgraphs`.
+        :return: A list of :class:`dag.AbstractNode` objects.
+        :rtype: :py:obj:`list`
+        """
         search_string_list_words = [re.findall(self.word_split, word) for word in search_string_list]
         search_string_word_set = set([word for sublist in search_string_list_words for word in sublist])
         filtered_nodes = set.union(*[node_set for node_set in [self.vocab_index[word] for word in search_string_word_set if word in self.vocab_index]])
@@ -160,7 +233,12 @@ class OboGraph(object):
         return filtered_nodes
 
     def filter_edges(self, filtered_nodes):
-        """Returns a list of edges in the graph that connect the nodes provided in the filtered nodes list."""
+        """Returns a list of edges in the graph that connect the nodes provided in the filtered nodes list.
+
+        :param filtered_nodes: List of filtered nodes provided by :func:`filter_nodes`.
+        :return: A list of :class:`dag.AbstractEdge` objects.
+        :rtype: :py:obj:`list`
+        """
         filtered_edges = [edge for edge in self.edge_list if edge.parent_node in filtered_nodes and edge.child_node in filtered_nodes]
         if self.allowed_relationships:
             filtered_edges = [edge for edge in filtered_edges if edge.relationship_id in self.allowed_relationships]
@@ -168,7 +246,13 @@ class OboGraph(object):
  
     def nodes_between(self, start_node, end_node):
         """Returns a set of nodes that occur along all paths between the start node and the end node. If no paths exist,
-        an empty set is returned."""
+        an empty set is returned.
+
+        :param start_node: :class:`dag.AbstractNode` object to start the paths.
+        :param end_node: :class:`dag.AbstractNode` object to end the paths.
+        :return: A set of :class:`dag.AbstractNode` objects if there is at least one path between the parameters, an empty set otherwise.
+        :rtype: :py:obj:`set`
+        """
         if start_node.ancestors and end_node.descendants:
             return start_node.ancestors.intersection(end_node.descendants)
         else:
@@ -177,9 +261,10 @@ class OboGraph(object):
 
 class AbstractNode(object):
 
-    """A node contaning all basic properties of an OBO node. The parser 
-    currently has direct access to datamembers (id, name, definition, 
-    namespace, edges, and obsolete)."""
+    """A node contaning all basic properties of an OBO node. The parsing object, :class:`ontologyparser.OboParser`
+    currently has direct access to datamembers (id, name, definition, namespace, edges, and obsolete) so that
+    information from the database file can be added to the object.
+    """
     
     def __init__(self):
         self.id = str()
@@ -197,27 +282,48 @@ class AbstractNode(object):
         
     @property
     def descendants(self):
-        """Returns the set of nodes that are recursively forward of a node with a scoping-type relationship."""
+        """:py:obj:`property` defining a set of nodes in the graph that are recusively reverse of a node with a
+        scoping-type relationship. When the node is modified, calls :func:`_update_nodes` to repopulate the sets of
+        descendents and ancestors. This represents a "lazy" evaluation of node descendents.
+
+        :return: Set of :class:`dag.AbstractNode` objects
+        :rtype: :py:class:`set`
+        """
         if self._modified:
             self._update_node()
         return self._descendants
 
     @property
     def ancestors(self):
-        """Returns set of nodes that are recursively reverse of a node with a scoping-type relationship."""
+        """:py:obj:`property` defining a set of nodes in the graph that are recusively forward of a node with a
+        scoping-type relationship. When the node is modified, calls :func:`_update_nodes` to repopulate the sets of
+        descendents and ancestors. This represents a "lazy" evaluation of node ancestors.
+
+        :return: Set of :class:`dag.AbstractNode` objects
+        :rtype: :py:class:`set`
+        """
         if self._modified:
             self._update_node()
         return self._ancestors
     
     def _update_node(self):
-        """Repopulates ancestor and descendent sets for a node."""
+        """Repopulates ancestor and descendent sets for a node. Sets modification state to :py:obj:`True`.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         self._update_descendants()
         self._update_ancestors()
         self._modified = False
 
     def add_edge(self, edge, allowed_relationships):
-        """Adds a given edge to the node's edge list and sets parent and child nodes given the edge represents an
-        allowed relationship."""
+        """Adds a given :class:`dag.AbstractEdge` to a each :class:`dag.AbstractNode` objects that the edge conects.
+        If there is a filter for the types of relationshpis allowed, edges with non-allowed relationship types are not
+        processed. Sets modification state to :py:obj:`True`.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         # TODO: Need to capture non-parent/child relationship types, such as actor/actee and equivalence
         # FIXME: Should we add edges that represent non-allowed relationships?
         self.edges.add(edge)

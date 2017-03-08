@@ -4,16 +4,18 @@ The GOcats API Reference
 
 Modules
 ~~~~~~~
-All modules are located in /ARK.GOcats/gocats.
+The following modules are located in /ARK.GOcats/gocats.
 
 .. automodule:: gocats
    :members:
+   :private-members:
 
 Directed Acyclic Graph (DAG)
 ----------------------------
 
 .. automodule:: dag
    :members:
+   :private-members:
 
 Gene Ontology Directed Acylic Graph (GODAG)
 -------------------------------------------

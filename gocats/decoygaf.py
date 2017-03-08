@@ -61,5 +61,5 @@ def map_terms(args):
             json.dump(args['--output_mapping_set'], f)
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version='DecoyGAF Version '+version.version)
+    args = docopt.docopt(__doc__, version='DecoyGAF Version '+version.__version__)
     main(args)
