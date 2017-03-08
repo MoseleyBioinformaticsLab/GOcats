@@ -17,7 +17,8 @@
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -25,7 +26,6 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="GOcats 1.0.0 documentation" href="index.html" />
     <link rel="prev" title="Welcome to GOcats’ documentation!" href="index.html" /> 
   </head>
   <body role="document">
@@ -49,20 +49,20 @@
 <h1>The GOcats API Reference<a class="headerlink" href="#the-gocats-api-reference" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="modules">
 <h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
-<p>All modules are located in /ARK.GOcats/gocats.</p>
+<p>The following modules are located in /ARK.GOcats/gocats.</p>
 <span class="target" id="module-gocats"></span><div class="section" id="the-gene-ontology-categories-suite-gocats">
 <h3>The Gene Ontology Categories Suite (GOcats)<a class="headerlink" href="#the-gene-ontology-categories-suite-gocats" title="Permalink to this headline">¶</a></h3>
 <p>This module provides methods for the creation of directed acyclic concept subgraphs of Gene Ontology, along with methods
 for evaluating those subgraphs.</p>
 <p>Command line implementation:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-    <span class="n">gocats</span> <span class="n">create_subgraphs</span> <span class="o">&lt;</span><span class="n">database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">supergraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">subgraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">supergraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">subgraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">map_supersets</span> <span class="o">--</span><span class="n">output_termlist</span> <span class="o">--</span><span class="n">test_subgraph</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span><span class="p">]</span>
-    <span class="n">gocats</span> <span class="n">compute_subgraph_intersection</span> <span class="o">&lt;</span><span class="n">gocats_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">uniprot_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">map2slim_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">inclusion_index</span> <span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
+    <span class="n">gocats</span> <span class="n">create_subgraphs</span> <span class="o">&lt;</span><span class="n">database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">supergraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">subgraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">supergraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">subgraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">map_supersets</span> <span class="o">--</span><span class="n">output_termlist</span><span class="p">]</span>
     <span class="n">gocats</span> <span class="n">compute_subgraph_similarity</span> <span class="o">&lt;</span><span class="n">gocats_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">other_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
+    <span class="n">gocats</span> <span class="n">compute_subgraph_intersection</span> <span class="o">&lt;</span><span class="n">gocats_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">uniprot_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">map2slim_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
     <span class="n">gocats</span> <span class="n">categorize_dataset</span> <span class="o">&lt;</span><span class="n">gaf_dataset</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">term_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">GAF_name</span><span class="o">&gt;</span>
     <span class="n">gocats</span> <span class="n">compare_mapping</span> <span class="o">&lt;</span><span class="n">mapped_gaf</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">manual_dataset</span><span class="o">&gt;</span>  <span class="p">[</span><span class="o">--</span><span class="n">map_manual_dataset</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">save_assignments</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
 <span class="n">Options</span><span class="p">:</span>
-    <span class="o">-</span><span class="n">h</span> <span class="o">--</span><span class="n">help</span>                            <span class="n">Shows</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
+    <span class="o">-</span><span class="n">h</span> <span class="o">|</span> <span class="o">--</span><span class="n">help</span>                          <span class="n">Shows</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
     <span class="o">--</span><span class="n">version</span>                            <span class="n">Shows</span> <span class="n">version</span><span class="o">.</span>
     <span class="o">--</span><span class="n">supergraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span>        <span class="n">Filters</span> <span class="n">the</span> <span class="n">supergraph</span> <span class="n">to</span> <span class="n">a</span> <span class="n">given</span> <span class="n">namespace</span><span class="o">.</span>
     <span class="o">--</span><span class="n">subgraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span>          <span class="n">Filters</span> <span class="n">the</span> <span class="n">subgraph</span> <span class="n">to</span> <span class="n">a</span> <span class="n">given</span> <span class="n">namespace</span><span class="o">.</span>
@@ -70,8 +70,6 @@ for evaluating those subgraphs.</p>
     <span class="o">--</span><span class="n">subgraph_relationships</span><span class="o">=</span><span class="p">[]</span>          <span class="n">A</span> <span class="n">provided</span> <span class="nb">list</span> <span class="n">will</span> <span class="n">denote</span> <span class="n">which</span> <span class="n">relationships</span> <span class="n">are</span> <span class="n">allowed</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">subgraph</span><span class="o">.</span>
     <span class="o">--</span><span class="n">map_supersets</span>                      <span class="n">Maps</span> <span class="nb">all</span> <span class="n">terms</span> <span class="n">to</span> <span class="nb">all</span> <span class="n">root</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">regardless</span> <span class="n">of</span> <span class="k">if</span> <span class="n">a</span> <span class="n">root</span> <span class="n">node</span> <span class="n">supercedes</span> <span class="n">another</span><span class="o">.</span>
     <span class="o">--</span><span class="n">output_termlist</span>                    <span class="n">Outputs</span> <span class="n">a</span> <span class="nb">list</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">terms</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">supergraph</span> <span class="k">as</span> <span class="n">a</span> <span class="n">JsonPickle</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">output</span> <span class="n">directory</span><span class="o">.</span>
-    <span class="o">--</span><span class="n">test_subgraph</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span>               <span class="n">Enter</span> <span class="n">a</span> <span class="n">GO</span> <span class="n">ID</span> <span class="n">to</span> <span class="n">output</span> <span class="n">information</span> <span class="n">describing</span> <span class="n">the</span> <span class="n">mapping</span> <span class="n">differences</span> <span class="n">between</span> <span class="n">GOcats</span> <span class="ow">and</span> <span class="n">Map2Slim</span><span class="o">.</span>
-    <span class="o">--</span><span class="n">inclusion_index</span>                    <span class="n">Calculates</span> <span class="n">inclusion</span> <span class="n">index</span> <span class="n">of</span> <span class="n">terms</span> <span class="n">between</span> <span class="n">categories</span> <span class="n">among</span> <span class="n">separate</span> <span class="n">mapping</span> <span class="n">sources</span><span class="o">.</span>
     <span class="o">--</span><span class="n">save_assignments</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span>        <span class="n">Save</span> <span class="n">a</span> <span class="n">file</span> <span class="k">with</span> <span class="nb">all</span> <span class="n">genes</span> <span class="ow">and</span> <span class="n">their</span> <span class="n">GO</span> <span class="n">assignments</span><span class="o">.</span>
     <span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span>          <span class="n">Specify</span> <span class="n">an</span> <span class="n">id_translation</span> <span class="n">file</span> <span class="n">to</span> <span class="n">associate</span> <span class="n">go</span> <span class="n">terms</span> <span class="k">with</span> <span class="n">their</span> <span class="n">English</span> <span class="n">names</span><span class="o">.</span>
     <span class="o">--</span><span class="n">map_manual_dataset</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span>      <span class="n">Specify</span> <span class="n">a</span> <span class="n">mapping</span> <span class="n">file</span> <span class="n">to</span> <span class="nb">map</span> <span class="n">manual</span> <span class="n">dataset</span> <span class="n">annotations</span> <span class="n">to</span> <span class="n">the</span> <span class="n">user</span><span class="o">-</span><span class="n">specified</span> <span class="n">categories</span><span class="o">.</span>
@@ -81,8 +79,7 @@ for evaluating those subgraphs.</p>
 <dt id="gocats.build_graph">
 <code class="descclassname">gocats.</code><code class="descname">build_graph</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#build_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.build_graph" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>Not yet implemented</strong></p>
-<p>Try build_graph_interpreter to create a GO graph object to explore within a Python
-interpreter.</p>
+<p>Try build_graph_interpreter to create a GO graph object to explore within a Python interpreter.</p>
 </dd></dl>
 
 <dl class="function">
@@ -93,11 +90,44 @@ interpreter.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filehandle</strong> &#8211; Ontology database file.</li>
-<li><strong>supergraph_namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Optional - Filter graph to a sub-ontology namespace.</li>
-<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; Optional - Filter graph to use only those relationships listed.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>database_file</strong> (<em>file_handle</em>) &#8211; Ontology database file.</li>
+<li><strong>supergraph_namespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Optional - Filter graph to a sub-ontology namespace.</li>
+<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; Optional - Filter graph to use only those relationships listed.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A Graph object of the ontology provided.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-obj docutils literal"><span class="pre">class</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gocats.categorize_dataset">
+<code class="descclassname">gocats.</code><code class="descname">categorize_dataset</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#categorize_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.categorize_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in a Gene Annotation File (GAF) and mapps the annotations contained therin to the categories organized by
+GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gaf_dataset</strong> &#8211; A Gene Annotation File</li>
+<li><strong>term_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms. May be produced by GOcats or another method.</li>
+<li><strong>output_directory</strong> &#8211; Specify the directory where theh output file will be stored.</li>
+<li><strong>GAF_name</strong> &#8211; Specify the desired name of the mapped GAF.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
 </td>
 </tr>
 </tbody>
@@ -107,21 +137,146 @@ interpreter.</p>
 <dl class="function">
 <dt id="gocats.compare_mapping">
 <code class="descclassname">gocats.</code><code class="descname">compare_mapping</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#compare_mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.compare_mapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compares the agreement in annotation assignment between a GAF produced by GOcats and another dataset, provided in
-csv format.</p>
+<dd><p>Compares the agreement in annotation assignment between a Gene Annotation File (GAF) produced by GOcats (or some
+other method) and a gold-standard, manually-curated dataset provided in csv format. <strong>Currently, this method is
+highly specific to HPA&#8217;s dataset formatting. It is not yet intended for generic use.</strong></p>
+<p>Agreement types:</p>
+<blockquote>
+<div><p>-Complete - Manually-assigned annotations and programatically assigned annotations were identical.</p>
+<p>-Partial - At least one annotation is shared between manual assignments and programatic assignments.</p>
+<p>-Superset - Programatic annotation assignments are a superset of manual annotation assignments.</p>
+<p>-None - Manual and programatic assignments are both present but there are no shared annotations.</p>
+<p>-Inconclusive - Annotations are missing from genes in one or both of the sources.</p>
+<p>-Not in knowledgebase - Gene absent from the knowledgebase, which is present in the dataset.</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mapped_gaf</strong> &#8211; A mapped GAF produced by either GOcats or another method</li>
+<li><strong>manual_dataset</strong> &#8211; A dataset containing manually-curated annotaion assignments (currently specific to HPA&#8217;s dataset).</li>
+<li><strong>--map_manual_dataset=&lt;filename&gt;</strong> &#8211; OPTIONAL,NOT YET IMPLEMENTED-Specify the location of a manual dataset of interest.</li>
+<li><strong>--save_assignments=&lt;filename&gt;</strong> &#8211; OPTIONAL-Output all gene-annotation assingments, along with their agreement to the specified filename.</li>
+<li><strong>--id_translation=&lt;filename&gt;</strong> &#8211; OPTIONAL-Specify the location of the translation file if one was produced by the &#8211;output_termlist option in <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">create_subgraphs()</span></code></a>. This will improve readability of the resulting tables.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gocats.compute_subgraph_intersection">
+<code class="descclassname">gocats.</code><code class="descname">compute_subgraph_intersection</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#compute_subgraph_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.compute_subgraph_intersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the intersection of GOcats, Map2Slim, and UniProt CV mappings and outputs a graph representation to a
+file using the PyUpSet resource (available here: <a class="reference external" href="https://github.com/ImSoErgodic/py-upset">https://github.com/ImSoErgodic/py-upset</a>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gocats_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.</li>
+<li><strong>uniprot_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from the UniProt CV mapping produced by uniprotsubcellparser.py</li>
+<li><strong>map2slim_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from Map2Slim</li>
+<li><strong>output_directory</strong> &#8211; Specify the directory where theh output file will be stored.</li>
+<li><strong>--id_translation=&lt;filename&gt;</strong> &#8211; OPTIONAL-Specify the location of the translation file if one was produced by the &#8211;output_termlist option in <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">create_subgraphs()</span></code></a>. This will improve readability of the resulting figures.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gocats.compute_subgraph_similarity">
+<code class="descclassname">gocats.</code><code class="descname">compute_subgraph_similarity</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#compute_subgraph_similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.compute_subgraph_similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the Jaccard index and inclusion index of comparable category subgraphs between those created by GOCats
+and those created by another method. Results are tabulated and stored in an specified output file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gocats_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.</li>
+<li><strong>other_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from another method.</li>
+<li><strong>output_directory</strong> &#8211; Specify the directory where the output file will be stored.</li>
+<li><strong>filename</strong> &#8211; Name the output file</li>
+<li><strong>--id_translation=&lt;filename&gt;</strong> &#8211; OPTIONAL-Specify the location of the translation file if one was produced by the &#8211;output_termlist option in <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">create_subgraphs()</span></code></a>. This will improve readability of the resulting table.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="gocats.create_subgraphs">
 <code class="descclassname">gocats.</code><code class="descname">create_subgraphs</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#create_subgraphs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.create_subgraphs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a graph object of GO and then extracts subgraphs which represent concepts that are defined by a list of
-provided keywords.</p>
+<dd><p>Creates a graph object of an ontology, processed into <code class="xref py py-class docutils literal"><span class="pre">OboGraph</span></code> or to an object that
+inherits from <code class="xref py py-class docutils literal"><span class="pre">OboGraph</span></code>, and then extracts subgraphs which represent concepts that are defined
+by a list of provided keywords. Each subgraph is processed into <code class="xref py py-class docutils literal"><span class="pre">SubGraph</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>database_file</strong> &#8211; Ontology database file.</li>
+<li><strong>keyword_file</strong> &#8211; A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).</li>
+<li><strong>output_directory</strong> &#8211; The directory where results are stored.</li>
+<li><strong>--supergraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a supergraph subontology to filter e.g. cellular_component</li>
+<li><strong>--subgraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a subgraph subontology to filter e.g. cellluar_componet</li>
+<li><strong>--supergraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of]</li>
+<li><strong>--subgraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of]</li>
+<li><strong>--map_supersets</strong> &#8211; OPTIONAL-Allow subgraphs to subsume other subgraphs</li>
+<li><strong>--output_termlist</strong> &#8211; OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="gocats.find_category_subsets">
 <code class="descclassname">gocats.</code><code class="descname">find_category_subsets</code><span class="sig-paren">(</span><em>subgraph_collection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#find_category_subsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.find_category_subsets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds subgraphs which are subsets of other subgraphs to remove reduncancy, when specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subgraph_collection</strong> &#8211; A dictionary of subgraph objects (keys: subgraph name, values: subgraph object)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary relating which subgraph objects are subsets of other subgraphs (keys: subset subgraph, values: superset subgraphs)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -180,9 +335,15 @@ relationship type describing now the two nodes are related.</p>
 <dl class="class">
 <dt id="dag.AbstractNode">
 <em class="property">class </em><code class="descclassname">dag.</code><code class="descname">AbstractNode</code><a class="reference internal" href="_modules/dag.html#AbstractNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.AbstractNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>A node contaning all basic properties of an OBO node. The parser 
-currently has direct access to datamembers (id, name, definition, 
-namespace, edges, and obsolete).</p>
+<dd><p>A node contaning all basic properties of an OBO node. The parsing object, <a class="reference internal" href="#ontologyparser.OboParser" title="ontologyparser.OboParser"><code class="xref py py-class docutils literal"><span class="pre">ontologyparser.OboParser</span></code></a>
+currently has direct access to datamembers (id, name, definition, namespace, edges, and obsolete) so that
+information from the database file can be added to the object.</p>
+<dl class="method">
+<dt id="dag.AbstractNode._update_node">
+<code class="descname">_update_node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#AbstractNode._update_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.AbstractNode._update_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repopulates ancestor and descendent sets for a node.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="dag.AbstractNode.add_edge">
 <code class="descname">add_edge</code><span class="sig-paren">(</span><em>edge</em>, <em>allowed_relationships</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#AbstractNode.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.AbstractNode.add_edge" title="Permalink to this definition">¶</a></dt>
@@ -193,13 +354,37 @@ allowed relationship.</p>
 <dl class="attribute">
 <dt id="dag.AbstractNode.ancestors">
 <code class="descname">ancestors</code><a class="headerlink" href="#dag.AbstractNode.ancestors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns set of nodes that are recursively reverse of a node with a scoping-type relationship.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph that are recusively forward of a node with a
+scoping-type relationship. When the node is modified, calls <code class="xref py py-func docutils literal"><span class="pre">_update_nodes()</span></code> to repopulate the sets of
+descendents and ancestors. This represents a &#8220;lazy&#8221; evaluation of node ancestors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Set of <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="dag.AbstractNode.descendants">
 <code class="descname">descendants</code><a class="headerlink" href="#dag.AbstractNode.descendants" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the set of nodes that are recursively forward of a node with a scoping-type relationship.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph that are recusively reverse of a node with a
+scoping-type relationship. When the node is modified, calls <code class="xref py py-func docutils literal"><span class="pre">_update_nodes()</span></code> to repopulate the sets of
+descendents and ancestors. This represents a &#8220;lazy&#8221; evaluation of node descendents.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Set of <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -245,16 +430,94 @@ of the directionality of the edge. Default position is 1.</p>
 <dd><p>A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
 acyclic graph (DAG).</p>
 <dl class="method">
+<dt id="dag.OboGraph._update_graph">
+<code class="descname">_update_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph._update_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph._update_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repopulates graph orphans and leaves sets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dag.OboGraph.add_edge">
+<code class="descname">add_edge</code><span class="sig-paren">(</span><em>edge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.add_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an edge object to the graph, and counts the edge relationship type. Sets modification state to
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edge</strong> &#8211; A <a class="reference internal" href="#dag.AbstractEdge" title="dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractEdge</span></code></a> object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="dag.OboGraph.add_node">
 <code class="descname">add_node</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.add_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.add_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a node object to the graph, adds an object pointer to the vocabulary index to reference nodes to every
-word in the node name and definition.</p>
+word in the node name and definition. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> &#8211; A <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dag.OboGraph.add_relationship">
+<code class="descname">add_relationship</code><span class="sig-paren">(</span><em>relationship</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.add_relationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.add_relationship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a <a class="reference internal" href="#dag.AbstractRelationship" title="dag.AbstractRelationship"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractRelationship</span></code></a> object to the graph&#8217;s relationship index, referenced by
+that relationships ID. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>relationship</strong> &#8211; A <a class="reference internal" href="#dag.AbstractRelationship" title="dag.AbstractRelationship"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractRelationship</span></code></a> object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="dag.OboGraph.filter_edges">
 <code class="descname">filter_edges</code><span class="sig-paren">(</span><em>filtered_nodes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.filter_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.filter_edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of edges in the graph that connect the nodes provided in the filtered nodes list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filtered_nodes</strong> &#8211; List of filtered nodes provided by <a class="reference internal" href="#dag.OboGraph.filter_nodes" title="dag.OboGraph.filter_nodes"><code class="xref py py-func docutils literal"><span class="pre">filter_nodes()</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <a class="reference internal" href="#dag.AbstractEdge" title="dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractEdge</span></code></a> objects.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -262,26 +525,73 @@ word in the node name and definition.</p>
 <code class="descname">filter_nodes</code><span class="sig-paren">(</span><em>search_string_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.filter_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.filter_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of node objects that contain vocabulary matching the keywords provided in the search string
 list. Nodes are selected by searching through the vocablary index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>search_string_list</strong> &#8211; A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of search strings provided in the keyword_file provided to <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> objects.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="dag.OboGraph.instantiate_valid_edges">
 <code class="descname">instantiate_valid_edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.instantiate_valid_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.instantiate_valid_edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instatntiate edge if both nodes of the edge are in the graph. Searches by node id because node objects are
-not referenced at the edges at the time this method is called.</p>
+<dd><p>Add all edge references to their respective nodes and vice versa if both nodes of the edge are in the graph.
+This is carried out by <code class="xref py py-func docutils literal"><span class="pre">edge.connect_nodes()</span></code>. Also adds <a class="reference internal" href="#dag.AbstractRelationship" title="dag.AbstractRelationship"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractRelationship</span></code></a> object
+reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets
+modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="dag.OboGraph.leaves">
 <code class="descname">leaves</code><a class="headerlink" href="#dag.OboGraph.leaves" title="Permalink to this definition">¶</a></dt>
-<dd><p>A set of nodes in the graph which have no children.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph which have no children. When the graph is modified, calls
+<a class="reference internal" href="#dag.OboGraph._update_graph" title="dag.OboGraph._update_graph"><code class="xref py py-func docutils literal"><span class="pre">_update_graph()</span></code></a> to repopulate the sets of orphan and leaf nodes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Set of &#8216;leaf&#8217; nodes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="dag.OboGraph.node_depth">
 <code class="descname">node_depth</code><span class="sig-paren">(</span><em>sample_node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.node_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.node_depth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an integer representative of how many nodes are between the given node and the root node of the
-graph.</p>
+<dd><p>Returns an integer representing how many nodes are between the given node and the root node of the graph
+(depth level).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sample_node</strong> &#8211; A <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Depth level.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -289,31 +599,117 @@ graph.</p>
 <code class="descname">nodes_between</code><span class="sig-paren">(</span><em>start_node</em>, <em>end_node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.nodes_between"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.nodes_between" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a set of nodes that occur along all paths between the start node and the end node. If no paths exist,
 an empty set is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_node</strong> &#8211; <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> object to start the paths.</li>
+<li><strong>end_node</strong> &#8211; <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> object to end the paths.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A set of <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> objects if there is at least one path between the parameters, an empty set otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="dag.OboGraph.orphans">
 <code class="descname">orphans</code><a class="headerlink" href="#dag.OboGraph.orphans" title="Permalink to this definition">¶</a></dt>
-<dd><p>A set of nodes in the graph which have no parents.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph which have no parents. When the graph is modified, calls
+<a class="reference internal" href="#dag.OboGraph._update_graph" title="dag.OboGraph._update_graph"><code class="xref py py-func docutils literal"><span class="pre">_update_graph()</span></code></a> to repopulate the sets of orphan and leaf nodes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Set of &#8216;orphan&#8217; nodes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dag.OboGraph.remove_edge">
+<code class="descname">remove_edge</code><span class="sig-paren">(</span><em>edge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.remove_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.remove_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes an edge object from the graph, and removes references to that edge from the node objects involved.
+Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edge</strong> &#8211; A <a class="reference internal" href="#dag.AbstractEdge" title="dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractEdge</span></code></a> object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="dag.OboGraph.remove_node">
 <code class="descname">remove_node</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.remove_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.remove_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes a node from the graph and deletes node references from all entries in the vocabulary index.</p>
+<dd><p>Removes a node from the graph and deletes node references from all entries in the vocabulary index. Sets
+modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> &#8211; A <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="dag.OboGraph.valid_edge">
 <code class="descname">valid_edge</code><span class="sig-paren">(</span><em>edge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.valid_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.valid_edge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if an edge is within the list of allowed edges and connects two nodes that are both contained in
-the graph in question.</p>
+<dd><p>Defines condition of a valid edge. Edge is valid if it is within the list of allowed edges and connects two
+nodes that are both contained in the graph in question.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edge</strong> &#8211; A <a class="reference internal" href="#dag.AbstractEdge" title="dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractEdge</span></code></a> object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node is valid, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">False</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="dag.OboGraph.valid_node">
 <code class="descname">valid_node</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.valid_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.valid_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if a node is not obsolete and is contained within the given ontology namespace contraint.</p>
+<dd><p>Defines condition of a valid node. Node is valid if it is not obsolete and is contained within the given
+ontology namespace contraint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> &#8211; A <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node is valid, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">False</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -582,7 +978,7 @@ enumerates how many mappings are created as a result.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Eugene Hinderer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

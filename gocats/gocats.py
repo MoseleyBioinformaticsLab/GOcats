@@ -9,13 +9,13 @@ for evaluating those subgraphs.
 Command line implementation::
 
     Usage:
-        gocats create_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist --test_subgraph=<None>]
-        gocats compute_subgraph_intersection <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--inclusion_index --id_translation=<filename>]
+        gocats create_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<None> --subgraph_namespace=<None> --supergraph_relationships=[] --subgraph_relationships=[] --map_supersets --output_termlist]
         gocats compute_subgraph_similarity <gocats_mapping> <other_mapping> <output_directory> <filename> [--id_translation=<filename>]
+        gocats compute_subgraph_intersection <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--id_translation=<filename>]
         gocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
         gocats compare_mapping <mapped_gaf> <manual_dataset>  [--map_manual_dataset=<filename> --save_assignments=<filename> --id_translation=<filename>]
     Options:
-        -h --help                            Shows this screen.
+        -h | --help                          Shows this screen.
         --version                            Shows version.
         --supergraph_namespace=<None>        Filters the supergraph to a given namespace.
         --subgraph_namespace=<None>          Filters the subgraph to a given namespace.
@@ -23,8 +23,6 @@ Command line implementation::
         --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
         --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
         --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
-        --test_subgraph=<None>               Enter a GO ID to output information describing the mapping differences between GOcats and Map2Slim.
-        --inclusion_index                    Calculates inclusion index of terms between categories among separate mapping sources.
         --save_assignments=<filename>        Save a file with all genes and their GO assignments.
         --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.
         --map_manual_dataset=<filename>      Specify a mapping file to map manual dataset annotations to the user-specified categories.
@@ -39,7 +37,7 @@ import subdag
 import docopt
 import tools
 import version
-
+__version__ = version.__version__
 
 def main(args):
     if args['create_subgraphs']:
@@ -58,8 +56,7 @@ def main(args):
 def build_graph(args):
     """**Not yet implemented**
 
-    Try build_graph_interpreter to create a GO graph object to explore within a Python
-    interpreter."""
+    Try build_graph_interpreter to create a GO graph object to explore within a Python interpreter."""
     # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to one another.
     if args['--supergraph_namespace']:
         supergraph_namespace = args['--supergraph_namespace']
@@ -85,9 +82,11 @@ def build_graph(args):
 def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None):
     """Creates a graph object of GO, which can be traversed and queried within a Python interpreter.
 
-    :param database_file: Ontology database file.
+    :param file_handle database_file: Ontology database file.
     :param str supergraph_namespace: Optional - Filter graph to a sub-ontology namespace.
     :param list allowed_relationships: Optional - Filter graph to use only those relationships listed.
+    :return: A Graph object of the ontology provided.
+    :rtype: :py:obj:`class`
     """
     database = open(database_file, 'r')
     graph = godag.GoGraph(supergraph_namespace, allowed_relationships)
@@ -98,8 +97,23 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
 
 
 def create_subgraphs(args):
-    """Creates a graph object of GO and then extracts subgraphs which represent concepts that are defined by a list of
-    provided keywords."""
+    """Creates a graph object of an ontology, processed into :class:`~gocats.dag.OboGraph` or to an object that
+    inherits from :class:`~gocats.dag.OboGraph`, and then extracts subgraphs which represent concepts that are defined
+    by a list of provided keywords. Each subgraph is processed into :class:`~gocats.subdag.SubGraph`.
+
+    :param database_file: Ontology database file.
+    :param keyword_file: A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).
+    :param output_directory: The directory where results are stored.
+    :param --supergraph_namespace=<None>: OPTIONAL-Specify a supergraph subontology to filter e.g. cellular_component
+    :param --subgraph_namespace=<None>: OPTIONAL-Specify a subgraph subontology to filter e.g. cellluar_componet
+    :param --supergraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of]
+    :param --subgraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of]
+    :param --map_supersets: OPTIONAL-Allow subgraphs to subsume other subgraphs
+    :param --output_termlist: OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results
+    :return: None
+    :rtype: :py:obj:`None`
+    """
+
     if args['--supergraph_namespace']:
         supergraph_namespace = args['--supergraph_namespace']
     else:
@@ -225,7 +239,12 @@ def create_subgraphs(args):
 
 
 def find_category_subsets(subgraph_collection):
-    """Finds subgraphs which are subsets of other subgraphs to remove reduncancy, when specified."""
+    """Finds subgraphs which are subsets of other subgraphs to remove reduncancy, when specified.
+
+    :param subgraph_collection: A dictionary of subgraph objects (keys: subgraph name, values: subgraph object)
+    :return: A dictionary relating which subgraph objects are subsets of other subgraphs (keys: subset subgraph, values: superset subgraphs)
+    :rtype: :py:obj:`dict`
+    """
     is_subset_of = dict()
     for subgraph in subgraph_collection.values():
         for next_subgraph in subgraph_collection.values():
@@ -238,6 +257,17 @@ def find_category_subsets(subgraph_collection):
 
 
 def compute_subgraph_similarity(args):
+    """Calculates the Jaccard index and inclusion index of comparable category subgraphs between those created by GOCats
+    and those created by another method. Results are tabulated and stored in an specified output file
+
+    :param gocats_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.
+    :param other_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from another method.
+    :param output_directory: Specify the directory where the output file will be stored.
+    :param filename: Name the output file
+    :param --id_translation=<filename>: OPTIONAL-Specify the location of the translation file if one was produced by the --output_termlist option in :func:`create_subgraphs`. This will improve readability of the resulting table.
+    :return: None
+    :rtype: :py:obj:`None`
+    """
     from tabulate import tabulate
     inc_index_table = list()
     output_file = args['<output_directory>']
@@ -267,6 +297,17 @@ def compute_subgraph_similarity(args):
 
 
 def compute_subgraph_intersection(args):
+    """Calculates the intersection of GOcats, Map2Slim, and UniProt CV mappings and outputs a graph representation to a
+    file using the PyUpSet resource (available here: https://github.com/ImSoErgodic/py-upset).
+
+    :param gocats_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.
+    :param uniprot_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from the UniProt CV mapping produced by uniprotsubcellparser.py
+    :param map2slim_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from Map2Slim
+    :param output_directory: Specify the directory where theh output file will be stored.
+    :param --id_translation=<filename>: OPTIONAL-Specify the location of the translation file if one was produced by the --output_termlist option in :func:`create_subgraphs`. This will improve readability of the resulting figures.
+    :return: None
+    :rtype: :py:obj:`None`
+    """
     import pandas as pd
     import pyupset as pyu
     if not os.path.exists(args['<output_directory>']):
@@ -293,6 +334,16 @@ def compute_subgraph_intersection(args):
 
 
 def categorize_dataset(args):
+    """Reads in a Gene Annotation File (GAF) and mapps the annotations contained therin to the categories organized by
+    GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.
+
+    :param gaf_dataset: A Gene Annotation File
+    :param term_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms. May be produced by GOcats or another method.
+    :param output_directory: Specify the directory where theh output file will be stored.
+    :param GAF_name: Specify the desired name of the mapped GAF.
+    :return: None
+    :rtype: :py:obj:`None`
+    """
     loaded_gaf_array = tools.parse_gaf(args['<gaf_dataset>'])
     mapping_dict = tools.jsonpickle_load(args['<term_mapping>'])
     output_directory = os.path.realpath(args['<output_directory>'])
@@ -317,8 +368,33 @@ def categorize_dataset(args):
 
 
 def compare_mapping(args):
-    """Compares the agreement in annotation assignment between a GAF produced by GOcats and another dataset, provided in
-    csv format."""
+    """Compares the agreement in annotation assignment between a Gene Annotation File (GAF) produced by GOcats (or some
+    other method) and a gold-standard, manually-curated dataset provided in csv format. **Currently, this method is
+    highly specific to HPA's dataset formatting. It is not yet intended for generic use.**
+
+    Agreement types:
+
+        -Complete - Manually-assigned annotations and programatically assigned annotations were identical.
+
+        -Partial - At least one annotation is shared between manual assignments and programatic assignments.
+
+        -Superset - Programatic annotation assignments are a superset of manual annotation assignments.
+
+        -None - Manual and programatic assignments are both present but there are no shared annotations.
+
+        -Inconclusive - Annotations are missing from genes in one or both of the sources.
+
+        -Not in knowledgebase - Gene absent from the knowledgebase, which is present in the dataset.
+
+
+    :param mapped_gaf: A mapped GAF produced by either GOcats or another method
+    :param manual_dataset: A dataset containing manually-curated annotaion assignments (currently specific to HPA's dataset).
+    :param --map_manual_dataset=<filename>: OPTIONAL,NOT YET IMPLEMENTED-Specify the location of a manual dataset of interest.
+    :param --save_assignments=<filename>: OPTIONAL-Output all gene-annotation assingments, along with their agreement to the specified filename.
+    :param --id_translation=<filename>: OPTIONAL-Specify the location of the translation file if one was produced by the --output_termlist option in :func:`create_subgraphs`. This will improve readability of the resulting tables.
+    :return: None
+    :rtype: :py:obj:`None`
+"""
     # TODO: Add argumnets for output directory. Save tables and list of genes not in database in this directory.
     from tabulate import tabulate
     import catcompare
@@ -417,27 +493,27 @@ def compare_mapping(args):
           'none: ', len(no_match), '\n', 'missing_annotations: ', len(missing_annotations), '\n',
           'not in knowledgebase: ', len(not_in_knowledgebase), '\n', 'Total: ', len(gene_assignment_tuples))
 
-    # The following are examples mentioned in the publication
-    print("----", "Partial", "----")
-    for item in partial:
-        if len(item[1]) > len(item[2]):
-            print(item, "greater than")
-        elif len(item[1]) == len(item[2]):
-            print(item, "equal to")
+    # The following are examples mentioned in the publication. Uncomment to produce these results.
+    #print("----", "Partial", "----")
+    #for item in partial:
+    #    if len(item[1]) > len(item[2]):
+    #        print(item, "greater than")
+    #    elif len(item[1]) == len(item[2]):
+    #        print(item, "equal to")
 
-    print("----", "Superset", "----")
-    for item in superset:
-        print(item)
-    for gene_tuple in gene_assignment_tuples:
-        if gene_tuple[0] == 'PSMD3' and gene_tuple[3] == 'complete':
-            print("PSMD3 IS IN COMPLETE AGREEMENT!")
-        elif gene_tuple[0] == 'PSMD3' and gene_tuple[3] != 'complete':
-            print("PSMD3 AGREEMENT IS NOT COMPLETE", gene_tuple[3])
+    #print("----", "Superset", "----")
+    #for item in superset:
+    #    print(item)
+    #for gene_tuple in gene_assignment_tuples:
+    #    if gene_tuple[0] == 'PSMD3' and gene_tuple[3] == 'complete':
+    #        print("PSMD3 IS IN COMPLETE AGREEMENT!")
+    #    elif gene_tuple[0] == 'PSMD3' and gene_tuple[3] != 'complete':
+    #        print("PSMD3 AGREEMENT IS NOT COMPLETE", gene_tuple[3])
 
     if args['--save_assignments']:
         file_name = args['--save_assignments']
         tools.list_to_file(file_name, sorted(gene_assignment_tuples, key=lambda gene_id: gene_id[0]))
 
 if __name__ == '__main__':
-    args = docopt.docopt(__doc__, version=str('GOcats Version ')+version.version)
+    args = docopt.docopt(__doc__, version=str('GOcats Version ')+__version__)
     main(args)
