@@ -26,11 +26,15 @@ def main(args):
 
 
 def make_decoy(args):
-    """Map2Slim does not output a mapping file relating to how it assigns specific terms to the root that it maps to in
-    the GO slim. We can get around this by creating a fake GAF that has the annotated GO term as the ID of the "gene"
-    and maintain its annotated GO term. The GAF will contain a single instance of a GO term for each term in the
-    sub-ontology. We can then map this phony gaf using the slim of our choice and the resulting mapped GAF can be parsed
-    to create the mapping we desire.
+    """Creates a GAF mapping all terms in an ontology to themselves. A GAF formatted file is created which replaces the
+     gene name column with a copy of an the ontology term for every term in an ontology. This can be used to create term
+     to term mappings via Map2Slim. See `Map2Slim Mapping Error Testing` in the api doccumentation for elaboration.
+
+    :param ontology_term_list: File produced by :func:`gocats.create_subgraphs` --output_termlist or another .json_pickle file listing all terms in an ontology.
+    :param output_dir: Specify the location of the output directory.
+    :param output_file: Specify the name of the decoy GAF.
+    :return: None
+    :rtype: :py:obj:`None`
     """
     line_format = "UniProtKB	R4GNC1	SRP72		GO:0005737	GO_REF:0000052	IDA		C	Signal recognition particle subunit SRP72	R4GNC1_HUMAN	protein	taxon:9606	20101115	HPA	"  # Random GAF line used for formatting purposes
     line_array = re.split('\t', line_format)
@@ -45,6 +49,16 @@ def make_decoy(args):
 
 
 def map_terms(args):
+    """Maps the terms contained in a mapped decoy GAF. The resulting mapping dictionary is saved to a json_pickle. See
+    `Map2Slim Mapping Error Testing` in the api doccumentation for elaboration.
+
+    :param mapped_gaf: A decoy GAF that has been mapped by Map2Slim
+    :param output_dir: Specify the location of the output directory.
+    :param output_file: Specify the name of the mapping dictionary json_pickle file.
+    :param --output_mapping_set=<filepath>: DEPRECIATED-Used for testing purposes, no longer necessary for use.
+    :return: None
+    :rtype: :py:obj:`None`
+    """
     term_mapping = {}
     with open(args['<mapped_gaf>'], 'r') as gaf_file:
         for line in csv.reader(gaf_file, delimiter='\t'):

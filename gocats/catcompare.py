@@ -8,7 +8,12 @@ import re
 
 def make_dataset_dict(file_handle, hpa_file=False, reliability_filter=None):
     """Currently setup to read HPA subcellular localization CSV file and create a dictionary mapping ENSG IDs to their
-    subcellular location. May need to be generalized, but then again this is a special test. """
+    subcellular location. May need to be generalized, but then again this is a special test for our publication.
+
+    :param file_handle: Location of the dataset file.
+    :param hpa_file: Specify whether the dataset is in HPA format NOTE: Only HPA formatting is currently supported.
+    :param reliability_filter: Specify which level of reliablity to evaluate from an HPA dataset type. Will vary depending on the version and type of dataset.
+    """
     list_split = re.compile(';')
     locations = []
     dataset_dict = {}
