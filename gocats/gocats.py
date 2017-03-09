@@ -21,7 +21,7 @@ Command line implementation::
         --subgraph_namespace=<None>          Filters the subgraph to a given namespace.
         --supergraph_relationships=[]        A provided list will denote which relationships are allowed in the supergraph.
         --subgraph_relationships=[]          A provided list will denote which relationships are allowed in the subgraph.
-        --map_supersets                      Maps all terms to all root nodes, regardless of if a root node supercedes another.
+        --map_supersets                      Maps all terms to all root nodes, regardless of if a root node subsumes another.
         --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
         --save_assignments=<filename>        Save a file with all genes and their GO assignments.
         --id_translation=<filename>          Specify an id_translation file to associate go terms with their English names.

@@ -27,7 +27,12 @@ all_bp_no_hp_nodes = bp_no_hp_graph.node_list
 
 def _potential_false_ancestors(edge):
     """Considering a problematic relationship edge, returns a set of ancestor nodes that could result in a problematic
-    mapping."""
+    mapping.
+
+    :param edge: :class:`dag.AbstractEdge` object
+    :return: A set subtraction of `dag.AbstractEdge.parent` ancestors from `dag.AbstractEdge.child` ancestors.
+    :rtype: :py:obj:`set`
+    """
     child_ancestors = set(edge.child_node.ancestors)
     child_ancestors.add(edge.child_node)
     parent_ancestors = set(edge.parent_node.ancestors)
@@ -38,7 +43,12 @@ def _potential_false_ancestors(edge):
 
 def _potential_false_descendants(edge):
     """Considering a problematic relationship edge, returns a set of descendent nodes that could result in a problematic
-    mapping."""
+    mapping.
+
+    :param edge: :class:`dag.AbstractEdge` object
+    :return: A set subtraction of `dag.AbstractEdge.child` descendants from `dag.AbstractEdge.parent` descendants.
+    :rtype: :py:obj:`set`
+    """
     parent_descendants = set(edge.parent_node.descendants)
     parent_descendants.add(edge.parent_node)
     child_descendants = set(edge.child_node.descendants)
@@ -49,7 +59,12 @@ def _potential_false_descendants(edge):
 
 def potential_false_mappings(edge_list):
     """Returns a set of mapping pairs (tuples of nodes) that results from a cartesian product of the sets of potential
-    false descendents and potential false ancestors calculated for a list or set of problematic edges."""
+    false descendents and potential false ancestors calculated for a list or set of problematic edges.
+
+    :param list edge_list: A list of :class:`dag.AbstractEdge` objects.
+    :return: Cartesian product of sets produced by :func:`_potential_false_ancestors` and :func:`_potential_false_descendants`.
+    :rtype: :py:obj:`set`
+    """
     pmf = set()
     for edge in edge_list:
         pmf.update(set(itertools.product(*[_potential_false_descendants(edge), _potential_false_ancestors(edge)])))
@@ -58,7 +73,12 @@ def potential_false_mappings(edge_list):
 
 def all_possible_mappings(node_list):
     """Given a list of all nodes in a graph, returns a set of mapping pairs (tuples of nodes) that results from a
-    cartesian product of all sets of descentent nodes to their respective ancestor nodes. Ignores self mappings."""
+    cartesian product of all sets of descentent nodes to their respective ancestor nodes. Ignores self mappings.
+
+    :param list node_list: A list of all :class:`dag.AbstractNode` objects in a graph.
+    :return: A set of all tupples representing every term-to-term mapping possilbe in the graph.
+    :rtype: :py:obj:`set` of :py:obj:`tuple`s.
+    """
     node_mapping_tuples = set()
     for node1 in node_list:
         for node2 in node_list:
@@ -98,4 +118,3 @@ print("Potentially false 'has part' mappings: ", len(potential_false_bp_hp_mappi
 print("All possible mappings: ", len(all_possible_bp_mappings))
 print("All possible mappings without 'has_part': ", len(all_possible_bp_no_hp_mappings))
 print("Intersection of possible true mappings and potentially false 'has_part' mappings: ", len(all_possible_bp_mappings.intersection(potential_false_bp_hp_mappings)))
-

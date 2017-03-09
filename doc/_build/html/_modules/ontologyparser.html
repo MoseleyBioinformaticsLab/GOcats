@@ -59,7 +59,10 @@
     <span class="sd">&quot;&quot;&quot;A scaffolding for parsing OBO formatted ontologies. Contains regular expressions for the basic stanzas and</span>
 <span class="sd">    information pertinent for creating a graph object of an ontology.&quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OboParser.__init__"><a class="viewcode-back" href="../api.html#ontologyparser.OboParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;`OboParser` initializer. Contains Regular Expressions for identifying crucial information from OBO formatted</span>
+<span class="sd">        ontologies.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">term_stanza</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;\[Term\]&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">go_term</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;GO\:\d</span><span class="si">{7}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stanza_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^id:&#39;</span><span class="p">)</span>
@@ -71,7 +74,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">relationship_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^relationship:&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_stanza</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^\s+&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">typedef_stanza</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^\[Typedef\]&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inverse_tag</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^inverse_of:&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inverse_tag</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^inverse_of:&#39;</span><span class="p">)</span></div></div>
 
         <span class="c1"># May use later.</span>
         <span class="c1"># self.comment = re.compile(&#39;\!.+&#39;)</span>
@@ -80,9 +83,18 @@
 
 <div class="viewcode-block" id="GoParser"><a class="viewcode-back" href="../api.html#ontologyparser.GoParser">[docs]</a><span class="k">class</span> <span class="nc">GoParser</span><span class="p">(</span><span class="n">OboParser</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;A parser specific to Gene Ontology&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;An ontology parser specific to Gene Ontology&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_file</span><span class="p">,</span> <span class="n">go_graph</span><span class="p">):</span>
+<div class="viewcode-block" id="GoParser.__init__"><a class="viewcode-back" href="../api.html#ontologyparser.GoParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_file</span><span class="p">,</span> <span class="n">go_graph</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therin to a</span>
+<span class="sd">        :class:`godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO</span>
+<span class="sd">        relationships.</span>
+
+<span class="sd">        :param file_handle database_file: Specify the location of a Gene Ontology .obo file.</span>
+<span class="sd">        :param go_graph: :class:`godag.GoGraph` object.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: :py:obj:`None`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database_file</span> <span class="o">=</span> <span class="n">database_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">go_graph</span> <span class="o">=</span> <span class="n">go_graph</span>
@@ -91,10 +103,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">relationship_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ends_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;happens_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;has_part&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                                      <span class="s2">&quot;negatively_regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;never_in_taxon&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;other&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;occurs_in&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
                                      <span class="s2">&quot;part_of&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;positively_regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                                     <span class="s2">&quot;starts_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;is_a&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span>
+                                     <span class="s2">&quot;starts_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;is_a&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span></div>
 
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># TODO: find all relationship types using TypeDef stanza</span>
+<div class="viewcode-block" id="GoParser.parse"><a class="viewcode-back" href="../api.html#ontologyparser.GoParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parses the ontology database file and accesses the ontology graph object to add information found in the</span>
+<span class="sd">        database. Once all information is added, this function calls the graph&#39;s instantiate_valid_edges function to</span>
+<span class="sd">        connect all nodes in the graph by their edges.</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: :py:obj:`None`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">is_term</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">is_typedef</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -171,7 +189,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">go_graph</span><span class="o">.</span><span class="n">add_relationship</span><span class="p">(</span><span class="n">relationship_obj</span><span class="p">)</span>
                     <span class="n">is_typedef</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">go_graph</span><span class="o">.</span><span class="n">instantiate_valid_edges</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">go_graph</span><span class="o">.</span><span class="n">instantiate_valid_edges</span><span class="p">()</span></div></div>
 </pre></div>
 
       </div>

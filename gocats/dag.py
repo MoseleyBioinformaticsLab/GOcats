@@ -1,6 +1,7 @@
 # !/usr/bin/python3
 """
-Contains necessary objects for creating a Directed Acyclic Graph (DAG) object to represent biomedical ontologies.
+Contains necessary objects for creating a Directed Acyclic Graph (DAG) object to represent Open Biomedical Ontologies
+(OBO).
 """
 import re
 
@@ -12,6 +13,12 @@ class OboGraph(object):
     """
 
     def __init__(self, namespace_filter=None, allowed_relationships=None):
+        """`OboGraph` initializer. Leave `namespace_filter` and `allowed_relationship` as :py:obj:`None` to create the
+        entire ontolgy graph. Otherwise, provide filters to limit what information is pulled into the graph.
+
+        :param str namespace_filter: Specify the namespace of a subontology namespace, if one is available for the ontology.
+        :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other reltionships will be ignored.
+        """
         self.namespace_filter = namespace_filter
         self.allowed_relationships = allowed_relationships
         self.word_split = re.compile(r"[\w\'\-]+")
@@ -37,7 +44,7 @@ class OboGraph(object):
         """:py:obj:`property` defining a set of nodes in the graph which have no parents. When the graph is modified, calls
         :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
 
-        :return: Set of 'orphan' nodes.
+        :return: Set of 'orphan' :class:`dag.AbstractNode` objects.
         :rtype: :py:class:`set`
         """
         if self._modified:
@@ -49,7 +56,7 @@ class OboGraph(object):
         """:py:obj:`property` defining a set of nodes in the graph which have no children. When the graph is modified, calls
         :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
 
-        :return: Set of 'leaf' nodes.
+        :return: Set of 'leaf' :class:`dag.AbstractNode` objects.
         :rtype: :py:class:`set`
         """
         if self._modified:
@@ -267,6 +274,8 @@ class AbstractNode(object):
     """
     
     def __init__(self):
+        """`AbstractNode` initializer
+        """
         self.id = str()
         self.name = str()
         self.definition = str()
@@ -340,6 +349,12 @@ class AbstractNode(object):
         self._modified = True
 
     def remove_edge(self, edge):
+        """Removes a given :class:`dag.AbstractEdge` the :class:`dag.AbstractNode` object. Also removes parent or child
+        node references that the edge referenced. Sets modification state to :py:obj:`True`.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         if edge.child_id == self.id:
             self.parent_node_set.remove(edge.parent_node)
         elif edge.parent_id == self.id:
@@ -348,6 +363,13 @@ class AbstractNode(object):
         self._modified = True
 
     def _update_descendants(self):
+        """Used for the lazy evaluation of graph descendents of the current :class:`dag.AbstractNode` object. Creates
+        internal :py:obj:`set` variable, descendant_set. Iterates through node children until the bottom of the graph is
+        reached. The descendant_set is a set of all nodes across all paths encountered from the current node.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         descendant_set = set()
         children = list(self.child_node_set) 
         while len(children) > 0:
@@ -361,6 +383,13 @@ class AbstractNode(object):
         self._descendants = descendant_set
 
     def _update_ancestors(self):
+        """Used for the lazy evaluation of graph ancestors of the current :class:`dag.AbstractNode` object. Creates
+        internal :py:obj:`set` variable, ancestors_set. Iterates through node parents until the top of the graph is
+        reached. The ancestors_set is a set of all nodes across all paths encountered from the current node.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         ancestors_set = set()
         parents = list(self.parent_node_set)
         while len(parents) > 0:
@@ -376,10 +405,19 @@ class AbstractNode(object):
 
 class AbstractEdge(object):
 
-    """An OBO edge which links two ontology term nodes and contains a 
-    relationship type describing now the two nodes are related."""
+    """An OBO edge which links two ontology term nodes and contains a relationship type describing now the two nodes are
+     related.
+    """
     
     def __init__(self, node1_id, node2_id, relationship_id, node_pair=None):
+        """`AbstractEdge` initializer. Node pair refers to a :py:obj:`tuple` of :class:`dag.AbstractNode` objects that are
+        connected by the edge. Defaults to :py:obj:`None` and is later populated.
+
+        :param str node1_id: The ID of the first term referenced from the ontology file's relationship line.
+        :param str node2_id: The ID of the second term referenced from the ontology file's relationship line.
+        :param str relationship_id: The ID of the relationship in the ontology file's relationship line.
+        :param tuple node_pair: Defalut-:py:obj:`None`, provide a :py:obj:`tuple` containing two :class:`dag.AbstractNode` objects if they are already created and able to be referenced.
+        """
         self.node_pair_id = (node1_id, node2_id)
         self.node_pair = node_pair
         self.relationship_id = relationship_id
@@ -387,42 +425,72 @@ class AbstractEdge(object):
 
     @property
     def parent_id(self):
-        """Returns the ID of a node which is forward with respect to the edge."""
+        """:py:obj:`property` defining the ID of the node forward of the current :class:`dag.AbstractEdge` object.
+
+        :return: :py:obj:`str` ID of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, :py:obj:`None` otherwise.
+        :rtype: :py:obj:`str` or :py:obj:`None`
+        """
         if self.relationship:
             return self.relationship.forward(self.node_pair_id)
         return None
 
     @property
     def child_id(self):
-        """Returns the ID of a node which is reverse with resepct to the edge."""
+        """:py:obj:`property` defining the ID of the node reverse of the current :class:`dag.AbstractEdge` object.
+
+        :return: :py:obj:`str` ID of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, :py:obj:`None` otherwise.
+        :rtype: :py:obj:`str` or :py:obj:`None`
+        """
         if self.relationship:
             return self.relationship.reverse(self.node_pair_id)
         return None
 
     @property
     def forward_node(self):
-        """Returns the node object which is forward with respect to the edge."""
+        """:py:obj:`property` defining the :class:`dag.AbstractNode` object forward of the current
+        :class:`dag.AbstractEdge` object.
+
+        :return: :class:`dag.AbstractNode` object of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        """
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.forward(self.node_pair) 
         return None
 
     @property
     def reverse_node(self):
-        """Returns the node object which is reverse with respect to the edge."""
+        """:py:obj:`property` defining the :class:`dag.AbstractNode` object reverse of the current
+        :class:`dag.AbstractEdge` object.
+
+        :return: :class:`dag.AbstractNode` object of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        """
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.reverse(self.node_pair) 
         return None
     
     @property
     def parent_node(self):
-        """Returns the node object with is forward with respect to the edge in scoping-type relationsihps."""
+        """:py:obj:`property` defining the :class:`dag.AbstractNode` object forward of the current
+        :class:`dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although this
+        is **not yet specified**.
+
+        :return: :class:`dag.AbstractNode` object of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        """
         if self.relationship:
             return self.relationship.forward(self.node_pair)
         return None
 
     @property
     def child_node(self):
-        """Returns the node object with is reverse with respect to the edge in scoping-type relationsihps."""
+        """:py:obj:`property` defining the :class:`dag.AbstractNode` object reverse of the current
+        :class:`dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although this
+        is **not yet specified**.
+
+        :return: :class:`dag.AbstractNode` object of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        """
         if self.relationship:
             return self.relationship.reverse(self.node_pair) 
         return None
@@ -430,26 +498,56 @@ class AbstractEdge(object):
     # Will finish these later
     @property
     def actor_node(self):
+        """**not yet implemented**
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         return
 
     @property
     def recipient_node(self):
+        """**not yet implemented**
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         return
 
     @property
     def ordinal_prior_node(self):
+        """**not yet implemented**
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         return
 
     @property
     def ordinal_post_node(self):
+        """**not yet implemented**
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         return
 
     @property
     def other_node(self, node):
+        """**not yet implemented**
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         return
 
     def connect_nodes(self, node_pair, allowed_relationships):
-        """Adds the edge object to the node objects (node pair) that are connected by the edge."""
+        """Adds the current edge object to the :class:`dag.AbstractNode` objects that are connected by the edge.
+        Populates the node_pair with :class:`dag.AbstractNode` objects.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         self.node_pair = node_pair
         node_pair[0].add_edge(self, allowed_relationships)
         node_pair[1].add_edge(self, allowed_relationships)
@@ -461,6 +559,8 @@ class AbstractRelationship(object):
     semantic correspondence."""
 
     def __init__(self):
+        """`AbstractRelationship` initializer.
+        """
         self.id = str()
         self.name = str()
         self.category = str()  # TODO: change category to correspondence_classes DO everywhere.
@@ -469,23 +569,33 @@ class AbstractRelationship(object):
 class DirectionalRelationship(AbstractRelationship):
 
     """A singly-directional relationship edge connecting two nodes in the graph. The two nodes are designated 'forward'
-    and 'reverse.' The 'forward' node semantically supercedes the 'reverse' node in a way that depends on the context of
+    and 'reverse.' The 'forward' node semantically succeeds the 'reverse' node in a way that depends on the context of
     the type of relationship describing the edge to which it is applied."""
 
     def __init__(self):
+        """`DirectionalRelationship` initializer.
+        """
         super().__init__()
         self.inverse_relationship_id = None
         self.inverse_relationship = None
         self.direction = 1  # Defaults as toward node2 (node2 is the 'forward' node)
 
     def forward(self, pair):
-        """Returns the tuple position of the node in a node pair that semantically supercedes the other and is
-        independent of the directionality of the edge. Default position is 1."""
+        """Returns the forward node in a node pair that semantically succeeds the other and is independent of the
+        directionality of the edge. Default position is the second position [1].
+
+        :param tuple pair: A pair of :class:`dag.AbstractNode` objects.
+        :return: The forward :class:`dag.AbstractNode` object as determined by the pre-defined semantic directionality of the relationship.
+        """
         return pair[self.direction]
 
     def reverse(self, pair):
-        """Returns the tuple position of the node in a node pair that semantically subcedes the other and is independent
-         of the directionality of the edge. Default position is 1."""
+        """Returns the reverse node in a node pair that semantically precedes the other and is independent of the
+        directionality of the edge. Default position is the second position [1].
+
+        :param tuple pair: A pair of :class:`dag.AbstractNode` objects.
+        :return: The reverse :class:`dag.AbstractNode` object as determined by the pre-defined semantic directionality of the relationship.
+        """
         return pair[(self.direction+1) % 2]
 
 
@@ -494,4 +604,6 @@ class NonDirectionalRelationship(AbstractRelationship):
     """A non-directional relationship whose edge directionality is either non-existant or semantically irrelevant."""
     
     def __init__(self):
+        """`NonDirectionalRelationship` initializer.
+        """
         return    

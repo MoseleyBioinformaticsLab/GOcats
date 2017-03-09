@@ -7,50 +7,72 @@ Modules
 The following modules are located in /ARK.GOcats/gocats.
 
 .. automodule:: gocats
+   :member-order: bysource
    :members:
+   :special-members:
    :private-members:
 
 Directed Acyclic Graph (DAG)
 ----------------------------
 
 .. automodule:: dag
+   :member-order: bysource
    :members:
+   :special-members:
    :private-members:
 
 Gene Ontology Directed Acylic Graph (GODAG)
 -------------------------------------------
 
 .. automodule:: godag
+   :member-order: bysource
    :members:
+   :special-members:
+   :private-members:
 
 Directed Acyclic Subgraph (SubDAG)
 ----------------------------------
 
 .. automodule:: subdag
+   :member-order: bysource
    :members:
+   :special-members:
+   :private-members:
 
 Ontology Parser
 ---------------
 
 .. automodule:: ontologyparser
+   :member-order: bysource
    :members:
+   :special-members:
+   :private-members:
 
 Decoy Gene Anotation File Creator (DecoyGAF)
 --------------------------------------------
 
 .. automodule:: decoygaf
+   :member-order: bysource
    :members:
+   :special-members:
+   :private-members:
 
 UniProt Subcellular Locations Parser
 ------------------------------------
 .. automodule:: uniprotsubcellparser
+   :member-order: bysource
    :members:
+   :special-members:
+   :private-members:
 
 Tools
 -----
 
 .. automodule:: tools
+   :member-order: bysource
    :members:
+   :special-members:
+   :private-members:
 
 Test Scripts
 ~~~~~~~~~~~~
