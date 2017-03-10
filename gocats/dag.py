@@ -14,10 +14,10 @@ class OboGraph(object):
 
     def __init__(self, namespace_filter=None, allowed_relationships=None):
         """`OboGraph` initializer. Leave `namespace_filter` and `allowed_relationship` as :py:obj:`None` to create the
-        entire ontolgy graph. Otherwise, provide filters to limit what information is pulled into the graph.
+        entire ontology graph. Otherwise, provide filters to limit what information is pulled into the graph.
 
-        :param str namespace_filter: Specify the namespace of a subontology namespace, if one is available for the ontology.
-        :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other reltionships will be ignored.
+        :param str namespace_filter: Specify the namespace of a sub-ontology namespace, if one is available for the ontology.
+        :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other relationships will be ignored.
         """
         self.namespace_filter = namespace_filter
         self.allowed_relationships = allowed_relationships
@@ -65,7 +65,7 @@ class OboGraph(object):
     
     def valid_node(self, node):
         """Defines condition of a valid node. Node is valid if it is not obsolete and is contained within the given
-        ontology namespace contraint.
+        ontology namespace constraint.
 
         :param node: A :class:`dag.AbstractNode` object
         :return: True if node is valid, False otherwise
