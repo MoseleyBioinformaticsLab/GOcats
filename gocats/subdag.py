@@ -12,8 +12,8 @@ class SubGraph(OboGraph):
     
     def __init__(self, super_graph, namespace_filter=None, allowed_relationships=None):
         """`SubGraph initializer. Creates a subgraph object of :class:`dag.OboGraph`. Leave `namespace_filter` and
-        `allowed_relationship` as :py:obj:`None` to create the entire ontology graph. Otherwise, provide filters to limit
-         what information is pulled into the subgraph.
+        `allowed_relationship` as :py:obj:`None` to create the entire ontology graph. Otherwise, provide filters to
+        limit what information is pulled into the subgraph.
 
         :param obj super_graph: A supergraph object i.e. :class:`godag.GoGraph`.
         :param str namespace_filter: Specify the namespace of a sub-ontology namespace, if one is available for the ontology.
@@ -82,7 +82,7 @@ class SubGraph(OboGraph):
 
         :param super_node: A node object from the supergraph i.e. :class:`godag.GoGraphNode`.
         :return: A :class:`subdag.SubGraphNode` object.
-        :rtype :py:obj:`class`
+        :rtype: :py:obj:`class`
         """
         if super_node.id not in self.id_index:
             self.add_node(super_node)
@@ -169,6 +169,15 @@ class SubGraph(OboGraph):
 
     @staticmethod
     def find_representative_node(subgraph, search_string_list):
+        """Extracts candidate :class:`subdag.SubGraphNode` objects from the :class:`subdag.SubGraph` objects based on a
+        list of search strings matching strings in the names of the nodes (using regular expressions). Returns the
+        candidate node with the highest number of descendants. Returns the sole node if the subgraph only contains one
+        node, aborts if the subgraph is empty.
+
+        :param subgraph: A :class:`subdag.SubGraph` object.
+        :param search_string_list: A :py:obj:`list` of search term :py:obj:`str` entries.
+        :return: A candidate term :class:`subgraph.SubGraphNode` chosen as the subgraph's representative ontology term.
+        """
         if len(subgraph.node_list) == 1:
             return subgraph.node_list[0]
         elif not subgraph.node_list:
@@ -180,6 +189,20 @@ class SubGraph(OboGraph):
 
     @staticmethod
     def from_filtered_graph(super_graph, keyword_list, namespace_filter=None, allowed_relationships=None, extension='greedy'):
+        """Staticmethod for extracting a subgraph from the supergraph by selecting nodes that contain vocabulary in the
+        supplied keyword list. Leave `namespace_filter` and `allowed_relationship` as :py:obj:`None` to create the
+        entire ontology graph. Otherwise, provide filters to limit what information is pulled into the subgraph.
+        Graph `extension` variable defaults to 'greedy' which calls :func:`greedily_extend_subgraph` to add nodes to the
+        subgraph after instantiation. Conversely, 'conservative' may be used to call
+        :func:`conservatively_extend_subgraph` for this function.
+
+        :param obj super_graph: A supergraph object i.e. :class:`godag.GoGraph`.
+        :param keyword_list: A :py:obj:`list` of :py:obj:`str` entries used to query the supergraph for concepts to be extracted into subgraphs.
+        :param str namespace_filter: Specify the namespace of a sub-ontology namespace, if one is available for the ontology.
+        :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other relationships will be ignored.
+        :param str extension: Specify 'greedy' or 'conservative' to determine how subgraphs will be extended after creation (defaults to greedy).
+        :return: A :class:`subdag.SubGraph` object.
+        """
         subgraph = SubGraph(super_graph, namespace_filter, allowed_relationships)
         keyword_list = [word.lower() for word in keyword_list]
         filtered_nodes = super_graph.filter_nodes(keyword_list)
@@ -191,7 +214,7 @@ class SubGraph(OboGraph):
         subgraph.root_nodes.append(subgraph.representative_node)
         if extension == 'greedy':
             subgraph.greedily_extend_subgraph()
-        else:
+        elif extension == 'conservative':
             subgraph.conservatively_extend_subgraph()
         subgraph_orphans_descendants = set()
         for orphan in subgraph.orphans:
@@ -204,10 +227,16 @@ class SubGraph(OboGraph):
 
 class SubGraphNode(AbstractNode):
 
-    """An instance of a node within a subgraph of an OBO ontology (super-graph)
+    """An instance of a node within a subgraph of an OBO ontology (supergraph)
     """
     
     def __init__(self, super_node, allowed_relationships=None):
+        """SubGraphNode initializer. Inherits from :class:`dag.AbstractNode` and contains a reference to the supergraph
+        node it represents e.g. :class:`godag.GoGraphNode`.
+
+        :param super_node: A node from the `supergraph`.
+        :param allowed_relationships: **Not currently used** Used to specify a list of allowable relationships evaluated between nodes.
+        """
         self.super_node = super_node
         self.parent_node_set = set()
         self.child_node_set = set()
@@ -219,35 +248,76 @@ class SubGraphNode(AbstractNode):
 
     @property
     def super_edges(self):
-        # Take super_edges that are consistent with the subgraph, but copy them to a new subgraph edges set.
+        """:py:obj:`property` describing the set of edges referenced in the supergraph node, filtered to only those
+         edges with nodes in the subgraph node.
+
+        :return: A set of :class:`subgraph.SubGraphNode` edges that were copied from the supergraph node.
+        :rtype: :py:obj:`set`
+        """
         edges = set()
         edges.add([edge for edge in self.super_node.edges if edge.parent_node.id in [node.id for node in self.parent_node_set] and edge.child_node.id in [node.id for node in self.child_node_set]])
         return edges
 
     @property
     def id(self):
+        """:py:obj:`property` describing the ID of the supernode
+
+        :return: The ID of a supernode e.g. :class:`godag.GoGraphNode`
+        :rtype: :py:obj:`str`
+        """
         return self.super_node.id
 
     @property
     def name(self):
+        """:py:obj:`property` describing the name of the supernode
+
+        :return: The name of a supernode e.g. :class:`godag.GoGraphNode`
+        :rtype: :py:obj:`str`
+        """
         return self.super_node.name
     
     @property
     def definition(self):
+        """:py:obj:`property` describing the definition of the supernode
+
+        :return: The definition of a supernode e.g. :class:`godag.GoGraphNode`
+        :rtype: :py:obj:`str`
+        """
         return self.super_node.definition
 
     @property
     def namespace(self):
+        """:py:obj:`property` describing the namespace of the supernode
+
+        :return: A namespace of a supernode e.g. :class:`godag.GoGraphNode`
+        :rtype: :py:obj:`str`
+        """
         return self.super_node.namespace
 
     @property
     def obsolete(self):
+        """:py:obj:`property` describing whether or not supernode is marked as obsolete.
+
+        :return: :py:obj:`True` or :py:obj:`False`
+        """
         return self.super_node.obsolete
 
-    def update_parents(self, parent_list):
-        self.parent_node_set.update(parent_list)
+    def update_parents(self, parent_set):
+        """Updates the parent_node_set with a set of new parents provided. Sets modification state to :py:obj:`True`.
+
+        :param parent_set: A set of parent nodes to be added to this objects parent_node set.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
+        self.parent_node_set.update(parent_set)
         self._modified = True
 
-    def update_children(self, child_list):
-        self.child_node_set.update(child_list)
+    def update_children(self, child_set):
+        """Updates the child_node_set with a set of new children provided. Sets modification state to :py:obj:`True`.
+
+        :param child_set: A set of child nodes to be added to this objects child_node set.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
+        self.child_node_set.update(child_set)
         self._modified = True

@@ -84,6 +84,7 @@
 <span class="kn">import</span> <span class="nn">version</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="n">version</span><span class="o">.</span><span class="n">__version__</span>
 
+
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;create_subgraphs&#39;</span><span class="p">]:</span>
         <span class="n">create_subgraphs</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
@@ -186,13 +187,13 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">supergraph</span> <span class="o">=</span> <span class="n">graph_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">graph_class</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of filenames are as follows: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">graph_class</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
     <span class="n">parsing_class</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;go.obo&#39;</span><span class="p">:</span> <span class="n">ontologyparser</span><span class="o">.</span><span class="n">GoParser</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">supergraph</span><span class="p">)}</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">parsing_class</span><span class="p">[</span><span class="n">database_name</span><span class="p">]</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">graph_class</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of filenames are as follows: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">graph_class</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_termlist&#39;</span><span class="p">]:</span>
         <span class="n">tools</span><span class="o">.</span><span class="n">jsonpickle_save</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">supergraph</span><span class="o">.</span><span class="n">id_index</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_directory&gt;&#39;</span><span class="p">],</span> <span class="s2">&quot;termlist&quot;</span><span class="p">))</span>
@@ -262,7 +263,7 @@
 <span class="s2">                </span><span class="si">{}</span><span class="s2"></span>
 <span class="s2">                Subgraph relationships: </span><span class="si">{}</span><span class="s2"></span>
 <span class="s2">                Seeded size: </span><span class="si">{}</span><span class="s2"></span>
-<span class="s2">                Representitive node: </span><span class="si">{}</span><span class="s2"></span>
+<span class="s2">                Representative node: </span><span class="si">{}</span><span class="s2"></span>
 <span class="s2">                Nodes added: </span><span class="si">{}</span><span class="s2"></span>
 <span class="s2">                Non-subgraph hits (orphans): </span><span class="si">{}</span><span class="s2"></span>
 <span class="s2">                Total nodes: </span><span class="si">{}</span><span class="s2"></span>
@@ -419,13 +420,13 @@
 
 <span class="sd">    Agreement types:</span>
 
-<span class="sd">        -Complete - Manually-assigned annotations and programatically assigned annotations were identical.</span>
+<span class="sd">        -Complete - Manually-assigned annotations and programmatically assigned annotations were identical.</span>
 
-<span class="sd">        -Partial - At least one annotation is shared between manual assignments and programatic assignments.</span>
+<span class="sd">        -Partial - At least one annotation is shared between manual assignments and programmatic assignments.</span>
 
-<span class="sd">        -Superset - Programatic annotation assignments are a superset of manual annotation assignments.</span>
+<span class="sd">        -Superset - Programmatic annotation assignments are a superset of manual annotation assignments.</span>
 
-<span class="sd">        -None - Manual and programatic assignments are both present but there are no shared annotations.</span>
+<span class="sd">        -None - Manual and programmatic assignments are both present but there are no shared annotations.</span>
 
 <span class="sd">        -Inconclusive - Annotations are missing from genes in one or both of the sources.</span>
 
@@ -440,7 +441,7 @@
 <span class="sd">    :return: None</span>
 <span class="sd">    :rtype: :py:obj:`None`</span>
 <span class="sd">&quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Add argumnets for output directory. Save tables and list of genes not in database in this directory.</span>
+    <span class="c1"># TODO: Add arguments for output directory. Save tables and list of genes not in database in this directory.</span>
     <span class="kn">from</span> <span class="nn">tabulate</span> <span class="k">import</span> <span class="n">tabulate</span>
     <span class="kn">import</span> <span class="nn">catcompare</span>
 
@@ -498,9 +499,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">id_translation_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-    <span class="c1"># shows a breakdown of agreement per location (annoataion category)</span>
+    <span class="c1"># shows a breakdown of agreement per location (annotation category)</span>
     <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">hpa_dataset_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span> <span class="o">+</span>
-                        <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">manual_dataset_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span> <span class="k">if</span> <span class="n">manual_dataset_mapping</span><span class="p">]):</span>  <span class="c1"># A flattening of the list of lists in hpa dataset dict locations. HPA dataset locaitons should be used as opposed to mapping methods&#39; locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didnt find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.</span>
+                        <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">manual_dataset_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span> <span class="k">if</span> <span class="n">manual_dataset_mapping</span><span class="p">]):</span>  <span class="c1"># A flattening of the list of lists in hpa dataset dict locations. HPA dataset locations should be used as opposed to mapping methods&#39; locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didn&#39;t find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.</span>
         <span class="n">complete</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
             <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;complete&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">location</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">location</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">gene_assignment_tuples</span><span class="p">))</span>
         <span class="n">partial</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
@@ -539,17 +540,17 @@
           <span class="s1">&#39;not in knowledgebase: &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">not_in_knowledgebase</span><span class="p">),</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;Total: &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gene_assignment_tuples</span><span class="p">))</span>
 
     <span class="c1"># The following are examples mentioned in the publication. Uncomment to produce these results.</span>
-    <span class="c1">#print(&quot;----&quot;, &quot;Partial&quot;, &quot;----&quot;)</span>
-    <span class="c1">#for item in partial:</span>
+    <span class="c1"># print(&quot;----&quot;, &quot;Partial&quot;, &quot;----&quot;)</span>
+    <span class="c1"># for item in partial:</span>
     <span class="c1">#    if len(item[1]) &gt; len(item[2]):</span>
     <span class="c1">#        print(item, &quot;greater than&quot;)</span>
     <span class="c1">#    elif len(item[1]) == len(item[2]):</span>
     <span class="c1">#        print(item, &quot;equal to&quot;)</span>
 
-    <span class="c1">#print(&quot;----&quot;, &quot;Superset&quot;, &quot;----&quot;)</span>
-    <span class="c1">#for item in superset:</span>
+    <span class="c1"># print(&quot;----&quot;, &quot;Superset&quot;, &quot;----&quot;)</span>
+    <span class="c1"># for item in superset:</span>
     <span class="c1">#    print(item)</span>
-    <span class="c1">#for gene_tuple in gene_assignment_tuples:</span>
+    <span class="c1"># for gene_tuple in gene_assignment_tuples:</span>
     <span class="c1">#    if gene_tuple[0] == &#39;PSMD3&#39; and gene_tuple[3] == &#39;complete&#39;:</span>
     <span class="c1">#        print(&quot;PSMD3 IS IN COMPLETE AGREEMENT!&quot;)</span>
     <span class="c1">#    elif gene_tuple[0] == &#39;PSMD3&#39; and gene_tuple[3] != &#39;complete&#39;:</span>
