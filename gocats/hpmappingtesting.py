@@ -42,7 +42,7 @@ def _potential_false_ancestors(edge):
 
 
 def _potential_false_descendants(edge):
-    """Considering a problematic relationship edge, returns a set of descendent nodes that could result in a problematic
+    """Considering a problematic relationship edge, returns a set of descendant nodes that could result in a problematic
     mapping.
 
     :param edge: :class:`dag.AbstractEdge` object
@@ -59,7 +59,7 @@ def _potential_false_descendants(edge):
 
 def potential_false_mappings(edge_list):
     """Returns a set of mapping pairs (tuples of nodes) that results from a cartesian product of the sets of potential
-    false descendents and potential false ancestors calculated for a list or set of problematic edges.
+    false descendants and potential false ancestors calculated for a list or set of problematic edges.
 
     :param list edge_list: A list of :class:`dag.AbstractEdge` objects.
     :return: Cartesian product of sets produced by :func:`_potential_false_ancestors` and :func:`_potential_false_descendants`.
@@ -73,10 +73,10 @@ def potential_false_mappings(edge_list):
 
 def all_possible_mappings(node_list):
     """Given a list of all nodes in a graph, returns a set of mapping pairs (tuples of nodes) that results from a
-    cartesian product of all sets of descentent nodes to their respective ancestor nodes. Ignores self mappings.
+    cartesian product of all sets of descendant nodes to their respective ancestor nodes. Ignores self mappings.
 
     :param list node_list: A list of all :class:`dag.AbstractNode` objects in a graph.
-    :return: A set of all tupples representing every term-to-term mapping possilbe in the graph.
+    :return: A set of all tuples representing every term-to-term mapping possible in the graph.
     :rtype: :py:obj:`set` of :py:obj:`tuple`s.
     """
     node_mapping_tuples = set()

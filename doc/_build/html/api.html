@@ -249,10 +249,10 @@ other method) and a gold-standard, manually-curated dataset provided in csv form
 highly specific to HPA&#8217;s dataset formatting. It is not yet intended for generic use.</strong></p>
 <p>Agreement types:</p>
 <blockquote>
-<div><p>-Complete - Manually-assigned annotations and programatically assigned annotations were identical.</p>
-<p>-Partial - At least one annotation is shared between manual assignments and programatic assignments.</p>
-<p>-Superset - Programatic annotation assignments are a superset of manual annotation assignments.</p>
-<p>-None - Manual and programatic assignments are both present but there are no shared annotations.</p>
+<div><p>-Complete - Manually-assigned annotations and programmatically assigned annotations were identical.</p>
+<p>-Partial - At least one annotation is shared between manual assignments and programmatic assignments.</p>
+<p>-Superset - Programmatic annotation assignments are a superset of manual annotation assignments.</p>
+<p>-None - Manual and programmatic assignments are both present but there are no shared annotations.</p>
 <p>-Inconclusive - Annotations are missing from genes in one or both of the sources.</p>
 <p>-Not in knowledgebase - Gene absent from the knowledgebase, which is present in the dataset.</p>
 </div></blockquote>
@@ -293,14 +293,14 @@ acyclic graph (DAG).</p>
 <dt id="dag.OboGraph.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>namespace_filter=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>OboGraph</cite> initializer. Leave <cite>namespace_filter</cite> and <cite>allowed_relationship</cite> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> to create the
-entire ontolgy graph. Otherwise, provide filters to limit what information is pulled into the graph.</p>
+entire ontology graph. Otherwise, provide filters to limit what information is pulled into the graph.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>namespace_filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Specify the namespace of a subontology namespace, if one is available for the ontology.</li>
-<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; Specify a list of relationships to utilize in the graph, other reltionships will be ignored.</li>
+<li><strong>namespace_filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Specify the namespace of a sub-ontology namespace, if one is available for the ontology.</li>
+<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; Specify a list of relationships to utilize in the graph, other relationships will be ignored.</li>
 </ul>
 </td>
 </tr>
@@ -346,7 +346,7 @@ entire ontolgy graph. Otherwise, provide filters to limit what information is pu
 <dt id="dag.OboGraph.valid_node">
 <code class="descname">valid_node</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dag.html#OboGraph.valid_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dag.OboGraph.valid_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines condition of a valid node. Node is valid if it is not obsolete and is contained within the given
-ontology namespace contraint.</p>
+ontology namespace constraint.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1072,8 +1072,8 @@ ontologies.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>namespace_filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Specify the namespace of a subontology namespace, if one is available for the ontology.</li>
-<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; Specify a list of relationships to utilize in the graph, other reltionships will be ignored.</li>
+<li><strong>namespace_filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Specify the namespace of a sub-ontology namespace, if one is available for the ontology.</li>
+<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; Specify a list of relationships to utilize in the graph, other relationships will be ignored.</li>
 </ul>
 </td>
 </tr>
@@ -1104,10 +1104,237 @@ ontologies.</p>
 <em class="property">class </em><code class="descclassname">subdag.</code><code class="descname">SubGraph</code><span class="sig-paren">(</span><em>super_graph</em>, <em>namespace_filter=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>A subgraph of a provided supergraph with node contents.</p>
 <dl class="method">
+<dt id="subdag.SubGraph.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>super_graph</em>, <em>namespace_filter=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>SubGraph initializer. Creates a subgraph object of :class:`dag.OboGraph</cite>. Leave <cite>namespace_filter</cite> and
+<cite>allowed_relationship</cite> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> to create the entire ontology graph. Otherwise, provide filters to
+limit what information is pulled into the subgraph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>super_graph</strong> (<em>obj</em>) &#8211; A supergraph object i.e. <a class="reference internal" href="#godag.GoGraph" title="godag.GoGraph"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraph</span></code></a>.</li>
+<li><strong>namespace_filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Specify the namespace of a sub-ontology namespace, if one is available for the ontology.</li>
+<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; Specify a list of relationships to utilize in the graph, other relationships will be ignored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraph.root_id_mapping">
+<code class="descname">root_id_mapping</code><a class="headerlink" href="#subdag.SubGraph.root_id_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property describing a mapping <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> that relates every ontology term ID of subgraphs in
+<a class="reference internal" href="#dag.OboGraph" title="dag.OboGraph"><code class="xref py py-class docutils literal"><span class="pre">dag.OboGraph</span></code></a> to a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of root, subgraph category-representative node IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> of <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> IDs mapped to a <code class="xref py py-obj docutils literal"><span class="pre">list'</span> <span class="pre">of</span> <span class="pre">root</span> <span class="pre">:class:`dag.AbstractNode</span></code> IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraph.root_node_mapping">
+<code class="descname">root_node_mapping</code><a class="headerlink" href="#subdag.SubGraph.root_node_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property describing a mapping <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> that relates every ontology <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> object of
+subgraphs in <a class="reference internal" href="#dag.OboGraph" title="dag.OboGraph"><code class="xref py py-class docutils literal"><span class="pre">dag.OboGraph</span></code></a> to a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of root, subgraph category-representative node objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> of <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> objects mapped to a <code class="xref py py-obj docutils literal"><span class="pre">list'</span> <span class="pre">of</span> <span class="pre">root</span> <span class="pre">:class:`dag.AbstractNode</span></code> objects.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraph.content_mapping">
+<code class="descname">content_mapping</code><a class="headerlink" href="#subdag.SubGraph.content_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property describing a mapping <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> that relates every root ontology <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> IDs
+of subgraphs in a <a class="reference internal" href="#dag.OboGraph" title="dag.OboGraph"><code class="xref py py-class docutils literal"><span class="pre">dag.OboGraph</span></code></a> to a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of their subgraph nodes&#8217; IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> of <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> IDs mapped to a <code class="xref py py-obj docutils literal"><span class="pre">list'</span> <span class="pre">of</span> <span class="pre">:class:`dag.AbstractNode</span></code> IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="subdag.SubGraph.subnode">
+<code class="descname">subnode</code><span class="sig-paren">(</span><em>super_node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.subnode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.subnode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a <a class="reference internal" href="#subdag.SubGraph" title="subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraph</span></code></a> node object. Calls <a class="reference internal" href="#subdag.SubGraph.add_node" title="subdag.SubGraph.add_node"><code class="xref py py-func docutils literal"><span class="pre">add_node()</span></code></a> to convert a supergraph node into a
+<a class="reference internal" href="#subdag.SubGraphNode" title="subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraphNode</span></code></a> and add this node to the subgraph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>super_node</strong> &#8211; A node object from the supergraph i.e. <a class="reference internal" href="#godag.GoGraphNode" title="godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraphNode</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="#subdag.SubGraphNode" title="subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraphNode</span></code></a> object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-obj docutils literal"><span class="pre">class</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="subdag.SubGraph.add_node">
+<code class="descname">add_node</code><span class="sig-paren">(</span><em>super_node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.add_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.add_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a supergraph node into a <a class="reference internal" href="#subdag.SubGraphNode" title="subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraphNode</span></code></a> and adds this node to the subgraph. Sets
+modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>super_node</strong> (<em>obj</em>) &#8211; A node object from the supergraph i.e. <a class="reference internal" href="#godag.GoGraphNode" title="godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraphNode</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="subdag.SubGraph.connect_subnodes">
+<code class="descname">connect_subnodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.connect_subnodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.connect_subnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analogous to <code class="xref py py-func docutils literal"><span class="pre">dag.instantiate_valid_edges()</span></code> and <a class="reference internal" href="#dag.AbstractEdge.connect_nodes" title="dag.AbstractEdge.connect_nodes"><code class="xref py py-func docutils literal"><span class="pre">dag.AbstractEdge.connect_nodes()</span></code></a>. Updates child
+and parent node sets for each <a class="reference internal" href="#subdag.SubGraphNode" title="subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraphNode</span></code></a> in the <a class="reference internal" href="#subdag.SubGraph" title="subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraph</span></code></a>. Adds edge object
+references to nodes and node object references to edges. Counts instances of relationship IDs and sets
+modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="subdag.SubGraph.greedily_extend_subgraph">
+<code class="descname">greedily_extend_subgraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.greedily_extend_subgraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.greedily_extend_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends a seeded subgraph to include all supergraph descendants of the nodes. Searches through the supergraph
+to add new node objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="subdag.SubGraph.conservatively_extend_subgraph">
+<code class="descname">conservatively_extend_subgraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.conservatively_extend_subgraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.conservatively_extend_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends a seeded subgraph to include only nodes in the supergraph that occur along paths between nodes in the
+subgraph. Searches through the supergraph to add new node objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="subdag.SubGraph.remove_orphan_paths">
 <code class="descname">remove_orphan_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.remove_orphan_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.remove_orphan_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Not currently in use. Removes nodes and their descendants from the subgraph which do not root to the
+<dd><p><strong>Not currently in use.</strong></p>
+<p>Removes nodes and their descendants from the subgraph which do not root to the
 category-representative node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="subdag.SubGraph.find_representative_node">
+<em class="property">static </em><code class="descname">find_representative_node</code><span class="sig-paren">(</span><em>subgraph</em>, <em>search_string_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.find_representative_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.find_representative_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts candidate <a class="reference internal" href="#subdag.SubGraphNode" title="subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraphNode</span></code></a> objects from the <a class="reference internal" href="#subdag.SubGraph" title="subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraph</span></code></a> objects based on a
+list of search strings matching strings in the names of the nodes (using regular expressions). Returns the
+candidate node with the highest number of descendants. Returns the sole node if the subgraph only contains one
+node, aborts if the subgraph is empty.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subgraph</strong> &#8211; A <a class="reference internal" href="#subdag.SubGraph" title="subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraph</span></code></a> object.</li>
+<li><strong>search_string_list</strong> &#8211; A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of search term <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> entries.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A candidate term <code class="xref py py-class docutils literal"><span class="pre">subgraph.SubGraphNode</span></code> chosen as the subgraph&#8217;s representative ontology term.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="subdag.SubGraph.from_filtered_graph">
+<em class="property">static </em><code class="descname">from_filtered_graph</code><span class="sig-paren">(</span><em>super_graph</em>, <em>keyword_list</em>, <em>namespace_filter=None</em>, <em>allowed_relationships=None</em>, <em>extension='greedy'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraph.from_filtered_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraph.from_filtered_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Staticmethod for extracting a subgraph from the supergraph by selecting nodes that contain vocabulary in the
+supplied keyword list. Leave <cite>namespace_filter</cite> and <cite>allowed_relationship</cite> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> to create the
+entire ontology graph. Otherwise, provide filters to limit what information is pulled into the subgraph.
+Graph <cite>extension</cite> variable defaults to &#8216;greedy&#8217; which calls <a class="reference internal" href="#subdag.SubGraph.greedily_extend_subgraph" title="subdag.SubGraph.greedily_extend_subgraph"><code class="xref py py-func docutils literal"><span class="pre">greedily_extend_subgraph()</span></code></a> to add nodes to the
+subgraph after instantiation. Conversely, &#8216;conservative&#8217; may be used to call
+<a class="reference internal" href="#subdag.SubGraph.conservatively_extend_subgraph" title="subdag.SubGraph.conservatively_extend_subgraph"><code class="xref py py-func docutils literal"><span class="pre">conservatively_extend_subgraph()</span></code></a> for this function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>super_graph</strong> (<em>obj</em>) &#8211; A supergraph object i.e. <a class="reference internal" href="#godag.GoGraph" title="godag.GoGraph"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraph</span></code></a>.</li>
+<li><strong>keyword_list</strong> &#8211; A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a> entries used to query the supergraph for concepts to be extracted into subgraphs.</li>
+<li><strong>namespace_filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Specify the namespace of a sub-ontology namespace, if one is available for the ontology.</li>
+<li><strong>allowed_relationships</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; Specify a list of relationships to utilize in the graph, other relationships will be ignored.</li>
+<li><strong>extension</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; Specify &#8216;greedy&#8217; or &#8216;conservative&#8217; to determine how subgraphs will be extended after creation (defaults to greedy).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference internal" href="#subdag.SubGraph" title="subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">subdag.SubGraph</span></code></a> object.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1115,7 +1342,159 @@ category-representative node.</p>
 <dl class="class">
 <dt id="subdag.SubGraphNode">
 <em class="property">class </em><code class="descclassname">subdag.</code><code class="descname">SubGraphNode</code><span class="sig-paren">(</span><em>super_node</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraphNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraphNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>An instance of a node within a subgraph of an OBO ontology (super-graph)</p>
+<dd><p>An instance of a node within a subgraph of an OBO ontology (supergraph)</p>
+<dl class="method">
+<dt id="subdag.SubGraphNode.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>super_node</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraphNode.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraphNode.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>SubGraphNode initializer. Inherits from <a class="reference internal" href="#dag.AbstractNode" title="dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">dag.AbstractNode</span></code></a> and contains a reference to the supergraph
+node it represents e.g. <a class="reference internal" href="#godag.GoGraphNode" title="godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraphNode</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>super_node</strong> &#8211; A node from the <cite>supergraph</cite>.</li>
+<li><strong>allowed_relationships</strong> &#8211; <strong>Not currently used</strong> Used to specify a list of allowable relationships evaluated between nodes.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraphNode.super_edges">
+<code class="descname">super_edges</code><a class="headerlink" href="#subdag.SubGraphNode.super_edges" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> describing the set of edges referenced in the supergraph node, filtered to only those</dt>
+<dd>edges with nodes in the subgraph node.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of <code class="xref py py-class docutils literal"><span class="pre">subgraph.SubGraphNode</span></code> edges that were copied from the supergraph node.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraphNode.id">
+<code class="descname">id</code><a class="headerlink" href="#subdag.SubGraphNode.id" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> describing the ID of the supernode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The ID of a supernode e.g. <a class="reference internal" href="#godag.GoGraphNode" title="godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraphNode</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraphNode.name">
+<code class="descname">name</code><a class="headerlink" href="#subdag.SubGraphNode.name" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> describing the name of the supernode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of a supernode e.g. <a class="reference internal" href="#godag.GoGraphNode" title="godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraphNode</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraphNode.definition">
+<code class="descname">definition</code><a class="headerlink" href="#subdag.SubGraphNode.definition" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> describing the definition of the supernode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The definition of a supernode e.g. <a class="reference internal" href="#godag.GoGraphNode" title="godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraphNode</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraphNode.namespace">
+<code class="descname">namespace</code><a class="headerlink" href="#subdag.SubGraphNode.namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> describing the namespace of the supernode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A namespace of a supernode e.g. <a class="reference internal" href="#godag.GoGraphNode" title="godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">godag.GoGraphNode</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subdag.SubGraphNode.obsolete">
+<code class="descname">obsolete</code><a class="headerlink" href="#subdag.SubGraphNode.obsolete" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> describing whether or not supernode is marked as obsolete.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">False</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="subdag.SubGraphNode.update_parents">
+<code class="descname">update_parents</code><span class="sig-paren">(</span><em>parent_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraphNode.update_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraphNode.update_parents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the parent_node_set with a set of new parents provided. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parent_set</strong> &#8211; A set of parent nodes to be added to this objects parent_node set.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="subdag.SubGraphNode.update_children">
+<code class="descname">update_children</code><span class="sig-paren">(</span><em>child_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/subdag.html#SubGraphNode.update_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#subdag.SubGraphNode.update_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the child_node_set with a set of new children provided. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>child_set</strong> &#8211; A set of child nodes to be added to this objects child_node set.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -1212,7 +1591,7 @@ connect all nodes in the graph by their edges.</p>
 <dd><dl class="docutils">
 <dt>Creates a GAF mapping all terms in an ontology to themselves. A GAF formatted file is created which replaces the</dt>
 <dd>gene name column with a copy of an the ontology term for every term in an ontology. This can be used to create term
-to term mappings via Map2Slim. See <cite>Map2Slim Mapping Error Testing</cite> in the api doccumentation for elaboration.</dd>
+to term mappings via Map2Slim. See <cite>Map2Slim Mapping Error Testing</cite> in the api documentation for elaboration.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1239,7 +1618,7 @@ to term mappings via Map2Slim. See <cite>Map2Slim Mapping Error Testing</cite> i
 <dt id="decoygaf.map_terms">
 <code class="descclassname">decoygaf.</code><code class="descname">map_terms</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/decoygaf.html#map_terms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#decoygaf.map_terms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maps the terms contained in a mapped decoy GAF. The resulting mapping dictionary is saved to a json_pickle. See
-<cite>Map2Slim Mapping Error Testing</cite> in the api doccumentation for elaboration.</p>
+<cite>Map2Slim Mapping Error Testing</cite> in the api documentation for elaboration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

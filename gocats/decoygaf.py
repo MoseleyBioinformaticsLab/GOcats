@@ -28,7 +28,7 @@ def main(args):
 def make_decoy(args):
     """Creates a GAF mapping all terms in an ontology to themselves. A GAF formatted file is created which replaces the
      gene name column with a copy of an the ontology term for every term in an ontology. This can be used to create term
-     to term mappings via Map2Slim. See `Map2Slim Mapping Error Testing` in the api doccumentation for elaboration.
+     to term mappings via Map2Slim. See `Map2Slim Mapping Error Testing` in the api documentation for elaboration.
 
     :param ontology_term_list: File produced by :func:`gocats.create_subgraphs` --output_termlist or another .json_pickle file listing all terms in an ontology.
     :param output_dir: Specify the location of the output directory.
@@ -50,7 +50,7 @@ def make_decoy(args):
 
 def map_terms(args):
     """Maps the terms contained in a mapped decoy GAF. The resulting mapping dictionary is saved to a json_pickle. See
-    `Map2Slim Mapping Error Testing` in the api doccumentation for elaboration.
+    `Map2Slim Mapping Error Testing` in the api documentation for elaboration.
 
     :param mapped_gaf: A decoy GAF that has been mapped by Map2Slim
     :param output_dir: Specify the location of the output directory.

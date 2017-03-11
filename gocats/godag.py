@@ -13,8 +13,8 @@ class GoGraph(OboGraph):
     def __init__(self, namespace_filter=None, allowed_relationships=None):
         """`GoGraph` initializer. Inherits and specializes properties from :class:`dag.OboGraph`.
 
-        :param str namespace_filter: Specify the namespace of a subontology namespace, if one is available for the ontology.
-        :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other reltionships will be ignored.
+        :param str namespace_filter: Specify the namespace of a sub-ontology namespace, if one is available for the ontology.
+        :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other relationships will be ignored.
         """
         self.valid_namespaces = ['cellular_component', 'biological_process', 'molecular_function', None]
         if namespace_filter not in self.valid_namespaces:

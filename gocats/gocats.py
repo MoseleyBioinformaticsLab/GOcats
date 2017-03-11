@@ -39,6 +39,7 @@ import tools
 import version
 __version__ = version.__version__
 
+
 def main(args):
     if args['create_subgraphs']:
         create_subgraphs(args)
@@ -104,12 +105,12 @@ def create_subgraphs(args):
     :param database_file: Ontology database file.
     :param keyword_file: A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).
     :param output_directory: The directory where results are stored.
-    :param --supergraph_namespace=<None>: OPTIONAL-Specify a supergraph subontology to filter e.g. cellular_component
-    :param --subgraph_namespace=<None>: OPTIONAL-Specify a subgraph subontology to filter e.g. cellluar_componet
-    :param --supergraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of]
-    :param --subgraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of]
-    :param --map_supersets: OPTIONAL-Allow subgraphs to subsume other subgraphs
-    :param --output_termlist: OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results
+    :param --supergraph_namespace=<None>: OPTIONAL-Specify a supergraph sub-ontology to filter e.g. cellular_component.
+    :param --subgraph_namespace=<None>: OPTIONAL-Specify a subgraph sub-ontology to filter e.g. cellluar_componet.
+    :param --supergraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of].
+    :param --subgraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of].
+    :param --map_supersets: OPTIONAL-Allow subgraphs to subsume other subgraphs.
+    :param --output_termlist: OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results.
     :return: None
     :rtype: :py:obj:`None`
     """
@@ -141,13 +142,13 @@ def create_subgraphs(args):
     try:
         supergraph = graph_class[database_name]
     except KeyError:
-        print("The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
+        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
         sys.exit()
     parsing_class = {'go.obo': ontologyparser.GoParser(database, supergraph)}
     try:
         parsing_class[database_name].parse()
     except KeyError:
-        print("The provided ontology filename was not reconized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
+        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
         sys.exit()
     if args['--output_termlist']:
         tools.jsonpickle_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
@@ -217,7 +218,7 @@ def create_subgraphs(args):
                 {}
                 Subgraph relationships: {}
                 Seeded size: {}
-                Representitive node: {}
+                Representative node: {}
                 Nodes added: {}
                 Non-subgraph hits (orphans): {}
                 Total nodes: {}
@@ -239,10 +240,10 @@ def create_subgraphs(args):
 
 
 def find_category_subsets(subgraph_collection):
-    """Finds subgraphs which are subsets of other subgraphs to remove reduncancy, when specified.
+    """Finds subgraphs which are subsets of other subgraphs to remove redundancy, when specified.
 
-    :param subgraph_collection: A dictionary of subgraph objects (keys: subgraph name, values: subgraph object)
-    :return: A dictionary relating which subgraph objects are subsets of other subgraphs (keys: subset subgraph, values: superset subgraphs)
+    :param subgraph_collection: A dictionary of subgraph objects (keys: subgraph name, values: subgraph object).
+    :return: A dictionary relating which subgraph objects are subsets of other subgraphs (keys: subset subgraph, values: superset subgraphs).
     :rtype: :py:obj:`dict`
     """
     is_subset_of = dict()
@@ -258,12 +259,12 @@ def find_category_subsets(subgraph_collection):
 
 def compute_subgraph_similarity(args):
     """Calculates the Jaccard index and inclusion index of comparable category subgraphs between those created by GOCats
-    and those created by another method. Results are tabulated and stored in an specified output file
+    and those created by another method. Results are tabulated and stored in an specified output file.
 
     :param gocats_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.
     :param other_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from another method.
     :param output_directory: Specify the directory where the output file will be stored.
-    :param filename: Name the output file
+    :param filename: Name the output file.
     :param --id_translation=<filename>: OPTIONAL-Specify the location of the translation file if one was produced by the --output_termlist option in :func:`create_subgraphs`. This will improve readability of the resulting table.
     :return: None
     :rtype: :py:obj:`None`
@@ -301,8 +302,8 @@ def compute_subgraph_intersection(args):
     file using the PyUpSet resource (available here: https://github.com/ImSoErgodic/py-upset).
 
     :param gocats_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.
-    :param uniprot_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from the UniProt CV mapping produced by uniprotsubcellparser.py
-    :param map2slim_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from Map2Slim
+    :param uniprot_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from the UniProt CV mapping produced by uniprotsubcellparser.py.
+    :param map2slim_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms from Map2Slim.
     :param output_directory: Specify the directory where theh output file will be stored.
     :param --id_translation=<filename>: OPTIONAL-Specify the location of the translation file if one was produced by the --output_termlist option in :func:`create_subgraphs`. This will improve readability of the resulting figures.
     :return: None
@@ -337,9 +338,9 @@ def categorize_dataset(args):
     """Reads in a Gene Annotation File (GAF) and mapps the annotations contained therin to the categories organized by
     GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.
 
-    :param gaf_dataset: A Gene Annotation File
+    :param gaf_dataset: A Gene Annotation File.
     :param term_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms. May be produced by GOcats or another method.
-    :param output_directory: Specify the directory where theh output file will be stored.
+    :param output_directory: Specify the directory where the output file will be stored.
     :param GAF_name: Specify the desired name of the mapped GAF.
     :return: None
     :rtype: :py:obj:`None`
@@ -374,20 +375,20 @@ def compare_mapping(args):
 
     Agreement types:
 
-        -Complete - Manually-assigned annotations and programatically assigned annotations were identical.
+        -Complete - Manually-assigned annotations and programmatically assigned annotations were identical.
 
-        -Partial - At least one annotation is shared between manual assignments and programatic assignments.
+        -Partial - At least one annotation is shared between manual assignments and programmatic assignments.
 
-        -Superset - Programatic annotation assignments are a superset of manual annotation assignments.
+        -Superset - Programmatic annotation assignments are a superset of manual annotation assignments.
 
-        -None - Manual and programatic assignments are both present but there are no shared annotations.
+        -None - Manual and programmatic assignments are both present but there are no shared annotations.
 
         -Inconclusive - Annotations are missing from genes in one or both of the sources.
 
         -Not in knowledgebase - Gene absent from the knowledgebase, which is present in the dataset.
 
 
-    :param mapped_gaf: A mapped GAF produced by either GOcats or another method
+    :param mapped_gaf: A mapped GAF produced by either GOcats or another method.
     :param manual_dataset: A dataset containing manually-curated annotaion assignments (currently specific to HPA's dataset).
     :param --map_manual_dataset=<filename>: OPTIONAL,NOT YET IMPLEMENTED-Specify the location of a manual dataset of interest.
     :param --save_assignments=<filename>: OPTIONAL-Output all gene-annotation assingments, along with their agreement to the specified filename.
@@ -395,7 +396,7 @@ def compare_mapping(args):
     :return: None
     :rtype: :py:obj:`None`
 """
-    # TODO: Add argumnets for output directory. Save tables and list of genes not in database in this directory.
+    # TODO: Add arguments for output directory. Save tables and list of genes not in database in this directory.
     from tabulate import tabulate
     import catcompare
 
@@ -453,9 +454,9 @@ def compare_mapping(args):
     else:
         id_translation_dict = dict()
 
-    # shows a breakdown of agreement per location (annoataion category)
+    # shows a breakdown of agreement per location (annotation category)
     for location in set([item for sublist in hpa_dataset_dict.values() for item in sublist] +
-                        [item for sublist in manual_dataset_mapping.values() for item in sublist if manual_dataset_mapping]):  # A flattening of the list of lists in hpa dataset dict locations. HPA dataset locaitons should be used as opposed to mapping methods' locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didnt find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.
+                        [item for sublist in manual_dataset_mapping.values() for item in sublist if manual_dataset_mapping]):  # A flattening of the list of lists in hpa dataset dict locations. HPA dataset locations should be used as opposed to mapping methods' locations because we want to account for ALL locations involved. These are all of the locations mapped in GO slims and in the Category file. There might be cases in which the mapping methods didn't find an assignment for a particular location in the knowledgebase, this would exclude a category from making it to this list.
         complete = list(
             filter(lambda x: x[3] == 'complete' and (location in x[1] and location in x[2]), gene_assignment_tuples))
         partial = list(
@@ -494,17 +495,17 @@ def compare_mapping(args):
           'not in knowledgebase: ', len(not_in_knowledgebase), '\n', 'Total: ', len(gene_assignment_tuples))
 
     # The following are examples mentioned in the publication. Uncomment to produce these results.
-    #print("----", "Partial", "----")
-    #for item in partial:
+    # print("----", "Partial", "----")
+    # for item in partial:
     #    if len(item[1]) > len(item[2]):
     #        print(item, "greater than")
     #    elif len(item[1]) == len(item[2]):
     #        print(item, "equal to")
 
-    #print("----", "Superset", "----")
-    #for item in superset:
+    # print("----", "Superset", "----")
+    # for item in superset:
     #    print(item)
-    #for gene_tuple in gene_assignment_tuples:
+    # for gene_tuple in gene_assignment_tuples:
     #    if gene_tuple[0] == 'PSMD3' and gene_tuple[3] == 'complete':
     #        print("PSMD3 IS IN COMPLETE AGREEMENT!")
     #    elif gene_tuple[0] == 'PSMD3' and gene_tuple[3] != 'complete':
