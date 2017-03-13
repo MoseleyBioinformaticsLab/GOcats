@@ -58,7 +58,7 @@ def build_graph(args):
     """**Not yet implemented**
 
     Try build_graph_interpreter to create a GO graph object to explore within a Python interpreter."""
-    # FIXME: JsonPickle is reaching max recusion depth because of the fact that objects point to one another.
+    # FIXME: JsonPickle is reaching max recursion depth because of the fact that objects point to one another.
     if args['--supergraph_namespace']:
         supergraph_namespace = args['--supergraph_namespace']
     else:
@@ -106,7 +106,7 @@ def create_subgraphs(args):
     :param keyword_file: A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).
     :param output_directory: The directory where results are stored.
     :param --supergraph_namespace=<None>: OPTIONAL-Specify a supergraph sub-ontology to filter e.g. cellular_component.
-    :param --subgraph_namespace=<None>: OPTIONAL-Specify a subgraph sub-ontology to filter e.g. cellluar_componet.
+    :param --subgraph_namespace=<None>: OPTIONAL-Specify a subgraph sub-ontology to filter e.g. cellular_component.
     :param --supergraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of].
     :param --subgraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of].
     :param --map_supersets: OPTIONAL-Allow subgraphs to subsume other subgraphs.
@@ -142,13 +142,13 @@ def create_subgraphs(args):
     try:
         supergraph = graph_class[database_name]
     except KeyError:
-        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
+        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of file names are as follows: \n", graph_class.keys())
         sys.exit()
     parsing_class = {'go.obo': ontologyparser.GoParser(database, supergraph)}
     try:
         parsing_class[database_name].parse()
     except KeyError:
-        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of filenames are as follows: \n", graph_class.keys())
+        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of file names are as follows: \n", graph_class.keys())
         sys.exit()
     if args['--output_termlist']:
         tools.jsonpickle_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
@@ -335,7 +335,7 @@ def compute_subgraph_intersection(args):
 
 
 def categorize_dataset(args):
-    """Reads in a Gene Annotation File (GAF) and mapps the annotations contained therin to the categories organized by
+    """Reads in a Gene Annotation File (GAF) and mapps the annotations contained therein to the categories organized by
     GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.
 
     :param gaf_dataset: A Gene Annotation File.

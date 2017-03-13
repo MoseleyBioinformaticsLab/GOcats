@@ -53,8 +53,8 @@ class GoParser(OboParser):
         super().__init__()
         self.database_file = database_file
         self.go_graph = go_graph
-        # 5 types of relationships: scoping, scaling (grouped with scoping for now), spaciotemporal, active, equivalance (not present here), and other.
-        # 1 means that the relationship directionality is converntional, 0 means that the semantic directionaly points from node 2 to node1. 
+        # 5 types of relationships: scoping, scaling (grouped with scoping for now), spatiotemporal, active, equivalence (not present here), and other.
+        # 1 means that the relationship directionality is conventional, 0 means that the semantic directionality points from node 2 to node1.
         self.relationship_mapping = {"ends_during": ("spatiotemporal", 1), "happens_during": ("spatiotemporal", 1), "has_part": ("scoping", 0),
                                      "negatively_regulates": ("active", 1), "never_in_taxon": ("other", 1), "occurs_in": ("spatiotemporal", 1),
                                      "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),

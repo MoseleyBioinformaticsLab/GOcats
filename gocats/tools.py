@@ -1,6 +1,6 @@
 # !/usr/bin/python3
 """
-Functions for handling I/O tasks (and more) with GOcats.
+Functions for handling some file input and output and reformatting tasks in GOcats.
 """
 import json
 import jsonpickle
@@ -13,6 +13,12 @@ csv.field_size_limit(sys.maxsize)
 
 # TODO: move to using JSON not JsonPickle and use sort_keys=True parameter to test outputs between runs
 def json_save(obj, filename):
+    """Takes a Python object, converts it into a JSON serializable object (if it is not already), and saves it to a file
+    that is specified.
+
+    :param obj: A Python :py:obj:`obj`.
+    :param file_handle filename: A path to output the resulting JSON file.
+    """
     if type(obj) == str or type(obj) == list:
         json_obj = obj
     elif type(obj) == dict:
@@ -35,7 +41,11 @@ def json_save(obj, filename):
 
 
 def jsonpickle_save(obj, filename):
-    """Saves an object to a file."""
+    """Takes a Python object, converts it into a JsonPickle string, and writes it out to a file.
+
+    :param obj: A Python :py:obj:`obj`
+    :param file_handle filename:  A path to output the resulting JsonPickle file.
+    """
     f = open(filename+".json_pickle", 'w')
     json_obj = jsonpickle.encode(obj, keys=True)  # Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.
     f.write(json_obj)
@@ -43,23 +53,33 @@ def jsonpickle_save(obj, filename):
 
 
 def jsonpickle_load(filename):
-    """Loads a jsonPickle object from a file."""
+    """Takes a JsonPickle file and loads in the JsonPickle object into a Python object.
+
+    :param file_handle filename: A path to a JsonPickle file.
+    """
     f = open(filename)
     json_str = f.read()
     obj = jsonpickle.decode(json_str, keys=True)  # Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.
     return obj
 
 
-def list_to_file(file_location, data):
-    """Makes a text document from data, with each line of the document being one item from the list and outputs the
-    document into a file."""
-    with open(file_location+".txt", 'wt') as out_file:
+def list_to_file(filename, data):
+    """Makes a text document from a :py:obj:`list`  of data, with each line of the document being one item from the list
+     and outputs the document into a file.
+
+     :param file_handle filename: A path to the output file.
+     :param data: A Python :py:obj:`list`.
+     """
+    with open(filename + ".txt", 'wt') as out_file:
         for line in data:
             out_file.write(str(line) + '\n')
 
 
 def display_name(dataset, go_id):
-    """Improves readability of Gene Ontology (GO) terms by dislpaying the english name of a GO ID within its dataset."""
+    """Improves readability of Gene Ontology (GO) terms by displaying the english name of a GO ID within its dataset.
+
+    :param
+    """
     if isinstance(go_id, list):
         id_list = list()
         for i in go_id:
