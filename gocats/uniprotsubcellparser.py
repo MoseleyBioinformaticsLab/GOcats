@@ -22,7 +22,14 @@ def main(args):
 
 
 def build_subdags(args):
-    # Uniprot Subcellular Location text file location
+    """Creats a graph object of UniProt's subcellular location controlled vocabulary and extracts subgraphs from it
+    using root nodes from the supergraph (those nodes with no parents).
+
+    :param file_handle cv_file: Specify the location of the subcell.txt controlled vocabulary file.
+    :param file_handle output_directory: Specify where to output the results.
+    :param str --visualize: Optional-Add this argument to print out a visualization of the subcellular localization controlled vocabulary graph as a tree.
+    """
+    # UniProt subcellular Location text file location
     sl = open(args['<cv_file>'], 'r')  # 'exampledata/uniprotparse/subcell.txt'
     uniprot_collection = list()
     go_translated_dict = dict()
@@ -63,7 +70,8 @@ def build_subdags(args):
 
 class SubcellParser():
 
-    """Parses Uniprot's subcell.txt to build a DAG version of the term relationships."""
+    """Parses Uniprot's subcell.txt to build a DAG version of the term relationships.
+    """
 
     start_match = re.compile('^\_\_*')
     id_match = re.compile('^ID')
@@ -73,12 +81,16 @@ class SubcellParser():
     end_match = re.compile('^\/\/')
     space_split = re.compile('\s|\.|\-|\,|\s|\;\s|\)\.|\s\(|\"\s|\.\"|\,\"')
 
-    def parse(self, visitor, file_handle):
-        """Parses the PARAMETER file_handle file using the PARAMETER visitor. NOTE THIS WAS UNDER """
+    def parse(self, visitor, filename):
+        """Parses the controlled vocabulary file and adds data to the graph object.
+
+        :param visitor: :class:`uniprotsubcellparser.UniprotDAG` object that describes the graph for representing the controlled vocabulary.
+        :param file_handle filename: Specify the location of the controlled vocabulary file.
+        """
         file_start = False
         is_term = False
         visitor.init_derived()
-        for line in file_handle:
+        for line in filename:
             if file_start is False and re.match(SubcellParser.start_match, line):
                 file_start = True
             elif is_term is False and file_start == True and re.match(SubcellParser.id_match, line):
@@ -101,10 +113,12 @@ class SubcellParser():
 class UniprotDAG:
 
     """A graph representation of the Uniprot subcellular locations. Acts as a visitor to the file_handle to save
-    information without altering the file."""
+    information without altering the file.
+    """
 
     def __init__(self):
-        """Creates containers for DAG creation."""
+        """Initializer for :class:`UniprotDAG`.
+        """
         self.DAG_dict = dict()
         self.go_to_name_mapping = dict()
         self.curr_id = None
@@ -115,33 +129,49 @@ class UniprotDAG:
         self.destroy_list = list()
 
     def init_derived(self):
-        """Reinitializes the relationship lists."""
+        """re-initializes the relationship lists.
+        """
         self.is_a = list()
         self.part_of = list()
 
     def set_curr_id(self, curr_id):
-        """Sets the current ID of the term being parsed."""
+        """Sets the current ID of the term being parsed.
+        :param curr_id: The ID string of the term being parsed.
+        """
         self.curr_id = curr_id.lower()
 
     def set_is(self, is_line):
-        """Sets the current 'is a' relationship partner."""
+        """Sets the current is_a relationship partner.
+
+        :param is_line: The ID string from the term related to the current term by an is_a relationship.
+        """
         self.is_a.append(is_line.lower())
 
     def set_part(self, part_line):
-        """Sets the current 'part of' relationship partner."""
+        """Sets the current part_of relationship partner.
+
+        :param part_line: The ID string from the term related to the current term by a part_of relationship.
+        """
         self.part_of.append(part_line.lower())
 
     def set_go(self, go_line):
-        """Sets the current GO ID."""
+        """Sets the current GO ID of the term being parsed.
+
+        :param go_line: The GO ID string of the current term.
+        """
         self.go_id = go_line
 
     def destroy_troublemakers(self):  # Trouble makers are separate CV terms that share the same GO term
+        """Removes terms that are unable to be evaluated due to multiple or ambiguous GO references to the same UniProt
+        controlled vocabulary term.
+        """
         for term in self.destroy_list:
             del self.DAG_dict[term]
 
     def make_entry(self):
-        """At the end of a term, saves all currently assigned information to a dictionary entry. Reinitializes all
-        variables."""
+        """At the end of a term, saves all currently assigned information to a dictionary entry. Re-initializes all
+        variables.
+        """
         if self.go_id is not None:  # Some of them don't have GO ids
             if self.go_id in self.go_to_name_mapping:
                 self.destroy_list.append(self.curr_id)  # Remove terms that refer to the same GO term.
@@ -158,19 +188,25 @@ class UniprotDAG:
         self.init_derived()
 
     def set_top_nodes(self):
-        """Signifies all top-nodes in the Uniprot controlled vocabulary by finding all terms without parents."""
+        """Signifies all top-nodes in the UniProt controlled vocabulary by finding all terms without parents."""
         self.top_nodes = [node for key, node in self.DAG_dict.items() if node['is_a'] == [] and node['part_of'] == []]
 
 
 class UniprotSubDAG:
 
     """Creates a subDAG for every top-node identified in the Uniprot CV. Every node without a parent is assigned as a
-    top-node."""
+    top-node.
+    """
 
     def __init__(self, udag, top_node, uniprot_collection):
         """Initialization of UniprotSubDAG. Creates containers for subDAG nodes. Calls build_subdag to iterate through
         children of children in the Uniprot DAG to find all children of the top-node. If the top-node contains a GO ID,
-        it is saved to the GLOBAL subDAG collection."""
+        it is saved to the GLOBAL subDAG collection.
+
+        :param udag: The supergraph object, e.g. :class:`uniprotsubcellparser.UniprotDAG` from which this subgraph is extracted.
+        :param top_node: The ID string of the root node for the subgraph.
+        :param uniprot_collection: A :py:obj:`dict` of subgraph objects that have been collected.
+        """
         self.udag = udag
         self.top_node = top_node
         self.subdag_list = list()
@@ -181,8 +217,12 @@ class UniprotSubDAG:
         uniprot_collection.append(self.subdag_dict)
 
     def _build_subdag(self, term, graph):
-        """Because Uniprot subDAG creation is TOP-TOWN, this must be written like this. Children must be found from the
-        top-node. Iterates through children of children to find all contents of a top-node."""
+        """Because UniProt subDAG creation is TOP-TOWN, this must be written like this. Children must be found from the
+        top-node. Iterates through children of children to find all contents of a top-node.
+
+        :param term: A term ID string from the subgraph.
+        :param graph: A :py:obj:`dict` representation of the supergraph, produced by iterations of :func:`uniprotsubcellparser.UniprotDAG.make_entry`
+        """
         if term != self.top_node['name']:
             self.subdag_list.append(graph[term]['name'])
         child_list = list()
