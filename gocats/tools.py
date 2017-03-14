@@ -76,41 +76,46 @@ def list_to_file(filename, data):
 
 
 # Functions for handling Gene Annotation Files
-def writeout_gaf(data, file_handle):
-    with open(file_handle, 'w') as gaf_file:
+def writeout_gaf(data, filename):
+    """Writes out an object representing a Gene Annotation File (GAF) to a file.
+
+    :param list data: A :py:obj:`list` object representing a GAF. Each item in the list represents a row.
+    :param file_handle filename: A path and name for the GAF.
+    """
+    with open(filename, 'w') as gaf_file:
         gafwriter = csv.writer(gaf_file, delimiter='\t')
         for line in data:
             gafwriter.writerow([item for item in line])
 
 
-def parse_gaf(file_handle):
+def parse_gaf(filename):
+    """Converts a Gene Annotation File (GAF) into a :py:obj:`list` object where every item is a row from the GAF.
+
+    :param file_handle filename: Specify the location of the GAF.
+    :return: A list representing the GAF.
+    :rtype: :py:obj:`list`
+    """
     comment_line = re.compile('^!')
     gaf_array = list()
-    with open(os.path.realpath(file_handle)) as gaf_file:
+    with open(os.path.realpath(filename)) as gaf_file:
         for line in csv.reader(gaf_file, delimiter='\t'):
             if not re.match(comment_line, str(line[0])):
                 gaf_array.append(line)
     return gaf_array
 
 
-def itemize_gaf(gaf_file):
-    location_gene_dict = dict()
-    with open(gaf_file, 'r') as file:
-        for line in csv.reader(file, delimiter='\t'):
-            if len(line) > 1:
-                if line[4] not in location_gene_dict.keys():
-                    location_gene_dict[line[4]] = set([line[1]])
-                elif line[4] in location_gene_dict.keys() and line[1] not in location_gene_dict[line[4]]:
-                    location_gene_dict[line[4]].update([line[1]])
-                else:
-                    pass
-    return location_gene_dict
+def make_gaf_dict(filename, keys):
+    """Creates a :py:obj:`dict` object mapping the "DB Object ID" column values to the "GO ID" column values in a Gene
+    Annotation File (GAF) or vice versa.
 
-
-def make_gaf_dict(gaf_file, keys):
+    :param: file_handle filename: Specify the location of the GAF.
+    :param str keys: Dictates whether the "DB Object ID" or  "GO ID" columns are used as keys in the mapping dict, accepts db_object_symbol or go_term
+    :returns: :py:obj:`dict` object mapping the GAF DB Object IDs and GO IDs, depending on which `keys` parameter is used.
+    :rtype: :py:obj:`dict`
+    """
     comment_line = re.compile('^\'!')
     gaf_dict = dict()
-    with open(gaf_file, 'r') as file:
+    with open(filename, 'r') as file:
         for line in csv.reader(file, delimiter='\t'):
             if len(line) > 1:
                 if keys == 'go_term':  # Here go terms are mapping to all of the DB Object Symbols in the GAF.
