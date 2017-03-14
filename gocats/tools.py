@@ -75,20 +75,6 @@ def list_to_file(filename, data):
             out_file.write(str(line) + '\n')
 
 
-def display_name(dataset, go_id):
-    """Improves readability of Gene Ontology (GO) terms by displaying the english name of a GO ID within its dataset.
-
-    :param
-    """
-    if isinstance(go_id, list):
-        id_list = list()
-        for i in go_id:
-            id_list.append(dataset[i]['name'])
-        return id_list
-    else:
-        return dataset[go_id]['name']
-
-
 # Functions for handling Gene Annotation Files
 def writeout_gaf(data, file_handle):
     with open(file_handle, 'w') as gaf_file:
