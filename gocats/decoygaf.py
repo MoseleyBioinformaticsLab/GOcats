@@ -1,13 +1,13 @@
 # !/usr/bin/python3
 """
-Decoy Gene Annotation File Creator command line implementation::
+Decoy Gene Annotation File Creator
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Command line implementation::
 
     Usage:
         decoygaf.py make_decoy <ontology_term_list> <output_dir> <output_file>
-        decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file> [--output_mapping_set=<filepath>]
-    Options:
-        -h --help                            Shows this screen.
-        --output_mapping_set=<filepath>      Saves a JSONPickle file of the mapping produced by the module under the provided filepath.
+        decoygaf.py map_terms <mapped_gaf> <output_dir> <output_file>
 """
 import os
 import docopt
@@ -55,7 +55,6 @@ def map_terms(args):
     :param mapped_gaf: A decoy GAF that has been mapped by Map2Slim
     :param output_dir: Specify the location of the output directory.
     :param output_file: Specify the name of the mapping dictionary json_pickle file.
-    :param --output_mapping_set=<filepath>: DEPRECIATED-Used for testing purposes, no longer necessary for use.
     :return: None
     :rtype: :py:obj:`None`
     """
@@ -68,11 +67,6 @@ def map_terms(args):
                 else:
                     term_mapping[line[4]] = [line[1]]
     tools.jsonpickle_save(term_mapping, os.path.join(args['<output_dir>'], args['<output_file>']))
-
-    if args['--output_mapping_set']:
-        tools.jsonpickle_save(set(term_mapping[args['--output_mapping_set']]), os.path.join(args['<output_dir>'], 'M2S_PlasmaMembrane_subgraph'))
-        with open(os.path.join(args['<output_dir>'], 'M2S_PlasmaMembrane_subgraph.json'), 'w') as f:
-            json.dump(args['--output_mapping_set'], f)
 
 if __name__ == '__main__':
     args = docopt.docopt(__doc__, version='DecoyGAF Version ' + version.__version__)
