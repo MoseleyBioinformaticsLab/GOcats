@@ -14,6 +14,7 @@ Command line implementation::
         gocats compute_subgraph_intersection <gocats_mapping> <uniprot_mapping> <map2slim_mapping> <output_directory> [--id_translation=<filename>]
         gocats categorize_dataset <gaf_dataset> <term_mapping> <output_directory> <GAF_name>
         gocats compare_mapping <mapped_gaf> <manual_dataset>  [--map_manual_dataset=<filename> --save_assignments=<filename> --id_translation=<filename>]
+    
     Options:
         -h | --help                          Shows this screen.
         --version                            Shows version.

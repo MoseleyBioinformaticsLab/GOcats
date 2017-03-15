@@ -12,7 +12,7 @@ def make_dataset_dict(file_handle, hpa_file=False, reliability_filter=None):
 
     :param file_handle: Location of the dataset file.
     :param hpa_file: Specify whether the dataset is in HPA format NOTE: Only HPA formatting is currently supported.
-    :param reliability_filter: Specify which level of reliablity to evaluate from an HPA dataset type. Will vary depending on the version and type of dataset.
+    :param reliability_filter: Specify which level of reliability to evaluate from an HPA dataset type. Will vary depending on the version and type of dataset.
     """
     list_split = re.compile(';')
     locations = []
