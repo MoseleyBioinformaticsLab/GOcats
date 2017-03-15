@@ -1,15 +1,14 @@
 # GOcats
 
-GOcats is an Open Biomedical Ontology (OBO) parser and categorizer--currently specialized for the Gene Ontology (GO)--which can sort ontology terms into conceptual categories that a user provides. It is being redeveloped from a previous version of GOcats available here: https://gitlab.cesb.uky.edu/eugene/ARK.goLocalization. Later, it will be fully extended into OBOcats, which will parse and categorize any ontology in the OBO Foundry.
-Currently in development.
+GOcats is an Open Biomedical Ontology (OBO) parser and categorizing utility--currently specialized for the Gene Ontology (GO)--which can sort ontology terms into conceptual categories that a user provides.
 
 ## Getting Started
 
-It is recommended that you clone this respository into a project directory within the home directory. 
+It is recommended that you clone this repository into a project directory within the home directory. 
 
 You will also need a local copy of the Gene Ontology OBO flat file, available here: http://purl.obolibrary.org/obo/go.obo
 
-GOcats is able to map annotations within Gene Associaition Files (GAFs) into categories specified by the user. These categories are specified by creating a csv file where column 1 is the name of the category and column 2 is a list of keywords assocaiated with that category concept, separated by semicolons (;). See ARK.GOcats3/gocats/exampledata/examplecategories.csv as an example of 25 subcellular location categories. In its current version, this will be the main use of GOcats. 
+GOcats is able to map annotations within Gene Association Files (GAFs) into categories specified by the user. These categories are specified by creating a csv file where column 1 is the name of the category and column 2 is a list of keywords associated with that category concept, separated by semicolons (;). See ARK.GOcats3/gocats/exampledata/examplecategories.csv as an example of 25 subcellular location categories. In its current version, this will be the main use of GOcats. 
 
 If you would like to perform the analyses carried out in the development of GOcats which involve mapping comparisons to OWLTools' Map2Slim and to UniProt's Subcellular Location Controlled Vocabulary, please install the "Additional Packages" listed under the Prerequisites section and see the Running the Tests section.
 
@@ -31,14 +30,15 @@ sudo apt-get install python3-dev
 sudo apt-get install python3-pip
 ```
 
-##### JSONPickle
+##### Docopt / JSONPickle
 
-Fefora 24 / Ubuntu 16.04
+Fedora 24 / Ubuntu 16.04
 ```
+sudo pip3 install docopt
 sudo pip3 install jsonpickle
 ```
 
-#### Additional Packages (for running development tests)
+#### Additional Packages (for running development tests, and scripts for producing manuscript results)
 
 ##### OWLTools prerequisites (see Installing OWLTools under Installing or visit https://github.com/owlcollab/owltools):
 
@@ -54,7 +54,7 @@ Ubuntu
 sudo apt-get install maven openjdk-8-jdk
 ```
 
-#### Plotting and analyses 
+#### Plotting analyses graphically and in tables
 
 Fedora 24
 ```
@@ -68,11 +68,12 @@ sudo apt get install gcc libpng-dev freetype2-demos libffi-dev python3-tk
 sudo pip3 install --upgrade pip
 sudo pip3 install numpy pandas tabulate cairocffi pyupset
 ```
+
 ### Installing
 
 #### GOcats
 
-Clone the repo after installing the dependancies
+Clone the repo after installing the dependencies
 ```
 cd
 git clone https://gitlab.cesb.uky.edu/eugene/ARK.GOcats3.git
@@ -80,7 +81,7 @@ git clone https://gitlab.cesb.uky.edu/eugene/ARK.GOcats3.git
 
 #### OWLTools (optional)
 
-Clone the repo after installing the dependancies 
+Clone the repo after installing the dependencies 
 ```
 cd
 git clone https://github.com/owlcollab/owltools
@@ -101,63 +102,43 @@ mvn clean package -D maven.test.skip.exec=true
 
 Creating a mapping of GO terms from the Gene Ontology using a category file
 ```
-python3 ~/ARK.GOcats/gocats/gocats.py filter_subgraphs ~/Databases/GeneOntology/01-12-2016/go.obo ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ./Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
+python3 ~/ARK.GOcats/gocats/gocats.py create_subgraphs /path_to_ontology_file ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ~/Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
 ```
 This will output several files in the 'Output' directory including:
 ```
-OC_content_mapping.json_pickle  # A python dictionary with category-defining GO terms as keys and a list of all subgraph contents as values.
-OC_id_mapping.json_pickle  # A python dictionary with every GO term of the specified namespace as keys and a list of category root terms as values.
+GC_content_mapping.json_pickle  # A python dictionary with category-defining GO terms as keys and a list of all subgraph contents as values.
+GC_id_mapping.json_pickle  # A python dictionary with every GO term of the specified namespace as keys and a list of category root terms as values.
 ```
 
 Mapping GO terms in a GAF
 ```
-python3 ~/ARK.GOcats/gocats/gocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/OC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_GAF_NAME.goa
+python3 ~/ARK.GOcats/gocats/gocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/GC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_GAF_NAME.goa
 ```
 
-## Running the tests
+## Running the tests and producing manuscript results
 
-Basic tests are located in ARK.GOcats/gocats/tests and can be run individually using the -m option in python
-```
-cd ~/ARK.GOcats3
-python3 -m gocats.tests.gocats_full_basic_test  # Note that this may be broken currently, I am working on fixing this. 
-```
+##### The following run scripts are located in ARK.GOcats/runscripts. See doc strings in each script for information on how to run each. NOTE: All prerequisites must be installed before running the following scripts. Make sure to check each script to ensure that the installation path to OWLTools is correct.  
 
-To run the analyses against OWLTools and UniProt CV, execute the runscript located in runscripts. It is self-documented as well.
-Change into the output directory of your choice
+**run.sh** - Produces data for Figures 7a-b, and 8a-b which are taken from the results located in ~/<output_directory>/PlotsAndAnalyses/..AgreementSummary files. Also produces information for Tables 6 and 8 which are taken from results located in ~/<output_directory>/subgraph_report.txt and ~/<output_directory>/PlotsAndAnalyses/HPA_GOcatsAgreementSummary, respectively.  
 
-The runscripts opperation is as follows:
-```
-run.sh <gocats_dir> <GO_file> <output_dir_path>
-```
+**GOcatsGenericHPAMapping.sh** - Produces data for Figures 7b and 8b which are taken from results located in ~/<output_directory>/PlotsAndAnalyses/..AgreementSummary files. 
 
-For example:
-```
-sh ~/ARK.GOcats3/runscripts/run.sh ~/ARK.GOcats3/gocats ~/Databases/GeneOntology/01-12-2016/go.obo ./Output
-```
+**FullSubgraphInclusion.sh** - Produces data for Figures 5 and S1a-v which are taken from results located in ~/<output_directory>/PlotsAndAnalyses/Plots. Also produces Figure 3a and b using line 19 and using the data in ~/<output_directory>/NetworkTable.csv as source and target nodes within Cytoscape to generate the figures. Finally, produces data for Tables 1, 2, and 3 which are taken from results located in ~/<output_directory>/subgraph_report.txt, ~/<output_directory>/GC-UP_InclusionIndex, and ~/<output_directory>/GC-M2S_InclusionIndex, respectively. 
 
-## Contributing
+**run_map_supersets.sh** - Produces data for Figure 3c (see comments in this script for details.) Data produced in ~/<output_directory>/NetworkTable.csv used as source and target nodes in Cytoscape to produce the figure.
 
-#TODO:edit this section
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+##### The following run script is located in ARK.GOcats/gocats:
 
-## Versioning
+**hpmappingtesting.py** - Prints the data for Table 4.
+ 
+##### The following run scripts are located in ARK.GOcats/gocats/tests/Map2SlimMappingTest:
 
-#TODO:edit this section
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+**run.sh** - Produces the data used in Table 5. Once run, the results are stored in ARK.GOcats/gocats/tests/Map2SlimMappingTest/logs. NOTE! These scripts contain custom commands for a TORQUE cluster that can only be run in-house and are thus not reproducible outside of our lab. Contact corresponding author for questions.
+
+Information for Table 7 was entered manually to describe how the custom generic categories encompassed the previously-used categories. 
+
+Information for Table 9 was compiled using the build_graph_interpreter command in gocats.py for each constraint (all GO, cellular_component, molecular_function, and biological_process) and accessing the graph object's 'relationship_count' variable to tally the use of each relationship type. The rest of the information was entered manually. 
 
 ## Authors
 
 * **Eugene Hinderer** - [ehinderer](https://github.com/ehinderer)
-
-#TODO:edit this section
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-#TODO:edit this section
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-#TODO:edit this section
-
