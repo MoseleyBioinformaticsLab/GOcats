@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>decoygaf &#8212; GOcats 0.3.0 documentation</title>
+    <title>decoygaf &#8212; GOcats 1.0.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,23 +14,22 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3.0',
+        VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="GOcats 0.3.0 documentation" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
   </head>
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>GOcats 0.3.0 documentation</span></a></h1>
+          <span>GOcats 1.0.0 documentation</span></a></h1>
         <h2 class="heading"><span>decoygaf</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,12 +44,15 @@
         
   <h1>Source code for decoygaf</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !/usr/bin/python3</span>
-<span class="sd">&quot;&quot;&quot;Decoy GAF maker</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Decoy Gene Annotation File Creator command line implementation::</span>
 
-<span class="sd">Usage:</span>
-<span class="sd">    decoygaf.py make_decoy &lt;ontology_term_list&gt; &lt;output_dir&gt; &lt;output_file&gt;</span>
-<span class="sd">    decoygaf.py map_terms &lt;mapped_gaf&gt; &lt;output_dir&gt; &lt;output_file&gt; [--output_mapping_set=None]</span>
-
+<span class="sd">    Usage:</span>
+<span class="sd">        decoygaf.py make_decoy &lt;ontology_term_list&gt; &lt;output_dir&gt; &lt;output_file&gt;</span>
+<span class="sd">        decoygaf.py map_terms &lt;mapped_gaf&gt; &lt;output_dir&gt; &lt;output_file&gt; [--output_mapping_set=&lt;filepath&gt;]</span>
+<span class="sd">    Options:</span>
+<span class="sd">        -h --help                            Shows this screen.</span>
+<span class="sd">        --output_mapping_set=&lt;filepath&gt;      Saves a JSONPickle file of the mapping produced by the module under the provided filepath.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">docopt</span>
@@ -58,6 +60,7 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">tools</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">version</span>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
@@ -68,16 +71,20 @@
 
 
 <div class="viewcode-block" id="make_decoy"><a class="viewcode-back" href="../api.html#decoygaf.make_decoy">[docs]</a><span class="k">def</span> <span class="nf">make_decoy</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Map2Slim does not output a mapping file relating to how it assigns specific terms to the root that it maps to in</span>
-<span class="sd">    the GO slim. We can get around this by creating a fake GAF that has the annotated GO term as the ID of the &quot;gene&quot;</span>
-<span class="sd">    and maintain its annotated GO term. The GAF will contain a single instance of a GO term for each term in the</span>
-<span class="sd">    sub-ontology. We can then map this phony gaf using the slim of our choice and the resulting mapped GAF can be parsed</span>
-<span class="sd">    to create the mapping we desire.</span>
+    <span class="sd">&quot;&quot;&quot;Creates a GAF mapping all terms in an ontology to themselves. A GAF formatted file is created which replaces the</span>
+<span class="sd">     gene name column with a copy of an the ontology term for every term in an ontology. This can be used to create term</span>
+<span class="sd">     to term mappings via Map2Slim. See `Map2Slim Mapping Error Testing` in the api documentation for elaboration.</span>
+
+<span class="sd">    :param ontology_term_list: File produced by :func:`gocats.create_subgraphs` --output_termlist or another .json_pickle file listing all terms in an ontology.</span>
+<span class="sd">    :param output_dir: Specify the location of the output directory.</span>
+<span class="sd">    :param output_file: Specify the name of the decoy GAF.</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    :rtype: :py:obj:`None`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">line_format</span> <span class="o">=</span> <span class="s2">&quot;UniProtKB	R4GNC1	SRP72		GO:0005737	GO_REF:0000052	IDA		C	Signal recognition particle subunit SRP72	R4GNC1_HUMAN	protein	taxon:9606	20101115	HPA	&quot;</span>  <span class="c1"># Random GAF line used for formatting purposes</span>
     <span class="n">line_array</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">line_format</span><span class="p">)</span>
 
-    <span class="n">go_terms</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;ontology_term_list&gt;&#39;</span><span class="p">])</span>
+    <span class="n">go_terms</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">jsonpickle_load</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;ontology_term_list&gt;&#39;</span><span class="p">])</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_file&gt;&#39;</span><span class="p">]),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
         <span class="n">gafwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -86,7 +93,17 @@
             <span class="n">gafwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">fake_line</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">map_terms</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="map_terms"><a class="viewcode-back" href="../api.html#decoygaf.map_terms">[docs]</a><span class="k">def</span> <span class="nf">map_terms</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Maps the terms contained in a mapped decoy GAF. The resulting mapping dictionary is saved to a json_pickle. See</span>
+<span class="sd">    `Map2Slim Mapping Error Testing` in the api documentation for elaboration.</span>
+
+<span class="sd">    :param mapped_gaf: A decoy GAF that has been mapped by Map2Slim</span>
+<span class="sd">    :param output_dir: Specify the location of the output directory.</span>
+<span class="sd">    :param output_file: Specify the name of the mapping dictionary json_pickle file.</span>
+<span class="sd">    :param --output_mapping_set=&lt;filepath&gt;: DEPRECIATED-Used for testing purposes, no longer necessary for use.</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    :rtype: :py:obj:`None`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">term_mapping</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;mapped_gaf&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
@@ -95,15 +112,15 @@
                     <span class="n">term_mapping</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">term_mapping</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-    <span class="n">tools</span><span class="o">.</span><span class="n">json_save</span><span class="p">(</span><span class="n">term_mapping</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_file&gt;&#39;</span><span class="p">]))</span>
+    <span class="n">tools</span><span class="o">.</span><span class="n">jsonpickle_save</span><span class="p">(</span><span class="n">term_mapping</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_file&gt;&#39;</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">]:</span>
-        <span class="n">tools</span><span class="o">.</span><span class="n">json_save</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">term_mapping</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">]]),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;M2S_PlasmaMembrane_subgraph&#39;</span><span class="p">))</span>
+        <span class="n">tools</span><span class="o">.</span><span class="n">jsonpickle_save</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">term_mapping</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">]]),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;M2S_PlasmaMembrane_subgraph&#39;</span><span class="p">))</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;&lt;output_dir&gt;&#39;</span><span class="p">],</span> <span class="s1">&#39;M2S_PlasmaMembrane_subgraph.json&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;--output_mapping_set&#39;</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span></div>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="n">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;GOcats version 0.3.0&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="n">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;DecoyGAF Version &#39;</span><span class="o">+</span><span class="n">version</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
     <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 
@@ -118,7 +135,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Eugene Hinderer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

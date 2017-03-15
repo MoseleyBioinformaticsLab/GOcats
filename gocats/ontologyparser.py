@@ -1,5 +1,9 @@
 # !/usr/bin/python3
-
+"""
+A parser which reads ontologies in the OBO format and calls appropriate graph objects to store information in a graph
+representation. Separate parsing classes within this module operate on distinct ontologies in the OBO Foundry to handle
+any subtle differences among ontologies.
+"""
 import re
 from dag import AbstractEdge, DirectionalRelationship
 from godag import GoGraphNode
@@ -11,6 +15,9 @@ class OboParser(object):
     information pertinent for creating a graph object of an ontology."""
     
     def __init__(self):
+        """`OboParser` initializer. Contains Regular Expressions for identifying crucial information from OBO formatted
+        ontologies.
+        """
         self.term_stanza = re.compile('\[Term\]')
         self.go_term = re.compile('GO\:\d{7}')
         self.stanza_id = re.compile('^id:')
@@ -31,21 +38,36 @@ class OboParser(object):
 
 class GoParser(OboParser):
 
-    """A parser specific to Gene Ontology"""
+    """An ontology parser specific to Gene Ontology"""
 
     def __init__(self, database_file, go_graph):
+        """`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therin to a
+        :class:`godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO
+        relationships.
+
+        :param file_handle database_file: Specify the location of a Gene Ontology .obo file.
+        :param go_graph: :class:`godag.GoGraph` object.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         super().__init__()
         self.database_file = database_file
         self.go_graph = go_graph
-        # 5 types of relationships: scoping, scaling (grouped with scoping for now), spaciotemporal, active, equivalance (not present here), and other.
-        # 1 means that the relationship directionality is converntional, 0 means that the semantic directionaly points from node 2 to node1. 
+        # 5 types of relationships: scoping, scaling (grouped with scoping for now), spatiotemporal, active, equivalence (not present here), and other.
+        # 1 means that the relationship directionality is conventional, 0 means that the semantic directionality points from node 2 to node1.
         self.relationship_mapping = {"ends_during": ("spatiotemporal", 1), "happens_during": ("spatiotemporal", 1), "has_part": ("scoping", 0),
                                      "negatively_regulates": ("active", 1), "never_in_taxon": ("other", 1), "occurs_in": ("spatiotemporal", 1),
                                      "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
                                      "starts_during": ("spatiotemporal", 1), "is_a": ("scoping", 1)}
 
     def parse(self):
-        # TODO: find all relationship types using TypeDef stanza
+        """Parses the ontology database file and accesses the ontology graph object to add information found in the
+        database. Once all information is added, this function calls the graph's instantiate_valid_edges function to
+        connect all nodes in the graph by their edges.
+
+        :return: None
+        :rtype: :py:obj:`None`
+        """
         is_term = False
         is_typedef = False
 

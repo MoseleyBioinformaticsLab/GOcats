@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>uniprotsubcellparser &#8212; GOcats 0.3.0 documentation</title>
+    <title>uniprotsubcellparser &#8212; GOcats 1.0.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,23 +14,22 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3.0',
+        VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="GOcats 0.3.0 documentation" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
   </head>
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>GOcats 0.3.0 documentation</span></a></h1>
+          <span>GOcats 1.0.0 documentation</span></a></h1>
         <h2 class="heading"><span>uniprotsubcellparser</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,20 +44,21 @@
         
   <h1>Source code for uniprotsubcellparser</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !usr/bin/python3</span>
-<span class="c1"># TODO: Why duplicate functionality? Use methods from other modules.</span>
-<span class="sd">&quot;&quot;&quot;uniprotsubcellparser.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">UniProt subcellular location parser and graph creation module command line implementation::</span>
 
-<span class="sd">Usage:</span>
-<span class="sd">    uniprotsubcellparser.py build_subdags &lt;cv_file&gt; &lt;output_directory&gt; [--visualize]</span>
+<span class="sd">    Usage:</span>
+<span class="sd">        uniprotsubcellparser.py build_subdags &lt;cv_file&gt; &lt;output_directory&gt; [--visualize]</span>
 
-<span class="sd">Options:</span>
-<span class="sd">    -h --help                     Show this screen.</span>
-<span class="sd">    --visualize                   Visualize subdags after creation</span>
+<span class="sd">    Options:</span>
+<span class="sd">        -h --help                     Show this screen.</span>
+<span class="sd">        --visualize                   Visualize subdags after creation</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">docopt</span>
 <span class="kn">import</span> <span class="nn">tools</span>
+<span class="kn">import</span> <span class="nn">version</span>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
@@ -102,8 +102,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">uniprot_multi_root</span><span class="p">[</span><span class="n">location</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">top_node</span><span class="p">]</span>
 
-    <span class="n">tools</span><span class="o">.</span><span class="n">json_save</span><span class="p">(</span><span class="n">go_translated_dict</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uniprot_subcell_results_dir</span><span class="p">,</span> <span class="s1">&#39;UP_content_mapping&#39;</span><span class="p">))</span>
-    <span class="n">tools</span><span class="o">.</span><span class="n">json_save</span><span class="p">(</span><span class="n">uniprot_multi_root</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uniprot_subcell_results_dir</span><span class="p">,</span> <span class="s1">&#39;UP_root_mapping&#39;</span><span class="p">))</span>
+    <span class="n">tools</span><span class="o">.</span><span class="n">jsonpickle_save</span><span class="p">(</span><span class="n">go_translated_dict</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uniprot_subcell_results_dir</span><span class="p">,</span> <span class="s1">&#39;UP_content_mapping&#39;</span><span class="p">))</span>
+    <span class="n">tools</span><span class="o">.</span><span class="n">jsonpickle_save</span><span class="p">(</span><span class="n">uniprot_multi_root</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uniprot_subcell_results_dir</span><span class="p">,</span> <span class="s1">&#39;UP_root_mapping&#39;</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="SubcellParser"><a class="viewcode-back" href="../api.html#uniprotsubcellparser.SubcellParser">[docs]</a><span class="k">class</span> <span class="nc">SubcellParser</span><span class="p">():</span>
@@ -148,7 +148,7 @@
     <span class="sd">&quot;&quot;&quot;A graph representation of the Uniprot subcellular locations. Acts as a visitor to the file_handle to save</span>
 <span class="sd">    information without altering the file.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UniprotDAG.__init__"><a class="viewcode-back" href="../api.html#uniprotsubcellparser.UniprotDAG.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates containers for DAG creation.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DAG_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">go_to_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -157,7 +157,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">part_of</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">destroy_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destroy_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="UniprotDAG.init_derived"><a class="viewcode-back" href="../api.html#uniprotsubcellparser.UniprotDAG.init_derived">[docs]</a>    <span class="k">def</span> <span class="nf">init_derived</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reinitializes the relationship lists.&quot;&quot;&quot;</span>
@@ -212,7 +212,7 @@
     <span class="sd">&quot;&quot;&quot;Creates a subDAG for every top-node identified in the Uniprot CV. Every node without a parent is assigned as a</span>
 <span class="sd">    top-node.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">udag</span><span class="p">,</span> <span class="n">top_node</span><span class="p">,</span> <span class="n">uniprot_collection</span><span class="p">):</span>
+<div class="viewcode-block" id="UniprotSubDAG.__init__"><a class="viewcode-back" href="../api.html#uniprotsubcellparser.UniprotSubDAG.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">udag</span><span class="p">,</span> <span class="n">top_node</span><span class="p">,</span> <span class="n">uniprot_collection</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialization of UniprotSubDAG. Creates containers for subDAG nodes. Calls build_subdag to iterate through</span>
 <span class="sd">        children of children in the Uniprot DAG to find all children of the top-node. If the top-node contains a GO ID,</span>
 <span class="sd">        it is saved to the GLOBAL subDAG collection.&quot;&quot;&quot;</span>
@@ -223,9 +223,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">subdag_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>  <span class="c1"># The top_node itself should be considered part of its own category</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_build_subdag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">udag</span><span class="o">.</span><span class="n">DAG_dict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subdag_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;go_id&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">[</span><span class="s1">&#39;go_id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">udag</span><span class="o">.</span><span class="n">DAG_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subdag_list</span><span class="p">]</span>
-        <span class="n">uniprot_collection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subdag_dict</span><span class="p">)</span>
+        <span class="n">uniprot_collection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subdag_dict</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_build_subdag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+<div class="viewcode-block" id="UniprotSubDAG._build_subdag"><a class="viewcode-back" href="../api.html#uniprotsubcellparser.UniprotSubDAG._build_subdag">[docs]</a>    <span class="k">def</span> <span class="nf">_build_subdag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Because Uniprot subDAG creation is TOP-TOWN, this must be written like this. Children must be found from the</span>
 <span class="sd">        top-node. Iterates through children of children to find all contents of a top-node.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">term</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]:</span>
@@ -233,10 +233,10 @@
         <span class="n">child_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="n">child_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">node</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="s1">&#39;is_a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">node</span><span class="p">[</span><span class="s1">&#39;part_of&#39;</span><span class="p">]])</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">child_list</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_build_subdag</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_subdag</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span></div></div>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="n">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;GOcats version 0.3.0&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">docopt</span><span class="o">.</span><span class="n">docopt</span><span class="p">(</span><span class="n">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;UniProtSubcellParser Version &#39;</span><span class="o">+</span><span class="n">version</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
     <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 
@@ -251,7 +251,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Eugene Hinderer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>
