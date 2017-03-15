@@ -117,23 +117,23 @@ python3 ~/ARK.GOcats/gocats/gocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPU
 
 ## Running the tests and producing manuscript results
 
-The following run scripts are located in ARK.GOcats/runscripts. See doc strings in each script for information on how to run each. NOTE: All prerequisites must be installed before running the following scripts. Make sure to check each script to ensure that the installation path to OWLTools is correct.  
+##### The following run scripts are located in ARK.GOcats/runscripts. See doc strings in each script for information on how to run each. NOTE: All prerequisites must be installed before running the following scripts. Make sure to check each script to ensure that the installation path to OWLTools is correct.  
 
-run.sh - Produces data for Figures 7a-b, and 8a-b which are taken from the results located in ~/<output_directory>/PlotsAndAnalyses/..AgreementSummary files. Also produces information for Tables 6 and 8 which are taken from results located in ~/<output_directory>/subgraph_report.txt and ~/<output_directory>/PlotsAndAnalyses/HPA_GOcatsAgreementSummary, respectively.  
+**run.sh** - Produces data for Figures 7a-b, and 8a-b which are taken from the results located in ~/<output_directory>/PlotsAndAnalyses/..AgreementSummary files. Also produces information for Tables 6 and 8 which are taken from results located in ~/<output_directory>/subgraph_report.txt and ~/<output_directory>/PlotsAndAnalyses/HPA_GOcatsAgreementSummary, respectively.  
 
-GOcatsGenericHPAMapping.sh - Produces data for Figures 7b and 8b which are taken from results located in ~/<output_directory>/PlotsAndAnalyses/..AgreementSummary files. 
+**GOcatsGenericHPAMapping.sh** - Produces data for Figures 7b and 8b which are taken from results located in ~/<output_directory>/PlotsAndAnalyses/..AgreementSummary files. 
 
-FullSubgraphInclusion.sh - Produces data for Figures 5 and S1a-v which are taken from results located in ~/<output_directory>/PlotsAndAnalyses/Plots. Also produces Figure 3a and b using line 19 and using the data in ~/<output_directory>/NetworkTable.csv as source and target nodes within Cytoscape to generate the figures. Finally, produces data for Tables 1, 2, and 3 which are taken from results located in ~/<output_directory>/subgraph_report.txt, ~/<output_directory>/GC-UP_InclusionIndex, and ~/<output_directory>/GC-M2S_InclusionIndex, respectively. 
+**FullSubgraphInclusion.sh** - Produces data for Figures 5 and S1a-v which are taken from results located in ~/<output_directory>/PlotsAndAnalyses/Plots. Also produces Figure 3a and b using line 19 and using the data in ~/<output_directory>/NetworkTable.csv as source and target nodes within Cytoscape to generate the figures. Finally, produces data for Tables 1, 2, and 3 which are taken from results located in ~/<output_directory>/subgraph_report.txt, ~/<output_directory>/GC-UP_InclusionIndex, and ~/<output_directory>/GC-M2S_InclusionIndex, respectively. 
 
-run_map_supersets.sh - Produces data for Figure 3c (see comments in this script for details.) Data produced in ~/<output_directory>/NetworkTable.csv used as source and target nodes in Cytoscape to produce the figure.
+**run_map_supersets.sh** - Produces data for Figure 3c (see comments in this script for details.) Data produced in ~/<output_directory>/NetworkTable.csv used as source and target nodes in Cytoscape to produce the figure.
 
-The following run script is located in ARK.GOcats/gocats:
+##### The following run script is located in ARK.GOcats/gocats:
 
-hpmappingtesting.py - Prints the data for Table 4.
+**hpmappingtesting.py** - Prints the data for Table 4.
  
-The following run scripts are located in ARK.GOcats/gocats/tests/Map2SlimMappingTest:
+##### The following run scripts are located in ARK.GOcats/gocats/tests/Map2SlimMappingTest:
 
-run.sh - Produces the data used in Table 5. Once run, the results are stored in ARK.GOcats/gocats/tests/Map2SlimMappingTest/logs. NOTE! These scripts contain custom commands for a TORQUE cluster that can only be run in-house and are thus not reproducible outside of our lab. Contact corresponding author for questions.
+**run.sh** - Produces the data used in Table 5. Once run, the results are stored in ARK.GOcats/gocats/tests/Map2SlimMappingTest/logs. NOTE! These scripts contain custom commands for a TORQUE cluster that can only be run in-house and are thus not reproducible outside of our lab. Contact corresponding author for questions.
 
 Information for Table 7 was entered manually to describe how the custom generic categories encompassed the previously-used categories. 
 
