@@ -1,17 +1,21 @@
 # !/usr/bin/python3
-"""
-Used to calculate estimated potential false mappings, potential false mappings, and total possible mappings that
-occur along paths containing the has_part relationship in GO.
+"""Used to calculate estimated potential false mappings, potential false mappings, and total possible mappings that
+occur along paths containing the has_part relationship in GO. This python script produces the results for table 4 in the
+manuscript.
+
+Usage: python3 hpmappingtesting.py <ontology_file>
 """
 import gocats
 import itertools
+from sys import argv
 
-cc_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='cellular_component', allowed_relationships=['is_a', 'part_of', 'has_part'])
-cc_no_hp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='cellular_component', allowed_relationships=['is_a', 'part_of'])
-mf_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='molecular_function', allowed_relationships=['is_a', 'part_of', 'has_part'])
-mf_no_hp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='molecular_function', allowed_relationships=['is_a', 'part_of'])
-bp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='biological_process', allowed_relationships=['is_a', 'part_of', 'has_part'])
-bp_no_hp_graph = gocats.build_graph_interpreter('/mlab/data/databases/GeneOntology/01-12-2016/go.obo', supergraph_namespace='biological_process', allowed_relationships=['is_a', 'part_of'])
+ontology_file_path = argv[1]
+cc_graph = gocats.build_graph_interpreter(ontology_file_path, supergraph_namespace='cellular_component', allowed_relationships=['is_a', 'part_of', 'has_part'])
+cc_no_hp_graph = gocats.build_graph_interpreter(ontology_file_path, supergraph_namespace='cellular_component', allowed_relationships=['is_a', 'part_of'])
+mf_graph = gocats.build_graph_interpreter(ontology_file_path, supergraph_namespace='molecular_function', allowed_relationships=['is_a', 'part_of', 'has_part'])
+mf_no_hp_graph = gocats.build_graph_interpreter(ontology_file_path, supergraph_namespace='molecular_function', allowed_relationships=['is_a', 'part_of'])
+bp_graph = gocats.build_graph_interpreter(ontology_file_path, supergraph_namespace='biological_process', allowed_relationships=['is_a', 'part_of', 'has_part'])
+bp_no_hp_graph = gocats.build_graph_interpreter(ontology_file_path, supergraph_namespace='biological_process', allowed_relationships=['is_a', 'part_of'])
 
 cc_hp_edges = [edge for edge in cc_graph.edge_list if edge.relationship.id == 'has_part']
 mf_hp_edges = [edge for edge in mf_graph.edge_list if edge.relationship.id == 'has_part']
