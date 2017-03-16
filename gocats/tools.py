@@ -76,7 +76,7 @@ def list_to_file(filename, data):
 
 
 # Functions for handling Gene Annotation Files
-def writeout_gaf(data, filename):
+def write_out_gaf(data, filename):
     """Writes out an object representing a Gene Annotation File (GAF) to a file.
 
     :param list data: A :py:obj:`list` object representing a GAF. Each item in the list represents a row.
@@ -102,34 +102,3 @@ def parse_gaf(filename):
             if not re.match(comment_line, str(line[0])):
                 gaf_array.append(line)
     return gaf_array
-
-
-def make_gaf_dict(filename, keys):
-    """Creates a :py:obj:`dict` object mapping the "DB Object ID" column values to the "GO ID" column values in a Gene
-    Annotation File (GAF) or vice versa.
-
-    :param: file_handle filename: Specify the location of the GAF.
-    :param str keys: Dictates whether the "DB Object ID" or  "GO ID" columns are used as keys in the mapping dict, accepts db_object_symbol or go_term
-    :returns: :py:obj:`dict` object mapping the GAF DB Object IDs and GO IDs, depending on which `keys` parameter is used.
-    :rtype: :py:obj:`dict`
-    """
-    comment_line = re.compile('^\'!')
-    gaf_dict = dict()
-    with open(filename, 'r') as file:
-        for line in csv.reader(file, delimiter='\t'):
-            if len(line) > 1:
-                if keys == 'go_term':  # Here go terms are mapping to all of the DB Object Symbols in the GAF.
-                    if line[4] not in gaf_dict.keys():
-                        gaf_dict[line[4]] = set([line[2]])
-                    elif line[4] in gaf_dict.keys() and line[2] not in gaf_dict[line[4]]:
-                        gaf_dict[line[4]].update([line[2]])
-                    else:
-                        pass
-                elif keys == 'db_object_symbol':
-                    if line[0] == 'UniProtKB' and line[2] not in gaf_dict.keys():
-                        gaf_dict[line[2]] = set([line[4]])
-                    elif line[0] == 'UniProtKB' and line[2] in gaf_dict.keys():
-                        gaf_dict[line[2]].add(line[4])
-                    else:
-                        print('ERROR: Reference DB not recognized: '+str(line[0]))
-        return gaf_dict

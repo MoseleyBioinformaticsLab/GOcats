@@ -39,7 +39,7 @@ class SubGraph(OboGraph):
         :return: :py:obj:`dict` of :class:`dag.AbstractNode` IDs mapped to a :py:obj:`list' of root :class:`dag.AbstractNode` IDs.
         :rtype: :py:obj:`dict`
         """
-        if (self._modified and self.representative_node) or self._root_id_mapping == None:
+        if (self._modified and self.representative_node) or self._root_id_mapping is None:
             self._root_id_mapping = {node.id: self.representative_node.id for node in self.representative_node.descendants}
             self._root_id_mapping[self.representative_node.id] = self.representative_node.id
         elif not self.representative_node:
@@ -54,7 +54,7 @@ class SubGraph(OboGraph):
         :return: :py:obj:`dict` of :class:`dag.AbstractNode` objects mapped to a :py:obj:`list' of root :class:`dag.AbstractNode` objects.
         :rtype: :py:obj:`dict`
         """
-        if (self._modified and self.representative_node) or self._root_node_mapping == None:
+        if (self._modified and self.representative_node) or self._root_node_mapping is None:
             self._root_node_mapping = {node: self.representative_node for node in self.representative_node.descendants}
             self._root_node_mapping[self.representative_node] = self.representative_node
         elif not self.representative_node:
@@ -69,7 +69,7 @@ class SubGraph(OboGraph):
         :return: :py:obj:`dict` of :class:`dag.AbstractNode` IDs mapped to a :py:obj:`list' of :class:`dag.AbstractNode` IDs.
         :rtype: :py:obj:`dict`
         """
-        if (self._modified and self.representative_node) or self._content_mapping == None:
+        if (self._modified and self.representative_node) or self._content_mapping is None:
             self._content_mapping = {self.representative_node.id: [node.id for node in self.representative_node.descendants]}
             self._content_mapping[self.representative_node.id].append(self.representative_node.id)
         elif not self.representative_node:

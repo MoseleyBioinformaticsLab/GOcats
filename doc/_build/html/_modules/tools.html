@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>tools &#8212; GOcats 1.0.0 documentation</title>
+    <title>tools &#8212; GOcats 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   </head>
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>GOcats 1.0.0 documentation</span></a></h1>
+          <span>GOcats 1.1.0 documentation</span></a></h1>
         <h2 class="heading"><span>tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,7 +45,7 @@
   <h1>Source code for tools</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !/usr/bin/python3</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Functions for handling I/O tasks (and more) with GOcats.</span>
+<span class="sd">Functions for handling some file input and output and reformatting tasks in GOcats.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">jsonpickle</span>
@@ -57,7 +57,13 @@
 
 
 <span class="c1"># TODO: move to using JSON not JsonPickle and use sort_keys=True parameter to test outputs between runs</span>
-<span class="k">def</span> <span class="nf">json_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="json_save"><a class="viewcode-back" href="../api.html#tools.json_save">[docs]</a><span class="k">def</span> <span class="nf">json_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes a Python object, converts it into a JSON serializable object (if it is not already), and saves it to a file</span>
+<span class="sd">    that is specified.</span>
+
+<span class="sd">    :param obj: A Python :py:obj:`obj`.</span>
+<span class="sd">    :param file_handle filename: A path to output the resulting JSON file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">json_obj</span> <span class="o">=</span> <span class="n">obj</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
@@ -76,11 +82,15 @@
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Data type is not supported!&quot;</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="o">+</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
         <span class="n">json_text</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_text</span><span class="p">)</span>
+        <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_text</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="jsonpickle_save"><a class="viewcode-back" href="../api.html#tools.jsonpickle_save">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Saves an object to a file.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Takes a Python object, converts it into a JsonPickle string, and writes it out to a file.</span>
+
+<span class="sd">    :param obj: A Python :py:obj:`obj`</span>
+<span class="sd">    :param file_handle filename:  A path to output the resulting JsonPickle file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="o">+</span><span class="s2">&quot;.json_pickle&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
     <span class="n">json_obj</span> <span class="o">=</span> <span class="n">jsonpickle</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.</span>
     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
@@ -88,85 +98,55 @@
 
 
 <div class="viewcode-block" id="jsonpickle_load"><a class="viewcode-back" href="../api.html#tools.jsonpickle_load">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_load</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads a jsonPickle object from a file.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Takes a JsonPickle file and loads in the JsonPickle object into a Python object.</span>
+
+<span class="sd">    :param file_handle filename: A path to a JsonPickle file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">json_str</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">jsonpickle</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">json_str</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Use_jsonpickle=True used to prevent jsonPickle from encoding dictkeys to strings.</span>
     <span class="k">return</span> <span class="n">obj</span></div>
 
 
-<div class="viewcode-block" id="list_to_file"><a class="viewcode-back" href="../api.html#tools.list_to_file">[docs]</a><span class="k">def</span> <span class="nf">list_to_file</span><span class="p">(</span><span class="n">file_location</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Makes a text document from data, with each line of the document being one item from the list and outputs the</span>
-<span class="sd">    document into a file.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_location</span><span class="o">+</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+<div class="viewcode-block" id="list_to_file"><a class="viewcode-back" href="../api.html#tools.list_to_file">[docs]</a><span class="k">def</span> <span class="nf">list_to_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Makes a text document from a :py:obj:`list`  of data, with each line of the document being one item from the list</span>
+<span class="sd">     and outputs the document into a file.</span>
+
+<span class="sd">     :param file_handle filename: A path to the output file.</span>
+<span class="sd">     :param data: A Python :py:obj:`list`.</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="display_name"><a class="viewcode-back" href="../api.html#tools.display_name">[docs]</a><span class="k">def</span> <span class="nf">display_name</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">go_id</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Improves readability of Gene Ontology (GO) terms by dislpaying the english name of a GO ID within its dataset.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">go_id</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">id_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">go_id</span><span class="p">:</span>
-            <span class="n">id_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">id_list</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="n">go_id</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span></div>
-
-
 <span class="c1"># Functions for handling Gene Annotation Files</span>
-<span class="k">def</span> <span class="nf">writeout_gaf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file_handle</span><span class="p">):</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_handle</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
+<div class="viewcode-block" id="write_out_gaf"><a class="viewcode-back" href="../api.html#tools.write_out_gaf">[docs]</a><span class="k">def</span> <span class="nf">write_out_gaf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Writes out an object representing a Gene Annotation File (GAF) to a file.</span>
+
+<span class="sd">    :param list data: A :py:obj:`list` object representing a GAF. Each item in the list represents a row.</span>
+<span class="sd">    :param file_handle filename: A path and name for the GAF.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
         <span class="n">gafwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">gafwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">line</span><span class="p">])</span>
+            <span class="n">gafwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">line</span><span class="p">])</span></div>
 
 
-<span class="k">def</span> <span class="nf">parse_gaf</span><span class="p">(</span><span class="n">file_handle</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_gaf"><a class="viewcode-back" href="../api.html#tools.parse_gaf">[docs]</a><span class="k">def</span> <span class="nf">parse_gaf</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts a Gene Annotation File (GAF) into a :py:obj:`list` object where every item is a row from the GAF.</span>
+
+<span class="sd">    :param file_handle filename: Specify the location of the GAF.</span>
+<span class="sd">    :return: A list representing the GAF.</span>
+<span class="sd">    :rtype: :py:obj:`list`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">comment_line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^!&#39;</span><span class="p">)</span>
     <span class="n">gaf_array</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">file_handle</span><span class="p">))</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span> <span class="k">as</span> <span class="n">gaf_file</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">comment_line</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
                 <span class="n">gaf_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">gaf_array</span>
-
-
-<span class="k">def</span> <span class="nf">itemize_gaf</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">):</span>
-    <span class="n">location_gene_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">location_gene_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="n">location_gene_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-                <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">in</span> <span class="n">location_gene_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">location_gene_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]:</span>
-                    <span class="n">location_gene_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">pass</span>
-    <span class="k">return</span> <span class="n">location_gene_dict</span>
-
-
-<span class="k">def</span> <span class="nf">make_gaf_dict</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
-    <span class="n">comment_line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^</span><span class="se">\&#39;</span><span class="s1">!&#39;</span><span class="p">)</span>
-    <span class="n">gaf_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gaf_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">keys</span> <span class="o">==</span> <span class="s1">&#39;go_term&#39;</span><span class="p">:</span>  <span class="c1"># Here go terms are mapping to all of the DB Object Symbols in the GAF.</span>
-                    <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gaf_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">gaf_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
-                    <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">in</span> <span class="n">gaf_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gaf_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]:</span>
-                        <span class="n">gaf_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">pass</span>
-                <span class="k">elif</span> <span class="n">keys</span> <span class="o">==</span> <span class="s1">&#39;db_object_symbol&#39;</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;UniProtKB&#39;</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gaf_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">gaf_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
-                    <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;UniProtKB&#39;</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="n">gaf_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">gaf_dict</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR: Reference DB not recognized: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="n">gaf_dict</span>
+    <span class="k">return</span> <span class="n">gaf_array</span></div>
 </pre></div>
 
       </div>

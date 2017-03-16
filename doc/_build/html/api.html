@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The GOcats API Reference &#8212; GOcats 1.0.0 documentation</title>
+    <title>The GOcats API Reference &#8212; GOcats 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0.0',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -30,7 +30,7 @@
   </head>
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>GOcats 1.0.0 documentation</span></a></h1>
+          <span>GOcats 1.1.0 documentation</span></a></h1>
         <h2 class="heading"><span>The GOcats API Reference</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -57,10 +57,8 @@ for evaluating those subgraphs.</p>
 <p>Command line implementation:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
     <span class="n">gocats</span> <span class="n">create_subgraphs</span> <span class="o">&lt;</span><span class="n">database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">supergraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">subgraph_namespace</span><span class="o">=&lt;</span><span class="kc">None</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">supergraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">subgraph_relationships</span><span class="o">=</span><span class="p">[]</span> <span class="o">--</span><span class="n">map_supersets</span> <span class="o">--</span><span class="n">output_termlist</span><span class="p">]</span>
-    <span class="n">gocats</span> <span class="n">compute_subgraph_similarity</span> <span class="o">&lt;</span><span class="n">gocats_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">other_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
-    <span class="n">gocats</span> <span class="n">compute_subgraph_intersection</span> <span class="o">&lt;</span><span class="n">gocats_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">uniprot_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">map2slim_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
     <span class="n">gocats</span> <span class="n">categorize_dataset</span> <span class="o">&lt;</span><span class="n">gaf_dataset</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">term_mapping</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">GAF_name</span><span class="o">&gt;</span>
-    <span class="n">gocats</span> <span class="n">compare_mapping</span> <span class="o">&lt;</span><span class="n">mapped_gaf</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">manual_dataset</span><span class="o">&gt;</span>  <span class="p">[</span><span class="o">--</span><span class="n">map_manual_dataset</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">save_assignments</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span><span class="p">]</span>
+
 <span class="n">Options</span><span class="p">:</span>
     <span class="o">-</span><span class="n">h</span> <span class="o">|</span> <span class="o">--</span><span class="n">help</span>                          <span class="n">Shows</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
     <span class="o">--</span><span class="n">version</span>                            <span class="n">Shows</span> <span class="n">version</span><span class="o">.</span>
@@ -70,9 +68,6 @@ for evaluating those subgraphs.</p>
     <span class="o">--</span><span class="n">subgraph_relationships</span><span class="o">=</span><span class="p">[]</span>          <span class="n">A</span> <span class="n">provided</span> <span class="nb">list</span> <span class="n">will</span> <span class="n">denote</span> <span class="n">which</span> <span class="n">relationships</span> <span class="n">are</span> <span class="n">allowed</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">subgraph</span><span class="o">.</span>
     <span class="o">--</span><span class="n">map_supersets</span>                      <span class="n">Maps</span> <span class="nb">all</span> <span class="n">terms</span> <span class="n">to</span> <span class="nb">all</span> <span class="n">root</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">regardless</span> <span class="n">of</span> <span class="k">if</span> <span class="n">a</span> <span class="n">root</span> <span class="n">node</span> <span class="n">subsumes</span> <span class="n">another</span><span class="o">.</span>
     <span class="o">--</span><span class="n">output_termlist</span>                    <span class="n">Outputs</span> <span class="n">a</span> <span class="nb">list</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">terms</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">supergraph</span> <span class="k">as</span> <span class="n">a</span> <span class="n">JsonPickle</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">output</span> <span class="n">directory</span><span class="o">.</span>
-    <span class="o">--</span><span class="n">save_assignments</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span>        <span class="n">Save</span> <span class="n">a</span> <span class="n">file</span> <span class="k">with</span> <span class="nb">all</span> <span class="n">genes</span> <span class="ow">and</span> <span class="n">their</span> <span class="n">GO</span> <span class="n">assignments</span><span class="o">.</span>
-    <span class="o">--</span><span class="n">id_translation</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span>          <span class="n">Specify</span> <span class="n">an</span> <span class="n">id_translation</span> <span class="n">file</span> <span class="n">to</span> <span class="n">associate</span> <span class="n">go</span> <span class="n">terms</span> <span class="k">with</span> <span class="n">their</span> <span class="n">English</span> <span class="n">names</span><span class="o">.</span>
-    <span class="o">--</span><span class="n">map_manual_dataset</span><span class="o">=&lt;</span><span class="n">filename</span><span class="o">&gt;</span>      <span class="n">Specify</span> <span class="n">a</span> <span class="n">mapping</span> <span class="n">file</span> <span class="n">to</span> <span class="nb">map</span> <span class="n">manual</span> <span class="n">dataset</span> <span class="n">annotations</span> <span class="n">to</span> <span class="n">the</span> <span class="n">user</span><span class="o">-</span><span class="n">specified</span> <span class="n">categories</span><span class="o">.</span>
 </pre></div>
 </div>
 <dl class="function">
@@ -121,12 +116,12 @@ by a list of provided keywords. Each subgraph is processed into <code class="xre
 <li><strong>database_file</strong> &#8211; Ontology database file.</li>
 <li><strong>keyword_file</strong> &#8211; A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).</li>
 <li><strong>output_directory</strong> &#8211; The directory where results are stored.</li>
-<li><strong>--supergraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a supergraph subontology to filter e.g. cellular_component</li>
-<li><strong>--subgraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a subgraph subontology to filter e.g. cellluar_componet</li>
-<li><strong>--supergraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of]</li>
-<li><strong>--subgraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of]</li>
-<li><strong>--map_supersets</strong> &#8211; OPTIONAL-Allow subgraphs to subsume other subgraphs</li>
-<li><strong>--output_termlist</strong> &#8211; OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results</li>
+<li><strong>--supergraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a supergraph sub-ontology to filter e.g. cellular_component.</li>
+<li><strong>--subgraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a subgraph sub-ontology to filter e.g. cellular_component.</li>
+<li><strong>--supergraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of].</li>
+<li><strong>--subgraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of].</li>
+<li><strong>--map_supersets</strong> &#8211; OPTIONAL-Allow subgraphs to subsume other subgraphs.</li>
+<li><strong>--output_termlist</strong> &#8211; OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results.</li>
 </ul>
 </td>
 </tr>
@@ -143,14 +138,14 @@ by a list of provided keywords. Each subgraph is processed into <code class="xre
 <dl class="function">
 <dt id="gocats.find_category_subsets">
 <code class="descclassname">gocats.</code><code class="descname">find_category_subsets</code><span class="sig-paren">(</span><em>subgraph_collection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#find_category_subsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.find_category_subsets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds subgraphs which are subsets of other subgraphs to remove reduncancy, when specified.</p>
+<dd><p>Finds subgraphs which are subsets of other subgraphs to remove redundancy, when specified.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subgraph_collection</strong> &#8211; A dictionary of subgraph objects (keys: subgraph name, values: subgraph object)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subgraph_collection</strong> &#8211; A dictionary of subgraph objects (keys: subgraph name, values: subgraph object).</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary relating which subgraph objects are subsets of other subgraphs (keys: subset subgraph, values: superset subgraphs)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary relating which subgraph objects are subsets of other subgraphs (keys: subset subgraph, values: superset subgraphs).</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a></td>
 </tr>
@@ -159,113 +154,19 @@ by a list of provided keywords. Each subgraph is processed into <code class="xre
 </dd></dl>
 
 <dl class="function">
-<dt id="gocats.compute_subgraph_similarity">
-<code class="descclassname">gocats.</code><code class="descname">compute_subgraph_similarity</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#compute_subgraph_similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.compute_subgraph_similarity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the Jaccard index and inclusion index of comparable category subgraphs between those created by GOCats
-and those created by another method. Results are tabulated and stored in an specified output file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gocats_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.</li>
-<li><strong>other_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from another method.</li>
-<li><strong>output_directory</strong> &#8211; Specify the directory where the output file will be stored.</li>
-<li><strong>filename</strong> &#8211; Name the output file</li>
-<li><strong>--id_translation=&lt;filename&gt;</strong> &#8211; OPTIONAL-Specify the location of the translation file if one was produced by the &#8211;output_termlist option in <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">create_subgraphs()</span></code></a>. This will improve readability of the resulting table.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="gocats.compute_subgraph_intersection">
-<code class="descclassname">gocats.</code><code class="descname">compute_subgraph_intersection</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#compute_subgraph_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.compute_subgraph_intersection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the intersection of GOcats, Map2Slim, and UniProt CV mappings and outputs a graph representation to a
-file using the PyUpSet resource (available here: <a class="reference external" href="https://github.com/ImSoErgodic/py-upset">https://github.com/ImSoErgodic/py-upset</a>).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gocats_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from GOcats.</li>
-<li><strong>uniprot_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from the UniProt CV mapping produced by uniprotsubcellparser.py</li>
-<li><strong>map2slim_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms from Map2Slim</li>
-<li><strong>output_directory</strong> &#8211; Specify the directory where theh output file will be stored.</li>
-<li><strong>--id_translation=&lt;filename&gt;</strong> &#8211; OPTIONAL-Specify the location of the translation file if one was produced by the &#8211;output_termlist option in <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">create_subgraphs()</span></code></a>. This will improve readability of the resulting figures.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="gocats.categorize_dataset">
 <code class="descclassname">gocats.</code><code class="descname">categorize_dataset</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#categorize_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.categorize_dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads in a Gene Annotation File (GAF) and mapps the annotations contained therin to the categories organized by
+<dd><p>Reads in a Gene Annotation File (GAF) and mapps the annotations contained therein to the categories organized by
 GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gaf_dataset</strong> &#8211; A Gene Annotation File</li>
+<li><strong>gaf_dataset</strong> &#8211; A Gene Annotation File.</li>
 <li><strong>term_mapping</strong> &#8211; A dictionary mapping category-defining ontology terms to their subgraph children terms. May be produced by GOcats or another method.</li>
-<li><strong>output_directory</strong> &#8211; Specify the directory where theh output file will be stored.</li>
+<li><strong>output_directory</strong> &#8211; Specify the directory where the output file will be stored.</li>
 <li><strong>GAF_name</strong> &#8211; Specify the desired name of the mapped GAF.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="gocats.compare_mapping">
-<code class="descclassname">gocats.</code><code class="descname">compare_mapping</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats.html#compare_mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.compare_mapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compares the agreement in annotation assignment between a Gene Annotation File (GAF) produced by GOcats (or some
-other method) and a gold-standard, manually-curated dataset provided in csv format. <strong>Currently, this method is
-highly specific to HPA&#8217;s dataset formatting. It is not yet intended for generic use.</strong></p>
-<p>Agreement types:</p>
-<blockquote>
-<div><p>-Complete - Manually-assigned annotations and programmatically assigned annotations were identical.</p>
-<p>-Partial - At least one annotation is shared between manual assignments and programmatic assignments.</p>
-<p>-Superset - Programmatic annotation assignments are a superset of manual annotation assignments.</p>
-<p>-None - Manual and programmatic assignments are both present but there are no shared annotations.</p>
-<p>-Inconclusive - Annotations are missing from genes in one or both of the sources.</p>
-<p>-Not in knowledgebase - Gene absent from the knowledgebase, which is present in the dataset.</p>
-</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>mapped_gaf</strong> &#8211; A mapped GAF produced by either GOcats or another method</li>
-<li><strong>manual_dataset</strong> &#8211; A dataset containing manually-curated annotaion assignments (currently specific to HPA&#8217;s dataset).</li>
-<li><strong>--map_manual_dataset=&lt;filename&gt;</strong> &#8211; OPTIONAL,NOT YET IMPLEMENTED-Specify the location of a manual dataset of interest.</li>
-<li><strong>--save_assignments=&lt;filename&gt;</strong> &#8211; OPTIONAL-Output all gene-annotation assingments, along with their agreement to the specified filename.</li>
-<li><strong>--id_translation=&lt;filename&gt;</strong> &#8211; OPTIONAL-Specify the location of the translation file if one was produced by the &#8211;output_termlist option in <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">create_subgraphs()</span></code></a>. This will improve readability of the resulting tables.</li>
 </ul>
 </td>
 </tr>
@@ -1574,277 +1475,115 @@ connect all nodes in the graph by their edges.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-decoygaf">
-<span id="decoy-gene-anotation-file-creator-decoygaf"></span><h3>Decoy Gene Anotation File Creator (DecoyGAF)<a class="headerlink" href="#module-decoygaf" title="Permalink to this headline">¶</a></h3>
-<p>Decoy Gene Annotation File Creator command line implementation:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-    <span class="n">decoygaf</span><span class="o">.</span><span class="n">py</span> <span class="n">make_decoy</span> <span class="o">&lt;</span><span class="n">ontology_term_list</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_dir</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_file</span><span class="o">&gt;</span>
-    <span class="n">decoygaf</span><span class="o">.</span><span class="n">py</span> <span class="n">map_terms</span> <span class="o">&lt;</span><span class="n">mapped_gaf</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_dir</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_file</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">output_mapping_set</span><span class="o">=&lt;</span><span class="n">filepath</span><span class="o">&gt;</span><span class="p">]</span>
-<span class="n">Options</span><span class="p">:</span>
-    <span class="o">-</span><span class="n">h</span> <span class="o">--</span><span class="n">help</span>                            <span class="n">Shows</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
-    <span class="o">--</span><span class="n">output_mapping_set</span><span class="o">=&lt;</span><span class="n">filepath</span><span class="o">&gt;</span>      <span class="n">Saves</span> <span class="n">a</span> <span class="n">JSONPickle</span> <span class="n">file</span> <span class="n">of</span> <span class="n">the</span> <span class="n">mapping</span> <span class="n">produced</span> <span class="n">by</span> <span class="n">the</span> <span class="n">module</span> <span class="n">under</span> <span class="n">the</span> <span class="n">provided</span> <span class="n">filepath</span><span class="o">.</span>
-</pre></div>
-</div>
-<dl class="function">
-<dt id="decoygaf.make_decoy">
-<code class="descclassname">decoygaf.</code><code class="descname">make_decoy</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/decoygaf.html#make_decoy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#decoygaf.make_decoy" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Creates a GAF mapping all terms in an ontology to themselves. A GAF formatted file is created which replaces the</dt>
-<dd>gene name column with a copy of an the ontology term for every term in an ontology. This can be used to create term
-to term mappings via Map2Slim. See <cite>Map2Slim Mapping Error Testing</cite> in the api documentation for elaboration.</dd>
-</dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ontology_term_list</strong> &#8211; File produced by <a class="reference internal" href="#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code></a> &#8211;output_termlist or another .json_pickle file listing all terms in an ontology.</li>
-<li><strong>output_dir</strong> &#8211; Specify the location of the output directory.</li>
-<li><strong>output_file</strong> &#8211; Specify the name of the decoy GAF.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="decoygaf.map_terms">
-<code class="descclassname">decoygaf.</code><code class="descname">map_terms</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/decoygaf.html#map_terms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#decoygaf.map_terms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maps the terms contained in a mapped decoy GAF. The resulting mapping dictionary is saved to a json_pickle. See
-<cite>Map2Slim Mapping Error Testing</cite> in the api documentation for elaboration.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>mapped_gaf</strong> &#8211; A decoy GAF that has been mapped by Map2Slim</li>
-<li><strong>output_dir</strong> &#8211; Specify the location of the output directory.</li>
-<li><strong>output_file</strong> &#8211; Specify the name of the mapping dictionary json_pickle file.</li>
-<li><strong>--output_mapping_set=&lt;filepath&gt;</strong> &#8211; DEPRECIATED-Used for testing purposes, no longer necessary for use.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-uniprotsubcellparser">
-<span id="uniprot-subcellular-locations-parser"></span><h3>UniProt Subcellular Locations Parser<a class="headerlink" href="#module-uniprotsubcellparser" title="Permalink to this headline">¶</a></h3>
-<p>UniProt subcellular location parser and graph creation module command line implementation:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-    <span class="n">uniprotsubcellparser</span><span class="o">.</span><span class="n">py</span> <span class="n">build_subdags</span> <span class="o">&lt;</span><span class="n">cv_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">visualize</span><span class="p">]</span>
-
-<span class="n">Options</span><span class="p">:</span>
-    <span class="o">-</span><span class="n">h</span> <span class="o">--</span><span class="n">help</span>                     <span class="n">Show</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
-    <span class="o">--</span><span class="n">visualize</span>                   <span class="n">Visualize</span> <span class="n">subdags</span> <span class="n">after</span> <span class="n">creation</span>
-</pre></div>
-</div>
-<dl class="class">
-<dt id="uniprotsubcellparser.SubcellParser">
-<em class="property">class </em><code class="descclassname">uniprotsubcellparser.</code><code class="descname">SubcellParser</code><a class="reference internal" href="_modules/uniprotsubcellparser.html#SubcellParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.SubcellParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses Uniprot&#8217;s subcell.txt to build a DAG version of the term relationships.</p>
-<dl class="method">
-<dt id="uniprotsubcellparser.SubcellParser.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><em>visitor</em>, <em>file_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#SubcellParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.SubcellParser.parse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses the PARAMETER file_handle file using the PARAMETER visitor. NOTE THIS WAS UNDER</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="uniprotsubcellparser.SubcellParser.__weakref__">
-<code class="descname">__weakref__</code><a class="headerlink" href="#uniprotsubcellparser.SubcellParser.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="uniprotsubcellparser.UniprotDAG">
-<em class="property">class </em><code class="descclassname">uniprotsubcellparser.</code><code class="descname">UniprotDAG</code><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG" title="Permalink to this definition">¶</a></dt>
-<dd><p>A graph representation of the Uniprot subcellular locations. Acts as a visitor to the file_handle to save
-information without altering the file.</p>
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates containers for DAG creation.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.init_derived">
-<code class="descname">init_derived</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.init_derived"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.init_derived" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reinitializes the relationship lists.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.set_curr_id">
-<code class="descname">set_curr_id</code><span class="sig-paren">(</span><em>curr_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_curr_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_curr_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the current ID of the term being parsed.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.set_is">
-<code class="descname">set_is</code><span class="sig-paren">(</span><em>is_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_is"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_is" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the current &#8216;is a&#8217; relationship partner.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.set_part">
-<code class="descname">set_part</code><span class="sig-paren">(</span><em>part_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_part"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_part" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the current &#8216;part of&#8217; relationship partner.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.set_go">
-<code class="descname">set_go</code><span class="sig-paren">(</span><em>go_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_go"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_go" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the current GO ID.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.make_entry">
-<code class="descname">make_entry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.make_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.make_entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>At the end of a term, saves all currently assigned information to a dictionary entry. Reinitializes all
-variables.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotDAG.set_top_nodes">
-<code class="descname">set_top_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotDAG.set_top_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.set_top_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Signifies all top-nodes in the Uniprot controlled vocabulary by finding all terms without parents.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="uniprotsubcellparser.UniprotDAG.__weakref__">
-<code class="descname">__weakref__</code><a class="headerlink" href="#uniprotsubcellparser.UniprotDAG.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="uniprotsubcellparser.UniprotSubDAG">
-<em class="property">class </em><code class="descclassname">uniprotsubcellparser.</code><code class="descname">UniprotSubDAG</code><span class="sig-paren">(</span><em>udag</em>, <em>top_node</em>, <em>uniprot_collection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotSubDAG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotSubDAG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a subDAG for every top-node identified in the Uniprot CV. Every node without a parent is assigned as a
-top-node.</p>
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotSubDAG.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>udag</em>, <em>top_node</em>, <em>uniprot_collection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotSubDAG.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotSubDAG.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialization of UniprotSubDAG. Creates containers for subDAG nodes. Calls build_subdag to iterate through
-children of children in the Uniprot DAG to find all children of the top-node. If the top-node contains a GO ID,
-it is saved to the GLOBAL subDAG collection.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="uniprotsubcellparser.UniprotSubDAG._build_subdag">
-<code class="descname">_build_subdag</code><span class="sig-paren">(</span><em>term</em>, <em>graph</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/uniprotsubcellparser.html#UniprotSubDAG._build_subdag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#uniprotsubcellparser.UniprotSubDAG._build_subdag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Because Uniprot subDAG creation is TOP-TOWN, this must be written like this. Children must be found from the
-top-node. Iterates through children of children to find all contents of a top-node.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="uniprotsubcellparser.UniprotSubDAG.__weakref__">
-<code class="descname">__weakref__</code><a class="headerlink" href="#uniprotsubcellparser.UniprotSubDAG.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
 <div class="section" id="module-tools">
 <span id="tools"></span><h3>Tools<a class="headerlink" href="#module-tools" title="Permalink to this headline">¶</a></h3>
-<p>Functions for handling I/O tasks (and more) with GOcats.</p>
+<p>Functions for handling some file input and output and reformatting tasks in GOcats.</p>
+<dl class="function">
+<dt id="tools.json_save">
+<code class="descclassname">tools.</code><code class="descname">json_save</code><span class="sig-paren">(</span><em>obj</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#json_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.json_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a Python object, converts it into a JSON serializable object (if it is not already), and saves it to a file
+that is specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> &#8211; A Python <code class="xref py py-obj docutils literal"><span class="pre">obj</span></code>.</li>
+<li><strong>filename</strong> (<em>file_handle</em>) &#8211; A path to output the resulting JSON file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="tools.jsonpickle_save">
 <code class="descclassname">tools.</code><code class="descname">jsonpickle_save</code><span class="sig-paren">(</span><em>obj</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#jsonpickle_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.jsonpickle_save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves an object to a file.</p>
+<dd><p>Takes a Python object, converts it into a JsonPickle string, and writes it out to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> &#8211; A Python <code class="xref py py-obj docutils literal"><span class="pre">obj</span></code></li>
+<li><strong>filename</strong> (<em>file_handle</em>) &#8211; A path to output the resulting JsonPickle file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="tools.jsonpickle_load">
 <code class="descclassname">tools.</code><code class="descname">jsonpickle_load</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#jsonpickle_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.jsonpickle_load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a jsonPickle object from a file.</p>
+<dd><p>Takes a JsonPickle file and loads in the JsonPickle object into a Python object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>file_handle</em>) &#8211; A path to a JsonPickle file.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="tools.list_to_file">
-<code class="descclassname">tools.</code><code class="descname">list_to_file</code><span class="sig-paren">(</span><em>file_location</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#list_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.list_to_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Makes a text document from data, with each line of the document being one item from the list and outputs the
-document into a file.</p>
+<code class="descclassname">tools.</code><code class="descname">list_to_file</code><span class="sig-paren">(</span><em>filename</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#list_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.list_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a text document from a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a>  of data, with each line of the document being one item from the list
+and outputs the document into a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>file_handle</em>) &#8211; A path to the output file.</li>
+<li><strong>data</strong> &#8211; A Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="tools.display_name">
-<code class="descclassname">tools.</code><code class="descname">display_name</code><span class="sig-paren">(</span><em>dataset</em>, <em>go_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#display_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.display_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Improves readability of Gene Ontology (GO) terms by dislpaying the english name of a GO ID within its dataset.</p>
+<dt id="tools.write_out_gaf">
+<code class="descclassname">tools.</code><code class="descname">write_out_gaf</code><span class="sig-paren">(</span><em>data</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#write_out_gaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.write_out_gaf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes out an object representing a Gene Annotation File (GAF) to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><em>list</em></a>) &#8211; A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> object representing a GAF. Each item in the list represents a row.</li>
+<li><strong>filename</strong> (<em>file_handle</em>) &#8211; A path and name for the GAF.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="test-scripts">
-<h2>Test Scripts<a class="headerlink" href="#test-scripts" title="Permalink to this headline">¶</a></h2>
-<p>Test scripts can be found in multiple subdirectories. Their location depends on which aspect of the project they test. Check each subsection to see where each test is located.</p>
-<div class="section" id="map2slim-mapping-error-testing">
-<h3>Map2Slim Mapping Error Testing<a class="headerlink" href="#map2slim-mapping-error-testing" title="Permalink to this headline">¶</a></h3>
-<p>The following scripts are located /ARK.GOcats/gocats/tests/Map2SlimMappingTest</p>
-<p>These scripts are for enumerating the potential scoping and scaling errors that Map2Slim makes by evaluating all
-relationship types in the same way. We are using Map2Slim&#8217;s &#8211;idfile option to map custom GO terms, instead of mapping
-to a whole GOslim. The goal is to produce an all-against-all mapping for all terms in Gene Ontology (or for individual
-sub-ontologies of GO) so that all possilbe term-to-term mappings that Map2Slim can make are evaluated. However, because
-Map2Slim does not natively allow this kind of evaluation, we were foced to perform two workarounds:</p>
-<p>1. The first workaround is mapping GO terms to themselves. Map2Slim is designed to map <em>gene</em> annotations within a Gene
-Annotation File (GAF) to a GO term in a GO slim or to a set of manually-defined GO terms. Therefore we created a &#8220;decoy&#8221;
-GAF which replaced the &#8220;gene name&#8221; field with a string representing a GO term from the GO ontology file, and its row
-contains a string of the same GO term in its &#8220;GO annotation&#8221; field. Map2Slim can read, process, and map the GO
-annotation field in the same way it normally does. In this way, the resulting mapped gaf contains a GO term string
-mapped to another GO term that has been mapped to the provided target GO term list.</p>
-<p>This was accomplished in gotermcollect.py</p>
-<p>2. The second workaround is that Map2Slim removes all mappings that are subsumed by other mappings. This means that if
-one were to supply our &#8220;decoy GAF&#8221; with an &#8211;idfile listing of all terms in GO we would receive only mappings of GO
-terms to themselves (all other mappings would be subsumed by one another). To overcome this we supplied a single GO term
-in the &#8211;idfile option at a time for all terms in go, and then converged all resulting mappings together from the
-resulting ~44,000 GAF output files (ignoring self-mappings and redundancy).</p>
-<p>This was accomplished using gotermcollect.py, outputprocessing.py, m2s_runner.sh, run.sh, and a Perl script wihich submitted jobs to a TORUQUE cluster (submit_spartan_24.pl).</p>
-</div>
-<div class="section" id="has-part-mapping-error-analysis-hp-mapping-testing-py">
-<h3>Has_Part mapping error analysis (hp_mapping_testing.py)<a class="headerlink" href="#has-part-mapping-error-analysis-hp-mapping-testing-py" title="Permalink to this headline">¶</a></h3>
-<p>The following script is located in /ARK.GOcats/gocats</p>
-<p>Similar to Map2Slim error testing, this script enumerates the errors made by the misinterpretation of a problematic edge
-type. In this case this involves enumerating all has_part paths in GO without reversing the semantic directionality of
-the edge. GOcats perferms this reversal by defalut, creating a proper scoping/scaling interpretation of the relationship
-with respect to term categorization. This test reverses the direcitonality back to its original, problematic state and
-enumerates how many mappings are created as a result.</p>
-</div>
-<div class="section" id="speed-test">
-<h3>Speed Test<a class="headerlink" href="#speed-test" title="Permalink to this headline">¶</a></h3>
-<p>This script is located in /ARK.GOcats/runscripts/Tests</p>
-</div>
-</div>
-<div class="section" id="run-scripts">
-<h2>Run Scripts<a class="headerlink" href="#run-scripts" title="Permalink to this headline">¶</a></h2>
-<p>All project-level runscripts are located under /ARK.GOcats/runscripts</p>
-<div class="section" id="run-sh">
-<h3>run.sh<a class="headerlink" href="#run-sh" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="run-map-supersets-sh">
-<h3>run_map_supersets.sh<a class="headerlink" href="#run-map-supersets-sh" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="fullsubgraphinclusion-sh">
-<h3>FullSubgraphInclusion.sh<a class="headerlink" href="#fullsubgraphinclusion-sh" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="gocatsgenerichpamapping-sh">
-<h3>GOcatsGenericHPAMapping.sh<a class="headerlink" href="#gocatsgenerichpamapping-sh" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="tools.parse_gaf">
+<code class="descclassname">tools.</code><code class="descname">parse_gaf</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#parse_gaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.parse_gaf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a Gene Annotation File (GAF) into a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> object where every item is a row from the GAF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>file_handle</em>) &#8211; Specify the location of the GAF.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list representing the GAF.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 </div>
