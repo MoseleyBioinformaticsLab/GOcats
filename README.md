@@ -3,6 +3,9 @@
 GOcats is an Open Biomedical Ontology (OBO) parser and categorizing utility--currently specialized for the Gene Ontology
 (GO)--which can sort ontology terms into conceptual categories that a user provides.
 
+## Important note: cite your use of GOcats
+See the CITATION file for instructions. 
+
 ## Getting Started
 
 It is recommended that you clone this repository into a project directory within the home directory. 
