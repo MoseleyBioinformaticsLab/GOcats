@@ -1,2 +1,1 @@
-from . import version
-__version__ = version.__version__
+from _version import __version__, short_version

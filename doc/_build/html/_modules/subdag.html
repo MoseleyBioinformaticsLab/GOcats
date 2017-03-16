@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>subdag &#8212; GOcats 1.0.0 documentation</title>
+    <title>subdag &#8212; GOcats 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   </head>
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>GOcats 1.0.0 documentation</span></a></h1>
+          <span>GOcats 1.1.0 documentation</span></a></h1>
         <h2 class="heading"><span>subdag</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -84,7 +84,7 @@
 <span class="sd">        :return: :py:obj:`dict` of :class:`dag.AbstractNode` IDs mapped to a :py:obj:`list&#39; of root :class:`dag.AbstractNode` IDs.</span>
 <span class="sd">        :rtype: :py:obj:`dict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_id_mapping</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_id_mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_root_id_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">descendants</span><span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_root_id_mapping</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">id</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">:</span>
@@ -99,7 +99,7 @@
 <span class="sd">        :return: :py:obj:`dict` of :class:`dag.AbstractNode` objects mapped to a :py:obj:`list&#39; of root :class:`dag.AbstractNode` objects.</span>
 <span class="sd">        :rtype: :py:obj:`dict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_node_mapping</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_node_mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_root_node_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">descendants</span><span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_root_node_mapping</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">:</span>
@@ -114,7 +114,7 @@
 <span class="sd">        :return: :py:obj:`dict` of :class:`dag.AbstractNode` IDs mapped to a :py:obj:`list&#39; of :class:`dag.AbstractNode` IDs.</span>
 <span class="sd">        :rtype: :py:obj:`dict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_mapping</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_content_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">descendants</span><span class="p">]}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_content_mapping</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_node</span><span class="p">:</span>

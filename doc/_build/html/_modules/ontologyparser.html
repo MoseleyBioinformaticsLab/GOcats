@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ontologyparser &#8212; GOcats 1.0.0 documentation</title>
+    <title>ontologyparser &#8212; GOcats 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
   </head>
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>GOcats 1.0.0 documentation</span></a></h1>
+          <span>GOcats 1.1.0 documentation</span></a></h1>
         <h2 class="heading"><span>ontologyparser</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -98,8 +98,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database_file</span> <span class="o">=</span> <span class="n">database_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">go_graph</span> <span class="o">=</span> <span class="n">go_graph</span>
-        <span class="c1"># 5 types of relationships: scoping, scaling (grouped with scoping for now), spaciotemporal, active, equivalance (not present here), and other.</span>
-        <span class="c1"># 1 means that the relationship directionality is converntional, 0 means that the semantic directionaly points from node 2 to node1. </span>
+        <span class="c1"># 5 types of relationships: scoping, scaling (grouped with scoping for now), spatiotemporal, active, equivalence (not present here), and other.</span>
+        <span class="c1"># 1 means that the relationship directionality is conventional, 0 means that the semantic directionality points from node 2 to node1.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">relationship_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ends_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;happens_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;has_part&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                                      <span class="s2">&quot;negatively_regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;never_in_taxon&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;other&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;occurs_in&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
                                      <span class="s2">&quot;part_of&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;positively_regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
