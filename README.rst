@@ -109,9 +109,9 @@ DAMAGE.
 Authors
 ~~~~~~~
 
-* **Eugene W. Hinderer III** - [ehinderer]_
-* **Hunter N.B. Moseley** - [hunter-moseley]_
+* **Eugene W. Hinderer III** - ehinderer_
+* **Hunter N.B. Moseley** - hunter-moseley_
 
 .. _installed: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
-.. _[ehinderer]: https://github.com/ehinderer
-.. _[hunter-moseley]: https://github.com/hunter-moseley
+.. _ehinderer: https://github.com/ehinderer
+.. _hunter-moseley: https://github.com/hunter-moseley
