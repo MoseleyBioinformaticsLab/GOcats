@@ -35,7 +35,7 @@ GOcats requires JSONPickle and docopt:
 Package installation
 ....................
 
-Make sure you have git .. _installed: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
+Make sure you have git installed_:
 
 .. code:: bash
 
@@ -109,5 +109,9 @@ DAMAGE.
 Authors
 ~~~~~~~
 
-* **Eugene W. Hinderer III** - .. _[ehinderer]: https://github.com/ehinderer
-* **Hunter N.B. Moseley** - .. _[hunter-moseley]: https://github.com/hunter-moseley
+* **Eugene W. Hinderer III** - [ehinderer]_
+* **Hunter N.B. Moseley** - [hunter-moseley]_
+
+.. _installed: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
+.. _[ehinderer]: https://github.com/ehinderer
+.. _[hunter-moseley]: https://github.com/hunter-moseley
