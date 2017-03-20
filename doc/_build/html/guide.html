@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="The GOcats Tutorial" href="tutorial.html" />
     <link rel="prev" title="The GOcats API Reference" href="api.html" /> 
   </head>
   <body role="document">
@@ -41,7 +41,7 @@
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="tutorial.html">Tutorial</a>&#160;&#160;»
+        <a href="tutorial.html">The GOcats Tutorial</a>&#160;&#160;»
         </p>
 
       </div>
@@ -62,6 +62,7 @@ of keywords created by the user.</p>
 <li>Create subgraphs of GO which each represent a user-specified concept.</li>
 <li>Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
 categories.</li>
+<li>Explore the Gene Ontology graph within a Python interpreter.</li>
 </ul>
 </dd>
 </dl>
@@ -141,7 +142,7 @@ high level concepts and their subgraph content terms.</p>
 <blockquote>
 <div><p>1. Create a CSV file, where column 1 is the name of the concept category (this can be anything) and
 column 2 is a list of keywords/phrases delineating that concept (separated by semicolons). See
-tutorial for more information.</p>
+<a class="reference internal" href="tutorial.html"><span class="doc">The GOcats Tutorial</span></a> for more information.</p>
 <ol class="arabic simple" start="2">
 <li>Download a Gene Ontology database <a class="reference external" href="http://www.geneontology.org/page/download-ontology">obo</a> file</li>
 <li>To create mappings, run the GOcats command, <a class="reference internal" href="api.html#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code></a>:</li>
@@ -175,7 +176,7 @@ list of category root terms as values.</li>
 </ol>
 </div></blockquote>
 </li>
-<li><p class="first">Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see tutorial for more
+<li><p class="first">Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see <a class="reference internal" href="tutorial.html"><span class="doc">The GOcats Tutorial</span></a> for more
 information).</p>
 <blockquote>
 <div><p>1. Navigate to the module directory within the project directory, open a Python 3.4+ interpreter, and import
@@ -190,11 +191,10 @@ GOcats:</p>
 <ol class="arabic simple" start="2">
 <li>Create the graph object using <a class="reference internal" href="api.html#gocats.build_graph_interpreter" title="gocats.build_graph_interpreter"><code class="xref py py-func docutils literal"><span class="pre">gocats.build_graph_interpreter()</span></code></a>:</li>
 </ol>
-<div class="code Python highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># May filter to GO sub-ontology or to a set of relationships (see tutorial).</span>
+<div class="code Python highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># May filter to GO sub-ontology or to a set of relationships.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">gocats</span><span class="o">.</span><span class="n">build_graph_interpreter</span><span class="p">(</span><span class="s2">&quot;path_to_database_file&quot;</span><span class="p">)</span>
 
-<span class="go">You may now access all properties of the Gene Ontology graph object. See tutorial for more details. Here are a</span>
-<span class="go">couple of examples:</span>
+<span class="go">You may now access all properties of the Gene Ontology graph object. Here are a couple of examples:</span>
 </pre></div>
 </div>
 <div class="code Python highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># See the descendants of a term node, GO:0006306</span>
@@ -221,7 +221,7 @@ GOcats:</p>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="tutorial.html">Tutorial</a>&#160;&#160;»
+        <a href="tutorial.html">The GOcats Tutorial</a>&#160;&#160;»
         </p>
 
       </div>
