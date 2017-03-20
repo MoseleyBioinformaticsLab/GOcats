@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial &#8212; GOcats 1.1.0 documentation</title>
+    <title>The GOcats Tutorial &#8212; GOcats 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -31,7 +31,7 @@
   <body role="document">
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
           <span>GOcats 1.1.0 documentation</span></a></h1>
-        <h2 class="heading"><span>Tutorial</span></h2>
+        <h2 class="heading"><span>The GOcats Tutorial</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
       
@@ -45,8 +45,161 @@
       <div class="content">
         
         
-  <div class="section" id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="the-gocats-tutorial">
+<h1>The GOcats Tutorial<a class="headerlink" href="#the-gocats-tutorial" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Currently, <cite>GOcats</cite> can be used to:</dt>
+<dd><ul class="first last simple">
+<li>Create subgraphs of the Gene Ontology (GO) which each represent a user-specified concept.</li>
+<li>Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
+categories.</li>
+<li>Explore the Gene Ontology graph within a Python interpreter.</li>
+</ul>
+</dd>
+</dl>
+<p>In this document, each use case will be explained in-depth.</p>
+<div class="section" id="using-gocats-to-create-subgraphs-representing-user-specified-concepts">
+<h2>Using GOcats to create subgraphs representing user-specified concepts<a class="headerlink" href="#using-gocats-to-create-subgraphs-representing-user-specified-concepts" title="Permalink to this headline">¶</a></h2>
+<p>Before starting, it is important to decide what concepts you as the user wish to extract from the Gene Ontology. You may
+have an investigation that is focused on concepts like &#8220;DNA repair&#8221; or &#8220;autophagy,&#8221; or you may simply be interested in
+enumerating many arbitrary categories and seeing how ontology terms are shared between concepts. As an example to use in
+this tutorial, let&#8217;s consider a goal of extracting subgraphs that represent some typical subcellular locations of a
+eukaryotic cell.</p>
+<div class="section" id="creating-a-keyword-file">
+<h3>Creating a keyword file<a class="headerlink" href="#creating-a-keyword-file" title="Permalink to this headline">¶</a></h3>
+<p>The phrase &#8220;keyword file&#8221; might be slightly misleading because GOcats does not only handle keywords, but also <strong>short phrases</strong>
+that may be used to define a concept. Therefore, both may be used in combination in the keyword CSV file.</p>
+<p>The CSV file is formatted as so:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Each row represents a separate concept.</li>
+<li>Column 1 is the name of the concept (this is for reference and will not be used to parse GO).</li>
+<li><dl class="first docutils">
+<dt>Column 2 is a list of keywords or short phrases used to describe the concept in question.</dt>
+<dd><ul class="first last">
+<li>Each item in column 2 is separated by a semicolon (;) with no whitespace around the semicolon.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>Here is an example of what the file contents should look like (<strong>do not include the header row in the actual file</strong>):</dt>
+<dd><table border="1" class="first last docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Concept</th>
+<th class="head">Keywords/phrases</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>mitochondria</td>
+<td>mitochondria;mitochondrial;mitochondrion</td>
+</tr>
+<tr class="row-odd"><td>Nucleus</td>
+<td>nucleus;nuclei;nuclear</td>
+</tr>
+<tr class="row-even"><td>lysosome</td>
+<td>lysosome;lysosomal;lysosomes</td>
+</tr>
+<tr class="row-odd"><td>vesicle</td>
+<td>vesicle;vesicles</td>
+</tr>
+<tr class="row-even"><td>ER</td>
+<td>endoplasmic;sarcoplasmic;reticulum</td>
+</tr>
+<tr class="row-odd"><td>golgi</td>
+<td>golgi; golgi apparatus</td>
+</tr>
+<tr class="row-even"><td>extracellular</td>
+<td>extracellular;secreted</td>
+</tr>
+<tr class="row-odd"><td>cytosol</td>
+<td>cytosol;cytosolic</td>
+</tr>
+<tr class="row-even"><td>cytoplasm</td>
+<td>cytoplasm;cytoplasmic</td>
+</tr>
+<tr class="row-odd"><td>cell membrane</td>
+<td>plasma;plasma membrane</td>
+</tr>
+<tr class="row-even"><td>cytoskeleton</td>
+<td>cytoskeleton;cytoskeletal</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>We&#8217;ll imagine this file is located in the home directory and is called &#8220;cell_locations.csv.&#8221;</p>
+</div>
+<div class="section" id="downloading-the-gene-ontology-obo-file">
+<h3>Downloading the Gene Ontology .obo file<a class="headerlink" href="#downloading-the-gene-ontology-obo-file" title="Permalink to this headline">¶</a></h3>
+<p>The go.obo file is available here: <a class="reference external" href="http://www.geneontology.org/page/download-ontology">http://www.geneontology.org/page/download-ontology</a>. Be sure to download the .obo-
+formatted version. All releases of GO in this format as of Jan 2015 have been verified to be compatible with GOcats.
+We&#8217;ll assume this database file is located in the home directory and is called &#8220;go.obo.&#8221;</p>
+</div>
+<div class="section" id="extracting-subgraphs-and-creating-concept-mappings">
+<h3>Extracting subgraphs and creating concept mappings<a class="headerlink" href="#extracting-subgraphs-and-creating-concept-mappings" title="Permalink to this headline">¶</a></h3>
+<p>This is where GOcats does the heavy lifting. We&#8217;ll assume the GOcats repository was already cloned into the home
+directory (refer to <a class="reference internal" href="guide.html"><span class="doc">User Guide</span></a> for instructions on how to install GOcats). We can now use Python to run the
+<a class="reference internal" href="api.html#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code></a> function. We can also specify that we only want to parse the &#8220;celluar_component&#8221;
+sub-ontology of GO (the &#8220;supergraph namespace&#8221;), since we are only interested in concepts of this type. Although it is
+redundant, we can also play it safe and limit subgraph creation to only consider terms listed in &#8220;cellular_component&#8221; as
+well (the &#8220;subgraph namespace&#8221;).</p>
+<blockquote>
+<div><div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">ARK</span><span class="o">.</span><span class="n">GOcats</span><span class="o">/</span><span class="n">gocats</span><span class="o">/</span><span class="n">gocats</span><span class="o">.</span><span class="n">py</span> <span class="n">create_subgraphs</span> <span class="o">~/</span><span class="n">go</span><span class="o">.</span><span class="n">obo</span> <span class="o">~/</span><span class="n">cell_locations</span><span class="o">.</span><span class="n">csv</span> <span class="o">~/</span><span class="n">cell_locations_output</span> <span class="o">--</span><span class="n">supergraph_namespace</span><span class="o">=</span><span class="n">cellular_component</span> <span class="o">--</span><span class="n">subgraph_namespace</span><span class="o">=</span><span class="n">cellular_component</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The results will be output to ~/cell_locations_output.</p>
+</div>
+<div class="section" id="let-s-look-at-the-output-files">
+<h3>Let&#8217;s look at the output files<a class="headerlink" href="#let-s-look-at-the-output-files" title="Permalink to this headline">¶</a></h3>
+<p>In the output directory (i.e. ~/cell_locations_output) we can see several files. The following table describes what
+can be found in each:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="13%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="2">File Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td colspan="2">GC_content_mapping.json</td>
+<td>JSON version of Python dictionary (keys: concept root nodes, values: list of subgraph term nodes).</td>
+</tr>
+<tr class="row-odd"><td colspan="2">GC_content_mapping.json_pickle</td>
+<td>Same as above, but a JSONPickle version of the dictionary.</td>
+</tr>
+<tr class="row-even"><td colspan="2">GC_id_mapping.json</td>
+<td>JSON version of Python dictionary (keys: subgraph term nodes, values: list of concept roots).</td>
+</tr>
+<tr class="row-odd"><td colspan="2">GC_id_mapping.json_pickle</td>
+<td>Same as above, but a JSONPickle version of the dictionary.</td>
+</tr>
+<tr class="row-even"><td colspan="2">id_translation.json_pickle</td>
+<td>A JSONPickle version of a Python dictionary mapping GO IDs to the name of the term.</td>
+</tr>
+<tr class="row-odd"><td colspan="2">NetworkTable.csv</td>
+<td>A csv version of id_translation for visualizing in Cytoscape (best results with &#8211;map_supersets)</td>
+</tr>
+<tr class="row-even"><td colspan="2">subgraph_report.txt</td>
+<td>A summary of the subgraphs extracted for mapping. See below for more details.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
 </div>
 
 

@@ -13,6 +13,7 @@ Currently, the `GOcats` package can be used to:
    * Create subgraphs of GO which each represent a user-specified concept.
    * Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
      categories.
+   * Explore the Gene Ontology graph within a Python interpreter.
 
 Installation
 ~~~~~~~~~~~~

@@ -13,6 +13,7 @@ Currently, the `GOcats` package can be used to:
    * Create subgraphs of GO which each represent a user-specified concept.
    * Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
      categories.
+   * Explore the Gene Ontology graph within a Python interpreter.
 
 Installation
 ~~~~~~~~~~~~
@@ -73,7 +74,7 @@ Basic usage
 
       1. Create a CSV file, where column 1 is the name of the concept category (this can be anything) and
       column 2 is a list of keywords/phrases delineating that concept (separated by semicolons). See
-      tutorial for more information.
+      :doc:`tutorial` for more information.
 
       2. Download a Gene Ontology database obo_ file
 
@@ -104,7 +105,7 @@ Basic usage
 
       3. The output GAF will have the specified <mapped_gaf_filename> in the <output_directory>
 
-   * Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see tutorial for more
+   * Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see :doc:`tutorial` for more
      information).
 
       1. Navigate to the module directory within the project directory, open a Python 3.4+ interpreter, and import
@@ -123,11 +124,10 @@ Basic usage
 
       .. code:: Python
 
-         >>> # May filter to GO sub-ontology or to a set of relationships (see tutorial).
+         >>> # May filter to GO sub-ontology or to a set of relationships.
          >>> my_graph = gocats.build_graph_interpreter("path_to_database_file")
 
-         You may now access all properties of the Gene Ontology graph object. See tutorial for more details. Here are a
-         couple of examples:
+         You may now access all properties of the Gene Ontology graph object. Here are a couple of examples:
 
       .. code:: Python
 
