@@ -23,16 +23,6 @@ Installation
 Install on Linux
 ----------------
 
-Dependency installation
-.......................
-
-GOcats requires JSONPickle and docopt:
-
-.. code:: bash
-
-   pip3 install docopt
-   pip3 install jsonpickle
-
 Package installation
 ....................
 
@@ -43,26 +33,26 @@ Make sure you have git_ installed:
    cd ~/
    git clone <PLACEHOLDER_URL>
 
-Install on Windows
-------------------
-Windows installation not yet available. Sorry about that.
-
 Dependencies
-~~~~~~~~~~~~
+............
 
 `GOcats` requires the following Python libraries:
 
    * docopt_ for creating the :mod:`gocats` command-line interface.
-      * To install docopt_, run the following:
-         .. code:: bash
-
-            pip3 install docopt  # on Linux
-
    * JSONPickle_ for saving Python objects in a JSON serializable form and outputting to a file.
-      * To install JSONPickle_, run the following:
-         .. code:: bash
 
-            pip3 install jsonpickle  # on Linux
+To install dependencies:
+
+.. code:: bash
+
+   pip3 install docopt
+   pip3 install jsonpickle
+
+Install on Windows
+------------------
+Windows installation not yet available. Sorry about that.
+
+
 
 Basic usage
 ~~~~~~~~~~~
