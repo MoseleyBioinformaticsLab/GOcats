@@ -23,6 +23,7 @@ Command line implementation::
         --map_supersets                      Maps all terms to all root nodes, regardless of if a root node subsumes another.
         --output_termlist                    Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
 """
+
 import docopt
 from . import gocats
 from ._version import __version__

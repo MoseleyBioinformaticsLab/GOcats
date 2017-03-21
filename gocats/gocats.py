@@ -1,7 +1,7 @@
 # !/usr/bin/python3
 """
-The Gene Ontology Categories Suite (GOcats)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The GOcats Runner
+~~~~~~~~~~~~~~~~~
 
 This module provides methods for the creation of directed acyclic concept subgraphs of Gene Ontology, along with methods
 for evaluating those subgraphs.
@@ -10,10 +10,10 @@ import os
 import sys
 import re
 import csv
-from . import ontologyparser
-from . import godag
-from . import subdag
-from . import tools
+import ontologyparser
+import godag
+import subdag
+import tools
 
 
 # Need a SubGraphCollection object

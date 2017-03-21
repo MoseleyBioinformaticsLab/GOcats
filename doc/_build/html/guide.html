@@ -85,7 +85,7 @@ categories.</li>
 <p><cite>GOcats</cite> requires the following Python libraries:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference external" href="https://github.com/docopt/docopt">docopt</a> for creating the <a class="reference internal" href="api.html#module-gocats" title="gocats"><code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code></a> command-line interface.</li>
+<li><a class="reference external" href="https://github.com/docopt/docopt">docopt</a> for creating the <code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code> command-line interface.</li>
 <li><a class="reference external" href="https://github.com/jsonpickle/jsonpickle">JSONPickle</a> for saving Python objects in a JSON serializable form and outputting to a file.</li>
 </ul>
 </div></blockquote>
@@ -103,7 +103,7 @@ categories.</li>
 </div>
 <div class="section" id="basic-usage">
 <h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="api.html#module-gocats" title="gocats"><code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code></a> can be used in the following ways:</p>
+<p><code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code> can be used in the following ways:</p>
 <blockquote>
 <div><ul>
 <li><p class="first">As a method to extract subgraphs of Gene Ontology that represent user-defined concepts and create mappings between
@@ -114,9 +114,10 @@ column 2 is a list of keywords/phrases delineating that concept (separated by se
 <a class="reference internal" href="tutorial.html"><span class="doc">The GOcats Tutorial</span></a> for more information.</p>
 <ol class="arabic simple" start="2">
 <li>Download a Gene Ontology database <a class="reference external" href="http://www.geneontology.org/page/download-ontology">obo</a> file</li>
-<li>To create mappings, run the GOcats command, <a class="reference internal" href="api.html#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code></a>:</li>
 </ol>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">~/</span><span class="n">ARK</span><span class="o">.</span><span class="n">GOcats</span><span class="o">/</span><span class="n">gocats</span> <span class="o">&lt;</span><span class="n">ontology_database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span>
+<p>3. To create mappings, run the GOcats command, <code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code> in the ~/ARK.GOcats directory or
+add the directory to the PYTHONPATH.</p>
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">gocats</span> <span class="n">create_subdags</span> <span class="o">&lt;</span><span class="n">ontology_database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
@@ -134,10 +135,10 @@ list of category root terms as values.</li>
 <blockquote>
 <div><ol class="arabic simple">
 <li>Create mapping files as defined in the previous section.</li>
-<li>Run the <a class="reference internal" href="api.html#gocats.categorize_dataset" title="gocats.categorize_dataset"><code class="xref py py-func docutils literal"><span class="pre">gocats.categorize_dataset()</span></code></a> to map terms to their categories:</li>
+<li>Run the <code class="xref py py-func docutils literal"><span class="pre">gocats.categorize_dataset()</span></code> to map terms to their categories:</li>
 </ol>
 <div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="c1"># NOTE: Use the GC_id_mapping.jsonpickle file.</span>
-<span class="n">python3</span> <span class="o">~/</span><span class="n">ARK</span><span class="o">.</span><span class="n">GOcats</span><span class="o">/</span><span class="n">gocats</span> <span class="o">&lt;</span><span class="n">GAF_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">term_mapping_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">mapped_gaf_filename</span><span class="o">&gt;</span>
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">gocats</span> <span class="n">categorize_dataset</span> <span class="o">&lt;</span><span class="n">GAF_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">term_mapping_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">mapped_gaf_filename</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
@@ -150,7 +151,7 @@ information).</p>
 <blockquote>
 <div><p>1. Navigate to the module directory within the project directory, open a Python 3.4+ interpreter, and import
 GOcats:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">ARK</span><span class="o">.</span><span class="n">GOcats</span><span class="o">/</span><span class="n">gocats</span>
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">ARK</span><span class="o">.</span><span class="n">GOcats</span>
 <span class="n">python3</span>
 </pre></div>
 </div>
@@ -158,7 +159,7 @@ GOcats:</p>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Create the graph object using <a class="reference internal" href="api.html#gocats.build_graph_interpreter" title="gocats.build_graph_interpreter"><code class="xref py py-func docutils literal"><span class="pre">gocats.build_graph_interpreter()</span></code></a>:</li>
+<li>Create the graph object using <code class="xref py py-func docutils literal"><span class="pre">gocats.build_graph_interpreter()</span></code>:</li>
 </ol>
 <div class="code Python highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># May filter to GO sub-ontology or to a set of relationships.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">gocats</span><span class="o">.</span><span class="n">build_graph_interpreter</span><span class="p">(</span><span class="s2">&quot;path_to_database_file&quot;</span><span class="p">)</span>
