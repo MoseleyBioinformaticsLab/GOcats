@@ -5,8 +5,8 @@ representation. Separate parsing classes within this module operate on distinct 
 any subtle differences among ontologies.
 """
 import re
-from .dag import AbstractEdge, DirectionalRelationship
-from .godag import GoGraphNode
+from dag import AbstractEdge, DirectionalRelationship
+from godag import GoGraphNode
 
 
 class OboParser(object):

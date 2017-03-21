@@ -80,7 +80,7 @@ the following:
 
    .. code:: bash
 
-      python3 -m gocats.py create_subgraphs ~/go.obo ~/cell_locations.csv ~/cell_locations_output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component
+      python3 -m gocats create_subgraphs ~/go.obo ~/cell_locations.csv ~/cell_locations_output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component
 
 The results will be output to ~/cell_locations_output.
 
@@ -163,7 +163,7 @@ PYTHONPATH and run the following:
 .. code:: bash
 
    # Note that you need to use the GC_id_mapping.json_pickle file for this step
-   python3 -m gocats.py categorize_dataset ~/datasetGAF.goa ~/cell_locations_output/GC_id_mapping.json_pickle ~/mapped_dataset mapped_GAF.goa
+   python3 -m gocats categorize_dataset ~/datasetGAF.goa ~/cell_locations_output/GC_id_mapping.json_pickle ~/mapped_dataset mapped_GAF.goa
 
 Here, we named the output directory "~/mapped_dataset" and we named the mapped GAF "mapped_GAF.goa". The mapped gaf and
 a list of unmapped genes will be stored in the output directory.

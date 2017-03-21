@@ -75,11 +75,12 @@ directory (refer to :doc:`guide` for instructions on how to install GOcats). We 
 :func:`gocats.create_subgraphs` function. We can also specify that we only want to parse the "cellular_component"
 sub-ontology of GO (the "supergraph namespace"), since we are only interested in concepts of this type. Although it is
 redundant, we can also play it safe and limit subgraph creation to only consider terms listed in "cellular_component" as
-well (the "subgraph namespace").
+well (the "subgraph namespace"). Navigate to the ARK.GOcats directory or add this directory to your PYTHONPATH and run
+the following:
 
    .. code:: bash
 
-      python3 ARK.GOcats/gocats/gocats.py create_subgraphs ~/go.obo ~/cell_locations.csv ~/cell_locations_output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component
+      python3 -m gocats create_subgraphs ~/go.obo ~/cell_locations.csv ~/cell_locations_output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component
 
 The results will be output to ~/cell_locations_output.
 
@@ -156,12 +157,13 @@ Using GOcats to map specific gene annotations in a GAF to custom categories
 With mapping files produced from the previous steps, it is possible to create a GAF with annotations mapped to the
 categories, or concepts, that we define. Let's consider our current "cell_locations" example and imagine that we have
 some gene set containing annotations in a GAF called "dataset_GAF.goa" in the home directory. To map these annotations, use
-the :func:`gocats.categorize_dataset` option:
+the :func:`gocats.categorize_dataset` option. Navigate to the ARK.GOcats directory or add this directory to your
+PYTHONPATH and run the following:
 
 .. code:: bash
 
    # Note that you need to use the GC_id_mapping.json_pickle file for this step
-   python3 ~/ARK.GOcats/gocats/gocats.py categorize_dataset ~/datasetGAF.goa ~/cell_locations_output/GC_id_mapping.json_pickle ~/mapped_dataset mapped_GAF.goa
+   python3 -m gocats categorize_dataset ~/datasetGAF.goa ~/cell_locations_output/GC_id_mapping.json_pickle ~/mapped_dataset mapped_GAF.goa
 
 Here, we named the output directory "~/mapped_dataset" and we named the mapped GAF "mapped_GAF.goa". The mapped gaf and
 a list of unmapped genes will be stored in the output directory.
@@ -174,7 +176,7 @@ GOcats:
 
 .. code:: bash
 
-   cd ~/ARK.GOcats/gocats
+   cd ~/ARK.GOcats
    python3
 
 .. code:: Python

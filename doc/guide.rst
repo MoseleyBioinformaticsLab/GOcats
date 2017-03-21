@@ -53,7 +53,6 @@ Install on Windows
 Windows installation not yet available. Sorry about that.
 
 
-
 Basic usage
 ~~~~~~~~~~~
 
