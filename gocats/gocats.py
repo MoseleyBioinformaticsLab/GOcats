@@ -245,7 +245,7 @@ def find_category_subsets(subgraph_collection):
 
 
 def categorize_dataset(args):
-    """Reads in a Gene Annotation File (GAF) and mapps the annotations contained therein to the categories organized by
+    """Reads in a Gene Annotation File (GAF) and maps the annotations contained therein to the categories organized by
     GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.
 
     :param gaf_dataset: A Gene Annotation File.

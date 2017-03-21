@@ -18,8 +18,8 @@ enumerating many arbitrary categories and seeing how ontology terms are shared b
 this tutorial, let's consider a goal of extracting subgraphs that represent some typical subcellular locations of a
 eukaryotic cell.
 
-Creating a keyword file
------------------------
+Create a keyword file
+---------------------
 
 The phrase "keyword file" might be slightly misleading because GOcats does not only handle keywords, but also **short phrases**
 that may be used to define a concept. Therefore, both may be used in combination in the keyword CSV file.
@@ -60,19 +60,19 @@ Here is an example of what the file contents should look like (**do not include 
 
 We'll imagine this file is located in the home directory and is called "cell_locations.csv."
 
-Downloading the Gene Ontology .obo file
----------------------------------------
+Download the Gene Ontology .obo file
+------------------------------------
 
-The go.obo file is available here: http://www.geneontology.org/page/download-ontology. Be sure to download the .obo-
-formatted version. All releases of GO in this format as of Jan 2015 have been verified to be compatible with GOcats.
-We'll assume this database file is located in the home directory and is called "go.obo."
+The go.obo file is available here: http://www.geneontology.org/page/download-ontology. Be sure to download the
+.obo-formatted version. All releases of GO in this format as of Jan 2015 have been verified to be compatible with
+GOcats. We'll assume this database file is located in the home directory and is called "go.obo."
 
-Extracting subgraphs and creating concept mappings
---------------------------------------------------
+Extract subgraphs and creating concept mappings
+-----------------------------------------------
 
 This is where GOcats does the heavy lifting. We'll assume the GOcats repository was already cloned into the home
 directory (refer to :doc:`guide` for instructions on how to install GOcats). We can now use Python to run the
-:func:`gocats.create_subgraphs` function. We can also specify that we only want to parse the "celluar_component"
+:func:`gocats.create_subgraphs` function. We can also specify that we only want to parse the "cellular_component"
 sub-ontology of GO (the "supergraph namespace"), since we are only interested in concepts of this type. Although it is
 redundant, we can also play it safe and limit subgraph creation to only consider terms listed in "cellular_component" as
 well (the "subgraph namespace").
@@ -109,3 +109,141 @@ can be found in each:
 
 We can look in subgraph_report.txt to get an overview of what our subgraphs contain, how they were constructed, and how
 they compare to the overall GO graph.
+
+**subgraph_report.txt**
+
+The first few lines give an overview of the subgraphs and supergraph (which is the full GO graph, unless a
+supergraph_namespace filter was used). In our example case, the supergraph is the cellular_component ontology of GO.
+
+In each divided section, the first line indicates the subgraph name (the one provided from column 1 in the keyword file)
+. The following describes the meaning of the values in each section:
+
+   - **Subgraph relationships**: the prevalence of relationship types in the subgraph.
+   - **Seeded size**: how many GO terms were initially filtered from GO with the keyword list.
+   - **Representative node**: the name of the GO term chosen as the root for that concept's subgraph.
+   - **Nodes added**: the number of GO terms added when extending the seeded subgraph to descendants not captured by the
+     initial search.
+   - **Non-subgraph hits (orphans)**: GO terms that were captured by the keyword search, but do not belong to the
+     subgraph.
+   - **Total nodes**: the total number of GO terms in the subgraph.
+
+Loading mapping files programmatically (optional)
+-------------------------------------------------
+
+While GOcats can use the mapping files described in the previous section to map terms in a GAF, it may also be useful to
+load them into your own scripts for use. Since the mappings are saved in JSON and JSONPickle formats, it is relatively
+simple to load them in programmatically:
+
+.. code:: Python
+
+   >>># Loading a JSON file
+   >>>import json
+   >>>with open('path_to_json_file', 'r') as json_file:
+   >>>    json_str = json_file.read()
+   >>>    json_obj = json.loads(json_str)
+   >>>my_mapping = json_obj
+
+   >>># Loading a JSONPickle file
+   >>>import jsonpickle
+   >>>with open('path_to_jsonpickle_file', 'r') as jsonpickle_file:
+   >>>    jsonpickle_str = jsonpickle_file.read()
+   >>>    jsonpickle_obj = jsonpickle.decode(jsonpickle_str, keys=True)
+   >>>my_mapping = jsonpickle_obj
+
+Using GOcats to map specific gene annotations in a GAF to custom categories
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With mapping files produced from the previous steps, it is possible to create a GAF with annotations mapped to the
+categories, or concepts, that we define. Let's consider our current "cell_locations" example and imagine that we have
+some gene set containing annotations in a GAF called "dataset_GAF.goa" in the home directory. To map these annotations, use
+the :func:`gocats.categorize_dataset` option:
+
+.. code:: bash
+
+   # Note that you need to use the GC_id_mapping.json_pickle file for this step
+   python3 ~/ARK.GOcats/gocats/gocats.py categorize_dataset ~/datasetGAF.goa ~/cell_locations_output/GC_id_mapping.json_pickle ~/mapped_dataset mapped_GAF.goa
+
+Here, we named the output directory "~/mapped_dataset" and we named the mapped GAF "mapped_GAF.goa". The mapped gaf and
+a list of unmapped genes will be stored in the output directory.
+
+Exploring Gene Ontology graph in a Python interpreter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First, navigate to the GOcats module directory within the project directory, open a Python 3.4+ interpreter, and import
+GOcats:
+
+.. code:: bash
+
+   cd ~/ARK.GOcats/gocats
+   python3
+
+.. code:: Python
+
+   >>> import gocats
+
+Next, create the graph object using :func:`gocats.build_graph_interpreter`. Since we have been looking at the
+cellular_component sub-ontology in this example, we can specify that we only want to look at that part of the graph with
+the supergraph_namespace option. Additionally we can filter the relationship types using the allowed_relationships
+option (only is_a, has_part, and part_of exist in cellular_component, so this is just for demonstration):
+
+.. code:: Python
+
+   >>> # May filter to GO sub-ontology or to a set of relationships.
+   >>> my_graph = gocats.build_graph_interpreter("~/go.obo", supergraph_namespace=cellular_component, allowed_relationships=["is_a", "has_part", "part_of"])
+   >>> full_graph = gocats.build_graph_interpreter("~/go.obo")
+
+The filtered graph (my_graph) and the full GO graph (full_graph) can now be explored.
+
+The graph object contains an **id_index** which allows one to access node objects by GO IDs like so:
+
+.. code:: Python
+
+   >>>my_node = my_graph.id_index['GO:0004567']
+
+It also contains a node_list and an edge_list.
+
+Edges and nodes in the graph are objects themselves.
+
+.. code:: Python
+
+   >>>print(my_node.name)
+
+Here is a list of some important graph, node, and edge data members and properties:
+
+**Graph**
+   - node_list: list of **node** objects in the graph.
+   - edge_list: list of **edge** objects in the graph.
+   - id_index: dictionary of node IDs that point to their respective **node** objects.
+   - vocab_index: dictionary listing every word used in the gene ontology, pointing to **node** objects those words can be found in.
+   - relationship_index: dictionary of relationships in the supergraph, pointing to their respective relationship objects.
+   - root_nodes: a set of root nodes of the supergraph.
+   - orphans: a set of nodes which have no parents.
+   - leaves: a set of nodes which have no children.
+
+**Node**
+   - id
+   - name
+   - definition
+   - namespace
+   - edges: a set of **edges** that connect the node.
+   - parent_node_set
+   - child_node_set
+   - descendants: a set of recursive graph children.
+   - ancestors: a set of recursive graph parents.
+
+**Edge**
+   - node_pair_id: tuple of IDs of the **nodes** connected by the edge.
+   - node_pair: a tuple of the **node objects** connected by the edge.
+   - relationship_id: the ID of the relationship type (i.e. the name of the relationship).
+   - relationship: the relationship object used to describe the edge
+   - parent_id
+   - parent_node
+   - child_id
+   - child_node
+   - forward_node: see :doc:`api`
+   - reverse_node: see :doc:`api`
+
+Plotting subgraphs in Cytoscape for visualization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Coming soon!
