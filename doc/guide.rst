@@ -23,16 +23,6 @@ Installation
 Install on Linux
 ----------------
 
-Dependency installation
-.......................
-
-GOcats requires JSONPickle and docopt:
-
-.. code:: bash
-
-   pip3 install docopt
-   pip3 install jsonpickle
-
 Package installation
 ....................
 
@@ -43,26 +33,26 @@ Make sure you have git_ installed:
    cd ~/
    git clone <PLACEHOLDER_URL>
 
-Install on Windows
-------------------
-Windows installation not yet available. Sorry about that.
-
 Dependencies
-~~~~~~~~~~~~
+............
 
 `GOcats` requires the following Python libraries:
 
    * docopt_ for creating the :mod:`gocats` command-line interface.
-      * To install docopt_, run the following:
-         .. code:: bash
-
-            pip3 install docopt  # on Linux
-
    * JSONPickle_ for saving Python objects in a JSON serializable form and outputting to a file.
-      * To install JSONPickle_, run the following:
-         .. code:: bash
 
-            pip3 install jsonpickle  # on Linux
+To install dependencies:
+
+.. code:: bash
+
+   pip3 install docopt
+   pip3 install jsonpickle
+
+Install on Windows
+------------------
+Windows installation not yet available. Sorry about that.
+
+
 
 Basic usage
 ~~~~~~~~~~~
@@ -78,11 +68,12 @@ Basic usage
 
       2. Download a Gene Ontology database obo_ file
 
-      3. To create mappings, run the GOcats command, :func:`gocats.create_subgraphs`:
+      3. To create mappings, run the GOcats command, :func:`gocats.create_subgraphs` in the ~/ARK.GOcats directory or
+      add the directory to the PYTHONPATH.
 
       .. code:: bash
 
-         python3 ~/ARK.GOcats/gocats <ontology_database_file> <keyword_file> <output_directory>
+         python3 -m gocats create_subdags <ontology_database_file> <keyword_file> <output_directory>
 
       4. Mappings can be found in your specified <output_directory>:
 
@@ -101,7 +92,7 @@ Basic usage
       .. code:: bash
 
          # NOTE: Use the GC_id_mapping.jsonpickle file.
-         python3 ~/ARK.GOcats/gocats <GAF_file> <term_mapping_file> <output_directory> <mapped_gaf_filename>
+         python3 -m gocats categorize_dataset <GAF_file> <term_mapping_file> <output_directory> <mapped_gaf_filename>
 
       3. The output GAF will have the specified <mapped_gaf_filename> in the <output_directory>
 
@@ -113,7 +104,7 @@ Basic usage
 
       .. code:: bash
 
-         cd ~/ARK.GOcats/gocats
+         cd ~/ARK.GOcats
          python3
 
       .. code:: Python

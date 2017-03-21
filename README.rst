@@ -12,8 +12,9 @@ Currently, the `GOcats` package can be used to:
      categories.
    * Explore the Gene Ontology graph within a Python interpreter.
 
-Links
-~~~~~
+Citation
+~~~~~~~~
+Please cite the GitHub repository until our manuscript is accepted for publication: PLACEHOLDER_URL
 
 Installation
 ~~~~~~~~~~~~
@@ -45,19 +46,20 @@ Make sure you have git_ installed:
 
 Install on Windows
 ------------------
-Windows installation not yet available. Sorry about that.
+Windows version not yet available; sorry about that.
 
 Quickstart
 ~~~~~~~~~~
 
 For instructions on how to format your keyword list and advanced argument usage, consult the tutorial, guide, and API
-documentation <PLACEHOLDER_URL>.
+documentation: <PLACEHOLDER_URL>.
 
-Subgraphs can be created from the command line:
+Subgraphs can be created from the command line. Either navigate to the ARK.GOcats directory or add the directory to your
+PYTHONPATH:
 
 .. code:: bash
 
-   python3 ~/ARK.GOcats/gocats/gocats.py create_subgraphs /path_to_ontology_file ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ~/Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
+   python3 -m gocats.py create_subgraphs /path_to_ontology_file ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ~/Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
 
 Mapping files can be found in the output directory:
 
@@ -68,7 +70,7 @@ GAF mappings can also be made from the command line:
 
 .. code:: bash
 
-   python3 ~/ARK.GOcats/gocats/gocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/GC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_GAF_NAME.goa
+   python3 -m gocats.py categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/GC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_GAF_NAME.goa
 
 
 License

@@ -2,7 +2,7 @@
 """
 A subgraph object of an OBOGraph object.
 """
-from dag import OboGraph, AbstractNode
+from .dag import OboGraph, AbstractNode
 import re
 
 
