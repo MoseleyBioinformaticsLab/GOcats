@@ -6,11 +6,8 @@ Modules
 ~~~~~~~
 The following modules are located in /ARK.GOcats/gocats.
 
-GOcats
-------
 .. automodule:: gocats
    :members:
-
 
 Directed Acyclic Graph (DAG)
 ----------------------------

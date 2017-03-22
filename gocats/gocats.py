@@ -1,7 +1,7 @@
 # !/usr/bin/python3
 """
-The GOcats Runner
-~~~~~~~~~~~~~~~~~
+The Gene Ontology Categories Suite (GOcats)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This module provides methods for the creation of directed acyclic concept subgraphs of Gene Ontology, along with methods
 for evaluating those subgraphs.

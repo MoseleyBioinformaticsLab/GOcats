@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The GOcats API Reference &#8212; GOcats 1.1.0 documentation</title>
+    <title>The GOcats API Reference &mdash; GOcats 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,15 +17,13 @@
         VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GOcats 1.1.0 documentation" href="index.html" />
     <link rel="next" title="User Guide" href="guide.html" />
     <link rel="prev" title="Welcome to GOcats’ documentation!" href="index.html" /> 
   </head>
@@ -53,10 +51,8 @@
 <div class="section" id="modules">
 <h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
 <p>The following modules are located in /ARK.GOcats/gocats.</p>
-<div class="section" id="module-gocats">
-<span id="gocats"></span><h3>GOcats<a class="headerlink" href="#module-gocats" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="the-gocats-runner">
-<h4>The GOcats Runner<a class="headerlink" href="#the-gocats-runner" title="Permalink to this headline">¶</a></h4>
+<span class="target" id="module-gocats"></span><div class="section" id="the-gene-ontology-categories-suite-gocats">
+<h3>The Gene Ontology Categories Suite (GOcats)<a class="headerlink" href="#the-gene-ontology-categories-suite-gocats" title="Permalink to this headline">¶</a></h3>
 <p>This module provides methods for the creation of directed acyclic concept subgraphs of Gene Ontology, along with methods
 for evaluating those subgraphs.</p>
 <dl class="function">
@@ -134,8 +130,8 @@ by a list of provided keywords. Each subgraph is processed into <code class="xre
 <li><strong>output_directory</strong> &#8211; The directory where results are stored.</li>
 <li><strong>--supergraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a supergraph sub-ontology to filter e.g. cellular_component.</li>
 <li><strong>--subgraph_namespace=&lt;None&gt;</strong> &#8211; OPTIONAL-Specify a subgraph sub-ontology to filter e.g. cellular_component.</li>
-<li><strong>--supergraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of].</li>
-<li><strong>--subgraph_relationships=</strong><strong>[</strong><strong></strong><strong>]</strong><strong></strong> &#8211; OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of].</li>
+<li><strong>--supergraph_relationships=[]</strong> &#8211; OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of].</li>
+<li><strong>--subgraph_relationships=[]</strong> &#8211; OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of].</li>
 <li><strong>--map_supersets</strong> &#8211; OPTIONAL-Allow subgraphs to subsume other subgraphs.</li>
 <li><strong>--output_termlist</strong> &#8211; OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results.</li>
 </ul>
@@ -169,7 +165,6 @@ by a list of provided keywords. Each subgraph is processed into <code class="xre
 </table>
 </dd></dl>
 
-</div>
 </div>
 <div class="section" id="module-dag">
 <span id="directed-acyclic-graph-dag"></span><h3>Directed Acyclic Graph (DAG)<a class="headerlink" href="#module-dag" title="Permalink to this headline">¶</a></h3>
@@ -1593,8 +1588,8 @@ and outputs the document into a file.</p>
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Eugene Hinderer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+        &copy; Copyright 2017, Eugene Hinderer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
     </div>
   </body>
 </html>
