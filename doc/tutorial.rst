@@ -37,13 +37,13 @@ Here is an example of what the file contents should look like (**do not include 
    +==============+==========================================+
    | mitochondria | mitochondria;mitochondrial;mitochondrion |
    +--------------+------------------------------------------+
-   |   Nucleus    | nucleus;nuclei;nuclear                   |
+   |   nucleus    | nucleus;nuclei;nuclear                   |
    +--------------+------------------------------------------+
    |   lysosome   | lysosome;lysosomal;lysosomes             |
    +--------------+------------------------------------------+
    |   vesicle    | vesicle;vesicles                         |
    +--------------+------------------------------------------+
-   |     ER       | endoplasmic;sarcoplasmic;reticulum       |
+   |     er       | endoplasmic;sarcoplasmic;reticulum       |
    +--------------+------------------------------------------+
    |    golgi     | golgi; golgi apparatus                   |
    +--------------+------------------------------------------+
@@ -72,7 +72,7 @@ Extract subgraphs and creating concept mappings
 
 This is where GOcats does the heavy lifting. We'll assume the GOcats repository was already cloned into the home
 directory (refer to :doc:`guide` for instructions on how to install GOcats). We can now use Python to run the
-:func:`gocats.create_subgraphs` function. We can also specify that we only want to parse the "cellular_component"
+:func:`gocats.gocats.create_subgraphs` function. We can also specify that we only want to parse the "cellular_component"
 sub-ontology of GO (the "supergraph namespace"), since we are only interested in concepts of this type. Although it is
 redundant, we can also play it safe and limit subgraph creation to only consider terms listed in "cellular_component" as
 well (the "subgraph namespace"). Navigate to the ARK.GOcats directory or add this directory to your PYTHONPATH and run
@@ -156,9 +156,9 @@ Using GOcats to map specific gene annotations in a GAF to custom categories
 
 With mapping files produced from the previous steps, it is possible to create a GAF with annotations mapped to the
 categories, or concepts, that we define. Let's consider our current "cell_locations" example and imagine that we have
-some gene set containing annotations in a GAF called "dataset_GAF.goa" in the home directory. To map these annotations, use
-the :func:`gocats.categorize_dataset` option. Navigate to the ARK.GOcats directory or add this directory to your
-PYTHONPATH and run the following:
+some gene set containing annotations in a GAF called "dataset_GAF.goa" in the home directory. To map these annotations,
+use the :func:`gocats.gocats.categorize_dataset` option. Navigate to the ARK.GOcats directory or add this directory to
+your PYTHONPATH and run the following:
 
 .. code:: bash
 
@@ -183,7 +183,7 @@ GOcats:
 
    >>> import gocats
 
-Next, create the graph object using :func:`gocats.build_graph_interpreter`. Since we have been looking at the
+Next, create the graph object using :func:`gocats.gocats.build_graph_interpreter`. Since we have been looking at the
 cellular_component sub-ontology in this example, we can specify that we only want to look at that part of the graph with
 the supergraph_namespace option. Additionally we can filter the relationship types using the allowed_relationships
 option (only is_a, has_part, and part_of exist in cellular_component, so this is just for demonstration):

@@ -61,9 +61,9 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
 
 
 def create_subgraphs(args):
-    """Creates a graph object of an ontology, processed into :class:`~gocats.dag.OboGraph` or to an object that
-    inherits from :class:`~gocats.dag.OboGraph`, and then extracts subgraphs which represent concepts that are defined
-    by a list of provided keywords. Each subgraph is processed into :class:`~gocats.subdag.SubGraph`.
+    """Creates a graph object of an ontology, processed into :class:`gocats.dag.OboGraph` or to an object that
+    inherits from :class:`gocats.dag.OboGraph`, and then extracts subgraphs which represent concepts that are defined
+    by a list of provided keywords. Each subgraph is processed into :class:`gocats.subdag.SubGraph`.
 
     :param database_file: Ontology database file.
     :param keyword_file: A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).
@@ -251,4 +251,3 @@ def categorize_dataset(args):
                 unmapped_genes.add(line[2])
     tools.write_out_gaf(mapped_gaf_array, os.path.join(output_directory, gaf_name))
     tools.list_to_file(os.path.join(output_directory, gaf_name + '_unmappedGenes'), unmapped_genes)
-

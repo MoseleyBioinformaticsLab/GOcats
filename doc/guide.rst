@@ -50,11 +50,17 @@ To install dependencies:
 
 Install on Windows
 ------------------
-Windows installation not yet available. Sorry about that.
+Windows version not yet available. Sorry about that.
 
 
 Basic usage
 ~~~~~~~~~~~
+To see command line arguments and options, navigate to the project directory and run the --help option:
+
+.. code:: bash
+
+   cd ~/ARK.GOcats
+   python3 -m gocats --help
 
 :mod:`gocats` can be used in the following ways:
 
@@ -67,8 +73,8 @@ Basic usage
 
       2. Download a Gene Ontology database obo_ file
 
-      3. To create mappings, run the GOcats command, :func:`gocats.create_subgraphs` in the ~/ARK.GOcats directory or
-      add the directory to the PYTHONPATH.
+      3. To create mappings, run the GOcats command, :func:`gocats.gocats.create_subgraphs` in the ~/ARK.GOcats
+      directory or add the directory to the PYTHONPATH.
 
       .. code:: bash
 
@@ -86,7 +92,7 @@ Basic usage
 
       1. Create mapping files as defined in the previous section.
 
-      2. Run the :func:`gocats.categorize_dataset` to map terms to their categories:
+      2. Run the :func:`gocats.gocats.categorize_dataset` to map terms to their categories:
 
       .. code:: bash
 
@@ -98,8 +104,7 @@ Basic usage
    * Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see :doc:`tutorial` for more
      information).
 
-      1. Navigate to the module directory within the project directory, open a Python 3.4+ interpreter, and import
-      GOcats:
+      1. Navigate to the project directory, open a Python 3.4+ interpreter, and import GOcats:
 
       .. code:: bash
 
@@ -110,7 +115,7 @@ Basic usage
 
          >>> import gocats
 
-      2. Create the graph object using :func:`gocats.build_graph_interpreter`:
+      2. Create the graph object using :func:`gocats.gocats.build_graph_interpreter`:
 
       .. code:: Python
 
