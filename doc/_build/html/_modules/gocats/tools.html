@@ -6,14 +6,14 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>tools &#8212; GOcats 1.1.0 documentation</title>
+    <title>gocats.tools &#8212; GOcats 1.1.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '../../',
         VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -21,28 +21,28 @@
         SOURCELINK_SUFFIX: '.txt'
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
-      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
           <span>GOcats 1.1.0 documentation</span></a></h1>
-        <h2 class="heading"><span>tools</span></h2>
+        <h2 class="heading"><span>gocats.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
-        <a class="uplink" href="../index.html">Contents</a>
+        <a class="uplink" href="../../index.html">Contents</a>
         </p>
 
       </div>
       <div class="content">
         
         
-  <h1>Source code for tools</h1><div class="highlight"><pre>
+  <h1>Source code for gocats.tools</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !/usr/bin/python3</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Functions for handling some file input and output and reformatting tasks in GOcats.</span>
@@ -57,7 +57,7 @@
 
 
 <span class="c1"># TODO: move to using JSON not JsonPickle and use sort_keys=True parameter to test outputs between runs</span>
-<div class="viewcode-block" id="json_save"><a class="viewcode-back" href="../api.html#tools.json_save">[docs]</a><span class="k">def</span> <span class="nf">json_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="json_save"><a class="viewcode-back" href="../../api.html#gocats.tools.json_save">[docs]</a><span class="k">def</span> <span class="nf">json_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Takes a Python object, converts it into a JSON serializable object (if it is not already), and saves it to a file</span>
 <span class="sd">    that is specified.</span>
 
@@ -85,7 +85,7 @@
         <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_text</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="jsonpickle_save"><a class="viewcode-back" href="../api.html#tools.jsonpickle_save">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="jsonpickle_save"><a class="viewcode-back" href="../../api.html#gocats.tools.jsonpickle_save">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_save</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Takes a Python object, converts it into a JsonPickle string, and writes it out to a file.</span>
 
 <span class="sd">    :param obj: A Python :py:obj:`obj`</span>
@@ -97,7 +97,7 @@
     <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="jsonpickle_load"><a class="viewcode-back" href="../api.html#tools.jsonpickle_load">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_load</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="jsonpickle_load"><a class="viewcode-back" href="../../api.html#gocats.tools.jsonpickle_load">[docs]</a><span class="k">def</span> <span class="nf">jsonpickle_load</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Takes a JsonPickle file and loads in the JsonPickle object into a Python object.</span>
 
 <span class="sd">    :param file_handle filename: A path to a JsonPickle file.</span>
@@ -108,7 +108,7 @@
     <span class="k">return</span> <span class="n">obj</span></div>
 
 
-<div class="viewcode-block" id="list_to_file"><a class="viewcode-back" href="../api.html#tools.list_to_file">[docs]</a><span class="k">def</span> <span class="nf">list_to_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="list_to_file"><a class="viewcode-back" href="../../api.html#gocats.tools.list_to_file">[docs]</a><span class="k">def</span> <span class="nf">list_to_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Makes a text document from a :py:obj:`list`  of data, with each line of the document being one item from the list</span>
 <span class="sd">     and outputs the document into a file.</span>
 
@@ -121,7 +121,7 @@
 
 
 <span class="c1"># Functions for handling Gene Annotation Files</span>
-<div class="viewcode-block" id="write_out_gaf"><a class="viewcode-back" href="../api.html#tools.write_out_gaf">[docs]</a><span class="k">def</span> <span class="nf">write_out_gaf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="write_out_gaf"><a class="viewcode-back" href="../../api.html#gocats.tools.write_out_gaf">[docs]</a><span class="k">def</span> <span class="nf">write_out_gaf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Writes out an object representing a Gene Annotation File (GAF) to a file.</span>
 
 <span class="sd">    :param list data: A :py:obj:`list` object representing a GAF. Each item in the list represents a row.</span>
@@ -133,7 +133,7 @@
             <span class="n">gafwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">line</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="parse_gaf"><a class="viewcode-back" href="../api.html#tools.parse_gaf">[docs]</a><span class="k">def</span> <span class="nf">parse_gaf</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_gaf"><a class="viewcode-back" href="../../api.html#gocats.tools.parse_gaf">[docs]</a><span class="k">def</span> <span class="nf">parse_gaf</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Converts a Gene Annotation File (GAF) into a :py:obj:`list` object where every item is a row from the GAF.</span>
 
 <span class="sd">    :param file_handle filename: Specify the location of the GAF.</span>
@@ -153,7 +153,7 @@
       <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
-        <a class="uplink" href="../index.html">Contents</a>
+        <a class="uplink" href="../../index.html">Contents</a>
         </p>
 
       </div>

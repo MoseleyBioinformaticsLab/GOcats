@@ -6,43 +6,43 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ontologyparser &#8212; GOcats 1.0.0 documentation</title>
+    <title>gocats.ontologyparser &#8212; GOcats 1.1.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0.0',
+        URL_ROOT:    '../../',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
         SOURCELINK_SUFFIX: '.txt'
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
-      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
-          <span>GOcats 1.0.0 documentation</span></a></h1>
-        <h2 class="heading"><span>ontologyparser</span></h2>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>GOcats 1.1.0 documentation</span></a></h1>
+        <h2 class="heading"><span>gocats.ontologyparser</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
       
         <p>
-        <a class="uplink" href="../index.html">Contents</a>
+        <a class="uplink" href="../../index.html">Contents</a>
         </p>
 
       </div>
       <div class="content">
         
         
-  <h1>Source code for ontologyparser</h1><div class="highlight"><pre>
+  <h1>Source code for gocats.ontologyparser</h1><div class="highlight"><pre>
 <span></span><span class="c1"># !/usr/bin/python3</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">A parser which reads ontologies in the OBO format and calls appropriate graph objects to store information in a graph</span>
@@ -50,16 +50,16 @@
 <span class="sd">any subtle differences among ontologies.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">dag</span> <span class="k">import</span> <span class="n">AbstractEdge</span><span class="p">,</span> <span class="n">DirectionalRelationship</span>
-<span class="kn">from</span> <span class="nn">godag</span> <span class="k">import</span> <span class="n">GoGraphNode</span>
+<span class="kn">from</span> <span class="nn">.dag</span> <span class="k">import</span> <span class="n">AbstractEdge</span><span class="p">,</span> <span class="n">DirectionalRelationship</span>
+<span class="kn">from</span> <span class="nn">.godag</span> <span class="k">import</span> <span class="n">GoGraphNode</span>
 
 
-<div class="viewcode-block" id="OboParser"><a class="viewcode-back" href="../api.html#ontologyparser.OboParser">[docs]</a><span class="k">class</span> <span class="nc">OboParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="OboParser"><a class="viewcode-back" href="../../api.html#gocats.ontologyparser.OboParser">[docs]</a><span class="k">class</span> <span class="nc">OboParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;A scaffolding for parsing OBO formatted ontologies. Contains regular expressions for the basic stanzas and</span>
 <span class="sd">    information pertinent for creating a graph object of an ontology.&quot;&quot;&quot;</span>
     
-<div class="viewcode-block" id="OboParser.__init__"><a class="viewcode-back" href="../api.html#ontologyparser.OboParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OboParser.__init__"><a class="viewcode-back" href="../../api.html#gocats.ontologyparser.OboParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;`OboParser` initializer. Contains Regular Expressions for identifying crucial information from OBO formatted</span>
 <span class="sd">        ontologies.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -81,31 +81,31 @@
         <span class="c1"># self.subset = re.compile(&#39;^subset:&#39;)</span>
 
 
-<div class="viewcode-block" id="GoParser"><a class="viewcode-back" href="../api.html#ontologyparser.GoParser">[docs]</a><span class="k">class</span> <span class="nc">GoParser</span><span class="p">(</span><span class="n">OboParser</span><span class="p">):</span>
+<div class="viewcode-block" id="GoParser"><a class="viewcode-back" href="../../api.html#gocats.ontologyparser.GoParser">[docs]</a><span class="k">class</span> <span class="nc">GoParser</span><span class="p">(</span><span class="n">OboParser</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;An ontology parser specific to Gene Ontology&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GoParser.__init__"><a class="viewcode-back" href="../api.html#ontologyparser.GoParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_file</span><span class="p">,</span> <span class="n">go_graph</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therin to a</span>
-<span class="sd">        :class:`godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO</span>
-<span class="sd">        relationships.</span>
+<div class="viewcode-block" id="GoParser.__init__"><a class="viewcode-back" href="../../api.html#gocats.ontologyparser.GoParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_file</span><span class="p">,</span> <span class="n">go_graph</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therein to a</span>
+<span class="sd">        :class:`gocats.godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all</span>
+<span class="sd">        GO relationships.</span>
 
 <span class="sd">        :param file_handle database_file: Specify the location of a Gene Ontology .obo file.</span>
-<span class="sd">        :param go_graph: :class:`godag.GoGraph` object.</span>
+<span class="sd">        :param go_graph: :class:`gocats.godag.GoGraph` object.</span>
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: :py:obj:`None`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database_file</span> <span class="o">=</span> <span class="n">database_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">go_graph</span> <span class="o">=</span> <span class="n">go_graph</span>
-        <span class="c1"># 5 types of relationships: scoping, scaling (grouped with scoping for now), spaciotemporal, active, equivalance (not present here), and other.</span>
-        <span class="c1"># 1 means that the relationship directionality is converntional, 0 means that the semantic directionaly points from node 2 to node1. </span>
+        <span class="c1"># 5 types of relationships: scoping, scaling (grouped with scoping for now), spatiotemporal, active, equivalence (not present here), and other.</span>
+        <span class="c1"># 1 means that the relationship directionality is conventional, 0 means that the semantic directionality points from node 2 to node1.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">relationship_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ends_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;happens_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;has_part&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                                      <span class="s2">&quot;negatively_regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;never_in_taxon&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;other&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;occurs_in&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
                                      <span class="s2">&quot;part_of&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;positively_regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;regulates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
                                      <span class="s2">&quot;starts_during&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;spatiotemporal&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;is_a&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;scoping&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span></div>
 
-<div class="viewcode-block" id="GoParser.parse"><a class="viewcode-back" href="../api.html#ontologyparser.GoParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoParser.parse"><a class="viewcode-back" href="../../api.html#gocats.ontologyparser.GoParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parses the ontology database file and accesses the ontology graph object to add information found in the</span>
 <span class="sd">        database. Once all information is added, this function calls the graph&#39;s instantiate_valid_edges function to</span>
 <span class="sd">        connect all nodes in the graph by their edges.</span>
@@ -196,7 +196,7 @@
       <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
         <p>
-        <a class="uplink" href="../index.html">Contents</a>
+        <a class="uplink" href="../../index.html">Contents</a>
         </p>
 
       </div>

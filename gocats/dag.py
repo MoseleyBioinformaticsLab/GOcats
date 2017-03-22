@@ -41,10 +41,10 @@ class OboGraph(object):
 
     @property
     def orphans(self):
-        """:py:obj:`property` defining a set of nodes in the graph which have no parents. When the graph is modified, calls
-        :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
+        """:py:obj:`property` defining a set of nodes in the graph which have no parents. When the graph is modified,
+        calls :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
 
-        :return: Set of 'orphan' :class:`dag.AbstractNode` objects.
+        :return: Set of 'orphan' :class:`gocats.dag.AbstractNode` objects.
         :rtype: :py:class:`set`
         """
         if self._modified:
@@ -53,10 +53,10 @@ class OboGraph(object):
 
     @property
     def leaves(self):
-        """:py:obj:`property` defining a set of nodes in the graph which have no children. When the graph is modified, calls
-        :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
+        """:py:obj:`property` defining a set of nodes in the graph which have no children. When the graph is modified,
+        calls :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.
 
-        :return: Set of 'leaf' :class:`dag.AbstractNode` objects.
+        :return: Set of 'leaf' :class:`gocats.dag.AbstractNode` objects.
         :rtype: :py:class:`set`
         """
         if self._modified:
@@ -67,7 +67,7 @@ class OboGraph(object):
         """Defines condition of a valid node. Node is valid if it is not obsolete and is contained within the given
         ontology namespace constraint.
 
-        :param node: A :class:`dag.AbstractNode` object
+        :param node: A :class:`gocats.dag.AbstractNode` object
         :return: True if node is valid, False otherwise
         :rtype: :py:obj:`True` or :py:obj:`False`
         """
@@ -79,7 +79,7 @@ class OboGraph(object):
         """Defines condition of a valid edge. Edge is valid if it is within the list of allowed edges and connects two
         nodes that are both contained in the graph in question.
 
-        :param edge: A :class:`dag.AbstractEdge` object
+        :param edge: A :class:`gocats.dag.AbstractEdge` object
         :return: True if node is valid, False otherwise
         :rtype: :py:obj:`True` or :py:obj:`False`
         """
@@ -101,7 +101,7 @@ class OboGraph(object):
         """Adds a node object to the graph, adds an object pointer to the vocabulary index to reference nodes to every
         word in the node name and definition. Sets modification state to :py:obj:`True`.
 
-        :param node: A :class:`dag.AbstractNode` object.
+        :param node: A :class:`gocats.dag.AbstractNode` object.
         :return: None
         :rtype: :py:obj:`None`
         """
@@ -118,7 +118,7 @@ class OboGraph(object):
         """Removes a node from the graph and deletes node references from all entries in the vocabulary index. Sets
         modification state to :py:obj:`True`.
 
-        :param node: A :class:`dag.AbstractNode` object.
+        :param node: A :class:`gocats.dag.AbstractNode` object.
         :return: None
         :rtype: :py:obj:`None`
         """
@@ -149,7 +149,7 @@ class OboGraph(object):
         """Adds an edge object to the graph, and counts the edge relationship type. Sets modification state to
         :py:obj:`True`.
 
-        :param edge: A :class:`dag.AbstractEdge` object.
+        :param edge: A :class:`gocats.dag.AbstractEdge` object.
         :return: None
         :rtype: :py:obj:`None`
         """
@@ -164,7 +164,7 @@ class OboGraph(object):
         """Removes an edge object from the graph, and removes references to that edge from the node objects involved.
         Sets modification state to :py:obj:`True`.
 
-        :param edge: A :class:`dag.AbstractEdge` object.
+        :param edge: A :class:`gocats.dag.AbstractEdge` object.
         :return: None
         :rtype: :py:obj:`None`
         """
@@ -174,10 +174,10 @@ class OboGraph(object):
         self._modified = True
 
     def add_relationship(self, relationship):
-        """Adds a :class:`dag.AbstractRelationship` object to the graph's relationship index, referenced by
+        """Adds a :class:`gocats.dag.AbstractRelationship` object to the graph's relationship index, referenced by
         that relationships ID. Sets modification state to :py:obj:`True`.
 
-        :param relationship: A :class:`dag.AbstractRelationship` object.
+        :param relationship: A :class:`gocats.dag.AbstractRelationship` object.
         :return: None
         :rtype: :py:obj:`None`
         """
@@ -186,8 +186,8 @@ class OboGraph(object):
 
     def instantiate_valid_edges(self):
         """Add all edge references to their respective nodes and vice versa if both nodes of the edge are in the graph.
-        This is carried out by :func:`edge.connect_nodes`. Also adds :class:`dag.AbstractRelationship` object
-        reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets
+        This is carried out by :func:`AbstractEdge.connect_nodes`. Also adds :class:`gocats.dag.AbstractRelationship`
+        object reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets
         modification state to :py:obj:`True`.
 
         :return: None
@@ -208,7 +208,7 @@ class OboGraph(object):
         """Returns an integer representing how many nodes are between the given node and the root node of the graph
         (depth level).
 
-        :param sample_node: A :class:`dag.AbstractNode` object.
+        :param sample_node: A :class:`gocats.dag.AbstractNode` object.
         :return: Depth level.
         :rtype: :py:obj:`int`
         """
@@ -228,8 +228,8 @@ class OboGraph(object):
         """Returns a list of node objects that contain vocabulary matching the keywords provided in the search string
         list. Nodes are selected by searching through the vocablary index.
 
-        :param search_string_list: A :py:obj:`list` of search strings provided in the keyword_file provided to :func:`gocats.create_subgraphs`.
-        :return: A list of :class:`dag.AbstractNode` objects.
+        :param search_string_list: A :py:obj:`list` of search strings provided in the keyword_file provided to :func:`gocats.gocats.create_subgraphs`.
+        :return: A list of :class:`gocats.dag.AbstractNode` objects.
         :rtype: :py:obj:`list`
         """
         search_string_list_words = [re.findall(self.word_split, word) for word in search_string_list]
@@ -243,7 +243,7 @@ class OboGraph(object):
         """Returns a list of edges in the graph that connect the nodes provided in the filtered nodes list.
 
         :param filtered_nodes: List of filtered nodes provided by :func:`filter_nodes`.
-        :return: A list of :class:`dag.AbstractEdge` objects.
+        :return: A list of :class:`gocats.dag.AbstractEdge` objects.
         :rtype: :py:obj:`list`
         """
         filtered_edges = [edge for edge in self.edge_list if edge.parent_node in filtered_nodes and edge.child_node in filtered_nodes]
@@ -255,9 +255,9 @@ class OboGraph(object):
         """Returns a set of nodes that occur along all paths between the start node and the end node. If no paths exist,
         an empty set is returned.
 
-        :param start_node: :class:`dag.AbstractNode` object to start the paths.
-        :param end_node: :class:`dag.AbstractNode` object to end the paths.
-        :return: A set of :class:`dag.AbstractNode` objects if there is at least one path between the parameters, an empty set otherwise.
+        :param start_node: :class:`gocats.dag.AbstractNode` object to start the paths.
+        :param end_node: :class:`gocats.dag.AbstractNode` object to end the paths.
+        :return: A set of :class:`gocats.dag.AbstractNode` objects if there is at least one path between the parameters, an empty set otherwise.
         :rtype: :py:obj:`set`
         """
         if start_node.ancestors and end_node.descendants:
@@ -268,8 +268,8 @@ class OboGraph(object):
 
 class AbstractNode(object):
 
-    """A node contaning all basic properties of an OBO node. The parsing object, :class:`ontologyparser.OboParser`
-    currently has direct access to datamembers (id, name, definition, namespace, edges, and obsolete) so that
+    """A node containing all basic properties of an OBO node. The parsing object, :class:`gocats.ontologyparser.OboParser`
+    currently has direct access to data members (id, name, definition, namespace, edges, and obsolete) so that
     information from the database file can be added to the object.
     """
     
@@ -291,11 +291,11 @@ class AbstractNode(object):
         
     @property
     def descendants(self):
-        """:py:obj:`property` defining a set of nodes in the graph that are recusively reverse of a node with a
-        scoping-type relationship. When the node is modified, calls :func:`_update_nodes` to repopulate the sets of
-        descendents and ancestors. This represents a "lazy" evaluation of node descendents.
+        """:py:obj:`property` defining a set of nodes in the graph that are recursively reverse of a node with a
+        scoping-type relationship. When the node is modified, calls :func:`gocats.dag.AbstractNode._update_node` to
+        repopulate the sets of descendants and ancestors. This represents a "lazy" evaluation of node descendants.
 
-        :return: Set of :class:`dag.AbstractNode` objects
+        :return: Set of :class:`gocats.dag.AbstractNode` objects
         :rtype: :py:class:`set`
         """
         if self._modified:
@@ -304,11 +304,11 @@ class AbstractNode(object):
 
     @property
     def ancestors(self):
-        """:py:obj:`property` defining a set of nodes in the graph that are recusively forward of a node with a
-        scoping-type relationship. When the node is modified, calls :func:`_update_nodes` to repopulate the sets of
-        descendents and ancestors. This represents a "lazy" evaluation of node ancestors.
+        """:py:obj:`property` defining a set of nodes in the graph that are recursively forward of a node with a
+        scoping-type relationship. When the node is modified, calls :func:`gocats.dag.AbstractNode._update_node` to
+        repopulate the sets of descendants and ancestors. This represents a "lazy" evaluation of node ancestors.
 
-        :return: Set of :class:`dag.AbstractNode` objects
+        :return: Set of :class:`gocats.dag.AbstractNode` objects
         :rtype: :py:class:`set`
         """
         if self._modified:
@@ -316,7 +316,7 @@ class AbstractNode(object):
         return self._ancestors
     
     def _update_node(self):
-        """Repopulates ancestor and descendent sets for a node. Sets modification state to :py:obj:`True`.
+        """Repopulates ancestor and descendant sets for a node. Sets modification state to :py:obj:`True`.
 
         :return: None
         :rtype: :py:obj:`None`
@@ -326,9 +326,9 @@ class AbstractNode(object):
         self._modified = False
 
     def add_edge(self, edge, allowed_relationships):
-        """Adds a given :class:`dag.AbstractEdge` to a each :class:`dag.AbstractNode` objects that the edge conects.
-        If there is a filter for the types of relationshpis allowed, edges with non-allowed relationship types are not
-        processed. Sets modification state to :py:obj:`True`.
+        """Adds a given :class:`gocats.dag.AbstractEdge` to a each :class:`gocats.dag.AbstractNode` objects that the
+        edge connects. If there is a filter for the types of relationships allowed, edges with non-allowed relationship
+        types are not processed. Sets modification state to :py:obj:`True`.
 
         :return: None
         :rtype: :py:obj:`None`
@@ -349,8 +349,8 @@ class AbstractNode(object):
         self._modified = True
 
     def remove_edge(self, edge):
-        """Removes a given :class:`dag.AbstractEdge` the :class:`dag.AbstractNode` object. Also removes parent or child
-        node references that the edge referenced. Sets modification state to :py:obj:`True`.
+        """Removes a given :class:`gocats.dag.AbstractEdge` the :class:`gocats.dag.AbstractNode` object. Also removes
+        parent or child node references that the edge referenced. Sets modification state to :py:obj:`True`.
 
         :return: None
         :rtype: :py:obj:`None`
@@ -363,9 +363,9 @@ class AbstractNode(object):
         self._modified = True
 
     def _update_descendants(self):
-        """Used for the lazy evaluation of graph descendents of the current :class:`dag.AbstractNode` object. Creates
-        internal :py:obj:`set` variable, descendant_set. Iterates through node children until the bottom of the graph is
-        reached. The descendant_set is a set of all nodes across all paths encountered from the current node.
+        """Used for the lazy evaluation of graph descendants of the current :class:`gocats.dag.AbstractNode` object.
+        Creates internal :py:obj:`set` variable, descendant_set. Iterates through node children until the bottom of the
+        graph is reached. The descendant_set is a set of all nodes across all paths encountered from the current node.
 
         :return: None
         :rtype: :py:obj:`None`
@@ -383,9 +383,9 @@ class AbstractNode(object):
         self._descendants = descendant_set
 
     def _update_ancestors(self):
-        """Used for the lazy evaluation of graph ancestors of the current :class:`dag.AbstractNode` object. Creates
-        internal :py:obj:`set` variable, ancestors_set. Iterates through node parents until the top of the graph is
-        reached. The ancestors_set is a set of all nodes across all paths encountered from the current node.
+        """Used for the lazy evaluation of graph ancestors of the current :class:`gocats.dag.AbstractNode` object.
+        Creates internal :py:obj:`set` variable, ancestors_set. Iterates through node parents until the top of the graph
+        is reached. The ancestors_set is a set of all nodes across all paths encountered from the current node.
 
         :return: None
         :rtype: :py:obj:`None`
@@ -410,13 +410,13 @@ class AbstractEdge(object):
     """
     
     def __init__(self, node1_id, node2_id, relationship_id, node_pair=None):
-        """`AbstractEdge` initializer. Node pair refers to a :py:obj:`tuple` of :class:`dag.AbstractNode` objects that are
+        """`AbstractEdge` initializer. Node pair refers to a :py:obj:`tuple` of :class:`gocats.dag.AbstractNode` objects that are
         connected by the edge. Defaults to :py:obj:`None` and is later populated.
 
         :param str node1_id: The ID of the first term referenced from the ontology file's relationship line.
         :param str node2_id: The ID of the second term referenced from the ontology file's relationship line.
         :param str relationship_id: The ID of the relationship in the ontology file's relationship line.
-        :param tuple node_pair: Defalut-:py:obj:`None`, provide a :py:obj:`tuple` containing two :class:`dag.AbstractNode` objects if they are already created and able to be referenced.
+        :param tuple node_pair: Default-:py:obj:`None`, provide a :py:obj:`tuple` containing two :class:`gocats.dag.AbstractNode` objects if they are already created and able to be referenced.
         """
         self.node_pair_id = (node1_id, node2_id)
         self.node_pair = node_pair
@@ -425,7 +425,8 @@ class AbstractEdge(object):
 
     @property
     def parent_id(self):
-        """:py:obj:`property` defining the ID of the node forward of the current :class:`dag.AbstractEdge` object.
+        """:py:obj:`property` defining the ID of the node forward of the current :class:`gocats.dag.AbstractEdge`
+        object.
 
         :return: :py:obj:`str` ID of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, :py:obj:`None` otherwise.
         :rtype: :py:obj:`str` or :py:obj:`None`
@@ -436,7 +437,7 @@ class AbstractEdge(object):
 
     @property
     def child_id(self):
-        """:py:obj:`property` defining the ID of the node reverse of the current :class:`dag.AbstractEdge` object.
+        """:py:obj:`property` defining the ID of the node reverse of the current :class:`gocats.dag.AbstractEdge` object.
 
         :return: :py:obj:`str` ID of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, :py:obj:`None` otherwise.
         :rtype: :py:obj:`str` or :py:obj:`None`
@@ -447,11 +448,11 @@ class AbstractEdge(object):
 
     @property
     def forward_node(self):
-        """:py:obj:`property` defining the :class:`dag.AbstractNode` object forward of the current
-        :class:`dag.AbstractEdge` object.
+        """:py:obj:`property` defining the :class:`gocats.dag.AbstractNode` object forward of the current
+        :class:`gocats.dag.AbstractEdge` object.
 
-        :return: :class:`dag.AbstractNode` object of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
-        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        :return: :class:`gocats.dag.AbstractNode` object of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`gocats.dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`
         """
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.forward(self.node_pair) 
@@ -459,11 +460,11 @@ class AbstractEdge(object):
 
     @property
     def reverse_node(self):
-        """:py:obj:`property` defining the :class:`dag.AbstractNode` object reverse of the current
-        :class:`dag.AbstractEdge` object.
+        """:py:obj:`property` defining the :class:`gocats.dag.AbstractNode` object reverse of the current
+        :class:`gocats.dag.AbstractEdge` object.
 
-        :return: :class:`dag.AbstractNode` object of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
-        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        :return: :class:`gocats.dag.AbstractNode` object of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`gocats.dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`
         """
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
             return self.relationship.reverse(self.node_pair) 
@@ -471,12 +472,12 @@ class AbstractEdge(object):
     
     @property
     def parent_node(self):
-        """:py:obj:`property` defining the :class:`dag.AbstractNode` object forward of the current
-        :class:`dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although this
-        is **not yet specified**.
+        """:py:obj:`property` defining the :class:`gocats.dag.AbstractNode` object forward of the current
+        :class:`gocats.dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although
+        this is **not yet specified**.
 
-        :return: :class:`dag.AbstractNode` object of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
-        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        :return: :class:`gocats.dag.AbstractNode` object of the forward node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`gocats.dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`
         """
         if self.relationship:
             return self.relationship.forward(self.node_pair)
@@ -484,12 +485,12 @@ class AbstractEdge(object):
 
     @property
     def child_node(self):
-        """:py:obj:`property` defining the :class:`dag.AbstractNode` object reverse of the current
-        :class:`dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although this
-        is **not yet specified**.
+        """:py:obj:`property` defining the :class:`gocats.dag.AbstractNode` object reverse of the current
+        :class:`gocats.dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although
+        this is **not yet specified**.
 
-        :return: :class:`dag.AbstractNode` object of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`dag.DirectionalRelationship` :py:obj:`None` otherwise.
-        :rtype: :class:`dag.AbstractNode` or :py:obj:`None`
+        :return: :class:`gocats.dag.AbstractNode` object of the reverse node in the node_pair associated with the edge if the edge's relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`gocats.dag.DirectionalRelationship` :py:obj:`None` otherwise.
+        :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`
         """
         if self.relationship:
             return self.relationship.reverse(self.node_pair) 
@@ -542,8 +543,8 @@ class AbstractEdge(object):
         return
 
     def connect_nodes(self, node_pair, allowed_relationships):
-        """Adds the current edge object to the :class:`dag.AbstractNode` objects that are connected by the edge.
-        Populates the node_pair with :class:`dag.AbstractNode` objects.
+        """Adds the current edge object to the :class:`gocats.dag.AbstractNode` objects that are connected by the edge.
+        Populates the node_pair with :class:`gocats.dag.AbstractNode` objects.
 
         :return: None
         :rtype: :py:obj:`None`
@@ -556,7 +557,8 @@ class AbstractEdge(object):
 class AbstractRelationship(object):
 
     """A relationship as defined by a [typedef] stanza in an OBO ontology and augmented by GOcats to better interpret
-    semantic correspondence."""
+    semantic correspondence.
+    """
 
     def __init__(self):
         """`AbstractRelationship` initializer.
@@ -570,7 +572,8 @@ class DirectionalRelationship(AbstractRelationship):
 
     """A singly-directional relationship edge connecting two nodes in the graph. The two nodes are designated 'forward'
     and 'reverse.' The 'forward' node semantically succeeds the 'reverse' node in a way that depends on the context of
-    the type of relationship describing the edge to which it is applied."""
+    the type of relationship describing the edge to which it is applied.
+    """
 
     def __init__(self):
         """`DirectionalRelationship` initializer.
@@ -584,8 +587,8 @@ class DirectionalRelationship(AbstractRelationship):
         """Returns the forward node in a node pair that semantically succeeds the other and is independent of the
         directionality of the edge. Default position is the second position [1].
 
-        :param tuple pair: A pair of :class:`dag.AbstractNode` objects.
-        :return: The forward :class:`dag.AbstractNode` object as determined by the pre-defined semantic directionality of the relationship.
+        :param tuple pair: A pair of :class:`gocats.dag.AbstractNode` objects.
+        :return: The forward :class:`gocats.dag.AbstractNode` object as determined by the pre-defined semantic directionality of the relationship.
         """
         return pair[self.direction]
 
@@ -593,15 +596,16 @@ class DirectionalRelationship(AbstractRelationship):
         """Returns the reverse node in a node pair that semantically precedes the other and is independent of the
         directionality of the edge. Default position is the second position [1].
 
-        :param tuple pair: A pair of :class:`dag.AbstractNode` objects.
-        :return: The reverse :class:`dag.AbstractNode` object as determined by the pre-defined semantic directionality of the relationship.
+        :param tuple pair: A pair of :class:`gocats.dag.AbstractNode` objects.
+        :return: The reverse :class:`gocats.dag.AbstractNode` object as determined by the pre-defined semantic directionality of the relationship.
         """
         return pair[(self.direction+1) % 2]
 
 
 class NonDirectionalRelationship(AbstractRelationship):
 
-    """A non-directional relationship whose edge directionality is either non-existant or semantically irrelevant."""
+    """A non-directional relationship whose edge directionality is either non-existent or semantically irrelevant.
+    """
     
     def __init__(self):
         """`NonDirectionalRelationship` initializer.

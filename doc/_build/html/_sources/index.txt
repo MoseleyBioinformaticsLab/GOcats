@@ -11,7 +11,8 @@ Welcome to GOcats' documentation!
    :caption: Contents:
 
    api
-
+   guide
+   tutorial
 
 Indices and tables
 ==================
