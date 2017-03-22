@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>User Guide &#8212; GOcats 1.1.0 documentation</title>
+    <title>User Guide &mdash; GOcats 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,15 +17,13 @@
         VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GOcats 1.1.0 documentation" href="index.html" />
     <link rel="next" title="The GOcats Tutorial" href="tutorial.html" />
     <link rel="prev" title="The GOcats API Reference" href="api.html" /> 
   </head>
@@ -75,8 +73,8 @@ categories.</li>
 <div class="section" id="package-installation">
 <h4>Package installation<a class="headerlink" href="#package-installation" title="Permalink to this headline">¶</a></h4>
 <p>Make sure you have <a class="reference external" href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/">git</a> installed:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span>
-<span class="n">git</span> <span class="n">clone</span> <span class="o">&lt;</span><span class="n">PLACEHOLDER_URL</span><span class="o">&gt;</span>
+<div class="code bash highlight-python"><div class="highlight"><pre>cd ~/
+git clone &lt;PLACEHOLDER_URL&gt;
 </pre></div>
 </div>
 </div>
@@ -85,13 +83,13 @@ categories.</li>
 <p><cite>GOcats</cite> requires the following Python libraries:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference external" href="https://github.com/docopt/docopt">docopt</a> for creating the <code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code> command-line interface.</li>
+<li><a class="reference external" href="https://github.com/docopt/docopt">docopt</a> for creating the <a class="reference internal" href="api.html#module-gocats" title="gocats"><code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code></a> command-line interface.</li>
 <li><a class="reference external" href="https://github.com/jsonpickle/jsonpickle">JSONPickle</a> for saving Python objects in a JSON serializable form and outputting to a file.</li>
 </ul>
 </div></blockquote>
 <p>To install dependencies:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">docopt</span>
-<span class="n">pip3</span> <span class="n">install</span> <span class="n">jsonpickle</span>
+<div class="code bash highlight-python"><div class="highlight"><pre>pip3 install docopt
+pip3 install jsonpickle
 </pre></div>
 </div>
 </div>
@@ -103,7 +101,7 @@ categories.</li>
 </div>
 <div class="section" id="basic-usage">
 <h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
-<p><code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code> can be used in the following ways:</p>
+<p><a class="reference internal" href="api.html#module-gocats" title="gocats"><code class="xref py py-mod docutils literal"><span class="pre">gocats</span></code></a> can be used in the following ways:</p>
 <blockquote>
 <div><ul>
 <li><p class="first">As a method to extract subgraphs of Gene Ontology that represent user-defined concepts and create mappings between
@@ -111,13 +109,13 @@ high level concepts and their subgraph content terms.</p>
 <blockquote>
 <div><p>1. Create a CSV file, where column 1 is the name of the concept category (this can be anything) and
 column 2 is a list of keywords/phrases delineating that concept (separated by semicolons). See
-<a class="reference internal" href="tutorial.html"><span class="doc">The GOcats Tutorial</span></a> for more information.</p>
+<a class="reference internal" href="tutorial.html"><em>The GOcats Tutorial</em></a> for more information.</p>
 <ol class="arabic simple" start="2">
 <li>Download a Gene Ontology database <a class="reference external" href="http://www.geneontology.org/page/download-ontology">obo</a> file</li>
 </ol>
-<p>3. To create mappings, run the GOcats command, <code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code> in the ~/ARK.GOcats directory or
+<p>3. To create mappings, run the GOcats command, <a class="reference internal" href="api.html#gocats.create_subgraphs" title="gocats.create_subgraphs"><code class="xref py py-func docutils literal"><span class="pre">gocats.create_subgraphs()</span></code></a> in the ~/ARK.GOcats directory or
 add the directory to the PYTHONPATH.</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">gocats</span> <span class="n">create_subdags</span> <span class="o">&lt;</span><span class="n">ontology_database_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">keyword_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span>
+<div class="code bash highlight-python"><div class="highlight"><pre>python3 -m gocats create_subdags &lt;ontology_database_file&gt; &lt;keyword_file&gt; &lt;output_directory&gt;
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
@@ -135,10 +133,10 @@ list of category root terms as values.</li>
 <blockquote>
 <div><ol class="arabic simple">
 <li>Create mapping files as defined in the previous section.</li>
-<li>Run the <code class="xref py py-func docutils literal"><span class="pre">gocats.categorize_dataset()</span></code> to map terms to their categories:</li>
+<li>Run the <a class="reference internal" href="api.html#gocats.categorize_dataset" title="gocats.categorize_dataset"><code class="xref py py-func docutils literal"><span class="pre">gocats.categorize_dataset()</span></code></a> to map terms to their categories:</li>
 </ol>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="c1"># NOTE: Use the GC_id_mapping.jsonpickle file.</span>
-<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">gocats</span> <span class="n">categorize_dataset</span> <span class="o">&lt;</span><span class="n">GAF_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">term_mapping_file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_directory</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">mapped_gaf_filename</span><span class="o">&gt;</span>
+<div class="code bash highlight-python"><div class="highlight"><pre># NOTE: Use the GC_id_mapping.jsonpickle file.
+python3 -m gocats categorize_dataset &lt;GAF_file&gt; &lt;term_mapping_file&gt; &lt;output_directory&gt; &lt;mapped_gaf_filename&gt;
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
@@ -146,28 +144,28 @@ list of category root terms as values.</li>
 </ol>
 </div></blockquote>
 </li>
-<li><p class="first">Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see <a class="reference internal" href="tutorial.html"><span class="doc">The GOcats Tutorial</span></a> for more
+<li><p class="first">Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see <a class="reference internal" href="tutorial.html"><em>The GOcats Tutorial</em></a> for more
 information).</p>
 <blockquote>
 <div><p>1. Navigate to the module directory within the project directory, open a Python 3.4+ interpreter, and import
 GOcats:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">ARK</span><span class="o">.</span><span class="n">GOcats</span>
-<span class="n">python3</span>
+<div class="code bash highlight-python"><div class="highlight"><pre>cd ~/ARK.GOcats
+python3
 </pre></div>
 </div>
-<div class="code Python highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gocats</span>
+<div class="code Python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gocats</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Create the graph object using <code class="xref py py-func docutils literal"><span class="pre">gocats.build_graph_interpreter()</span></code>:</li>
+<li>Create the graph object using <a class="reference internal" href="api.html#gocats.build_graph_interpreter" title="gocats.build_graph_interpreter"><code class="xref py py-func docutils literal"><span class="pre">gocats.build_graph_interpreter()</span></code></a>:</li>
 </ol>
-<div class="code Python highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># May filter to GO sub-ontology or to a set of relationships.</span>
+<div class="code Python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># May filter to GO sub-ontology or to a set of relationships.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">gocats</span><span class="o">.</span><span class="n">build_graph_interpreter</span><span class="p">(</span><span class="s2">&quot;path_to_database_file&quot;</span><span class="p">)</span>
 
 <span class="go">You may now access all properties of the Gene Ontology graph object. Here are a couple of examples:</span>
 </pre></div>
 </div>
-<div class="code Python highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># See the descendants of a term node, GO:0006306</span>
+<div class="code Python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c1"># See the descendants of a term node, GO:0006306</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">descendant_set</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">id_index</span><span class="p">[</span><span class="s1">&#39;GO:0006306&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">descendants</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">descendant_set</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Access all graph leaf nodes</span>
@@ -197,8 +195,8 @@ GOcats:</p>
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Eugene Hinderer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+        &copy; Copyright 2017, Eugene Hinderer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
     </div>
   </body>
 </html>
