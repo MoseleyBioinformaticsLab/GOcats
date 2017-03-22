@@ -67,7 +67,7 @@ Basic usage
 
       2. Download a Gene Ontology database obo_ file
 
-      3. To create mappings, run the GOcats command, :func:`gocats.create_subgraphs` in the ~/ARK.GOcats directory or
+      3. To create mappings, run the GOcats command, :func:`gocats.create_subgraphs` in the ~/GOcats directory or
       add the directory to the PYTHONPATH.
 
       .. code:: bash
@@ -103,7 +103,7 @@ Basic usage
 
       .. code:: bash
 
-         cd ~/ARK.GOcats
+         cd ~/GOcats
          python3
 
       .. code:: Python
