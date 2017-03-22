@@ -2,9 +2,7 @@
 The GOcats API Reference
 ========================
 
-Modules
-~~~~~~~
-The following modules are located in /ARK.GOcats/gocats.
+The following are located in /ARK.GOcats/gocats.
 
 .. automodule:: gocats.gocats
    :members:

@@ -87,15 +87,15 @@
 
 <div class="viewcode-block" id="GoParser.__init__"><a class="viewcode-back" href="../../api.html#gocats.ontologyparser.GoParser.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_file</span><span class="p">,</span> <span class="n">go_graph</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therin to a</span>
-<span class="sd">        :class:`godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO</span>
+<span class="sd">        :class:`gocats.godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO</span>
 <span class="sd">        relationships.</span>
 
 <span class="sd">        :param file_handle database_file: Specify the location of a Gene Ontology .obo file.</span>
-<span class="sd">        :param go_graph: :class:`godag.GoGraph` object.</span>
+<span class="sd">        :param go_graph: :class:`gocats.godag.GoGraph` object.</span>
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: :py:obj:`None`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database_file</span> <span class="o">=</span> <span class="n">database_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">go_graph</span> <span class="o">=</span> <span class="n">go_graph</span>
         <span class="c1"># 5 types of relationships: scoping, scaling (grouped with scoping for now), spatiotemporal, active, equivalence (not present here), and other.</span>
@@ -174,13 +174,13 @@
 
             <span class="k">elif</span> <span class="n">is_typedef</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stanza_id</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-                    <span class="n">relationship_obj</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[\w+\:]+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">relationship_obj</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">r&quot;[\w+\:]+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
                 <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stanza_name</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-                    <span class="n">relationship_obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[\w+\:]+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">relationship_obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">r&quot;[\w+\:]+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
                 <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inverse_tag</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-                    <span class="n">relationship_obj</span><span class="o">.</span><span class="n">inverse_relationship_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[\w+\:]+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">relationship_obj</span><span class="o">.</span><span class="n">inverse_relationship_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">r&quot;[\w+\:]+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
                 <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_stanza</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
                     <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relationship_mapping</span><span class="p">[</span><span class="n">relationship_obj</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
@@ -203,7 +203,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Eugene Hinderer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>
