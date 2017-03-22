@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gocats.godag &#8212; GOcats 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>GOcats 1.1.0 documentation</span></a></h1>
+        <h2 class="heading"><span>gocats.godag</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for gocats.godag</h1><div class="highlight"><pre>
+<span></span><span class="c1"># !/usr/bin/python3</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a Gene Ontology-specific graph which may have special properties when compared to other OBO formatted</span>
+<span class="sd">ontologies.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">.dag</span> <span class="k">import</span> <span class="n">OboGraph</span><span class="p">,</span> <span class="n">AbstractNode</span>
+
+
+<div class="viewcode-block" id="GoGraph"><a class="viewcode-back" href="../../api.html#gocats.godag.GoGraph">[docs]</a><span class="k">class</span> <span class="nc">GoGraph</span><span class="p">(</span><span class="n">OboGraph</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;A Gene-Ontology-specific graph. GO-specific idiosyncrasies go here.&quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="GoGraph.__init__"><a class="viewcode-back" href="../../api.html#gocats.godag.GoGraph.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allowed_relationships</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;`GoGraph` initializer. Inherits and specializes properties from :class:`gocats.dag.OboGraph`.</span>
+
+<span class="sd">        :param str namespace_filter: Specify the namespace of a sub-ontology namespace, if one is available for the ontology.</span>
+<span class="sd">        :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other relationships will be ignored.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_namespaces</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cellular_component&#39;</span><span class="p">,</span> <span class="s1">&#39;biological_process&#39;</span><span class="p">,</span> <span class="s1">&#39;molecular_function&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">namespace_filter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_namespaces</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not a valid Gene Ontology namespace.</span><span class="se">\n</span><span class="s2">Please select from the following: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">namespace_filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_namespaces</span><span class="p">))</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">namespace_filter</span><span class="p">,</span> <span class="n">allowed_relationships</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="GoGraphNode"><a class="viewcode-back" href="../../api.html#gocats.godag.GoGraphNode">[docs]</a><span class="k">class</span> <span class="nc">GoGraphNode</span><span class="p">(</span><span class="n">AbstractNode</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Extends AbstractNode to include GO relevant information.&quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="GoGraphNode.__init__"><a class="viewcode-back" href="../../api.html#gocats.godag.GoGraphNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;`GoGraphNode` initializer. Inherits all properties from :class:`gocats.dag.AbstractNode`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Eugene Hinderer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>
