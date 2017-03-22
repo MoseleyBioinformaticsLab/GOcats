@@ -5,8 +5,8 @@ representation. Separate parsing classes within this module operate on distinct 
 any subtle differences among ontologies.
 """
 import re
-from dag import AbstractEdge, DirectionalRelationship
-from godag import GoGraphNode
+from .dag import AbstractEdge, DirectionalRelationship
+from .godag import GoGraphNode
 
 
 class OboParser(object):
@@ -41,12 +41,12 @@ class GoParser(OboParser):
     """An ontology parser specific to Gene Ontology"""
 
     def __init__(self, database_file, go_graph):
-        """`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therin to a
-        :class:`godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO
-        relationships.
+        """`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therein to a
+        :class:`gocats.godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all
+        GO relationships.
 
         :param file_handle database_file: Specify the location of a Gene Ontology .obo file.
-        :param go_graph: :class:`godag.GoGraph` object.
+        :param go_graph: :class:`gocats.godag.GoGraph` object.
         :return: None
         :rtype: :py:obj:`None`
         """

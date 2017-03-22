@@ -2,7 +2,7 @@
 """
 A subgraph object of an OBOGraph object.
 """
-from dag import OboGraph, AbstractNode
+from .dag import OboGraph, AbstractNode
 import re
 
 
@@ -11,11 +11,11 @@ class SubGraph(OboGraph):
     """A subgraph of a provided supergraph with node contents."""
     
     def __init__(self, super_graph, namespace_filter=None, allowed_relationships=None):
-        """`SubGraph initializer. Creates a subgraph object of :class:`dag.OboGraph`. Leave `namespace_filter` and
-        `allowed_relationship` as :py:obj:`None` to create the entire ontology graph. Otherwise, provide filters to
+        """`SubGraph initializer. Creates a subgraph object of :class:`gocats.dag.OboGraph`. Leave `namespace_filter`
+        and `allowed_relationship` as :py:obj:`None` to create the entire ontology graph. Otherwise, provide filters to
         limit what information is pulled into the subgraph.
 
-        :param obj super_graph: A supergraph object i.e. :class:`godag.GoGraph`.
+        :param obj super_graph: A supergraph object i.e. :class:`gocats.godag.GoGraph`.
         :param str namespace_filter: Specify the namespace of a sub-ontology namespace, if one is available for the ontology.
         :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other relationships will be ignored.
         """
@@ -34,12 +34,12 @@ class SubGraph(OboGraph):
     @property
     def root_id_mapping(self):
         """Property describing a mapping :py:obj:`dict` that relates every ontology term ID of subgraphs in
-        :class:`dag.OboGraph` to a :py:obj:`list` of root, subgraph category-representative node IDs.
+        :class:`gocats.dag.OboGraph` to a :py:obj:`list` of root, subgraph category-representative node IDs.
 
-        :return: :py:obj:`dict` of :class:`dag.AbstractNode` IDs mapped to a :py:obj:`list' of root :class:`dag.AbstractNode` IDs.
+        :return: :py:obj:`dict` of :class:`gocats.dag.AbstractNode` IDs mapped to a :py:obj:`list` of root :class:`gocats.dag.AbstractNode` IDs.
         :rtype: :py:obj:`dict`
         """
-        if (self._modified and self.representative_node) or self._root_id_mapping == None:
+        if (self._modified and self.representative_node) or self._root_id_mapping is None:
             self._root_id_mapping = {node.id: self.representative_node.id for node in self.representative_node.descendants}
             self._root_id_mapping[self.representative_node.id] = self.representative_node.id
         elif not self.representative_node:
@@ -48,13 +48,14 @@ class SubGraph(OboGraph):
 
     @property
     def root_node_mapping(self):
-        """Property describing a mapping :py:obj:`dict` that relates every ontology :class:`dag.AbstractNode` object of
-        subgraphs in :class:`dag.OboGraph` to a :py:obj:`list` of root, subgraph category-representative node objects.
+        """Property describing a mapping :py:obj:`dict` that relates every ontology :class:`gocats.dag.AbstractNode`
+        object of subgraphs in :class:`gocats.dag.OboGraph` to a :py:obj:`list` of root, subgraph
+        category-representative node objects.
 
-        :return: :py:obj:`dict` of :class:`dag.AbstractNode` objects mapped to a :py:obj:`list' of root :class:`dag.AbstractNode` objects.
+        :return: :py:obj:`dict` of :class:`gocats.dag.AbstractNode` objects mapped to a :py:obj:`list` of root :class:`gocats.dag.AbstractNode` objects.
         :rtype: :py:obj:`dict`
         """
-        if (self._modified and self.representative_node) or self._root_node_mapping == None:
+        if (self._modified and self.representative_node) or self._root_node_mapping is None:
             self._root_node_mapping = {node: self.representative_node for node in self.representative_node.descendants}
             self._root_node_mapping[self.representative_node] = self.representative_node
         elif not self.representative_node:
@@ -63,13 +64,14 @@ class SubGraph(OboGraph):
 
     @property
     def content_mapping(self):
-        """Property describing a mapping :py:obj:`dict` that relates every root ontology :class:`dag.AbstractNode` IDs
-        of subgraphs in a :class:`dag.OboGraph` to a :py:obj:`list` of their subgraph nodes' IDs.
+        """Property describing a mapping :py:obj:`dict` that relates every root ontology
+        :class:`gocats.dag.AbstractNode` IDs of subgraphs in a :class:`gocats.dag.OboGraph` to a :py:obj:`list` of their
+        subgraph nodes' IDs.
 
-        :return: :py:obj:`dict` of :class:`dag.AbstractNode` IDs mapped to a :py:obj:`list' of :class:`dag.AbstractNode` IDs.
+        :return: :py:obj:`dict` of :class:`gocats.dag.AbstractNode` IDs mapped to a :py:obj:`list' of :class:`gocats.dag.AbstractNode` IDs.
         :rtype: :py:obj:`dict`
         """
-        if (self._modified and self.representative_node) or self._content_mapping == None:
+        if (self._modified and self.representative_node) or self._content_mapping is None:
             self._content_mapping = {self.representative_node.id: [node.id for node in self.representative_node.descendants]}
             self._content_mapping[self.representative_node.id].append(self.representative_node.id)
         elif not self.representative_node:
@@ -77,11 +79,11 @@ class SubGraph(OboGraph):
         return self._content_mapping
 
     def subnode(self, super_node):
-        """Defines a :class:`subdag.SubGraph` node object. Calls :func:`add_node` to convert a supergraph node into a
-        :class:`subdag.SubGraphNode` and add this node to the subgraph.
+        """Defines a :class:`gocats.subdag.SubGraph` node object. Calls :func:`add_node` to convert a supergraph node
+        into a :class:`gocats.subdag.SubGraphNode` and add this node to the subgraph.
 
-        :param super_node: A node object from the supergraph i.e. :class:`godag.GoGraphNode`.
-        :return: A :class:`subdag.SubGraphNode` object.
+        :param super_node: A node object from the supergraph i.e. :class:`gocats.godag.GoGraphNode`.
+        :return: A :class:`gocats.subdag.SubGraphNode` object.
         :rtype: :py:obj:`class`
         """
         if super_node.id not in self.id_index:
@@ -89,10 +91,10 @@ class SubGraph(OboGraph):
         return self.id_index[super_node.id]
 
     def add_node(self, super_node):
-        """Converts a supergraph node into a :class:`subdag.SubGraphNode` and adds this node to the subgraph. Sets
-        modification state to :py:obj:`True`.
+        """Converts a supergraph node into a :class:`gocats.subdag.SubGraphNode` and adds this node to the subgraph.
+        Sets modification state to :py:obj:`True`.
 
-        :param obj super_node: A node object from the supergraph i.e. :class:`godag.GoGraphNode`.
+        :param obj super_node: A node object from the supergraph i.e. :class:`gocats.godag.GoGraphNode`.
         :return: None
         :rtype: :py:obj:`None`
         """
@@ -103,10 +105,10 @@ class SubGraph(OboGraph):
 
     # TODO: Rename/reconsider this (needs to be similar to instantiate_valid_edges)
     def connect_subnodes(self):
-        """Analogous to :func:`dag.instantiate_valid_edges` and :func:`dag.AbstractEdge.connect_nodes`. Updates child
-        and parent node sets for each :class:`subdag.SubGraphNode` in the :class:`subdag.SubGraph`. Adds edge object
-        references to nodes and node object references to edges. Counts instances of relationship IDs and sets
-        modification state to :py:obj:`True`.
+        """Analogous to :func:`gocats.dag.instantiate_valid_edges` and :func:`gocats.dag.AbstractEdge.connect_nodes`.
+        Updates child and parent node sets for each :class:`gocats.subdag.SubGraphNode` in the
+        :class:`gocats.subdag.SubGraph`. Adds edge object references to nodes and node object references to edges.
+        Counts instances of relationship IDs and sets modification state to :py:obj:`True`.
 
         :return: None
         :rtype: :py:obj:`None`
@@ -169,14 +171,14 @@ class SubGraph(OboGraph):
 
     @staticmethod
     def find_representative_node(subgraph, search_string_list):
-        """Extracts candidate :class:`subdag.SubGraphNode` objects from the :class:`subdag.SubGraph` objects based on a
-        list of search strings matching strings in the names of the nodes (using regular expressions). Returns the
-        candidate node with the highest number of descendants. Returns the sole node if the subgraph only contains one
-        node, aborts if the subgraph is empty.
+        """Extracts candidate :class:`gocats.subdag.SubGraphNode` objects from the :class:`gocats.subdag.SubGraph`
+        objects based on a list of search strings matching strings in the names of the nodes (using regular
+        expressions). Returns the candidate node with the highest number of descendants. Returns the sole node if the
+        subgraph only contains one node, aborts if the subgraph is empty.
 
-        :param subgraph: A :class:`subdag.SubGraph` object.
+        :param subgraph: A :class:`gocats.subdag.SubGraph` object.
         :param search_string_list: A :py:obj:`list` of search term :py:obj:`str` entries.
-        :return: A candidate term :class:`subgraph.SubGraphNode` chosen as the subgraph's representative ontology term.
+        :return: A candidate term :class:`gocats.subgraph.SubGraphNode` chosen as the subgraph's representative ontology term.
         """
         if len(subgraph.node_list) == 1:
             return subgraph.node_list[0]
@@ -196,12 +198,12 @@ class SubGraph(OboGraph):
         subgraph after instantiation. Conversely, 'conservative' may be used to call
         :func:`conservatively_extend_subgraph` for this function.
 
-        :param obj super_graph: A supergraph object i.e. :class:`godag.GoGraph`.
+        :param obj super_graph: A supergraph object i.e. :class:`gocats.godag.GoGraph`.
         :param keyword_list: A :py:obj:`list` of :py:obj:`str` entries used to query the supergraph for concepts to be extracted into subgraphs.
         :param str namespace_filter: Specify the namespace of a sub-ontology namespace, if one is available for the ontology.
         :param list allowed_relationships: Specify a list of relationships to utilize in the graph, other relationships will be ignored.
         :param str extension: Specify 'greedy' or 'conservative' to determine how subgraphs will be extended after creation (defaults to greedy).
-        :return: A :class:`subdag.SubGraph` object.
+        :return: A :class:`gocats.subdag.SubGraph` object.
         """
         subgraph = SubGraph(super_graph, namespace_filter, allowed_relationships)
         keyword_list = [word.lower() for word in keyword_list]
@@ -231,8 +233,8 @@ class SubGraphNode(AbstractNode):
     """
     
     def __init__(self, super_node, allowed_relationships=None):
-        """SubGraphNode initializer. Inherits from :class:`dag.AbstractNode` and contains a reference to the supergraph
-        node it represents e.g. :class:`godag.GoGraphNode`.
+        """SubGraphNode initializer. Inherits from :class:`gocats.dag.AbstractNode` and contains a reference to the
+        supergraph node it represents e.g. :class:`gocats.godag.GoGraphNode`.
 
         :param super_node: A node from the `supergraph`.
         :param allowed_relationships: **Not currently used** Used to specify a list of allowable relationships evaluated between nodes.
@@ -251,7 +253,7 @@ class SubGraphNode(AbstractNode):
         """:py:obj:`property` describing the set of edges referenced in the supergraph node, filtered to only those
          edges with nodes in the subgraph node.
 
-        :return: A set of :class:`subgraph.SubGraphNode` edges that were copied from the supergraph node.
+        :return: A set of :class:`gocats.subgraph.SubGraphNode` edges that were copied from the supergraph node.
         :rtype: :py:obj:`set`
         """
         edges = set()
@@ -262,7 +264,7 @@ class SubGraphNode(AbstractNode):
     def id(self):
         """:py:obj:`property` describing the ID of the supernode
 
-        :return: The ID of a supernode e.g. :class:`godag.GoGraphNode`
+        :return: The ID of a supernode e.g. :class:`gocats.godag.GoGraphNode`
         :rtype: :py:obj:`str`
         """
         return self.super_node.id
@@ -271,7 +273,7 @@ class SubGraphNode(AbstractNode):
     def name(self):
         """:py:obj:`property` describing the name of the supernode
 
-        :return: The name of a supernode e.g. :class:`godag.GoGraphNode`
+        :return: The name of a supernode e.g. :class:`gocats.godag.GoGraphNode`
         :rtype: :py:obj:`str`
         """
         return self.super_node.name
@@ -280,7 +282,7 @@ class SubGraphNode(AbstractNode):
     def definition(self):
         """:py:obj:`property` describing the definition of the supernode
 
-        :return: The definition of a supernode e.g. :class:`godag.GoGraphNode`
+        :return: The definition of a supernode e.g. :class:`gocats.godag.GoGraphNode`
         :rtype: :py:obj:`str`
         """
         return self.super_node.definition
@@ -289,7 +291,7 @@ class SubGraphNode(AbstractNode):
     def namespace(self):
         """:py:obj:`property` describing the namespace of the supernode
 
-        :return: A namespace of a supernode e.g. :class:`godag.GoGraphNode`
+        :return: A namespace of a supernode e.g. :class:`gocats.godag.GoGraphNode`
         :rtype: :py:obj:`str`
         """
         return self.super_node.namespace
