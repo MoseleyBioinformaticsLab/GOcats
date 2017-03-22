@@ -54,12 +54,12 @@ Quickstart
 For instructions on how to format your keyword list and advanced argument usage, consult the tutorial, guide, and API
 documentation: <PLACEHOLDER_URL>.
 
-Subgraphs can be created from the command line. Either navigate to the ARK.GOcats directory or add the directory to your
+Subgraphs can be created from the command line. Either navigate to the GOcats directory or add the directory to your
 PYTHONPATH:
 
 .. code:: bash
 
-   python3 -m gocats create_subgraphs /path_to_ontology_file ~/ARK.GOcats/gocats/exampledata/examplecategories.csv ~/Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
+   python3 -m gocats create_subgraphs /path_to_ontology_file ~/GOcats/gocats/exampledata/examplecategories.csv ~/Output --supergraph_namespace=cellular_component --subgraph_namespace=cellular_component --output_termlist
 
 Mapping files can be found in the output directory:
 

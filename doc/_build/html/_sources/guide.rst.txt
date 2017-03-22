@@ -59,7 +59,7 @@ To see command line arguments and options, navigate to the project directory and
 
 .. code:: bash
 
-   cd ~/ARK.GOcats
+   cd ~/GOcats
    python3 -m gocats --help
 
 :mod:`gocats` can be used in the following ways:
@@ -73,7 +73,7 @@ To see command line arguments and options, navigate to the project directory and
 
       2. Download a Gene Ontology database obo_ file
 
-      3. To create mappings, run the GOcats command, :func:`gocats.gocats.create_subgraphs` in the ~/ARK.GOcats
+      3. To create mappings, run the GOcats command, :func:`gocats.gocats.create_subgraphs` in the ~/GOcats
       directory or add the directory to the PYTHONPATH.
 
       .. code:: bash
@@ -108,7 +108,7 @@ To see command line arguments and options, navigate to the project directory and
 
       .. code:: bash
 
-         cd ~/ARK.GOcats
+         cd ~/GOcats
          python3
 
       .. code:: Python
