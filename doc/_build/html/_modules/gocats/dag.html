@@ -86,8 +86,8 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">orphans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining a set of nodes in the graph which have no parents. When the graph is modified, calls</span>
-<span class="sd">        :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.</span>
+        <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining a set of nodes in the graph which have no parents. When the graph is modified,</span>
+<span class="sd">        calls :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.</span>
 
 <span class="sd">        :return: Set of &#39;orphan&#39; :class:`gocats.dag.AbstractNode` objects.</span>
 <span class="sd">        :rtype: :py:class:`set`</span>
@@ -98,8 +98,8 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">leaves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining a set of nodes in the graph which have no children. When the graph is modified, calls</span>
-<span class="sd">        :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.</span>
+        <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining a set of nodes in the graph which have no children. When the graph is modified,</span>
+<span class="sd">        calls :func:`_update_graph` to repopulate the sets of orphan and leaf nodes.</span>
 
 <span class="sd">        :return: Set of &#39;leaf&#39; :class:`gocats.dag.AbstractNode` objects.</span>
 <span class="sd">        :rtype: :py:class:`set`</span>
@@ -231,8 +231,8 @@
 
 <div class="viewcode-block" id="OboGraph.instantiate_valid_edges"><a class="viewcode-back" href="../../api.html#gocats.dag.OboGraph.instantiate_valid_edges">[docs]</a>    <span class="k">def</span> <span class="nf">instantiate_valid_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add all edge references to their respective nodes and vice versa if both nodes of the edge are in the graph.</span>
-<span class="sd">        This is carried out by :func:`AbstractEdge.connect_nodes`. Also adds :class:`gocats.dag.AbstractRelationship` object</span>
-<span class="sd">        reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets</span>
+<span class="sd">        This is carried out by :func:`AbstractEdge.connect_nodes`. Also adds :class:`gocats.dag.AbstractRelationship`</span>
+<span class="sd">        object reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets</span>
 <span class="sd">        modification state to :py:obj:`True`.</span>
 
 <span class="sd">        :return: None</span>
@@ -314,7 +314,7 @@
 <div class="viewcode-block" id="AbstractNode"><a class="viewcode-back" href="../../api.html#gocats.dag.AbstractNode">[docs]</a><span class="k">class</span> <span class="nc">AbstractNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;A node containing all basic properties of an OBO node. The parsing object, :class:`gocats.ontologyparser.OboParser`</span>
-<span class="sd">    currently has direct access to datamembers (id, name, definition, namespace, edges, and obsolete) so that</span>
+<span class="sd">    currently has direct access to data members (id, name, definition, namespace, edges, and obsolete) so that</span>
 <span class="sd">    information from the database file can be added to the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
@@ -337,8 +337,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining a set of nodes in the graph that are recursively reverse of a node with a</span>
-<span class="sd">        scoping-type relationship. When the node is modified, calls :func:`gocats.dag.AbstractNode._update_node` to repopulate the sets of</span>
-<span class="sd">        descendants and ancestors. This represents a &quot;lazy&quot; evaluation of node descendants.</span>
+<span class="sd">        scoping-type relationship. When the node is modified, calls :func:`gocats.dag.AbstractNode._update_node` to</span>
+<span class="sd">        repopulate the sets of descendants and ancestors. This represents a &quot;lazy&quot; evaluation of node descendants.</span>
 
 <span class="sd">        :return: Set of :class:`gocats.dag.AbstractNode` objects</span>
 <span class="sd">        :rtype: :py:class:`set`</span>
@@ -350,8 +350,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining a set of nodes in the graph that are recursively forward of a node with a</span>
-<span class="sd">        scoping-type relationship. When the node is modified, calls :func:`gocats.dag.AbstractNode._update_node` to repopulate the sets of</span>
-<span class="sd">        descendants and ancestors. This represents a &quot;lazy&quot; evaluation of node ancestors.</span>
+<span class="sd">        scoping-type relationship. When the node is modified, calls :func:`gocats.dag.AbstractNode._update_node` to</span>
+<span class="sd">        repopulate the sets of descendants and ancestors. This represents a &quot;lazy&quot; evaluation of node ancestors.</span>
 
 <span class="sd">        :return: Set of :class:`gocats.dag.AbstractNode` objects</span>
 <span class="sd">        :rtype: :py:class:`set`</span>
@@ -371,9 +371,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="AbstractNode.add_edge"><a class="viewcode-back" href="../../api.html#gocats.dag.AbstractNode.add_edge">[docs]</a>    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">allowed_relationships</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds a given :class:`gocats.dag.AbstractEdge` to a each :class:`gocats.dag.AbstractNode` objects that the edge connects.</span>
-<span class="sd">        If there is a filter for the types of relationships allowed, edges with non-allowed relationship types are not</span>
-<span class="sd">        processed. Sets modification state to :py:obj:`True`.</span>
+        <span class="sd">&quot;&quot;&quot;Adds a given :class:`gocats.dag.AbstractEdge` to a each :class:`gocats.dag.AbstractNode` objects that the</span>
+<span class="sd">        edge connects. If there is a filter for the types of relationships allowed, edges with non-allowed relationship</span>
+<span class="sd">        types are not processed. Sets modification state to :py:obj:`True`.</span>
 
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: :py:obj:`None`</span>
@@ -394,8 +394,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="AbstractNode.remove_edge"><a class="viewcode-back" href="../../api.html#gocats.dag.AbstractNode.remove_edge">[docs]</a>    <span class="k">def</span> <span class="nf">remove_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Removes a given :class:`gocats.dag.AbstractEdge` the :class:`gocats.dag.AbstractNode` object. Also removes parent or child</span>
-<span class="sd">        node references that the edge referenced. Sets modification state to :py:obj:`True`.</span>
+        <span class="sd">&quot;&quot;&quot;Removes a given :class:`gocats.dag.AbstractEdge` the :class:`gocats.dag.AbstractNode` object. Also removes</span>
+<span class="sd">        parent or child node references that the edge referenced. Sets modification state to :py:obj:`True`.</span>
 
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: :py:obj:`None`</span>
@@ -408,9 +408,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_modified</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="AbstractNode._update_descendants"><a class="viewcode-back" href="../../api.html#gocats.dag.AbstractNode._update_descendants">[docs]</a>    <span class="k">def</span> <span class="nf">_update_descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Used for the lazy evaluation of graph descendants of the current :class:`gocats.dag.AbstractNode` object. Creates</span>
-<span class="sd">        internal :py:obj:`set` variable, descendant_set. Iterates through node children until the bottom of the graph is</span>
-<span class="sd">        reached. The descendant_set is a set of all nodes across all paths encountered from the current node.</span>
+        <span class="sd">&quot;&quot;&quot;Used for the lazy evaluation of graph descendants of the current :class:`gocats.dag.AbstractNode` object.</span>
+<span class="sd">        Creates internal :py:obj:`set` variable, descendant_set. Iterates through node children until the bottom of the</span>
+<span class="sd">        graph is reached. The descendant_set is a set of all nodes across all paths encountered from the current node.</span>
 
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: :py:obj:`None`</span>
@@ -428,9 +428,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_descendants</span> <span class="o">=</span> <span class="n">descendant_set</span></div>
 
 <div class="viewcode-block" id="AbstractNode._update_ancestors"><a class="viewcode-back" href="../../api.html#gocats.dag.AbstractNode._update_ancestors">[docs]</a>    <span class="k">def</span> <span class="nf">_update_ancestors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Used for the lazy evaluation of graph ancestors of the current :class:`gocats.dag.AbstractNode` object. Creates</span>
-<span class="sd">        internal :py:obj:`set` variable, ancestors_set. Iterates through node parents until the top of the graph is</span>
-<span class="sd">        reached. The ancestors_set is a set of all nodes across all paths encountered from the current node.</span>
+        <span class="sd">&quot;&quot;&quot;Used for the lazy evaluation of graph ancestors of the current :class:`gocats.dag.AbstractNode` object.</span>
+<span class="sd">        Creates internal :py:obj:`set` variable, ancestors_set. Iterates through node parents until the top of the graph</span>
+<span class="sd">        is reached. The ancestors_set is a set of all nodes across all paths encountered from the current node.</span>
 
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: :py:obj:`None`</span>
@@ -470,7 +470,8 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">parent_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining the ID of the node forward of the current :class:`gocats.dag.AbstractEdge` object.</span>
+        <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining the ID of the node forward of the current :class:`gocats.dag.AbstractEdge`</span>
+<span class="sd">        object.</span>
 
 <span class="sd">        :return: :py:obj:`str` ID of the forward node in the node_pair associated with the edge if the edge&#39;s relationship is assigned, :py:obj:`None` otherwise.</span>
 <span class="sd">        :rtype: :py:obj:`str` or :py:obj:`None`</span>
@@ -517,8 +518,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">parent_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining the :class:`gocats.dag.AbstractNode` object forward of the current</span>
-<span class="sd">        :class:`gocats.dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although this</span>
-<span class="sd">        is **not yet specified**.</span>
+<span class="sd">        :class:`gocats.dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although</span>
+<span class="sd">        this is **not yet specified**.</span>
 
 <span class="sd">        :return: :class:`gocats.dag.AbstractNode` object of the forward node in the node_pair associated with the edge if the edge&#39;s relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`gocats.dag.DirectionalRelationship` :py:obj:`None` otherwise.</span>
 <span class="sd">        :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`</span>
@@ -530,8 +531,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">child_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;:py:obj:`property` defining the :class:`gocats.dag.AbstractNode` object reverse of the current</span>
-<span class="sd">        :class:`gocats.dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although this</span>
-<span class="sd">        is **not yet specified**.</span>
+<span class="sd">        :class:`gocats.dag.AbstractEdge` object. This designation will be unique to scoping-type relationships, although</span>
+<span class="sd">        this is **not yet specified**.</span>
 
 <span class="sd">        :return: :class:`gocats.dag.AbstractNode` object of the reverse node in the node_pair associated with the edge if the edge&#39;s relationship is assigned, the node_pair is assigned, and the type of relationship is instantiated by :class:`gocats.dag.DirectionalRelationship` :py:obj:`None` otherwise.</span>
 <span class="sd">        :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`</span>
@@ -601,7 +602,8 @@
 <div class="viewcode-block" id="AbstractRelationship"><a class="viewcode-back" href="../../api.html#gocats.dag.AbstractRelationship">[docs]</a><span class="k">class</span> <span class="nc">AbstractRelationship</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;A relationship as defined by a [typedef] stanza in an OBO ontology and augmented by GOcats to better interpret</span>
-<span class="sd">    semantic correspondence.&quot;&quot;&quot;</span>
+<span class="sd">    semantic correspondence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="AbstractRelationship.__init__"><a class="viewcode-back" href="../../api.html#gocats.dag.AbstractRelationship.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;`AbstractRelationship` initializer.</span>
@@ -615,7 +617,8 @@
 
     <span class="sd">&quot;&quot;&quot;A singly-directional relationship edge connecting two nodes in the graph. The two nodes are designated &#39;forward&#39;</span>
 <span class="sd">    and &#39;reverse.&#39; The &#39;forward&#39; node semantically succeeds the &#39;reverse&#39; node in a way that depends on the context of</span>
-<span class="sd">    the type of relationship describing the edge to which it is applied.&quot;&quot;&quot;</span>
+<span class="sd">    the type of relationship describing the edge to which it is applied.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="DirectionalRelationship.__init__"><a class="viewcode-back" href="../../api.html#gocats.dag.DirectionalRelationship.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;`DirectionalRelationship` initializer.</span>
@@ -646,7 +649,8 @@
 
 <div class="viewcode-block" id="NonDirectionalRelationship"><a class="viewcode-back" href="../../api.html#gocats.dag.NonDirectionalRelationship">[docs]</a><span class="k">class</span> <span class="nc">NonDirectionalRelationship</span><span class="p">(</span><span class="n">AbstractRelationship</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;A non-directional relationship whose edge directionality is either non-existant or semantically irrelevant.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;A non-directional relationship whose edge directionality is either non-existent or semantically irrelevant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
 <div class="viewcode-block" id="NonDirectionalRelationship.__init__"><a class="viewcode-back" href="../../api.html#gocats.dag.NonDirectionalRelationship.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;`NonDirectionalRelationship` initializer.</span>

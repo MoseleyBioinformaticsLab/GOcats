@@ -37,13 +37,13 @@ Here is an example of what the file contents should look like (**do not include 
    +==============+==========================================+
    | mitochondria | mitochondria;mitochondrial;mitochondrion |
    +--------------+------------------------------------------+
-   |   Nucleus    | nucleus;nuclei;nuclear                   |
+   |   nucleus    | nucleus;nuclei;nuclear                   |
    +--------------+------------------------------------------+
    |   lysosome   | lysosome;lysosomal;lysosomes             |
    +--------------+------------------------------------------+
    |   vesicle    | vesicle;vesicles                         |
    +--------------+------------------------------------------+
-   |     ER       | endoplasmic;sarcoplasmic;reticulum       |
+   |     er       | endoplasmic;sarcoplasmic;reticulum       |
    +--------------+------------------------------------------+
    |    golgi     | golgi; golgi apparatus                   |
    +--------------+------------------------------------------+
@@ -156,9 +156,9 @@ Using GOcats to map specific gene annotations in a GAF to custom categories
 
 With mapping files produced from the previous steps, it is possible to create a GAF with annotations mapped to the
 categories, or concepts, that we define. Let's consider our current "cell_locations" example and imagine that we have
-some gene set containing annotations in a GAF called "dataset_GAF.goa" in the home directory. To map these annotations, use
-the :func:`gocats.gocats.categorize_dataset` option. Navigate to the ARK.GOcats directory or add this directory to your
-PYTHONPATH and run the following:
+some gene set containing annotations in a GAF called "dataset_GAF.goa" in the home directory. To map these annotations,
+use the :func:`gocats.gocats.categorize_dataset` option. Navigate to the ARK.GOcats directory or add this directory to
+your PYTHONPATH and run the following:
 
 .. code:: bash
 

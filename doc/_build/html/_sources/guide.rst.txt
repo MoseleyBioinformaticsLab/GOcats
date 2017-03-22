@@ -73,8 +73,8 @@ To see command line arguments and options, navigate to the project directory and
 
       2. Download a Gene Ontology database obo_ file
 
-      3. To create mappings, run the GOcats command, :func:`gocats.gocats.create_subgraphs` in the ~/ARK.GOcats directory or
-      add the directory to the PYTHONPATH.
+      3. To create mappings, run the GOcats command, :func:`gocats.gocats.create_subgraphs` in the ~/ARK.GOcats
+      directory or add the directory to the PYTHONPATH.
 
       .. code:: bash
 

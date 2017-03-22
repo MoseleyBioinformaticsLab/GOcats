@@ -56,8 +56,8 @@
     <span class="sd">&quot;&quot;&quot;A subgraph of a provided supergraph with node contents.&quot;&quot;&quot;</span>
     
 <div class="viewcode-block" id="SubGraph.__init__"><a class="viewcode-back" href="../../api.html#gocats.subdag.SubGraph.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_graph</span><span class="p">,</span> <span class="n">namespace_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allowed_relationships</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;`SubGraph initializer. Creates a subgraph object of :class:`gocats.dag.OboGraph`. Leave `namespace_filter` and</span>
-<span class="sd">        `allowed_relationship` as :py:obj:`None` to create the entire ontology graph. Otherwise, provide filters to</span>
+        <span class="sd">&quot;&quot;&quot;`SubGraph initializer. Creates a subgraph object of :class:`gocats.dag.OboGraph`. Leave `namespace_filter`</span>
+<span class="sd">        and `allowed_relationship` as :py:obj:`None` to create the entire ontology graph. Otherwise, provide filters to</span>
 <span class="sd">        limit what information is pulled into the subgraph.</span>
 
 <span class="sd">        :param obj super_graph: A supergraph object i.e. :class:`gocats.godag.GoGraph`.</span>
@@ -93,8 +93,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">root_node_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Property describing a mapping :py:obj:`dict` that relates every ontology :class:`gocats.dag.AbstractNode` object of</span>
-<span class="sd">        subgraphs in :class:`gocats.dag.OboGraph` to a :py:obj:`list` of root, subgraph category-representative node objects.</span>
+        <span class="sd">&quot;&quot;&quot;Property describing a mapping :py:obj:`dict` that relates every ontology :class:`gocats.dag.AbstractNode`</span>
+<span class="sd">        object of subgraphs in :class:`gocats.dag.OboGraph` to a :py:obj:`list` of root, subgraph</span>
+<span class="sd">        category-representative node objects.</span>
 
 <span class="sd">        :return: :py:obj:`dict` of :class:`gocats.dag.AbstractNode` objects mapped to a :py:obj:`list` of root :class:`gocats.dag.AbstractNode` objects.</span>
 <span class="sd">        :rtype: :py:obj:`dict`</span>
@@ -108,8 +109,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">content_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Property describing a mapping :py:obj:`dict` that relates every root ontology :class:`gocats.dag.AbstractNode` IDs</span>
-<span class="sd">        of subgraphs in a :class:`gocats.dag.OboGraph` to a :py:obj:`list` of their subgraph nodes&#39; IDs.</span>
+        <span class="sd">&quot;&quot;&quot;Property describing a mapping :py:obj:`dict` that relates every root ontology</span>
+<span class="sd">        :class:`gocats.dag.AbstractNode` IDs of subgraphs in a :class:`gocats.dag.OboGraph` to a :py:obj:`list` of their</span>
+<span class="sd">        subgraph nodes&#39; IDs.</span>
 
 <span class="sd">        :return: :py:obj:`dict` of :class:`gocats.dag.AbstractNode` IDs mapped to a :py:obj:`list&#39; of :class:`gocats.dag.AbstractNode` IDs.</span>
 <span class="sd">        :rtype: :py:obj:`dict`</span>
@@ -122,8 +124,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_mapping</span>
 
 <div class="viewcode-block" id="SubGraph.subnode"><a class="viewcode-back" href="../../api.html#gocats.subdag.SubGraph.subnode">[docs]</a>    <span class="k">def</span> <span class="nf">subnode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Defines a :class:`gocats.subdag.SubGraph` node object. Calls :func:`add_node` to convert a supergraph node into a</span>
-<span class="sd">        :class:`gocats.subdag.SubGraphNode` and add this node to the subgraph.</span>
+        <span class="sd">&quot;&quot;&quot;Defines a :class:`gocats.subdag.SubGraph` node object. Calls :func:`add_node` to convert a supergraph node</span>
+<span class="sd">        into a :class:`gocats.subdag.SubGraphNode` and add this node to the subgraph.</span>
 
 <span class="sd">        :param super_node: A node object from the supergraph i.e. :class:`gocats.godag.GoGraphNode`.</span>
 <span class="sd">        :return: A :class:`gocats.subdag.SubGraphNode` object.</span>
@@ -134,8 +136,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_index</span><span class="p">[</span><span class="n">super_node</span><span class="o">.</span><span class="n">id</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="SubGraph.add_node"><a class="viewcode-back" href="../../api.html#gocats.subdag.SubGraph.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Converts a supergraph node into a :class:`gocats.subdag.SubGraphNode` and adds this node to the subgraph. Sets</span>
-<span class="sd">        modification state to :py:obj:`True`.</span>
+        <span class="sd">&quot;&quot;&quot;Converts a supergraph node into a :class:`gocats.subdag.SubGraphNode` and adds this node to the subgraph.</span>
+<span class="sd">        Sets modification state to :py:obj:`True`.</span>
 
 <span class="sd">        :param obj super_node: A node object from the supergraph i.e. :class:`gocats.godag.GoGraphNode`.</span>
 <span class="sd">        :return: None</span>
@@ -149,9 +151,9 @@
     <span class="c1"># TODO: Rename/reconsider this (needs to be similar to instantiate_valid_edges)</span>
 <div class="viewcode-block" id="SubGraph.connect_subnodes"><a class="viewcode-back" href="../../api.html#gocats.subdag.SubGraph.connect_subnodes">[docs]</a>    <span class="k">def</span> <span class="nf">connect_subnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Analogous to :func:`gocats.dag.instantiate_valid_edges` and :func:`gocats.dag.AbstractEdge.connect_nodes`.</span>
-<span class="sd">        Updates child and parent node sets for each :class:`gocats.subdag.SubGraphNode` in the :class:`gocats.subdag.SubGraph`. Adds</span>
-<span class="sd">        edge object references to nodes and node object references to edges. Counts instances of relationship IDs and</span>
-<span class="sd">        sets modification state to :py:obj:`True`.</span>
+<span class="sd">        Updates child and parent node sets for each :class:`gocats.subdag.SubGraphNode` in the</span>
+<span class="sd">        :class:`gocats.subdag.SubGraph`. Adds edge object references to nodes and node object references to edges.</span>
+<span class="sd">        Counts instances of relationship IDs and sets modification state to :py:obj:`True`.</span>
 
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: :py:obj:`None`</span>
@@ -214,10 +216,10 @@
 
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SubGraph.find_representative_node"><a class="viewcode-back" href="../../api.html#gocats.subdag.SubGraph.find_representative_node">[docs]</a>    <span class="k">def</span> <span class="nf">find_representative_node</span><span class="p">(</span><span class="n">subgraph</span><span class="p">,</span> <span class="n">search_string_list</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Extracts candidate :class:`gocats.subdag.SubGraphNode` objects from the :class:`gocats.subdag.SubGraph` objects based on a</span>
-<span class="sd">        list of search strings matching strings in the names of the nodes (using regular expressions). Returns the</span>
-<span class="sd">        candidate node with the highest number of descendants. Returns the sole node if the subgraph only contains one</span>
-<span class="sd">        node, aborts if the subgraph is empty.</span>
+        <span class="sd">&quot;&quot;&quot;Extracts candidate :class:`gocats.subdag.SubGraphNode` objects from the :class:`gocats.subdag.SubGraph`</span>
+<span class="sd">        objects based on a list of search strings matching strings in the names of the nodes (using regular</span>
+<span class="sd">        expressions). Returns the candidate node with the highest number of descendants. Returns the sole node if the</span>
+<span class="sd">        subgraph only contains one node, aborts if the subgraph is empty.</span>
 
 <span class="sd">        :param subgraph: A :class:`gocats.subdag.SubGraph` object.</span>
 <span class="sd">        :param search_string_list: A :py:obj:`list` of search term :py:obj:`str` entries.</span>
@@ -276,8 +278,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     
 <div class="viewcode-block" id="SubGraphNode.__init__"><a class="viewcode-back" href="../../api.html#gocats.subdag.SubGraphNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_node</span><span class="p">,</span> <span class="n">allowed_relationships</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;SubGraphNode initializer. Inherits from :class:`gocats.dag.AbstractNode` and contains a reference to the supergraph</span>
-<span class="sd">        node it represents e.g. :class:`gocats.godag.GoGraphNode`.</span>
+        <span class="sd">&quot;&quot;&quot;SubGraphNode initializer. Inherits from :class:`gocats.dag.AbstractNode` and contains a reference to the</span>
+<span class="sd">        supergraph node it represents e.g. :class:`gocats.godag.GoGraphNode`.</span>
 
 <span class="sd">        :param super_node: A node from the `supergraph`.</span>
 <span class="sd">        :param allowed_relationships: **Not currently used** Used to specify a list of allowable relationships evaluated between nodes.</span>
