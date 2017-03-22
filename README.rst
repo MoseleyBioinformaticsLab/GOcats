@@ -14,7 +14,7 @@ Currently, the `GOcats` package can be used to:
 
 Citation
 ~~~~~~~~
-Please cite the GitHub repository until our manuscript is accepted for publication: PLACEHOLDER_URL
+Please cite the GitHub repository until our manuscript is accepted for publication: https://github.com/MoseleyBioinformaticsLab/GOcats.git
 
 Installation
 ~~~~~~~~~~~~
@@ -42,7 +42,7 @@ Make sure you have git_ installed:
 .. code:: bash
 
    cd ~/
-   git clone <PLACEHOLDER_URL>
+   git clone https://github.com/MoseleyBioinformaticsLab/GOcats.git
 
 Install on Windows
 ------------------
@@ -52,7 +52,7 @@ Quickstart
 ~~~~~~~~~~
 
 For instructions on how to format your keyword list and advanced argument usage, consult the tutorial, guide, and API
-documentation: <PLACEHOLDER_URL>.
+documentation in GOcats/doc.
 
 Subgraphs can be created from the command line. Either navigate to the GOcats directory or add the directory to your
 PYTHONPATH:

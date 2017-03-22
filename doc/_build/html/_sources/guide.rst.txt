@@ -31,7 +31,7 @@ Make sure you have git_ installed:
 .. code:: bash
 
    cd ~/
-   git clone <PLACEHOLDER_URL>
+   git clone https://github.com/MoseleyBioinformaticsLab/GOcats.git
 
 Dependencies
 ............
