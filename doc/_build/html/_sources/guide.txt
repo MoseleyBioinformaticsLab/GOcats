@@ -1,0 +1,134 @@
+User Guide
+==========
+
+Description
+~~~~~~~~~~~
+
+:mod:`GOcats` is an Open Biomedical Ontology (OBO) parser and categorizing utility--currently specialized for the Gene
+Ontology (GO)--which can help scientists interpret large-scale experimental results by organizing redundant and highly-
+specific annotations into customizable, biologically-relevant concept categories. Concept subgraphs are defined by lists
+of keywords created by the user.
+
+Currently, the `GOcats` package can be used to:
+   * Create subgraphs of GO which each represent a user-specified concept.
+   * Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
+     categories.
+   * Explore the Gene Ontology graph within a Python interpreter.
+
+Installation
+~~~~~~~~~~~~
+
+`GOcats` runs under Python 3.4+, clone the git repo and install the following dependencies and you are ready to go!
+
+Install on Linux
+----------------
+
+Package installation
+....................
+
+Make sure you have git_ installed:
+
+.. code:: bash
+
+   cd ~/
+   git clone <PLACEHOLDER_URL>
+
+Dependencies
+............
+
+`GOcats` requires the following Python libraries:
+
+   * docopt_ for creating the :mod:`gocats` command-line interface.
+   * JSONPickle_ for saving Python objects in a JSON serializable form and outputting to a file.
+
+To install dependencies:
+
+.. code:: bash
+
+   pip3 install docopt
+   pip3 install jsonpickle
+
+Install on Windows
+------------------
+Windows installation not yet available. Sorry about that.
+
+
+Basic usage
+~~~~~~~~~~~
+
+:mod:`gocats` can be used in the following ways:
+
+   * As a method to extract subgraphs of Gene Ontology that represent user-defined concepts and create mappings between
+     high level concepts and their subgraph content terms.
+
+      1. Create a CSV file, where column 1 is the name of the concept category (this can be anything) and
+      column 2 is a list of keywords/phrases delineating that concept (separated by semicolons). See
+      :doc:`tutorial` for more information.
+
+      2. Download a Gene Ontology database obo_ file
+
+      3. To create mappings, run the GOcats command, :func:`gocats.create_subgraphs` in the ~/GOcats directory or
+      add the directory to the PYTHONPATH.
+
+      .. code:: bash
+
+         python3 -m gocats create_subdags <ontology_database_file> <keyword_file> <output_directory>
+
+      4. Mappings can be found in your specified <output_directory>:
+
+         - GC_content_mapping.json_pickle  # A python dictionary with category-defining GO terms as keys and a list of
+           all subgraph contents as values.
+
+         - GC_id_mapping.json_pickle  # A python dictionary with every GO term of the specified namespace as keys and a
+           list of category root terms as values.
+
+   * As a method to map gene annotations in a Gene Annotation File (GAF) to a set of user-defined categories.
+
+      1. Create mapping files as defined in the previous section.
+
+      2. Run the :func:`gocats.categorize_dataset` to map terms to their categories:
+
+      .. code:: bash
+
+         # NOTE: Use the GC_id_mapping.jsonpickle file.
+         python3 -m gocats categorize_dataset <GAF_file> <term_mapping_file> <output_directory> <mapped_gaf_filename>
+
+      3. The output GAF will have the specified <mapped_gaf_filename> in the <output_directory>
+
+   * Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see :doc:`tutorial` for more
+     information).
+
+      1. Navigate to the module directory within the project directory, open a Python 3.4+ interpreter, and import
+      GOcats:
+
+      .. code:: bash
+
+         cd ~/GOcats
+         python3
+
+      .. code:: Python
+
+         >>> import gocats
+
+      2. Create the graph object using :func:`gocats.build_graph_interpreter`:
+
+      .. code:: Python
+
+         >>> # May filter to GO sub-ontology or to a set of relationships.
+         >>> my_graph = gocats.build_graph_interpreter("path_to_database_file")
+
+         You may now access all properties of the Gene Ontology graph object. Here are a couple of examples:
+
+      .. code:: Python
+
+         >>> # See the descendants of a term node, GO:0006306
+         >>> descendant_set = my_graph.id_index['GO:0006306'].descendants
+         >>> [node.name for node in descendant_set]
+         >>> # Access all graph leaf nodes
+         >>> leaf_nodes  = my_graph.leaves
+         >>> [node.name for node in leaf_nodes]
+
+.. _git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
+.. _docopt: https://github.com/docopt/docopt
+.. _JSONPickle: https://github.com/jsonpickle/jsonpickle
+.. _obo: http://www.geneontology.org/page/download-ontology
