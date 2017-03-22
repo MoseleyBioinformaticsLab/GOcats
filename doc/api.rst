@@ -6,13 +6,13 @@ Modules
 ~~~~~~~
 The following modules are located in /ARK.GOcats/gocats.
 
-.. automodule:: gocats
+.. automodule:: gocats.gocats
    :members:
 
 Directed Acyclic Graph (DAG)
 ----------------------------
 
-.. automodule:: dag
+.. automodule:: gocats.dag
    :member-order: bysource
    :members:
    :special-members:
@@ -21,7 +21,7 @@ Directed Acyclic Graph (DAG)
 Gene Ontology Directed Acylic Graph (GODAG)
 -------------------------------------------
 
-.. automodule:: godag
+.. automodule:: gocats.godag
    :member-order: bysource
    :members:
    :special-members:
@@ -30,7 +30,7 @@ Gene Ontology Directed Acylic Graph (GODAG)
 Directed Acyclic Subgraph (SubDAG)
 ----------------------------------
 
-.. automodule:: subdag
+.. automodule:: gocats.subdag
    :member-order: bysource
    :members:
    :special-members:
@@ -39,7 +39,7 @@ Directed Acyclic Subgraph (SubDAG)
 Ontology Parser
 ---------------
 
-.. automodule:: ontologyparser
+.. automodule:: gocats.ontologyparser
    :member-order: bysource
    :members:
    :special-members:
@@ -48,7 +48,7 @@ Ontology Parser
 Tools
 -----
 
-.. automodule:: tools
+.. automodule:: gocats.tools
    :member-order: bysource
    :members:
    :special-members:

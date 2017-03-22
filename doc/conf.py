@@ -19,8 +19,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../gocats'))
-from _version import __version__, short_version
+sys.path.insert(0, os.path.abspath('../../ARK.GOcats'))
+from gocats._version import __version__, short_version
 
 # -- General configuration ------------------------------------------------
 
@@ -37,9 +37,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinx.ext.imgmath',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
+    'sphinx.ext.viewcode'
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
