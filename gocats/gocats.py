@@ -10,10 +10,10 @@ import os
 import sys
 import re
 import csv
-import ontologyparser
-import godag
-import subdag
-import tools
+from . import ontologyparser
+from . import godag
+from . import subdag
+from . import tools
 
 
 # Need a SubGraphCollection object
