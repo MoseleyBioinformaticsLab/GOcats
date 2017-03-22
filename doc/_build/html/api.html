@@ -197,8 +197,8 @@ entire ontology graph. Otherwise, provide filters to limit what information is p
 <dl class="attribute">
 <dt id="gocats.dag.OboGraph.orphans">
 <code class="descname">orphans</code><a class="headerlink" href="#gocats.dag.OboGraph.orphans" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph which have no parents. When the graph is modified, calls
-<a class="reference internal" href="#gocats.dag.OboGraph._update_graph" title="gocats.dag.OboGraph._update_graph"><code class="xref py py-func docutils literal"><span class="pre">_update_graph()</span></code></a> to repopulate the sets of orphan and leaf nodes.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph which have no parents. When the graph is modified,
+calls <a class="reference internal" href="#gocats.dag.OboGraph._update_graph" title="gocats.dag.OboGraph._update_graph"><code class="xref py py-func docutils literal"><span class="pre">_update_graph()</span></code></a> to repopulate the sets of orphan and leaf nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -214,8 +214,8 @@ entire ontology graph. Otherwise, provide filters to limit what information is p
 <dl class="attribute">
 <dt id="gocats.dag.OboGraph.leaves">
 <code class="descname">leaves</code><a class="headerlink" href="#gocats.dag.OboGraph.leaves" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph which have no children. When the graph is modified, calls
-<a class="reference internal" href="#gocats.dag.OboGraph._update_graph" title="gocats.dag.OboGraph._update_graph"><code class="xref py py-func docutils literal"><span class="pre">_update_graph()</span></code></a> to repopulate the sets of orphan and leaf nodes.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph which have no children. When the graph is modified,
+calls <a class="reference internal" href="#gocats.dag.OboGraph._update_graph" title="gocats.dag.OboGraph._update_graph"><code class="xref py py-func docutils literal"><span class="pre">_update_graph()</span></code></a> to repopulate the sets of orphan and leaf nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -381,8 +381,8 @@ that relationships ID. Sets modification state to <a class="reference external" 
 <dt id="gocats.dag.OboGraph.instantiate_valid_edges">
 <code class="descname">instantiate_valid_edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/dag.html#OboGraph.instantiate_valid_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.OboGraph.instantiate_valid_edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add all edge references to their respective nodes and vice versa if both nodes of the edge are in the graph.
-This is carried out by <a class="reference internal" href="#gocats.dag.AbstractEdge.connect_nodes" title="gocats.dag.AbstractEdge.connect_nodes"><code class="xref py py-func docutils literal"><span class="pre">AbstractEdge.connect_nodes()</span></code></a>. Also adds <a class="reference internal" href="#gocats.dag.AbstractRelationship" title="gocats.dag.AbstractRelationship"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractRelationship</span></code></a> object
-reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets
+This is carried out by <a class="reference internal" href="#gocats.dag.AbstractEdge.connect_nodes" title="gocats.dag.AbstractEdge.connect_nodes"><code class="xref py py-func docutils literal"><span class="pre">AbstractEdge.connect_nodes()</span></code></a>. Also adds <a class="reference internal" href="#gocats.dag.AbstractRelationship" title="gocats.dag.AbstractRelationship"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractRelationship</span></code></a>
+object reference to each edge. If both nodes are not in the graph, the edge is deleted from the graph. Sets
 modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -489,7 +489,7 @@ an empty set is returned.</p>
 <dt id="gocats.dag.AbstractNode">
 <em class="property">class </em><code class="descclassname">gocats.dag.</code><code class="descname">AbstractNode</code><a class="reference internal" href="_modules/gocats/dag.html#AbstractNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.AbstractNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>A node containing all basic properties of an OBO node. The parsing object, <a class="reference internal" href="#gocats.ontologyparser.OboParser" title="gocats.ontologyparser.OboParser"><code class="xref py py-class docutils literal"><span class="pre">gocats.ontologyparser.OboParser</span></code></a>
-currently has direct access to datamembers (id, name, definition, namespace, edges, and obsolete) so that
+currently has direct access to data members (id, name, definition, namespace, edges, and obsolete) so that
 information from the database file can be added to the object.</p>
 <dl class="method">
 <dt id="gocats.dag.AbstractNode.__init__">
@@ -501,8 +501,8 @@ information from the database file can be added to the object.</p>
 <dt id="gocats.dag.AbstractNode.descendants">
 <code class="descname">descendants</code><a class="headerlink" href="#gocats.dag.AbstractNode.descendants" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph that are recursively reverse of a node with a
-scoping-type relationship. When the node is modified, calls <a class="reference internal" href="#gocats.dag.AbstractNode._update_node" title="gocats.dag.AbstractNode._update_node"><code class="xref py py-func docutils literal"><span class="pre">gocats.dag.AbstractNode._update_node()</span></code></a> to repopulate the sets of
-descendants and ancestors. This represents a &#8220;lazy&#8221; evaluation of node descendants.</p>
+scoping-type relationship. When the node is modified, calls <a class="reference internal" href="#gocats.dag.AbstractNode._update_node" title="gocats.dag.AbstractNode._update_node"><code class="xref py py-func docutils literal"><span class="pre">gocats.dag.AbstractNode._update_node()</span></code></a> to
+repopulate the sets of descendants and ancestors. This represents a &#8220;lazy&#8221; evaluation of node descendants.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -519,8 +519,8 @@ descendants and ancestors. This represents a &#8220;lazy&#8221; evaluation of no
 <dt id="gocats.dag.AbstractNode.ancestors">
 <code class="descname">ancestors</code><a class="headerlink" href="#gocats.dag.AbstractNode.ancestors" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining a set of nodes in the graph that are recursively forward of a node with a
-scoping-type relationship. When the node is modified, calls <a class="reference internal" href="#gocats.dag.AbstractNode._update_node" title="gocats.dag.AbstractNode._update_node"><code class="xref py py-func docutils literal"><span class="pre">gocats.dag.AbstractNode._update_node()</span></code></a> to repopulate the sets of
-descendants and ancestors. This represents a &#8220;lazy&#8221; evaluation of node ancestors.</p>
+scoping-type relationship. When the node is modified, calls <a class="reference internal" href="#gocats.dag.AbstractNode._update_node" title="gocats.dag.AbstractNode._update_node"><code class="xref py py-func docutils literal"><span class="pre">gocats.dag.AbstractNode._update_node()</span></code></a> to
+repopulate the sets of descendants and ancestors. This represents a &#8220;lazy&#8221; evaluation of node ancestors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -552,9 +552,9 @@ descendants and ancestors. This represents a &#8220;lazy&#8221; evaluation of no
 <dl class="method">
 <dt id="gocats.dag.AbstractNode.add_edge">
 <code class="descname">add_edge</code><span class="sig-paren">(</span><em>edge</em>, <em>allowed_relationships</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/dag.html#AbstractNode.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.AbstractNode.add_edge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a given <a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> to a each <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> objects that the edge connects.
-If there is a filter for the types of relationships allowed, edges with non-allowed relationship types are not
-processed. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<dd><p>Adds a given <a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> to a each <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> objects that the
+edge connects. If there is a filter for the types of relationships allowed, edges with non-allowed relationship
+types are not processed. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -570,8 +570,8 @@ processed. Sets modification state to <a class="reference external" href="https:
 <dl class="method">
 <dt id="gocats.dag.AbstractNode.remove_edge">
 <code class="descname">remove_edge</code><span class="sig-paren">(</span><em>edge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/dag.html#AbstractNode.remove_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.AbstractNode.remove_edge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes a given <a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> the <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object. Also removes parent or child
-node references that the edge referenced. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<dd><p>Removes a given <a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> the <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object. Also removes
+parent or child node references that the edge referenced. Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -587,9 +587,9 @@ node references that the edge referenced. Sets modification state to <a class="r
 <dl class="method">
 <dt id="gocats.dag.AbstractNode._update_descendants">
 <code class="descname">_update_descendants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/dag.html#AbstractNode._update_descendants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.AbstractNode._update_descendants" title="Permalink to this definition">¶</a></dt>
-<dd><p>Used for the lazy evaluation of graph descendants of the current <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object. Creates
-internal <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a> variable, descendant_set. Iterates through node children until the bottom of the graph is
-reached. The descendant_set is a set of all nodes across all paths encountered from the current node.</p>
+<dd><p>Used for the lazy evaluation of graph descendants of the current <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object.
+Creates internal <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a> variable, descendant_set. Iterates through node children until the bottom of the
+graph is reached. The descendant_set is a set of all nodes across all paths encountered from the current node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -605,9 +605,9 @@ reached. The descendant_set is a set of all nodes across all paths encountered f
 <dl class="method">
 <dt id="gocats.dag.AbstractNode._update_ancestors">
 <code class="descname">_update_ancestors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/dag.html#AbstractNode._update_ancestors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.AbstractNode._update_ancestors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Used for the lazy evaluation of graph ancestors of the current <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object. Creates
-internal <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a> variable, ancestors_set. Iterates through node parents until the top of the graph is
-reached. The ancestors_set is a set of all nodes across all paths encountered from the current node.</p>
+<dd><p>Used for the lazy evaluation of graph ancestors of the current <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object.
+Creates internal <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">set</span></code></a> variable, ancestors_set. Iterates through node parents until the top of the graph
+is reached. The ancestors_set is a set of all nodes across all paths encountered from the current node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -657,7 +657,8 @@ connected by the edge. Defaults to <a class="reference external" href="https://d
 <dl class="attribute">
 <dt id="gocats.dag.AbstractEdge.parent_id">
 <code class="descname">parent_id</code><a class="headerlink" href="#gocats.dag.AbstractEdge.parent_id" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining the ID of the node forward of the current <a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> object.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining the ID of the node forward of the current <a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a>
+object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -724,8 +725,8 @@ connected by the edge. Defaults to <a class="reference external" href="https://d
 <dt id="gocats.dag.AbstractEdge.parent_node">
 <code class="descname">parent_node</code><a class="headerlink" href="#gocats.dag.AbstractEdge.parent_node" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining the <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object forward of the current
-<a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> object. This designation will be unique to scoping-type relationships, although this
-is <strong>not yet specified</strong>.</p>
+<a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> object. This designation will be unique to scoping-type relationships, although
+this is <strong>not yet specified</strong>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -742,8 +743,8 @@ is <strong>not yet specified</strong>.</p>
 <dt id="gocats.dag.AbstractEdge.child_node">
 <code class="descname">child_node</code><a class="headerlink" href="#gocats.dag.AbstractEdge.child_node" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#property" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">property</span></code></a> defining the <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object reverse of the current
-<a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> object. This designation will be unique to scoping-type relationships, although this
-is <strong>not yet specified</strong>.</p>
+<a class="reference internal" href="#gocats.dag.AbstractEdge" title="gocats.dag.AbstractEdge"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractEdge</span></code></a> object. This designation will be unique to scoping-type relationships, although
+this is <strong>not yet specified</strong>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -931,7 +932,7 @@ directionality of the edge. Default position is the second position [1].</p>
 <dl class="class">
 <dt id="gocats.dag.NonDirectionalRelationship">
 <em class="property">class </em><code class="descclassname">gocats.dag.</code><code class="descname">NonDirectionalRelationship</code><a class="reference internal" href="_modules/gocats/dag.html#NonDirectionalRelationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.NonDirectionalRelationship" title="Permalink to this definition">¶</a></dt>
-<dd><p>A non-directional relationship whose edge directionality is either non-existant or semantically irrelevant.</p>
+<dd><p>A non-directional relationship whose edge directionality is either non-existent or semantically irrelevant.</p>
 <dl class="method">
 <dt id="gocats.dag.NonDirectionalRelationship.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/dag.html#NonDirectionalRelationship.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.dag.NonDirectionalRelationship.__init__" title="Permalink to this definition">¶</a></dt>
@@ -992,8 +993,8 @@ ontologies.</p>
 <dl class="method">
 <dt id="gocats.subdag.SubGraph.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>super_graph</em>, <em>namespace_filter=None</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/subdag.html#SubGraph.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.subdag.SubGraph.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>SubGraph initializer. Creates a subgraph object of :class:`gocats.dag.OboGraph</cite>. Leave <cite>namespace_filter</cite> and
-<cite>allowed_relationship</cite> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> to create the entire ontology graph. Otherwise, provide filters to
+<dd><p><cite>SubGraph initializer. Creates a subgraph object of :class:`gocats.dag.OboGraph</cite>. Leave <cite>namespace_filter</cite>
+and <cite>allowed_relationship</cite> as <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">None</span></code></a> to create the entire ontology graph. Otherwise, provide filters to
 limit what information is pulled into the subgraph.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1030,8 +1031,9 @@ limit what information is pulled into the subgraph.</p>
 <dl class="attribute">
 <dt id="gocats.subdag.SubGraph.root_node_mapping">
 <code class="descname">root_node_mapping</code><a class="headerlink" href="#gocats.subdag.SubGraph.root_node_mapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property describing a mapping <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> that relates every ontology <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> object of
-subgraphs in <a class="reference internal" href="#gocats.dag.OboGraph" title="gocats.dag.OboGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.OboGraph</span></code></a> to a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of root, subgraph category-representative node objects.</p>
+<dd><p>Property describing a mapping <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> that relates every ontology <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a>
+object of subgraphs in <a class="reference internal" href="#gocats.dag.OboGraph" title="gocats.dag.OboGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.OboGraph</span></code></a> to a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of root, subgraph
+category-representative node objects.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1047,8 +1049,9 @@ subgraphs in <a class="reference internal" href="#gocats.dag.OboGraph" title="go
 <dl class="attribute">
 <dt id="gocats.subdag.SubGraph.content_mapping">
 <code class="descname">content_mapping</code><a class="headerlink" href="#gocats.subdag.SubGraph.content_mapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property describing a mapping <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> that relates every root ontology <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> IDs
-of subgraphs in a <a class="reference internal" href="#gocats.dag.OboGraph" title="gocats.dag.OboGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.OboGraph</span></code></a> to a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of their subgraph nodes&#8217; IDs.</p>
+<dd><p>Property describing a mapping <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a> that relates every root ontology
+<a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> IDs of subgraphs in a <a class="reference internal" href="#gocats.dag.OboGraph" title="gocats.dag.OboGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.OboGraph</span></code></a> to a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of their
+subgraph nodes&#8217; IDs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1064,8 +1067,8 @@ of subgraphs in a <a class="reference internal" href="#gocats.dag.OboGraph" titl
 <dl class="method">
 <dt id="gocats.subdag.SubGraph.subnode">
 <code class="descname">subnode</code><span class="sig-paren">(</span><em>super_node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/subdag.html#SubGraph.subnode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.subdag.SubGraph.subnode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines a <a class="reference internal" href="#gocats.subdag.SubGraph" title="gocats.subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraph</span></code></a> node object. Calls <a class="reference internal" href="#gocats.subdag.SubGraph.add_node" title="gocats.subdag.SubGraph.add_node"><code class="xref py py-func docutils literal"><span class="pre">add_node()</span></code></a> to convert a supergraph node into a
-<a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> and add this node to the subgraph.</p>
+<dd><p>Defines a <a class="reference internal" href="#gocats.subdag.SubGraph" title="gocats.subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraph</span></code></a> node object. Calls <a class="reference internal" href="#gocats.subdag.SubGraph.add_node" title="gocats.subdag.SubGraph.add_node"><code class="xref py py-func docutils literal"><span class="pre">add_node()</span></code></a> to convert a supergraph node
+into a <a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> and add this node to the subgraph.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1083,8 +1086,8 @@ of subgraphs in a <a class="reference internal" href="#gocats.dag.OboGraph" titl
 <dl class="method">
 <dt id="gocats.subdag.SubGraph.add_node">
 <code class="descname">add_node</code><span class="sig-paren">(</span><em>super_node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/subdag.html#SubGraph.add_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.subdag.SubGraph.add_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a supergraph node into a <a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> and adds this node to the subgraph. Sets
-modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+<dd><p>Converts a supergraph node into a <a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> and adds this node to the subgraph.
+Sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1103,9 +1106,9 @@ modification state to <a class="reference external" href="https://docs.python.or
 <dt id="gocats.subdag.SubGraph.connect_subnodes">
 <code class="descname">connect_subnodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/subdag.html#SubGraph.connect_subnodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.subdag.SubGraph.connect_subnodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Analogous to <code class="xref py py-func docutils literal"><span class="pre">gocats.dag.instantiate_valid_edges()</span></code> and <a class="reference internal" href="#gocats.dag.AbstractEdge.connect_nodes" title="gocats.dag.AbstractEdge.connect_nodes"><code class="xref py py-func docutils literal"><span class="pre">gocats.dag.AbstractEdge.connect_nodes()</span></code></a>.
-Updates child and parent node sets for each <a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> in the <a class="reference internal" href="#gocats.subdag.SubGraph" title="gocats.subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraph</span></code></a>. Adds
-edge object references to nodes and node object references to edges. Counts instances of relationship IDs and
-sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
+Updates child and parent node sets for each <a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> in the
+<a class="reference internal" href="#gocats.subdag.SubGraph" title="gocats.subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraph</span></code></a>. Adds edge object references to nodes and node object references to edges.
+Counts instances of relationship IDs and sets modification state to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.6)"><code class="xref py py-obj docutils literal"><span class="pre">True</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1173,10 +1176,10 @@ category-representative node.</p>
 <dl class="staticmethod">
 <dt id="gocats.subdag.SubGraph.find_representative_node">
 <em class="property">static </em><code class="descname">find_representative_node</code><span class="sig-paren">(</span><em>subgraph</em>, <em>search_string_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/subdag.html#SubGraph.find_representative_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.subdag.SubGraph.find_representative_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts candidate <a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> objects from the <a class="reference internal" href="#gocats.subdag.SubGraph" title="gocats.subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraph</span></code></a> objects based on a
-list of search strings matching strings in the names of the nodes (using regular expressions). Returns the
-candidate node with the highest number of descendants. Returns the sole node if the subgraph only contains one
-node, aborts if the subgraph is empty.</p>
+<dd><p>Extracts candidate <a class="reference internal" href="#gocats.subdag.SubGraphNode" title="gocats.subdag.SubGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraphNode</span></code></a> objects from the <a class="reference internal" href="#gocats.subdag.SubGraph" title="gocats.subdag.SubGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.subdag.SubGraph</span></code></a>
+objects based on a list of search strings matching strings in the names of the nodes (using regular
+expressions). Returns the candidate node with the highest number of descendants. Returns the sole node if the
+subgraph only contains one node, aborts if the subgraph is empty.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1232,8 +1235,8 @@ subgraph after instantiation. Conversely, &#8216;conservative&#8217; may be used
 <dl class="method">
 <dt id="gocats.subdag.SubGraphNode.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>super_node</em>, <em>allowed_relationships=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/subdag.html#SubGraphNode.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.subdag.SubGraphNode.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>SubGraphNode initializer. Inherits from <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> and contains a reference to the supergraph
-node it represents e.g. <a class="reference internal" href="#gocats.godag.GoGraphNode" title="gocats.godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.godag.GoGraphNode</span></code></a>.</p>
+<dd><p>SubGraphNode initializer. Inherits from <a class="reference internal" href="#gocats.dag.AbstractNode" title="gocats.dag.AbstractNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.dag.AbstractNode</span></code></a> and contains a reference to the
+supergraph node it represents e.g. <a class="reference internal" href="#gocats.godag.GoGraphNode" title="gocats.godag.GoGraphNode"><code class="xref py py-class docutils literal"><span class="pre">gocats.godag.GoGraphNode</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1416,9 +1419,9 @@ ontologies.</p>
 <dl class="method">
 <dt id="gocats.ontologyparser.GoParser.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>database_file</em>, <em>go_graph</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gocats/ontologyparser.html#GoParser.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gocats.ontologyparser.GoParser.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>GoParser</cite> initializer. Parses a Gene Ontology database file and adds properties found therin to a
-<a class="reference internal" href="#gocats.godag.GoGraph" title="gocats.godag.GoGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.godag.GoGraph</span></code></a> object. <strong>Importantly:</strong> includes descriptions of semantic directionality of all GO
-relationships.</p>
+<dd><p><cite>GoParser</cite> initializer. Parses a Gene Ontology database file and adds properties found therein to a
+<a class="reference internal" href="#gocats.godag.GoGraph" title="gocats.godag.GoGraph"><code class="xref py py-class docutils literal"><span class="pre">gocats.godag.GoGraph</span></code></a> object. <strong>Importantly:</strong> includes descriptions of semantic directionality of all
+GO relationships.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
