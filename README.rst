@@ -51,7 +51,7 @@ Windows version not yet available; sorry about that.
 Quickstart
 ~~~~~~~~~~
 
-For instructions on how to format your keyword list and advanced argument usage, consult the [tutorial](doc/tutorial.rst), [guide](doc/guide.rst), and [API](doc/api.rst)
+For instructions on how to format your keyword list and advanced argument usage, consult the `tutorial <doc/tutorial.rst>`_, [guide](doc/guide.rst), and [API](doc/api.rst)
 documentation in GOcats/doc.
 
 Subgraphs can be created from the command line. Either navigate to the GOcats directory or add the directory to your
