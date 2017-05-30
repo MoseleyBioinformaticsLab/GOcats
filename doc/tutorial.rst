@@ -181,7 +181,11 @@ GOcats:
 
 .. code:: Python
 
+<<<<<<< HEAD
    >>> import gocats.gocats as gocats
+=======
+   >>> import gocats
+>>>>>>> 968d220051822ba0104d0097b9e008cfb617b7c6
 
 Next, create the graph object using :func:`gocats.gocats.build_graph_interpreter`. Since we have been looking at the
 cellular_component sub-ontology in this example, we can specify that we only want to look at that part of the graph with
