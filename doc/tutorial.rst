@@ -67,16 +67,16 @@ The go.obo file is available here: http://www.geneontology.org/page/download-ont
 .obo-formatted version. All releases of GO in this format as of Jan 2015 have been verified to be compatible with
 GOcats. We'll assume this database file is located in the home directory and is called "go.obo."
 
-Extract subgraphs and creating concept mappings
------------------------------------------------
+Extract subgraphs and create concept mappings
+---------------------------------------------
 
-This is where GOcats does the heavy lifting. We'll assume the GOcats repository was already cloned into the home
-directory (refer to :doc:`guide` for instructions on how to install GOcats). We can now use Python to run the
-:func:`gocats.gocats.create_subgraphs` function. We can also specify that we only want to parse the "cellular_component"
-sub-ontology of GO (the "supergraph namespace"), since we are only interested in concepts of this type. Although it is
-redundant, we can also play it safe and limit subgraph creation to only consider terms listed in "cellular_component" as
-well (the "subgraph namespace"). Navigate to the GOcats directory or add this directory to your PYTHONPATH and run
-the following:
+This is where GOcats does the heavy lifting. We'll assume GOcats was already installed via pip or the repository was
+already cloned into the home directory (refer to :doc:`guide` for instructions on how to install GOcats). We can now use
+Python to run the :func:`gocats.gocats.create_subgraphs` function. We can also specify that we only want to parse the
+"cellular_component" sub-ontology of GO (the "supergraph namespace"), since we are only interested in concepts of this
+type. Although it is redundant, we can also play it safe and limit subgraph creation to only consider terms listed in
+"cellular_component" as well (the "subgraph namespace"). Run the following if you hav installed via pip (if running from
+the Git repository navigate to the GOcats directory or add this directory to your PYTHONPATH beforehand).
 
    .. code:: bash
 
@@ -157,8 +157,8 @@ Using GOcats to map specific gene annotations in a GAF to custom categories
 With mapping files produced from the previous steps, it is possible to create a GAF with annotations mapped to the
 categories, or concepts, that we define. Let's consider our current "cell_locations" example and imagine that we have
 some gene set containing annotations in a GAF called "dataset_GAF.goa" in the home directory. To map these annotations,
-use the :func:`gocats.gocats.categorize_dataset` option. Navigate to the GOcats directory or add this directory to
-your PYTHONPATH and run the following:
+use the :func:`gocats.gocats.categorize_dataset` option. Again, this should work from any location if you've installed
+via pip, otherwise navigate to the GOcats directory or add this directory to your PYTHONPATH and run the following:
 
 .. code:: bash
 
@@ -168,24 +168,15 @@ your PYTHONPATH and run the following:
 Here, we named the output directory "~/mapped_dataset" and we named the mapped GAF "mapped_GAF.goa". The mapped gaf and
 a list of unmapped genes will be stored in the output directory.
 
-Exploring Gene Ontology graph in a Python interpreter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Exploring Gene Ontology graph in a Python interpreter or in your own Python project
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, navigate to the GOcats module directory within the project directory, open a Python 3.4+ interpreter, and import
-GOcats:
-
-.. code:: bash
-
-   cd ~/GOcats
-   python3
+If you've installed GOcats via pip, importing should work as expected. Otherwise, navigate to the Git project directory,
+open a Python 3.4+ interpreter, and import GOcats:
 
 .. code:: Python
 
-<<<<<<< HEAD
-   >>> import gocats.gocats as gocats
-=======
-   >>> import gocats
->>>>>>> 968d220051822ba0104d0097b9e008cfb617b7c6
+   >>> from gocats import gocats as gc
 
 Next, create the graph object using :func:`gocats.gocats.build_graph_interpreter`. Since we have been looking at the
 cellular_component sub-ontology in this example, we can specify that we only want to look at that part of the graph with
@@ -195,8 +186,8 @@ option (only is_a, has_part, and part_of exist in cellular_component, so this is
 .. code:: Python
 
    >>> # May filter to GO sub-ontology or to a set of relationships.
-   >>> my_graph = gocats.build_graph_interpreter("~/go.obo", supergraph_namespace=cellular_component, allowed_relationships=["is_a", "has_part", "part_of"])
-   >>> full_graph = gocats.build_graph_interpreter("~/go.obo")
+   >>> my_graph = gc.build_graph_interpreter("~/go.obo", supergraph_namespace=cellular_component, allowed_relationships=["is_a", "has_part", "part_of"])
+   >>> full_graph = gc.build_graph_interpreter("~/go.obo")
 
 The filtered graph (my_graph) and the full GO graph (full_graph) can now be explored.
 
