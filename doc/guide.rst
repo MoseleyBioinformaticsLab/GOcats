@@ -18,24 +18,30 @@ Currently, the `GOcats` package can be used to:
 Installation
 ~~~~~~~~~~~~
 
-`GOcats` runs under Python 3.4+, clone the git repo and install the following dependencies and you are ready to go!
+`GOcats` runs under Python 3.4+ and is available through python3-pip. Install via pip or clone the git repo and install
+the following dependencies and you are ready to go!
 
 Install on Linux
 ----------------
 
-Package installation
-....................
+Pip installation (method 1)
+...........................
+
+Dependencies should automatically be installed using this method. It is strongly recommended that you install with this
+method.
+.. code:: bash
+
+   pip3 install gocats
+
+GitHub Package installation (method 2)
+......................................
 
 Make sure you have git_ installed:
 
 .. code:: bash
 
    cd ~/
-<<<<<<< HEAD
    git clone https://github.com/MoseleyBioinformaticsLab/GOcats.git
-=======
-   git clone <PLACEHOLDER_URL>
->>>>>>> 968d220051822ba0104d0097b9e008cfb617b7c6
 
 Dependencies
 ............
@@ -45,7 +51,7 @@ Dependencies
    * docopt_ for creating the :mod:`gocats` command-line interface.
    * JSONPickle_ for saving Python objects in a JSON serializable form and outputting to a file.
 
-To install dependencies:
+To install dependencies manually:
 
 .. code:: bash
 
@@ -77,8 +83,8 @@ To see command line arguments and options, navigate to the project directory and
 
       2. Download a Gene Ontology database obo_ file
 
-      3. To create mappings, run the GOcats command, :func:`gocats.gocats.create_subgraphs` in the ~/GOcats
-      directory or add the directory to the PYTHONPATH.
+      3. To create mappings, run the GOcats command, :func:`gocats.gocats.create_subgraphs`. If you installed by cloning
+      the repository from GitHub, first navigate to the GOcats project directory or add the directory to the PYTHONPATH.
 
       .. code:: bash
 
@@ -108,23 +114,19 @@ To see command line arguments and options, navigate to the project directory and
    * Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see :doc:`tutorial` for more
      information).
 
-      1. Navigate to the project directory, open a Python 3.4+ interpreter, and import GOcats:
+      1. If you've installed GOcats via pip, importing should work as expected. Otherwise, navigate to the Git project
+      directory, open a Python 3.4+ interpreter, and import GOcats:
 
-      .. code:: bash
+     .. code:: Python
 
-         cd ~/GOcats
-         python3
-
-      .. code:: Python
-
-         >>> import gocats
+         >>> from gocats import gocats as gc
 
       2. Create the graph object using :func:`gocats.gocats.build_graph_interpreter`:
 
       .. code:: Python
 
          >>> # May filter to GO sub-ontology or to a set of relationships.
-         >>> my_graph = gocats.build_graph_interpreter("path_to_database_file")
+         >>> my_graph = gc.build_graph_interpreter("path_to_database_file")
 
          You may now access all properties of the Gene Ontology graph object. Here are a couple of examples:
 

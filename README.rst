@@ -19,23 +19,23 @@ Please cite the GitHub repository until our manuscript is accepted for publicati
 Installation
 ~~~~~~~~~~~~
 
-`GOcats` runs under Python 3.4+, clone the git repo and install the following dependencies and you are ready to go!
+`GOcats` runs under Python 3.4+ and is available through python3-pip. Install via pip or clone the git repo and install
+the following dependencies and you are ready to go!
 
 Install on Linux
 ----------------
 
-Dependency installation
-.......................
+Pip installation
+................
 
-GOcats requires JSONPickle and docopt:
-
+Dependencies should be automatically installed using this method. It is strongly recommended that you install with this
+method.
 .. code:: bash
 
-   pip3 install docopt
-   pip3 install jsonpickle
+   pip3 install gocats
 
-Package installation
-....................
+GitHub Package installation
+...........................
 
 Make sure you have git_ installed:
 
@@ -43,6 +43,21 @@ Make sure you have git_ installed:
 
    cd ~/
    git clone https://github.com/MoseleyBioinformaticsLab/GOcats.git
+
+Dependencies
+............
+
+`GOcats` requires the following Python libraries:
+
+   * docopt_ for creating the :mod:`gocats` command-line interface.
+   * JSONPickle_ for saving Python objects in a JSON serializable form and outputting to a file.
+
+To install dependencies manually:
+
+.. code:: bash
+
+   pip3 install docopt
+   pip3 install jsonpickle
 
 Install on Windows
 ------------------
@@ -53,8 +68,7 @@ Quickstart
 
 For instructions on how to format your keyword list and advanced argument usage, consult the `tutorial <doc/tutorial.rst>`_, `guide <doc/guide.rst>`_, and `API <doc/api.rst>`_
 
-Subgraphs can be created from the command line. Either navigate to the GOcats directory or add the directory to your
-PYTHONPATH:
+Subgraphs can be created from the command line.
 
 .. code:: bash
 
