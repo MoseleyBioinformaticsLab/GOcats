@@ -1,0 +1,20 @@
+image: ewhinderer-twine-python
+
+stages:
+  - deploy
+  - cleanup
+deploy_pypi:
+  stage: deploy
+  script:   # Configure the PyPI credentials, then push the package, and cleanup the creds.
+    - echo "[pypi]" >> ~/.pypirc
+    - echo "username =" $PYPI_USER >> ~/.pypirc
+    - echo "password =" $PYPI_PASSWORD >> ~/.pypirc
+    - python setup.py sdist bdist
+    - twine upload dist/* -r pypi
+  only:
+    - production # This should only execute when the production branch is pushed.
+cleanup_pypirc:
+   stage: cleanup
+   when: always   # this is important; run even if preceding stages failed.
+   script:
+    - rm -vf ~/.pypirc  # we don't want to leave these around, but GitLab may clean up anyway.
