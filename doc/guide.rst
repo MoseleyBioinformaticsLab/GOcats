@@ -29,6 +29,7 @@ Pip installation (method 1)
 
 Dependencies should automatically be installed using this method. It is strongly recommended that you install with this
 method.
+
 .. code:: bash
 
    pip3 install gocats
