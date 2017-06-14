@@ -2,6 +2,7 @@ GOcats
 ======
 
 .. image:: https://raw.githubusercontent.com/MoseleyBioinformaticsLab/GOcats/master/doc/_static/images/GOcats_logo.png
+   :width: 50%
    :align: center
    :target: http://gocats.readthedocs.io/
 
