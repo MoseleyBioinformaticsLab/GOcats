@@ -3,7 +3,7 @@ GOcats
 
 .. image:: https://raw.githubusercontent.com/MoseleyBioinformaticsLab/GOcats/master/doc/_static/images/GOcats_logo.png
    :width: 50%
-   :align: center
+   :align: right
    :target: http://gocats.readthedocs.io/
 
 `GOcats` is an Open Biomedical Ontology (OBO) parser and categorizing utility--currently specialized for the Gene
