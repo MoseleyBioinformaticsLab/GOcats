@@ -118,7 +118,7 @@ To see command line arguments and options, navigate to the project directory and
       1. If you've installed GOcats via pip, importing should work as expected. Otherwise, navigate to the Git project
       directory, open a Python 3.4+ interpreter, and import GOcats:
 
-     .. code:: Python
+      .. code:: Python
 
          >>> from gocats import gocats as gc
 
