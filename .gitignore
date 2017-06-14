@@ -176,7 +176,6 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml 
 # *.ipr
-doc/_static/
 doc/_templates/
 doc/html/
 gocats/__pycache__/
