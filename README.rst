@@ -1,6 +1,11 @@
 GOcats
 ======
 
+.. image:: _static/images/GOcats_logo.png
+   :width: 50%
+   :align: center
+   :target: http://gocats.readthedocs.io/
+
 `GOcats` is an Open Biomedical Ontology (OBO) parser and categorizing utility--currently specialized for the Gene
 Ontology (GO)--which can help scientists interpret large-scale experimental results by organizing redundant and highly-
 specific annotations into customizable, biologically-relevant concept categories. Concept subgraphs are defined by lists

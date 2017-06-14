@@ -6,6 +6,8 @@
 Welcome to GOcats' documentation!
 =================================
 
+.. include:: ../README.rst
+
 .. toctree::
    :maxdepth: 3
    :caption: Contents:
