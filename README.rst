@@ -11,6 +11,8 @@ Ontology (GO)--which can help scientists interpret large-scale experimental resu
 specific annotations into customizable, biologically-relevant concept categories. Concept subgraphs are defined by lists
 of keywords created by the user.
 
+Full API documentation, userguide, and tutorial can be found on readthedocs_
+
 Currently, the `GOcats` package can be used to:
    * Create subgraphs of GO which each represent a user-specified concept.
    * Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
@@ -135,6 +137,7 @@ Authors
 * **Eugene W. Hinderer III** - ehinderer_
 * **Hunter N.B. Moseley** - hunter-moseley_
 
+.. _readthedocs: http://gocats.readthedocs.io/en/latest/
 .. _git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
 .. _ehinderer: https://github.com/ehinderer
 .. _hunter-moseley: https://github.com/hunter-moseley
