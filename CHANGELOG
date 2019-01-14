@@ -10,3 +10,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.1.1] - 2017-06-07
 - Hotfix: Edited glaring issues in documentation. Updated installation instructions for pip and resolved merge conflicts.
+
+## [1.1.2] - 2018-03-13
+- Added new options for traversing relationship directionality in ontologyparser. Can now utilize GOcats' directionality or original directionality.
+
+## [1.1.3] - 2018-03-13
+- Hotfix: Fixed issues in CD/CI scripts.
+
+## [1.1.3a] - 2018-03-15
+- Hotfix: Optimizing deployment options; adding bdist_wheel to setup script.
+
+## [1.1.4] - 2018-04-02
+- Hotfix: Fixed handling of edge case where a subgraph is attempted to be built on a set of seeded nodes that are exclusively leaves of the supergraph.
+- Added CategoryNode object on SubGraph which replaces much of the functionality of the previous version's SubGraph.representative_node data member.
+- CategoryNode contains a list called representative_nodes, which allows the subgraph to be rooted to multiple nodes if needed.
+

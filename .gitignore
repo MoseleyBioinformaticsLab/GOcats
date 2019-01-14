@@ -133,6 +133,8 @@ GitHub.sublime-settings
 .idea/dictionaries
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
+runscripts/*
+vignettes/*
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids
