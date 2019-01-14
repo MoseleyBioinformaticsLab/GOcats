@@ -98,7 +98,7 @@ License
 
 .. include:: ../LICENSE
 
-Made available under the terms of The Clear BSD License. See full license in LICENSE.
+Made available under the terms of The Clear BSD License. See full license in LICENSE_.
 
 Authors
 ~~~~~~~
@@ -112,3 +112,4 @@ Authors
 .. _git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
 .. _ehinderer: https://github.com/ehinderer
 .. _hunter-moseley: https://github.com/hunter-moseley
+.. _LICENSE: https://gocats.readthedocs.io/en/latest/#license
