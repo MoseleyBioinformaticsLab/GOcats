@@ -13,7 +13,7 @@ class OboParser(object):
 
     """A scaffolding for parsing OBO formatted ontologies. Contains regular expressions for the basic stanzas and
     information pertinent for creating a graph object of an ontology."""
-    
+
     def __init__(self):
         """`OboParser` initializer. Contains Regular Expressions for identifying crucial information from OBO formatted
         ontologies.
@@ -40,11 +40,11 @@ class GoParser(OboParser):
 
     """An ontology parser specific to Gene Ontology"""
 
-    def __init__(self, database_file, go_graph):
-        """`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therein to a
-        :class:`gocats.godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all
-        GO relationships.
 
+    def __init__(self, database_file, go_graph, relationship_directionality='gocats'):
+        """`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therein to a
+        :class:`godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO
+        relationships.
         :param file_handle database_file: Specify the location of a Gene Ontology .obo file.
         :param go_graph: :class:`gocats.godag.GoGraph` object.
         :return: None
@@ -54,11 +54,17 @@ class GoParser(OboParser):
         self.database_file = database_file
         self.go_graph = go_graph
         # 5 types of relationships: scoping, scaling (grouped with scoping for now), spatiotemporal, active, equivalence (not present here), and other.
-        # 1 means that the relationship directionality is conventional, 0 means that the semantic directionality points from node 2 to node1.
-        self.relationship_mapping = {"ends_during": ("spatiotemporal", 1), "happens_during": ("spatiotemporal", 1), "has_part": ("scoping", 0),
-                                     "negatively_regulates": ("active", 1), "never_in_taxon": ("other", 1), "occurs_in": ("spatiotemporal", 1),
-                                     "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
-                                     "starts_during": ("spatiotemporal", 1), "is_a": ("scoping", 1)}
+        # 1 means that the relationship directionality is conventional, 0 means that the semantic directionality points from node 2 to node 1.
+        if relationship_directionality == 'gocats':
+            self.relationship_mapping = {"ends_during": ("spatiotemporal", 1), "happens_during": ("spatiotemporal", 1), "has_part": ("scoping", 0),
+                                         "negatively_regulates": ("active", 1), "never_in_taxon": ("other", 1), "occurs_in": ("spatiotemporal", 1),
+                                         "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
+                                         "starts_during": ("spatiotemporal", 1), "is_a": ("scoping", 1)}
+        else:
+            self.relationship_mapping = {"ends_during": ("spatiotemporal", 1), "happens_during": ("spatiotemporal", 1), "has_part": ("scoping", 1),
+                                         "negatively_regulates": ("active", 1), "never_in_taxon": ("other", 1), "occurs_in": ("spatiotemporal", 1),
+                                         "part_of": ("scoping", 1), "positively_regulates": ("active", 1), "regulates": ("active", 1),
+                                         "starts_during": ("spatiotemporal", 1), "is_a": ("scoping", 1)}
 
     def parse(self):
         """Parses the ontology database file and accesses the ontology graph object to add information found in the
@@ -72,7 +78,7 @@ class GoParser(OboParser):
         is_typedef = False
 
         for line in self.database_file:
-            
+
             if not is_term and not is_typedef and re.match(self.term_stanza, line):
                 is_term = True
                 node = GoGraphNode()
@@ -80,7 +86,7 @@ class GoParser(OboParser):
 
             if not is_typedef and not is_term and re.match(self.typedef_stanza, line):
                 is_typedef = True
-                relationship_obj = DirectionalRelationship() 
+                relationship_obj = DirectionalRelationship()
 
             elif is_term:
                 if re.match(self.stanza_id, line):
@@ -124,7 +130,7 @@ class GoParser(OboParser):
                                 self.go_graph.add_edge(edge)
                                 self.go_graph.used_relationship_set.add(edge.relationship_id)
                         if node_edge_list == [] and node.obsolete == False:  # Have to look at the local edge list because nodes have not been linked with edges yet. Entire graph must be populated first. This is the only way to do this on-the-fly.
-                            self.go_graph.root_nodes.append(node)  # make root nodes a set of all namespaces used in the ontology. 
+                            self.go_graph.root_nodes.append(node)  # make root nodes a set of all namespaces used in the ontology.
                     is_term = False
 
             elif is_typedef:

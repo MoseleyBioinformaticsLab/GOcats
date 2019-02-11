@@ -8,7 +8,7 @@ import re
 
 class OboGraph(object):
 
-    """A pythonic graph of a generic Open Biomedical Ontology (OBO) directed 
+    """A pythonic graph of a generic Open Biomedical Ontology (OBO) directed
     acyclic graph (DAG).
     """
 
@@ -62,7 +62,7 @@ class OboGraph(object):
         if self._modified:
             self._update_graph()
         return self._leaves
-    
+
     def valid_node(self, node):
         """Defines condition of a valid node. Node is valid if it is not obsolete and is contained within the given
         ontology namespace constraint.
@@ -111,7 +111,7 @@ class OboGraph(object):
             try:
                 self.vocab_index[word].add(node)
             except KeyError:
-                self.vocab_index[word] = set([node])
+                self.vocab_index[word] = set([node])  # Don't replace with set literal
         self._modified = True
 
     def remove_node(self, node):
@@ -132,7 +132,7 @@ class OboGraph(object):
                     graph_node.child_node_set.remove(node)
                 for edge in graph_node.edges:
                     if node is edge.parent_node or node is edge.child_node:
-                        graph_node.edges.remove(edge)                    
+                        graph_node.edges.remove(edge)
             for word in re.findall(r"[\w\'\-]+", node.name + " " + node.definition):
                 try:
                     self.vocab_index[word].remove(node)
@@ -250,7 +250,7 @@ class OboGraph(object):
         if self.allowed_relationships:
             filtered_edges = [edge for edge in filtered_edges if edge.relationship_id in self.allowed_relationships]
         return filtered_edges
- 
+
     def nodes_between(self, start_node, end_node):
         """Returns a set of nodes that occur along all paths between the start node and the end node. If no paths exist,
         an empty set is returned.
@@ -272,7 +272,7 @@ class AbstractNode(object):
     currently has direct access to data members (id, name, definition, namespace, edges, and obsolete) so that
     information from the database file can be added to the object.
     """
-    
+
     def __init__(self):
         """`AbstractNode` initializer
         """
@@ -288,7 +288,7 @@ class AbstractNode(object):
         self._descendants = None
         self._ancestors = None
         # Will add new sets for equivalence, actor/actee, ordinal, etc
-        
+
     @property
     def descendants(self):
         """:py:obj:`property` defining a set of nodes in the graph that are recursively reverse of a node with a
@@ -314,7 +314,7 @@ class AbstractNode(object):
         if self._modified:
             self._update_node()
         return self._ancestors
-    
+
     def _update_node(self):
         """Repopulates ancestor and descendant sets for a node. Sets modification state to :py:obj:`True`.
 
@@ -371,7 +371,7 @@ class AbstractNode(object):
         :rtype: :py:obj:`None`
         """
         descendant_set = set()
-        children = list(self.child_node_set) 
+        children = list(self.child_node_set)
         while len(children) > 0:
             child = children[0]
             descendant_set.add(child)
@@ -408,7 +408,7 @@ class AbstractEdge(object):
     """An OBO edge which links two ontology term nodes and contains a relationship type describing now the two nodes are
      related.
     """
-    
+
     def __init__(self, node1_id, node2_id, relationship_id, node_pair=None):
         """`AbstractEdge` initializer. Node pair refers to a :py:obj:`tuple` of :class:`gocats.dag.AbstractNode` objects that are
         connected by the edge. Defaults to :py:obj:`None` and is later populated.
@@ -422,6 +422,17 @@ class AbstractEdge(object):
         self.node_pair = node_pair
         self.relationship_id = relationship_id
         self.relationship = None
+
+    @property
+    def json_edge(self):
+        """:py:obj:`property` which returns a tuple where position 0 is a unique string representation of the edge made by combining the ID of the reverse node and the id of the forward nodes and where position 1 is a list of two node IDs: the reverse and forward node.
+
+        :return: :py:obj:`tuple` of a unique :class:`AbstractEdge` ID and a list of that edge object's reverse and forward node IDs, respectively. Returns an empty :py:obj:str at a position for which there are no forward or reverse nodes in the graph.
+        :rtype: :py:obj:`tuple`
+        """
+        reverse_node_id = self.reverse_node.id
+        forward_node_id = self.forward_node.id
+        return (str(reverse_node_id+forward_node_id), [reverse_node_id, forward_node_id])
 
     @property
     def parent_id(self):
@@ -455,7 +466,7 @@ class AbstractEdge(object):
         :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`
         """
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
-            return self.relationship.forward(self.node_pair) 
+            return self.relationship.forward(self.node_pair)
         return None
 
     @property
@@ -467,9 +478,9 @@ class AbstractEdge(object):
         :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`
         """
         if self.node_pair and self.relationship and type(self.relationship) is DirectionalRelationship:
-            return self.relationship.reverse(self.node_pair) 
+            return self.relationship.reverse(self.node_pair)
         return None
-    
+
     @property
     def parent_node(self):
         """:py:obj:`property` defining the :class:`gocats.dag.AbstractNode` object forward of the current
@@ -493,7 +504,7 @@ class AbstractEdge(object):
         :rtype: :class:`gocats.dag.AbstractNode` or :py:obj:`None`
         """
         if self.relationship:
-            return self.relationship.reverse(self.node_pair) 
+            return self.relationship.reverse(self.node_pair)
         return None
 
     # Will finish these later
@@ -606,8 +617,7 @@ class NonDirectionalRelationship(AbstractRelationship):
 
     """A non-directional relationship whose edge directionality is either non-existent or semantically irrelevant.
     """
-    
     def __init__(self):
         """`NonDirectionalRelationship` initializer.
         """
-        return    
+        return
