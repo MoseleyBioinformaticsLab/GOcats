@@ -25,3 +25,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added CategoryNode object on SubGraph which replaces much of the functionality of the previous version's SubGraph.representative_node data member.
 - CategoryNode contains a list called representative_nodes, which allows the subgraph to be rooted to multiple nodes if needed.
 
+## [1.1.6] - 2019-11-25
+- Fixed an issue related to setting max field_size_limit for CSV and creating OverflowErrors on some systems.

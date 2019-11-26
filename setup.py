@@ -20,7 +20,7 @@ setup(
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
 
-    version='1.1.4',
+    version='1.1.6',
 
     description='A tool for categorizing Gene Ontology into subgraphs of user-defined emergent concepts',
     long_description=long_description,

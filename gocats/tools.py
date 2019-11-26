@@ -8,7 +8,17 @@ import sys
 import os
 import re
 import csv
-csv.field_size_limit(sys.maxsize)
+maxInt = sys.maxsize
+
+while True:
+    # decrease the maxInt value by factor 10
+    # as long as the OverflowError occurs.
+
+    try:
+        csv.field_size_limit(maxInt)
+        break
+    except OverflowError:
+        maxInt = int(maxInt/10)
 
 
 # TODO: move to using JSON not JsonPickle and use sort_keys=True parameter to test outputs between runs

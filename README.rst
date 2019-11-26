@@ -1,17 +1,15 @@
 GOcats
 ======
 
-.. image:: https://raw.githubusercontent.com/MoseleyBioinformaticsLab/GOcats/master/doc/_static/images/GOcats_logo.png
+.. image:: _static/images/GOcats_logo.png
    :width: 50%
-   :align: right
+   :align: center
    :target: http://gocats.readthedocs.io/
 
 `GOcats` is an Open Biomedical Ontology (OBO) parser and categorizing utility--currently specialized for the Gene
 Ontology (GO)--which can help scientists interpret large-scale experimental results by organizing redundant and highly-
 specific annotations into customizable, biologically-relevant concept categories. Concept subgraphs are defined by lists
 of keywords created by the user.
-
-Full API documentation, userguide, and tutorial can be found on readthedocs_
 
 Currently, the `GOcats` package can be used to:
    * Create subgraphs of GO which each represent a user-specified concept.
@@ -57,7 +55,7 @@ Dependencies
 `GOcats` requires the following Python libraries:
 
    * docopt_ for creating the :mod:`gocats` command-line interface.
-   * jsonpickle_ for saving Python objects in a JSON serializable form and outputting to a file.
+   * JSONPickle_ for saving Python objects in a JSON serializable form and outputting to a file.
 
 To install dependencies manually:
 
@@ -96,9 +94,40 @@ GAF mappings can also be made from the command line:
 License
 ~~~~~~~
 
-.. include:: ../LICENSE
+Made available under the terms of The Clear BSD License. See full license in LICENSE.
 
-Made available under the terms of The Clear BSD License. See full license in LICENSE_.
+The Clear BSD License
+
+Copyright (c) 2017, Eugene W. Hinderer III, Hunter N.B. Moseley
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted (subject to the limitations in the disclaimer
+below) provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its contributors may be used
+  to endorse or promote products derived from this software without specific
+  prior written permission.
+
+NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGE.
 
 Authors
 ~~~~~~~
@@ -106,10 +135,6 @@ Authors
 * **Eugene W. Hinderer III** - ehinderer_
 * **Hunter N.B. Moseley** - hunter-moseley_
 
-.. _readthedocs: http://gocats.readthedocs.io/en/latest/
-.. _docopt: https://github.com/docopt/docopt
-.. _jsonpickle: https://jsonpickle.github.io/
 .. _git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
 .. _ehinderer: https://github.com/ehinderer
 .. _hunter-moseley: https://github.com/hunter-moseley
-.. _LICENSE: https://gocats.readthedocs.io/en/latest/#license
