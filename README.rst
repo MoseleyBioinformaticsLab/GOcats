@@ -66,7 +66,7 @@ To install dependencies manually:
 
 Install on Windows
 ------------------
-Windows version not yet available; sorry about that.
+GOcats can also be installed on windows through pip. 
 
 Quickstart
 ~~~~~~~~~~
@@ -135,6 +135,8 @@ Authors
 * **Eugene W. Hinderer III** - ehinderer_
 * **Hunter N.B. Moseley** - hunter-moseley_
 
+.. _jsonpickle: https://github.com/jsonpickle/jsonpickle
+.. _docopt: https://github.com/docopt/docopt
 .. _git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
 .. _ehinderer: https://github.com/ehinderer
 .. _hunter-moseley: https://github.com/hunter-moseley
