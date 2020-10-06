@@ -14,7 +14,11 @@ Currently, the `GOcats` package can be used to:
 
 Citation
 ~~~~~~~~
-Please cite the GitHub repository until our manuscript is accepted for publication: https://github.com/MoseleyBioinformaticsLab/GOcats.git
+Please cite the following papers when using GOcats:
+
+Hinderer EW, Moseley NHB. GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts. PLoS One. 2020;15(6):1-29.
+
+Hinderer EW, Flight RM, Dubey R, Macleod JN, Moseley HNB. Advances in Gene Ontology utilization improve statistical power of annotation enrichment. PLoS One. 2019;14(8):1-20.
 
 Installation
 ~~~~~~~~~~~~
@@ -49,7 +53,7 @@ Dependencies
 
 `GOcats` requires the following Python libraries:
 
-   * docopt_ for creating the :mod:`gocats` command-line interface.
+   * docopt_ for creating the gocats command-line interface.
    * JSONPickle_ for saving Python objects in a JSON serializable form and outputting to a file.
 
 To install dependencies manually:
