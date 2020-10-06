@@ -1,11 +1,6 @@
 GOcats
 ======
 
-.. image:: _static/images/GOcats_logo.png
-   :width: 50%
-   :align: center
-   :target: http://gocats.readthedocs.io/
-
 `GOcats` is an Open Biomedical Ontology (OBO) parser and categorizing utility--currently specialized for the Gene
 Ontology (GO)--which can help scientists interpret large-scale experimental results by organizing redundant and highly-
 specific annotations into customizable, biologically-relevant concept categories. Concept subgraphs are defined by lists
@@ -66,12 +61,12 @@ To install dependencies manually:
 
 Install on Windows
 ------------------
-GOcats can also be installed on windows through pip. 
+GOcats can also be installed on windows through pip.
 
 Quickstart
 ~~~~~~~~~~
 
-For instructions on how to format your keyword list and advanced argument usage, consult the `tutorial <doc/tutorial.rst>`_, `guide <doc/guide.rst>`_, and `API <doc/api.rst>`_
+For instructions on how to format your keyword list and advanced argument usage, consult the tutorial, guide, and API documentation at readthedocs_.
 
 Subgraphs can be created from the command line.
 
@@ -135,6 +130,7 @@ Authors
 * **Eugene W. Hinderer III** - ehinderer_
 * **Hunter N.B. Moseley** - hunter-moseley_
 
+.. _readthedocs: http://gocats.readthedocs.io/
 .. _jsonpickle: https://github.com/jsonpickle/jsonpickle
 .. _docopt: https://github.com/docopt/docopt
 .. _git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/
