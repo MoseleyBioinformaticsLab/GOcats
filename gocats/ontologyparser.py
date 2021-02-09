@@ -40,7 +40,6 @@ class GoParser(OboParser):
 
     """An ontology parser specific to Gene Ontology"""
 
-
     def __init__(self, database_file, go_graph, relationship_directionality='gocats'):
         """`GoParser` initializer. Parses a Gene Ontology database file and adds properties found therein to a
         :class:`godag.GoGraph` object. **Importantly:** includes descriptions of semantic directionality of all GO
@@ -138,7 +137,7 @@ class GoParser(OboParser):
                     relationship_obj.id = re.findall(r"[\w+\:]+", line)[1]
 
                 elif re.match(self.stanza_name, line):
-                    relationship_obj.name = re.findall(r"[\w+\:]+", line)[1]
+                    relationship_obj.name = " ".join(re.findall(r"[\w+\:]+", line)[1:])
 
                 elif re.match(self.inverse_tag, line):
                     relationship_obj.inverse_relationship_id = re.findall(r"[\w+\:]+", line)[1]

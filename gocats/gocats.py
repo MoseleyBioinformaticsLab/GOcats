@@ -22,7 +22,9 @@ __version__ = _version.__version__
 
 
 def json_format_graph(graph_object, graph_identifier):
-    "Creates a dictionary representing the edges in the graph and formats it in such a way that it can be encoded into JSON for comparing the graph objects between versions of GOcats."
+    """Creates a dictionary representing the edges in the graph and formats it in such a way that it can be encoded into
+    JSON for comparing the graph objects between versions of GOcats.
+    """
     json_dict = dict()
 
     for edge in graph_object.edge_list:
@@ -57,13 +59,14 @@ def build_graph(args):
     database.close()
 
 
-def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None, relationship_directionality='gocats'):
+def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_relationships=None,
+                            relationship_directionality='gocats'):
     """Creates a graph object of GO, which can be traversed and queried within a Python interpreter.
 
     :param file_handle database_file: Ontology database file.
     :param str supergraph_namespace: Optional - Filter graph to a sub-ontology namespace.
     :param list allowed_relationships: Optional - Filter graph to use only those relationships listed.
-    :param relationship_directionality: Optional - Any string other than 'gocats' will retain all original GO relationship directionalities. Defaults to reverseing has_part direction.
+    :param relationship_directionality: Optional - Change to retain all original GO relationship directionalities.
     :return: A Graph object of the ontology provided.
     :rtype: :py:obj:`class`
     """
@@ -81,7 +84,7 @@ def create_subgraphs(args):
     by a list of provided keywords. Each subgraph is processed into :class:`gocats.subdag.SubGraph`.
 
     :param database_file: Ontology database file.
-    :param keyword_file: A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).
+    :param keyword_file: A CSV file with two columns: column 1 naming categories, and column 2 listing search strings.
     :param output_directory: The directory where results are stored.
     :param --supergraph_namespace=<None>: OPTIONAL-Specify a supergraph sub-ontology to filter e.g. cellular_component.
     :param --subgraph_namespace=<None>: OPTIONAL-Specify a subgraph sub-ontology to filter e.g. cellular_component.
@@ -129,13 +132,15 @@ def create_subgraphs(args):
     try:
         supergraph = graph_class[database_name]
     except KeyError:
-        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of file names are as follows: \n", graph_class.keys())
+        print("The provided ontology filename was not recognized. Please do not rename ontology files. \
+        The accepted list of file names are as follows: \n", graph_class.keys())
         sys.exit()
     parsing_class = {'go.obo': ontologyparser.GoParser(database, supergraph)}
     try:
         parsing_class[database_name].parse()
     except KeyError:
-        print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of file names are as follows: \n", graph_class.keys())
+        print("The provided ontology filename was not recognized. Please do not rename ontology files. \
+        The accepted list of file names are as follows: \n", graph_class.keys())
         sys.exit()
     if args['--output_termlist']:
         tools.jsonpickle_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
@@ -154,7 +159,11 @@ def create_subgraphs(args):
         for row in reader:
             subgraph_name = row[0]
             keyword_list = [keyword for keyword in re.split(';', row[1])]
-            subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, subgraph_name, keyword_list, subgraph_namespace, subgraph_relationships)
+            subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph,
+                                                                                     subgraph_name,
+                                                                                     keyword_list,
+                                                                                     subgraph_namespace,
+                                                                                     subgraph_relationships)
 
     # Handling superset mapping
     if not args['--map_supersets']:
@@ -366,3 +375,55 @@ def categorize_dataset(args):
             for row in mapped_rows:
                 csv_writer.writerow([item for item in row])
         tools.list_to_file(os.path.join(output_directory, 'unmappedEntities'), unmapped_entities)
+
+
+# TODO: pass in args from command line implementation.
+# TODO: rename all instances of "database_file" to "ontology_file"
+def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edges=None):
+    """Identifies regulatory inferences in GO by incorporating inferred regulatory ancestors of Regulates,
+    negatively_regulates, and/or positively_regulates edges into the list of annotations associated to genes and gene
+    products in a gene annotation file (GAF). This "regulatory GAF" (rGAF) allows for enrichment of regulatory
+    mechanisms when used as an input for hypergeometric enrichment analyses. The rGAF contains only those annotation
+    terms which are ancestors of terms inferred to regulate original set of annotations.
+
+        :param ontology_file: Ontology database file.
+        :param input_gaf: A file containing original gene annotations.
+        :param output_rgaf: Specify the desired name of the output GAF.
+        :param --regulation_edges=[]: Specify which regulation edges to include in the rGAF ["regulates", "positively_regulates", "negatively_regulates"]. Defaults to all.
+        :return: None
+        :rtype: :py:obj:`None`
+        """
+    # Create the GO graph in GOcats; allow all relationships, use the "gocats" interpretation directionality as this is
+    # intended for enrichment applications.
+    ontology = open(ontology_file, 'r')
+    graph = godag.GoGraph()
+    go_parser = ontologyparser.GoParser(ontology, graph, relationship_directionality="gocats")
+    go_parser.parse()
+    ontology.close()
+
+    # Load in the GAF to be modified into the rGAF.
+    loaded_gaf_array = tools.parse_gaf(input_gaf)
+    mapped_rgaf_array = list()
+
+    # Identify regulation inferences.
+    if not regulation_edges:
+        allowed_regulation = ["regulates", "positively_regulates", "negatively_regulates"]  # Default to using all regulation edges in GO
+    else:
+        for relation in regulation_edges:
+            assert relation in graph.relationship_index.keys(), "Provided regulation relation not found in GO: {}".format(relation)
+            assert graph.relationship_index[relation].category == "active", "Provided relation is not an 'active' relation: {}".format(relation)
+        allowed_regulation = regulation_edges
+
+    count = 1
+    for line in loaded_gaf_array:
+        print("{} of {} annotations parsed".format(count, len(loaded_gaf_array)))
+        count += 1
+        for edge in graph.edge_list:
+            if edge.relationship_id in allowed_regulation and (line[4] in [node.id for node in edge.forward_node.ancestors] or line[4] == edge.forward_node.id):
+                regulatory_subject_ancestors = [node.id for node in edge.reverse_node.ancestors]
+                regulatory_subject_ancestors.append(edge.reverse_node.id)
+                for regulatory_subject in regulatory_subject_ancestors:
+                    # print("{} {} for {}".format(regulatory_subject, edge.relationship_id, line[4]))
+                    mapped_rgaf_array.append(line[0:4] + [regulatory_subject] + line[5:-1])
+
+    tools.write_out_gaf(mapped_rgaf_array, output_rgaf)

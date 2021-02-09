@@ -29,4 +29,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed an issue related to setting max field_size_limit for CSV and creating OverflowErrors on some systems.
 
 ## [1.1.7] - 2020-09-26
-- Updated relationship_mapping in the GoParser to capture new "term_tracker_item" added to GO. Fixes issue #13: preventing newer versions of GO from being built within GOcats. 
+- Updated relationship_mapping in the GoParser to capture new "term_tracker_item" added to GO. Fixes issue #13: preventing newer versions of GO from being built within GOcats.
+
+## [1.1.8] -2021-02-xx
+- Added functionality for creating a "regulatory GAF" (rGAF). Allows for enrichment of regulatory mechanisms when used as an input for hypergeometric enrichment analyses. The rGAF contains only those annotation terms which are ancestors of terms inferred to regulate original set of annotations.
+- Ensured compatibility for GAF version 2.2 format.
+- Minor bug fixes and improved code readability.
