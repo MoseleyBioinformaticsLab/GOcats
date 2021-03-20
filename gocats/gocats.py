@@ -11,6 +11,7 @@ import sys
 import re
 import csv
 import jsonpickle
+import collections
 from . import ontologyparser
 from . import godag
 from . import subdag
@@ -379,7 +380,7 @@ def categorize_dataset(args):
 
 # TODO: pass in args from command line implementation.
 # TODO: rename all instances of "database_file" to "ontology_file"
-def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edges=None):
+def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edges=None, limit=False):
     """Identifies regulatory inferences in GO by incorporating inferred regulatory ancestors of Regulates,
     negatively_regulates, and/or positively_regulates edges into the list of annotations associated to genes and gene
     products in a gene annotation file (GAF). This "regulatory GAF" (rGAF) allows for enrichment of regulatory
@@ -390,6 +391,7 @@ def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edge
         :param input_gaf: A file containing original gene annotations.
         :param output_rgaf: Specify the desired name of the output GAF.
         :param --regulation_edges=[]: Specify which regulation edges to include in the rGAF ["regulates", "positively_regulates", "negatively_regulates"]. Defaults to all.
+        :param bool limit: Limit to the direct regulator node.
         :return: None
         :rtype: :py:obj:`None`
         """
@@ -414,16 +416,19 @@ def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edge
             assert graph.relationship_index[relation].category == "active", "Provided relation is not an 'active' relation: {}".format(relation)
         allowed_regulation = regulation_edges
 
-    count = 1
+    gene2regulator_ids = collections.defaultdict(set)
+    gene2line = dict()
+
     for line in loaded_gaf_array:
-        print("{} of {} annotations parsed".format(count, len(loaded_gaf_array)))
-        count += 1
         for edge in graph.edge_list:
-            if edge.relationship_id in allowed_regulation and (line[4] in [node.id for node in edge.forward_node.ancestors] or line[4] == edge.forward_node.id):
-                regulatory_subject_ancestors = [node.id for node in edge.reverse_node.ancestors]
-                regulatory_subject_ancestors.append(edge.reverse_node.id)
-                for regulatory_subject in regulatory_subject_ancestors:
-                    # print("{} {} for {}".format(regulatory_subject, edge.relationship_id, line[4]))
-                    mapped_rgaf_array.append(line[0:4] + [regulatory_subject] + line[5:-1])
+            if edge.relationship_id in allowed_regulation and (line[4] == edge.forward_node.id or any(line[4] == node.id for node in edge.forward_node.ancestors)):
+                if not limit:
+                    gene2regulator_ids[line[1]].extend([node.id for node in edge.reverse_node.ancestors])
+                gene2regulator_ids[line[1]].add(edge.reverse_node.id)
+                gene2line[line[1]] = line
+
+    for gene,regulator_ids in gene2regulator_ids.items():
+        for regulator_id in regulator_ids:
+            mapped_rgaf_array.append(gene2line[gene][0:4] + [regulator_id] + gene2line[gene][5:-1])
 
     tools.write_out_gaf(mapped_rgaf_array, output_rgaf)
