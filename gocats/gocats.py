@@ -11,6 +11,7 @@ import sys
 import re
 import csv
 import jsonpickle
+import collections
 from . import ontologyparser
 from . import godag
 from . import subdag
@@ -415,19 +416,19 @@ def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edge
             assert graph.relationship_index[relation].category == "active", "Provided relation is not an 'active' relation: {}".format(relation)
         allowed_regulation = regulation_edges
 
-    count = 1
+    gene2regulator_ids = collections.defaultdict(set)
+    gene2line = dict()
+
     for line in loaded_gaf_array:
-        print("{} of {} annotations parsed".format(count, len(loaded_gaf_array)))
-        count += 1
-        regulator_ids = set()
         for edge in graph.edge_list:
             if edge.relationship_id in allowed_regulation and (line[4] == edge.forward_node.id or any(line[4] == node.id for node in edge.forward_node.ancestors)):
                 if not limit:
-                    regulator_ids.extend([node.id for node in edge.reverse_node.ancestors])
-                regulator_ids.add(edge.reverse_node.id)
-        if regulator_ids:
-            for regulator_id in regulator_ids:
-                # print("{} {} for {}".format(regulatory_id, edge.relationship_id, line[4]))
-                mapped_rgaf_array.append(line[0:4] + [regulator_id] + line[5:-1])
+                    gene2regulator_ids[line[1]].extend([node.id for node in edge.reverse_node.ancestors])
+                gene2regulator_ids[line[1]].add(edge.reverse_node.id)
+                gene2line[line[1]] = line
+
+    for gene,regulator_ids in gene2regulator_ids.items():
+        for regulator_id in regulator_ids:
+            mapped_rgaf_array.append(gene2line[gene][0:4] + [regulator_id] + gene2line[gene][5:-1])
 
     tools.write_out_gaf(mapped_rgaf_array, output_rgaf)
