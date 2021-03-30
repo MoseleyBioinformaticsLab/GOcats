@@ -380,17 +380,17 @@ def categorize_dataset(args):
 
 # TODO: pass in args from command line implementation.
 # TODO: rename all instances of "database_file" to "ontology_file"
-def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edges=None, limitRegulator=False, limitRegulatee=False):
+def create_regulatory_gaf(ontology_filename, input_gaf_filename, output_rgaf_filename, regulation_relationships=None, limitRegulator=False, limitRegulatee=False):
     """Identifies regulatory inferences in GO by incorporating inferred regulatory ancestors of Regulates,
     negatively_regulates, and/or positively_regulates edges into the list of annotations associated to genes and gene
     products in a gene annotation file (GAF). This "regulatory GAF" (rGAF) allows for enrichment of regulatory
     mechanisms when used as an input for hypergeometric enrichment analyses. The rGAF contains only those annotation
     terms which are ancestors of terms inferred to regulate original set of annotations.
 
-        :param ontology_file: Ontology database file.
-        :param input_gaf: A file containing original gene annotations.
-        :param output_rgaf: Specify the desired name of the output GAF.
-        :param --regulation_edges=[]: Specify which regulation edges to include in the rGAF ["regulates", "positively_regulates", "negatively_regulates"]. Defaults to all.
+        :param str ontology_filename: Ontology database file.
+        :param str input_gaf_filename: A file containing original gene annotations.
+        :param str output_rgaf_filename: Specify the desired name of the output GAF.
+        :param list regulation_relationships: Specify which regulation edges to include in the rGAF ["regulates", "positively_regulates", "negatively_regulates"]. Defaults to all.
         :param bool limitRegulator: Limit to the direct regulator node.
         :param bool limitRegulatee: Limit to the direct regulatee node.
         :return: None
@@ -398,32 +398,36 @@ def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edge
         """
     # Create the GO graph in GOcats; allow all relationships, use the "gocats" interpretation directionality as this is
     # intended for enrichment applications.
-    ontology = open(ontology_file, 'r')
-    graph = godag.GoGraph()
-    go_parser = ontologyparser.GoParser(ontology, graph, relationship_directionality="gocats")
-    go_parser.parse()
-    ontology.close()
+    try:
+        with open(ontology_filename, 'r') as ontology:
+            graph = godag.GoGraph()
+            go_parser = ontologyparser.GoParser(ontology, graph, relationship_directionality="gocats")
+            go_parser.parse()
+    except:
+        sys.exit(str("Error: ontology file \"") + ontology_filename + "\" does not exist or is not parsable.")
 
     # Load in the GAF to be modified into the rGAF.
-    loaded_gaf_array = tools.parse_gaf(input_gaf)
+    loaded_gaf_array = tools.parse_gaf(input_gaf_filename)
     mapped_rgaf_array = list()
 
     # Identify regulation inferences.
-    if not regulation_edges:
+    if not regulation_relationships:
         allowed_regulation = ["regulates", "positively_regulates", "negatively_regulates"]  # Default to using all regulation edges in GO
     else:
-        for relation in regulation_edges:
+        for relation in regulation_relationships:
             assert relation in graph.relationship_index.keys(), "Provided regulation relation not found in GO: {}".format(relation)
             assert graph.relationship_index[relation].category == "active", "Provided relation is not an 'active' relation: {}".format(relation)
-        allowed_regulation = regulation_edges
+        allowed_regulation = regulation_relationships
+
+    regulation_edges = [ edge for edge in graph.edge_list if edge.relationship_id in allowed_regulation ]
 
     gene2regulator_ids = collections.defaultdict(set)
     gene2line = dict()
     gene2relationshipID = dict()
 
     for line in loaded_gaf_array:
-        for edge in graph.edge_list:
-            if edge.relationship_id in allowed_regulation and (line[4] == edge.forward_node.id or (not limitRegulatee and any(line[4] == node.id for node in edge.forward_node.ancestors))):
+        for edge in regulation_edges:
+            if line[4] == edge.forward_node.id or (not limitRegulatee and any(line[4] == node.id for node in edge.forward_node.ancestors)):
                 if not limitRegulator:
                     gene2regulator_ids[line[1]].extend([node.id for node in edge.reverse_node.ancestors])
                 gene2regulator_ids[line[1]].add(edge.reverse_node.id)
@@ -434,4 +438,4 @@ def create_regulatory_gaf(ontology_file, input_gaf, output_rgaf, regulation_edge
         for regulator_id in regulator_ids:
             mapped_rgaf_array.append(gene2line[gene][0:4] + [regulator_id, gene2line[gene][5], "rGAF", gene2relationshipID[gene]] + gene2line[gene][8:-1])
 
-    tools.write_out_gaf(mapped_rgaf_array, output_rgaf)
+    tools.write_out_gaf(mapped_rgaf_array, output_rgaf_filename)
