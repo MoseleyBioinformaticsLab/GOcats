@@ -429,7 +429,7 @@ def create_regulatory_gaf(ontology_filename, input_gaf_filename, output_rgaf_fil
         for edge in regulation_edges:
             if line[4] == edge.forward_node.id or (not limitRegulatee and any(line[4] == node.id for node in edge.forward_node.ancestors)):
                 if not limitRegulator:
-                    gene2regulator_ids[line[1]].extend([node.id for node in edge.reverse_node.ancestors])
+                    gene2regulator_ids[line[1]].update([node.id for node in edge.reverse_node.ancestors])
                 gene2regulator_ids[line[1]].add(edge.reverse_node.id)
                 gene2line[line[1]] = line
                 gene2relationshipID[line[1]] = edge.relationship_id
