@@ -419,20 +419,27 @@ def create_regulatory_gaf(ontology_filename, input_gaf_filename, output_rgaf_fil
             assert graph.relationship_index[relation].category == "active", "Provided relation is not an 'active' relation: {}".format(relation)
         allowed_regulation = regulation_relationships
 
-    regulation_edges = [ edge for edge in graph.edge_list if edge.relationship_id in allowed_regulation ]
+    regulation_edges_forward_node_ids = [ [edge, {edge.forward_node.id}] for edge in graph.edge_list if edge.relationship_id in allowed_regulation ]
+    if not limitRegulatee:
+        for edge,forward_node_ids in regulation_edges_forward_node_ids:
+            forward_node_ids.update([node.id for node in edge.forward_node.ancestors])
 
     gene2regulator_ids = collections.defaultdict(set)
     gene2line = dict()
     gene2relationshipID = dict()
+    gene2node_ids =  collections.defaultdict(set)
 
     for line in loaded_gaf_array:
-        for edge in regulation_edges:
-            if line[4] == edge.forward_node.id or (not limitRegulatee and any(line[4] == node.id for node in edge.forward_node.ancestors)):
+        gene2line[line[1]] = line
+        gene2node_ids[line[1]].add(line[4])
+
+    for gene,node_ids in gene2node_ids.items():
+        for edge,forward_node_ids in regulation_edges_forward_node_ids:
+            if not node_ids.isdisjoint(forward_node_ids):
                 if not limitRegulator:
-                    gene2regulator_ids[line[1]].update([node.id for node in edge.reverse_node.ancestors])
-                gene2regulator_ids[line[1]].add(edge.reverse_node.id)
-                gene2line[line[1]] = line
-                gene2relationshipID[line[1]] = edge.relationship_id
+                    gene2regulator_ids[gene].update([node.id for node in edge.reverse_node.ancestors])
+                gene2regulator_ids[gene].add(edge.reverse_node.id)
+                gene2relationshipID[gene] = edge.relationship_id
 
     for gene,regulator_ids in gene2regulator_ids.items():
         for regulator_id in regulator_ids:
