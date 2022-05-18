@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: "If you use this software, please cite both articles below."
 authors:
 - family-names: "Hinderer"
   given-names: "Eugene"
@@ -25,16 +25,22 @@ preferred-citation:
   title: "GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts"
   volume: 15
   year: 2020
+  
   type: article
   authors:
-  - family-names: "Hinderer"
-    given-names: "Eugene"
-    name-suffix: "III"
-    orcid: "https://orcid.org/0000-0001-8045-7083"
-  - family-names: "Moseley"
-    given-names: "Hunter"
-  doi: "10.1371/journal.pone.0233311"
-  journal: "PLOS ONE"
-  title: "GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts"
-  volume: 15
-  year: 2020
+    - family-names: "Hinderer"
+      given-names: "Eugene"
+      name-suffix: "III"
+    - family-names: "Flight"
+      given-names: "Robert"
+    - family-names: "Dubey"
+      given-names: "Rashmi"
+    - family-names: "MacLeod"
+      given-names: "James"
+    - family-names: "Moseley"
+      given-names: "Hunter"
+    doi: 10.1371/journal.pone.0220728
+    volume: 14
+    journal: "PLOS ONE"
+    title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
+    year: 2019
