@@ -26,9 +26,21 @@ references:
     volume: 15
     year: 2020
   - authors:
-      - family-names: Haines
-        given-names: Robert
-    title: "Ruby CFF Library"
-    type: software
-    version: 1.0
+      - family-names: "Hinderer"
+        given-names: "Eugene"
+        name-suffix: "III"
+      - family-names: "Flight"
+        given-names: "Robert"
+      - family-names: "Dubey"
+        given-names: "Rashmi"
+      - family-names: "MacLeod"
+        given-names: "James"
+      - family-names: "Moseley"
+        given-names: "Hunter"
+      type: article
+      doi: 10.1371/journal.pone.0220728
+      volume: 14
+      journal: "PLOS ONE"
+      title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
+      year: 2019
 title: "My Research Software"
