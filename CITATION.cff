@@ -11,7 +11,6 @@ title: "GOcats"
 version: 1.1.7
 date-released: 2017-06-1
 url: "https://github.com/MoseleyBioinformaticsLab/GOcats"
-
 references:
   - authors:
     - family-names: "Hinderer"
