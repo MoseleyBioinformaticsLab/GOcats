@@ -25,6 +25,7 @@ preferred-citation:
   title: "GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts"
   volume: 15
   year: 2020
+preferred-citation:
   type: article
   authors:
     - family-names: "Hinderer"
