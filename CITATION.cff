@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please both of the folloing articles"
+@article{article,
+author = {Hinderer, Eugene and Flight, Robert and Dubey, Rashmi and MacLeod, James and Moseley, Hunter},
+year = {2019},
+month = {08},
+pages = {e0220728},
+title = {Advances in gene ontology utilization improve statistical power of annotation enrichment},
+volume = {14},
+journal = {PLOS ONE},
+doi = {10.1371/journal.pone.0220728}
+}
+@article{article,
+author = {Hinderer, Eugene and Moseley, Hunter},
+year = {2020},
+month = {06},
+pages = {e0233311},
+title = {GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts},
+volume = {15},
+journal = {PLOS ONE},
+doi = {10.1371/journal.pone.0233311}
+}
