@@ -37,6 +37,7 @@ references:
         given-names: "James"
       - family-names: "Moseley"
         given-names: "Hunter"
-    title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
     type: article
+    doi: "10.1371/journal.pone.0220728"
+    title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
 title: "My Research Software"
