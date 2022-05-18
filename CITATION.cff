@@ -1,8 +1,16 @@
-authors:
-  - family-names: Druskat
-    given-names: Stephan
 cff-version: 1.2.0
-message: "If you use this software, please cite it using these metadata."
+message: "If you use this software, please cite both articles in the reference section."
+authors:
+- family-names: "Hinderer"
+  given-names: "Eugene"
+  name-suffix: "III"
+  orcid: "https://orcid.org/0000-0001-8045-7083"
+- family-names: "Moseley"
+  given-names: "Hunter"
+title: "GOcats"
+version: 1.1.7
+date-released: 2017-06-1
+url: "https://github.com/MoseleyBioinformaticsLab/GOcats"
 references:
   - authors:
       - family-names: Spaaks
