@@ -26,8 +26,17 @@ references:
     volume: 15
     year: 2020
   - authors:
-      - family-names: Haines
-        given-names: Robert
+      - family-names: "Hinderer"
+        given-names: "Eugene"
+        name-suffix: "III"
+      - family-names: "Flight"
+        given-names: "Robert"
+      - family-names: "Dubey"
+        given-names: "Rashmi"
+      - family-names: "MacLeod"
+        given-names: "James"
+      - family-names: "Moseley"
+        given-names: "Hunter"
     title: "Ruby CFF Library"
     type: article
 title: "My Research Software"
