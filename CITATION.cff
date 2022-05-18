@@ -13,10 +13,18 @@ date-released: 2017-06-1
 url: "https://github.com/MoseleyBioinformaticsLab/GOcats"
 references:
   - authors:
-      - family-names: Spaaks
-        given-names: "Jurriaan H."
-    title: "The foundation of Research Software"
-    type: software
+    - family-names: "Hinderer"
+      given-names: "Eugene"
+      name-suffix: "III"
+      orcid: "https://orcid.org/0000-0001-8045-7083"
+    - family-names: "Moseley"
+      given-names: "Hunter"
+    type: article
+    doi: "10.1371/journal.pone.0233311"
+    journal: "PLOS ONE"
+    title: "GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts"
+    volume: 15
+    year: 2020
   - authors:
       - family-names: Haines
         given-names: Robert
