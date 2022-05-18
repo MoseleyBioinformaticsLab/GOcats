@@ -10,7 +10,6 @@ title: "GOcats"
 version: 1.1.7
 date-released: 2017-06-01
 url: "https://github.com/MoseleyBioinformaticsLab/GOcats"
-
 preferred-citation:
   type: article
   authors:
@@ -25,7 +24,7 @@ preferred-citation:
       given-names: "James"
     - family-names: "Moseley"
       given-names: "Hunter"
-    doi: 10.1371/journal.pone.0220728
+    doi: "10.1371/journal.pone.0220728"
     volume: 14
     journal: "PLOS ONE"
     title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
