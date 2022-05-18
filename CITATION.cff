@@ -39,5 +39,8 @@ references:
         given-names: "Hunter"
     type: article
     doi: "10.1371/journal.pone.0220728"
+    journal: "PLOS ONE"
     title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
+    volume: 14
+    year: 2019
 title: "My Research Software"
