@@ -1,5 +1,11 @@
+authors: 
+  - family-names: Hinderer
+      given-names: Eugene
+      name-suffix: III
+  - family-names: Moseley
+      given-names: Hunter    
 cff-version: 1.2.0
-message: "If you use this software, please both of the folloing articles"
+message: "If you use this software, please both of the following references"
 references:
   - authors:
     - family-names: Hinderer
