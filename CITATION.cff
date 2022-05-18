@@ -1,30 +1,43 @@
 cff-version: 1.2.0
 message: "If you use this software, please both of the references below"
-authors:
-  - family-names: "Hinderer"
-    given-names: "Eugene"
-    name-suffix: "III"
-  - family-names: "Flight"
-    given-names: "Robert"
-  - family-names: "Dubey"
-    given-names: "Rashmi"
-  - family-names: "MacLeod"
-    given-names: "James"
-  - family-names: "Moseley"
-    given-names: "Hunter"
-  doi: 10.1371/journal.pone.0220728
-  volume: 14
-  journal: "PLOS ONE"
-  title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
-  year: 2019
 authors: 
   - family-names: "Hinderer"
     given-names: "Eugene"
     name-suffix: "III"
   - family-names: "Moseley"
     given-names: "Hunter"
-  doi: 10.1371/journal.pone.0233311
-  volume: 15
-  journal: "PLOS ONE"
-  title: "GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts"
-  year: 2020
+title: "GOcats"
+version: 1.1.7
+date-released: 2017-06-01
+url: "https://github.com/MoseleyBioinformaticsLab/GOcats"
+
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Hinderer"
+      given-names: "Eugene"
+      name-suffix: "III"
+    - family-names: "Flight"
+      given-names: "Robert"
+    - family-names: "Dubey"
+      given-names: "Rashmi"
+    - family-names: "MacLeod"
+      given-names: "James"
+    - family-names: "Moseley"
+      given-names: "Hunter"
+    doi: 10.1371/journal.pone.0220728
+    volume: 14
+    journal: "PLOS ONE"
+    title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
+    year: 2019
+  authors: 
+    - family-names: "Hinderer"
+      given-names: "Eugene"
+      name-suffix: "III"
+    - family-names: "Moseley"
+      given-names: "Hunter"
+    doi: 10.1371/journal.pone.0233311
+    volume: 15
+    journal: "PLOS ONE"
+    title: "GOcats: A tool for categorizing Gene Ontology into subgraphs of user-defined concepts"
+    year: 2020
