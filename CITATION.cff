@@ -1,31 +1,32 @@
 cff-version: 1.2.0
-message: "If you use this software, please both of the references below"
-authors: 
-  - family-names: "Hinderer"
-    given-names: "Eugene"
-    name-suffix: "III"
-  - family-names: "Moseley"
-    given-names: "Hunter"
-title: "GOcats"
-version: 1.1.7
-date-released: 2017-06-01
-url: "https://github.com/MoseleyBioinformaticsLab/GOcats"
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Lisa"
+  given-names: "Mona"
+  orcid: "https://orcid.org/0000-0000-0000-0000"
+- family-names: "Bot"
+  given-names: "Hew"
+  orcid: "https://orcid.org/0000-0000-0000-0000"
+title: "My Research Software"
+version: 2.0.4
+doi: 10.5281/zenodo.1234
+date-released: 2017-12-18
+url: "https://github.com/github/linguist"
 preferred-citation:
   type: article
   authors:
-    - family-names: "Hinderer"
-      given-names: "Eugene"
-      name-suffix: "III"
-    - family-names: "Flight"
-      given-names: "Robert"
-    - family-names: "Dubey"
-      given-names: "Rashmi"
-    - family-names: "MacLeod"
-      given-names: "James"
-    - family-names: "Moseley"
-      given-names: "Hunter"
-    doi: "10.1371/journal.pone.0220728"
-    volume: 14
-    journal: "PLOS ONE"
-    title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
-    year: 2019
+  - family-names: "Lisa"
+    given-names: "Mona"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+  - family-names: "Bot"
+    given-names: "Hew"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+  doi: "10.0000/00000"
+  journal: "Journal Title"
+  month: 9
+  start: 1 # First page number
+  end: 10 # Last page number
+  title: "My awesome research software"
+  issue: 1
+  volume: 1
+  year: 2021
