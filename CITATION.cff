@@ -1,15 +1,5 @@
 cff-version: 1.2.0
 message: "If you use this software, please both of the references below"
-authors: 
-  - family-names: "Hinderer"
-    given-names: "Eugene"
-    name-suffix: "III"
-  - family-names: "Moseley"
-    given-names: "Hunter"
-title: "GOcats"
-version: 1.1.7
-date-released: 2017-06-01
-url: "https://github.com/MoseleyBioinformaticsLab/GOcats"
 
 references:
   - authors:
