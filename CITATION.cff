@@ -29,6 +29,5 @@ references:
       - family-names: Haines
         given-names: Robert
     title: "Ruby CFF Library"
-    type: software
-    version: 1.0
+    type: article
 title: "My Research Software"
