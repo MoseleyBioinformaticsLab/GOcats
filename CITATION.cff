@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-message: "If you use this software, please both of the following articles"
+message: "If you use this software, please both of the folloing articles"
 references:
-  authors: 
+  - authors:
     - family-names: Hinderer
       given-names: Eugene
       name-suffix: III
@@ -13,8 +13,8 @@ references:
       given-names: James
     - family-names: Moseley
       given-names: Hunter
-  doi: 10.1371/journal.pone.0220728
-  volume: 14
-  journal: "PLOS ONE"
-  year: 2019
-  title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
+    doi: 10.1371/journal.pone.0220728
+    volume: 14
+    journal: "PLOS ONE"
+    title: "Advances in gene ontology utilization improve statistical power of annotation enrichment"
+    year: 2019
