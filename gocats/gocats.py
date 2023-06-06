@@ -11,6 +11,8 @@ import sys
 import re
 import csv
 import jsonpickle
+import json
+from collections import defaultdict
 from . import ontologyparser
 from . import godag
 from . import subdag
@@ -366,3 +368,56 @@ def categorize_dataset(args):
             for row in mapped_rows:
                 csv_writer.writerow([item for item in row])
         tools.list_to_file(os.path.join(output_directory, 'unmappedEntities'), unmapped_entities)
+
+
+def remap_goterms(args):
+    """Reads in a Gene Ontology relationship file, and a Gene Annotation File (GAF), and
+    follows the GOcats rules for allowed term-to-term relationships. Generates as output
+    a new GAF, and a new term to ontology namespace mapping.
+    
+    :param go_database: the gene ontology dataset
+    :param goa_gaf: the gene annotation file
+    :param ancestor_filename: the output file containing new gene to ontology mappings
+    :param namespace_filename: the output file containing the term to ontology mappings
+    :param --allowed_relationships: what term to term relationships will be considered <["is_a", "part_of", "has_part"]> 
+    :param --identifier_column: which column is being used for the gene identifiers.
+    :return: None
+    :rtype: :py:obj:`None`
+    """
+    if args['--allowed_relationships']:
+        allowed_relationships = args['--allowed_relationships']
+    else:
+        allowed_relationships = ["is_a", "part_of", "has_part"]
+    if args['--identifier_column']:
+        identifier_column = int(args['--identifier_column'])
+    else:
+        identifier_column = 1
+    
+    graph = build_graph_interpreter(args['<go_database>'], allowed_relationships=allowed_relationships)
+    goa_gene_annotation_dict = defaultdict(set)
+    # Building the annotation dictionary
+    with open(args['<goa_gaf>'], 'r') as gaf:
+        reader = csv.reader(gaf, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
+        for line in reader:
+                goa_gene_annotation_dict[line[identifier_column]].add(line[4])  # the dictionary has DB object symbol  keys and a set of go terms as values
+    ancestor_dict = defaultdict(set)
+    missing_go_terms = set()
+    # Adding ancestors to the annotation dictionary.
+    for gene_symbol, go_term_set in goa_gene_annotation_dict.items():
+        ancestor_dict[gene_symbol].update(go_term_set)
+        for go_term in go_term_set:
+            if go_term in graph.id_index.keys():
+                ancestor_dict[gene_symbol].update([node.id for node in graph.id_index[go_term].ancestors])
+            else:
+                missing_go_terms.add(go_term)  # NOTE: These are missing because they are depreciated IDs that are now ALT IDs of another term. Need to incorporate alt ids in GOcats.
+    # Need to convert dict sets into lists for json
+    ancestor_dict = {gene_symbol: list(go_term_set) for gene_symbol, go_term_set in ancestor_dict.items()}
+    # Writeout output json file.
+    with open(args['<ancestor_filename>'],"w") as output_file:
+        json.dump(ancestor_dict, output_file)
+    with open(args['<namespace_filename>'], "w") as output_file:
+        namespace_translation = {}
+        for node in graph.node_list:
+            namespace_translation[node.id] = node.namespace
+        json.dump(namespace_translation, output_file)
+    return None
