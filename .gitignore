@@ -181,3 +181,4 @@ fabric.properties
 doc/_templates/
 doc/html/
 gocats/__pycache__/
+.Rproj.user

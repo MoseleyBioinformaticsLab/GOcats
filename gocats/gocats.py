@@ -370,7 +370,7 @@ def categorize_dataset(args):
         tools.list_to_file(os.path.join(output_directory, 'unmappedEntities'), unmapped_entities)
 
 
-def remap_goterms(args):
+def remap_goterms(go_database, goa_gaf, ancestor_filename, namespace_filename, allowed_relationships, identifier_column):
     """Reads in a Gene Ontology relationship file, and a Gene Annotation File (GAF), and
     follows the GOcats rules for allowed term-to-term relationships. Generates as output
     a new GAF, and a new term to ontology namespace mapping.
@@ -379,25 +379,16 @@ def remap_goterms(args):
     :param goa_gaf: the gene annotation file
     :param ancestor_filename: the output file containing new gene to ontology mappings
     :param namespace_filename: the output file containing the term to ontology mappings
-    :param --allowed_relationships: what term to term relationships will be considered (is_a,part_of,has_part) 
-    :param --identifier_column: which column is being used for the gene identifiers (1)
+    :param allowed_relationships: what term to term relationships will be considered (is_a,part_of,has_part) 
+    :param identifier_column: which column is being used for the gene identifiers (1)
     :return: None
     :rtype: :py:obj:`None`
     """
-    if args['--allowed_relationships']:
-        allowed_relationships = args['--allowed_relationships'].split(",")
-    else:
-        allowed_relationships = ["is_a", "part_of", "has_part"]
-    if args['--identifier_column']:
-        identifier_column = int(args['--identifier_column'])
-    else:
-        identifier_column = 1
-
     
-    graph = build_graph_interpreter(args['<go_database>'], allowed_relationships=allowed_relationships)
+    graph = build_graph_interpreter(go_database, allowed_relationships=allowed_relationships)
     goa_gene_annotation_dict = defaultdict(set)
     # Building the annotation dictionary
-    with open(args['<goa_gaf>'], 'r') as gaf:
+    with open(goa_gaf, 'r') as gaf:
         reader = csv.reader(gaf, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
         for line in reader:
                 goa_gene_annotation_dict[line[identifier_column]].add(line[4])  # the dictionary has DB object symbol  keys and a set of go terms as values
@@ -414,9 +405,9 @@ def remap_goterms(args):
     # Need to convert dict sets into lists for json
     ancestor_dict = {gene_symbol: list(go_term_set) for gene_symbol, go_term_set in ancestor_dict.items()}
     # Writeout output json file.
-    with open(args['<ancestor_filename>'],"w") as output_file:
+    with open(ancestor_filename, "w") as output_file:
         json.dump(ancestor_dict, output_file)
-    with open(args['<namespace_filename>'], "w") as output_file:
+    with open(namespace_filename, "w") as output_file:
         namespace_translation = {}
         for node in graph.node_list:
             namespace_translation[node.id] = node.namespace
