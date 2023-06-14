@@ -379,19 +379,20 @@ def remap_goterms(args):
     :param goa_gaf: the gene annotation file
     :param ancestor_filename: the output file containing new gene to ontology mappings
     :param namespace_filename: the output file containing the term to ontology mappings
-    :param --allowed_relationships: what term to term relationships will be considered <["is_a", "part_of", "has_part"]> 
-    :param --identifier_column: which column is being used for the gene identifiers.
+    :param --allowed_relationships: what term to term relationships will be considered (is_a,part_of,has_part) 
+    :param --identifier_column: which column is being used for the gene identifiers (1)
     :return: None
     :rtype: :py:obj:`None`
     """
     if args['--allowed_relationships']:
-        allowed_relationships = args['--allowed_relationships']
+        allowed_relationships = args['--allowed_relationships'].split(",")
     else:
         allowed_relationships = ["is_a", "part_of", "has_part"]
     if args['--identifier_column']:
         identifier_column = int(args['--identifier_column'])
     else:
         identifier_column = 1
+
     
     graph = build_graph_interpreter(args['<go_database>'], allowed_relationships=allowed_relationships)
     goa_gene_annotation_dict = defaultdict(set)
