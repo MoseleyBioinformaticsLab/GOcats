@@ -13,6 +13,7 @@ Currently, the `GOcats` package can be used to:
    * Create subgraphs of GO which each represent a user-specified concept.
    * Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
      categories.
+   * Reorganize GO terms based on allowed term-term relationships, and re-create the gene to all direct and ancestor GO terms.
    * Explore the Gene Ontology graph within a Python interpreter.
 
 Installation
@@ -75,7 +76,7 @@ To see command line arguments and options, navigate to the project directory and
 
 :mod:`gocats` can be used in the following ways:
 
-   * As a method to extract subgraphs of Gene Ontology that represent user-defined concepts and create mappings between
+   * To extract subgraphs of Gene Ontology that represent user-defined concepts and create mappings between
      high level concepts and their subgraph content terms.
 
       1. Create a CSV file, where column 1 is the name of the concept category (this can be anything) and
@@ -99,7 +100,7 @@ To see command line arguments and options, navigate to the project directory and
          - GC_id_mapping.json_pickle  # A python dictionary with every GO term of the specified namespace as keys and a
            list of category root terms as values.
 
-   * As a method to map gene annotations in a Gene Annotation File (GAF) to a set of user-defined categories.
+   * To map gene annotations in a Gene Annotation File (GAF) to a set of user-defined categories.
 
       1. Create mapping files as defined in the previous section.
 
@@ -111,6 +112,23 @@ To see command line arguments and options, navigate to the project directory and
          python3 -m gocats categorize_dataset <GAF_file> <term_mapping_file> <output_directory> <mapped_gaf_filename>
 
       3. The output GAF will have the specified <mapped_gaf_filename> in the <output_directory>
+      
+    * To reorganize parent - child Gene Ontology terms relationships and the gene annotations with a set of user defined relationships.
+    This has been shown to increase statistical power in GO enrichment calculations (see Hinderer_).
+    
+      1. Download a Gene Ontology database obo_ file.
+      
+      2. Download a Gene Ontology gene annotation format gaf_ file.
+      
+      3. Run the :func:`gocats.gocats.remap_goterms` to generate new gene to annotation relationships:
+      
+      .. code:: bash
+      
+          python3 -m gocats remap_goterms <go_database> <goa_gaf> <ancestor_filename> <namespace_filename> [--allowed_relationships=<relationships> --identifier_column=<column>]
+          
+      4. ``--allowed_relationships`` should be a comma separated string: ``is_a,part_of,has_part``
+      
+      5. The output <ancestor_filename> will be in JSON format, with genes as the keys, and annotated GO terms as the set.
 
    * Within the Python interpreter to explore the Gene Ontology graph (advanced usage, see :doc:`tutorial` for more
      information).
@@ -144,3 +162,5 @@ To see command line arguments and options, navigate to the project directory and
 .. _docopt: https://github.com/docopt/docopt
 .. _JSONPickle: https://github.com/jsonpickle/jsonpickle
 .. _obo: http://www.geneontology.org/page/download-ontology
+.. _gaf: http://current.geneontology.org/products/pages/downloads.html
+.. _Hinderer: https://doi.org/10.1371/journal.pone.0220728

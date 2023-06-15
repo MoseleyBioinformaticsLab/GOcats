@@ -7,7 +7,7 @@ The Gene Ontology Categories Suite (GOcats)
 This module provides methods for the creation of directed acyclic concept subgraphs of Gene Ontology, along with methods
 for evaluating those subgraphs.
 
-Command line implementation:
+Command line implementation::
 
     Usage:
         gocats create_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<namespace> --subgraph_namespace=<namespace> --supergraph_relationships=<relationships> --subgraph_relationships=<relationships> --network_table_name=<name> --map_supersets --output_termlist --go_basic_scoping --test]
