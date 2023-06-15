@@ -180,4 +180,6 @@ fabric.properties
 # *.ipr
 doc/_templates/
 doc/html/
+doc/_build/
 gocats/__pycache__/
+.Rproj.user

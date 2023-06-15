@@ -50,8 +50,7 @@ class SubGraph(OboGraph):
     @property
     def root_node_mapping(self):
         """Property describing a mapping :py:obj:`dict` that relates every ontology :class:`gocats.subdag.SubGraphNode`
-        object of subgraphs in :class:`gocats.subdag.SubGraph` to a :py:obj:`list` of root
-       :class:`gocats.subdag.CategoryNode` objects.
+        object of subgraphs in :class:`gocats.subdag.SubGraph` to a :py:obj:`list` of root :class:`gocats.subdag.CategoryNode` objects.
 
         :return: :py:obj:`dict` of :class:`gocats.subdag.SubGraphNode` objects mapped to a :py:obj:`list` of root :class:`gocats.subdag.CategoryNode` objects.
         :rtype: :py:obj:`dict`
