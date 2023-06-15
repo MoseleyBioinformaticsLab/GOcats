@@ -77,7 +77,7 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
     return graph
 
 
-def create_subgraphs(args):
+def create_subgraphs(database_file, keyword_file, output_directory, supergraph_namespace=None, subraph_namespace=None, supergraph_relationships=['is_a', 'part_of', 'has_part'], subgraph_relationships=['is_a', 'part_of', 'has_part'], map_supersets=False, output_termlist=False, go_basic_scoping=False, network_table_name=None, test=False):
     """Creates a graph object of an ontology, processed into :class:`gocats.dag.OboGraph` or to an object that
     inherits from :class:`gocats.dag.OboGraph`, and then extracts subgraphs which represent concepts that are defined
     by a list of provided keywords. Each subgraph is processed into :class:`gocats.subdag.SubGraph`.
@@ -85,48 +85,28 @@ def create_subgraphs(args):
     :param database_file: Ontology database file.
     :param keyword_file: A CSV file with two columns: column 1 naming categories, and column 2 listing search strings (no quotation marks, separated by semicolons).
     :param output_directory: The directory where results are stored.
-    :param --supergraph_namespace=<None>: OPTIONAL-Specify a supergraph sub-ontology to filter e.g. cellular_component.
-    :param --subgraph_namespace=<None>: OPTIONAL-Specify a subgraph sub-ontology to filter e.g. cellular_component.
-    :param --supergraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in the supergraph e.g. [is_a, part_of].
-    :param --subgraph_relationships=[]: OPTIONAL-Specify a list of relationships to limit in subgraphs e.g. [is_a, part_of].
-    :param --map_supersets: OPTIONAL-Allow subgraphs to subsume other subgraphs.
-    :param --output_termlist: OPTIONAL-Create a translation of ontology terms to their names to improve interpretability of dev test results.
-    :param --go-basic-scoping: OPTIONAL-Creates a GO graph similar to go-basic with only scoping-type relationships (is_a and part_of).
-    :param --network_table_name=<None>: OPTIONAL-Make a specific name for the network table produced from the subgraphs (defaults to NetworkTable.csv)
+    :param supergraph_namespace: a supergraph sub-ontology to filter e.g. cellular_component, optional
+    :param subgraph_namespace: a subgraph sub-ontology to filter e.g. cellular_component, optional
+    :param supergraph_relationships: a list of relationships to limit in the supergraph e.g. ['is_a', 'part_of'], optional
+    :param subgraph_relationships: a list of relationships to limit in subgraphs e.g. ['is_a', 'part_of'], optional
+    :param map_supersets: whether to allow subgraphs to subsume other subgraphs, logical, optional
+    :param output_termlist: whether to create a translation of ontology terms to their names to improve interpretability of dev test results, logical, optional
+    :param go-basic-scoping: whether to create a GO graph similar to go-basic with only scoping-type relationships (is_a and part_of), logical, optional
+    :param network_table_name: whether to make a specific name for the network table produced from the subgraphs (defaults to NetworkTable.csv)
     :return: None
     :rtype: :py:obj:`None`
     """
 
-    if args['--supergraph_namespace']:
-        supergraph_namespace = args['--supergraph_namespace']
-    else:
-        supergraph_namespace = None
-    if args['--subgraph_namespace']:
-        subgraph_namespace = args['--subgraph_namespace']
-    else:
-        subgraph_namespace = None
-    if args['--supergraph_relationships']:
-        supergraph_relationships = args['--supergraph_relationships']
-    else:
-        supergraph_relationships = None
-    if args['--subgraph_relationships']:
-        subgraph_relationships = args['--subgraph_relationships']
-    else:
-        subgraph_relationships = None
-    if args['--go-basic-scoping']:
+    if go_basic_scoping:
         supergraph_relationships = ['is_a', 'part_of']
         subgraph_relationships = ['is_a', 'part_of']
-    if args['--test']:
-        test = True
-    else:
-        test = False
 
     # Building the supergraph
-    database = open(args['<database_file>'], 'r')
-    output_directory = args['<output_directory>']
+    database = open(database_file, 'r')
+    output_directory = output_directory
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
-    database_name = os.path.basename(args['<database_file>'])
+    database_name = os.path.basename(database_file)
     graph_class = {'go.obo': godag.GoGraph(supergraph_namespace, supergraph_relationships)}
     try:
         supergraph = graph_class[database_name]
@@ -139,19 +119,19 @@ def create_subgraphs(args):
     except KeyError:
         print("The provided ontology filename was not recognized. Please do not rename ontology files. The accepted list of file names are as follows: \n", graph_class.keys())
         sys.exit()
-    if args['--output_termlist']:
-        tools.jsonpickle_save(list(supergraph.id_index.keys()), os.path.join(args['<output_directory>'], "termlist"))
+    if output_termlist:
+        tools.jsonpickle_save(list(supergraph.id_index.keys()), os.path.join(output_directory, "termlist"))
 
     id_translation = dict()
     for id, node in supergraph.id_index.items():
         id_translation[id] = node.name
-    tools.jsonpickle_save(id_translation, os.path.join(args['<output_directory>'], "id_translation"))
+    tools.jsonpickle_save(id_translation, os.path.join(output_directory, "id_translation"))
 
     database.close()
 
     # Building and collecting subgraphs
     subgraph_collection = dict()
-    with open(args['<keyword_file>'], newline='') as file:
+    with open(keyword_file, newline='') as file:
         reader = csv.reader(file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
         for row in reader:
             subgraph_name = row[0]
@@ -159,7 +139,7 @@ def create_subgraphs(args):
             subgraph_collection[subgraph_name] = subdag.SubGraph.from_filtered_graph(supergraph, subgraph_name, keyword_list, subgraph_namespace, subgraph_relationships)
 
     # Handling superset mapping
-    if not args['--map_supersets']:
+    if not map_supersets:
         category_subsets = find_category_subsets(subgraph_collection)
     else:
         print("NOTE: supersets were mapped.")
@@ -191,10 +171,10 @@ def create_subgraphs(args):
     # TODO: do the same for node_object_mapping
 
     # Save mapping files and create report
-    tools.jsonpickle_save(collection_id_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
-    tools.json_save(collection_id_mapping, os.path.join(args['<output_directory>'], "GC_id_mapping"))
-    tools.jsonpickle_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_content_mapping"))
-    tools.json_save(collection_content_mapping, os.path.join(args['<output_directory>'], "GC_content_mapping"))
+    tools.jsonpickle_save(collection_id_mapping, os.path.join(output_directory, "GC_id_mapping"))
+    tools.json_save(collection_id_mapping, os.path.join(output_directory, "GC_id_mapping"))
+    tools.jsonpickle_save(collection_content_mapping, os.path.join(output_directory, "GC_content_mapping"))
+    tools.json_save(collection_content_mapping, os.path.join(output_directory, "GC_content_mapping"))
     with open(os.path.join(output_directory, 'subgraph_report.txt'), 'w') as report_file:
         report_file.write(
             'Subgraph data\nSupergraph filter: {}\nSubgraph filter: {}\nGO terms in the supergraph: {}\nGO terms in subgraphs: {}\nRelationship prevalence: {}'.format(
@@ -219,33 +199,31 @@ def create_subgraphs(args):
     # FIXME: cannot json save due to recursion of objects within objects...
     # tools.jsonpickle_save(collection_node_mapping, os.path.join(args['<output_directory>'], "GC_node_mapping"))
 
-    if args['--network_table_name']:
-        network_table_name = args['--network_table_name']
-    else:
+    if network_table_name is None:
         network_table_name = "Network_table.csv"
 
     # Making a file for network visualization via Cytoscape 3.0
-    with open(os.path.join(args['<output_directory>'], network_table_name), 'w', newline='') as network_table:
+    with open(os.path.join(output_directory, network_table_name), 'w', newline='') as network_table:
         edgewriter = csv.writer(network_table, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         for term_id, root_id_list in collection_id_mapping.items():
             for root_id in root_id_list:
                 edgewriter.writerow([term_id, root_id])
 
     if test:
-        json_graph_destination_file = os.path.join(args['<output_directory>'], str(__version__)+'_graph_output.json')
+        json_graph_destination_file = os.path.join(output_directory, str(__version__)+'_graph_output.json')
         with open(json_graph_destination_file, 'w') as destfile:
             destfile.write(jsonpickle.encode(json_format_graph(supergraph, 'supergraph')))
             for subgraph_name, subgraph in subgraph_collection.items():
                 destfile.write(jsonpickle.encode(json_format_graph(subgraph, subgraph_name)))
 
-        jsonpickle_supergraph_destination_file = os.path.join(args['<output_directory>'], str(__version__)+'_supergraph_output.jsonpickle')
+        jsonpickle_supergraph_destination_file = os.path.join(output_directory, str(__version__)+'_supergraph_output.jsonpickle')
         jsonpickle_clean_graph(supergraph)
         with open(jsonpickle_supergraph_destination_file, 'w') as destfile:
             destfile.write(jsonpickle.encode(supergraph))
 
         for subgraph_name, subgraph in subgraph_collection.items():
             jsonpickle_clean_graph(subgraph)
-            jsonpickle_subgraph_destination_file = os.path.join(args['<output_directory>'], str(__version__)+'_'+subgraph_name+'_output.jsonpickle')
+            jsonpickle_subgraph_destination_file = os.path.join(output_directory, str(__version__)+'_'+subgraph_name+'_output.jsonpickle')
             with open(jsonpickle_subgraph_destination_file, 'w') as destfile:
                 destfile.write(jsonpickle.encode(subgraph))
 
@@ -296,43 +274,31 @@ def find_category_subsets(subgraph_collection):
     return is_subset_of
 
 
-def categorize_dataset(args):
+def categorize_dataset(ataset_file, term_mapping, output_directory, mapped_dataset_filename, dataset_type="GAF", entity_col=0, go_col=1, retain_unmapped_annotations=False):
     """Reads in a Gene Annotation File (GAF) and maps the annotations contained therein to the categories organized by
     GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.
 
     :param dataset_file: A file containing gene annotations.
     :param term_mapping: A dictionary mapping category-defining ontology terms to their subgraph children terms. May be produced by GOcats or another method.
-    :param output_directory: Specify the directory where the output file will be stored.
-    :param mapped_dataset_filename: Specify the desired name of the mapped GAF.
-    :param --dataset_type: Enter file type for dataset [GAF|TSV|CSV]. Defaults to GAF.
-    :param --entity_col=<0>: If CSV or TSV file type, indicate which column the entity IDs are listed. Defaults to 0.
-    :param --go_col: If CSV or TSV file type, indicate which column the GO IDs are listed. Defaults to 1.
-    :param --retain_unmapped_annotations: If specified, annotations that are not mapped to a concept are copied into the mapped dataset output file with its original annotation.
+    :param output_directory: The directory where the output file will be stored.
+    :param mapped_dataset_filename: The desired name of the mapped GAF.
+    :param dataset_type: Enter file type for dataset [GAF|TSV|CSV]. Defaults to "GAF".
+    :param entity_col: If CSV or TSV file type, indicate which column the entity IDs are listed. Defaults to 0.
+    :param go_col: If CSV or TSV file type, indicate which column the GO IDs are listed. Defaults to 1.
+    :param retain_unmapped_annotations: If specified, annotations that are not mapped to a concept are copied into the mapped dataset output file with its original annotation.
     :return: None
     :rtype: :py:obj:`None`
     """
-    if args['--dataset_type']:
-        dataset_type = args['--dataset_type']
-    else:
-        dataset_type = None
-    if args['--entity_col']:
-        entity_id_index = int(args['--entity_col'])
-    else:
-        entity_id_index = 0
-    if args['--go_col']:
-        go_id_index = int(args['--go_col'])
-    else:
-        go_id_index = 1
+    
 
-    mapping_dict = tools.jsonpickle_load(args['<term_mapping>'])
-    output_directory = os.path.realpath(args['<output_directory>'])
-    mapped_dataset_filename = args['<mapped_dataset_filename>']
+    mapping_dict = tools.jsonpickle_load(term_mapping)
+    output_directory = os.path.realpath(output_directory)
     unmapped_entities = set()
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
     if dataset_type == "GAF" or not dataset_type:
-        loaded_gaf_array = tools.parse_gaf(args['<dataset_file>'])
+        loaded_gaf_array = tools.parse_gaf(dataset_file)
         mapped_gaf_array = list()
         for line in loaded_gaf_array:
             if line[4] in mapping_dict.keys():
@@ -349,7 +315,7 @@ def categorize_dataset(args):
 
     elif dataset_type == "CSV":
         mapped_rows = []
-        with open(os.path.realpath(args['<dataset_file>']), 'r') as csv_file:
+        with open(os.path.realpath(dataset_file), 'r') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             header = next(csv_reader)
             for row in csv_reader:
