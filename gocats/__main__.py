@@ -93,7 +93,7 @@ def main(args):
       
         dataset_file = args['<dataset_file>']
         term_mapping = args['<term_mapping>']
-        output_directory = args['<output_director>']
+        output_directory = args['<output_directory>']
         mapped_dataset_filename = args['<mapped_dataset_filename>']
         
         if args['--dataset_type']:

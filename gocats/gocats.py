@@ -274,7 +274,7 @@ def find_category_subsets(subgraph_collection):
     return is_subset_of
 
 
-def categorize_dataset(ataset_file, term_mapping, output_directory, mapped_dataset_filename, dataset_type="GAF", entity_col=0, go_col=1, retain_unmapped_annotations=False):
+def categorize_dataset(dataset_file, term_mapping, output_directory, mapped_dataset_filename, dataset_type="GAF", entity_col=0, go_col=1, retain_unmapped_annotations=False):
     """Reads in a Gene Annotation File (GAF) and maps the annotations contained therein to the categories organized by
     GOcats or other methods. Outputs a mapped GAF and a list of unmapped genes in the specified output directory.
 
