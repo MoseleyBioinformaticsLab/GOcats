@@ -326,7 +326,7 @@ def categorize_dataset(dataset_file, term_mapping, output_directory, mapped_data
                         mapped_rows.append(mapped_row)
                 else:
                     unmapped_entities.add(mapped_row[entity_id_index])
-                    if args['--retain_unmapped_annotations']:
+                    if retain_unmapped_annotations:
                         mapped_rows.append(mapped_row)
             mapped_rows.insert(0, header)
         with open(os.path.join(output_directory, mapped_dataset_filename), 'w') as output_csv:
@@ -352,12 +352,11 @@ def remap_goterms(go_database, goa_gaf, ancestor_filename, namespace_filename, a
     """
     
     graph = build_graph_interpreter(go_database, allowed_relationships=allowed_relationships)
+    gaf_array = tools.parse_gaf(goa_gaf)
     goa_gene_annotation_dict = defaultdict(set)
     # Building the annotation dictionary
-    with open(goa_gaf, 'r') as gaf:
-        reader = csv.reader(gaf, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
-        for line in reader:
-                goa_gene_annotation_dict[line[identifier_column]].add(line[4])  # the dictionary has DB object symbol  keys and a set of go terms as values
+    for line in gaf_array:
+        goa_gene_annotation_dict[line[identifier_column]].add(line[4]) # the dictionary has DB object symbol  keys and a set of go terms as values
     ancestor_dict = defaultdict(set)
     missing_go_terms = set()
     # Adding ancestors to the annotation dictionary.
