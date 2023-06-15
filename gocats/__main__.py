@@ -10,7 +10,7 @@ for evaluating those subgraphs.
 Command line implementation:
 
     Usage:
-        gocats create_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<namespace> --subgraph_namespace=<namespace> --supergraph_relationships=<relationships> --subgraph_relationships=<relationships> --network_table_name=<name> --map_supersets --output_termlist --go-basic-scoping --test]
+        gocats create_subgraphs <database_file> <keyword_file> <output_directory> [--supergraph_namespace=<namespace> --subgraph_namespace=<namespace> --supergraph_relationships=<relationships> --subgraph_relationships=<relationships> --network_table_name=<name> --map_supersets --output_termlist --go_basic_scoping --test]
         gocats categorize_dataset <dataset_file> <term_mapping> <output_directory> <mapped_dataset_filename> [--dataset_type=<GAF> --entity_col=<entity> --go_col=<go> --retain_unmapped_annotations]
         gocats remap_goterms <go_database> <goa_gaf> <ancestor_filename> <namespace_filename> [--allowed_relationships=<relationships> --identifier_column=<column>]
         gocats (-h | --help)
@@ -29,7 +29,7 @@ Command line implementation:
         --network_table_name=<name>                 Custom name for the output NetworkTable.csv to be used with Cytoscape. [default: NetworkTable.csv]
         --map_supersets                             Maps all terms to all root nodes, regardless of if a root node subsumes another.
         --output_termlist                           Outputs a list of all terms in the supergraph as a JsonPickle file in the output directory.
-        --go-basic-scoping                          Creates a GO graph similar to go-basic with only scoping-type relationships (is_a and part_of). WARNING, this supersedes relationship definitions.
+        --go_basic_scoping                          Creates a GO graph similar to go-basic with only scoping-type relationships (is_a and part_of). WARNING, this supersedes relationship definitions.
         <dataset_file>                              A GO dataset file.
         <term_mapping>                              A dictionary mapping category-defining ontology terms to their subgraph children terms. May be produced by GOcats or another method.
         <mapped_dataset_filename>                   The desired name of the mapped GAF.
@@ -87,11 +87,11 @@ def main(args):
         if args['--test']:
             test = True
         
-        gocats.create_subgraphs(database_file, keyword_file, output_directory, supergraph_namespace=None, subraph_namespace=None, supergraph_relationships=['is_a', 'part_of', 'has_part'], subgraph_relationships=['is_a', 'part_of', 'has_part'], map_supersets=False, output_termlist=False, go_basic_scoping=False, network_table_name=None, test=False)
+        gocats.create_subgraphs(database_file, keyword_file, output_directory, supergraph_namespace=None, subgraph_namespace=None, supergraph_relationships=['is_a', 'part_of', 'has_part'], subgraph_relationships=['is_a', 'part_of', 'has_part'], map_supersets=False, output_termlist=False, go_basic_scoping=False, network_table_name=None, test=False)
 
     elif args['categorize_dataset']:
       
-        dataset_file = args['<dataset_file>]
+        dataset_file = args['<dataset_file>']
         term_mapping = args['<term_mapping>']
         output_directory = args['<output_director>']
         mapped_dataset_filename = args['<mapped_dataset_filename>']
@@ -101,7 +101,7 @@ def main(args):
         else:
             dataset_type = "GAF"
         if args['--entity_col']:
-            entity_col = int(args['--entity_col']
+            entity_col = int(args['--entity_col'])
         else:
             entity_col = 0
         if args['--go_col']:

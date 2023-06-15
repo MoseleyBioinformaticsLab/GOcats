@@ -77,7 +77,7 @@ def build_graph_interpreter(database_file, supergraph_namespace=None, allowed_re
     return graph
 
 
-def create_subgraphs(database_file, keyword_file, output_directory, supergraph_namespace=None, subraph_namespace=None, supergraph_relationships=['is_a', 'part_of', 'has_part'], subgraph_relationships=['is_a', 'part_of', 'has_part'], map_supersets=False, output_termlist=False, go_basic_scoping=False, network_table_name=None, test=False):
+def create_subgraphs(database_file, keyword_file, output_directory, supergraph_namespace=None, subgraph_namespace=None, supergraph_relationships=['is_a', 'part_of', 'has_part'], subgraph_relationships=['is_a', 'part_of', 'has_part'], map_supersets=False, output_termlist=False, go_basic_scoping=False, network_table_name=None, test=False):
     """Creates a graph object of an ontology, processed into :class:`gocats.dag.OboGraph` or to an object that
     inherits from :class:`gocats.dag.OboGraph`, and then extracts subgraphs which represent concepts that are defined
     by a list of provided keywords. Each subgraph is processed into :class:`gocats.subdag.SubGraph`.
