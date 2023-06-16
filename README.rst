@@ -10,6 +10,7 @@ Currently, the `GOcats` package can be used to:
    * Create subgraphs of GO which each represent a user-specified concept.
    * Map specific, or fine-grained, GO terms in a Gene Annotation File (GAF) to an arbitrary number of concept
      categories.
+   * Remap ancestor Gene Ontology term relationships and the gene annotations with a set of user defined relationships.
    * Explore the Gene Ontology graph within a Python interpreter.
 
 Citation
@@ -89,6 +90,13 @@ GAF mappings can also be made from the command line:
 
    python3 -m gocats categorize_dataset YOUR_GAF.goa YOUR_OUTPUT_DIRECTORY/GC_id_mapping.json_pickle YOUR_OUTPUT_DIRECTORY MAPPED_DATASET_NAME.goa
 
+Gene to GO Term remappings with consideration of ``has_part`` relationships can created from the command line:
+
+.. code:: bash
+
+   python3 -m gocats remap_goterms /path_to_ontology_file.obo /path_to_gaf.goa ancestors_output.json namespace_output.json --allowed_relationships=is_a,part_of,has_part --identifier_column=1
+
+Gene to GO terms will be in JSON format in ``ancestor_output.json``, and new GO term to namespace in ``namespace_output.json``.
 
 License
 ~~~~~~~
