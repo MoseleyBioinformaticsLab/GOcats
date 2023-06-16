@@ -135,6 +135,7 @@ GitHub.sublime-settings
 .idea/jsLibraryMappings.xml
 runscripts/*
 vignettes/*
+local_testing/*
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids
